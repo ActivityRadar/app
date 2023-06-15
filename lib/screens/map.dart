@@ -8,6 +8,10 @@ class MapScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    //size of the window
+    var size = MediaQuery.of(context).size;
+    var height = size.height;
+    var width = size.width;
     final mapController = MapController();
     return Stack(
       children: [
@@ -22,7 +26,35 @@ class MapScreen extends StatelessWidget {
               urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
               subdomains: const ['a', 'b', 'c'],
             ),
+            MarkerLayer(
+              markers: [
+                Marker(
+                  point: LatLng(52.520008, 13.404954),
+                  width: width / 1,
+                  height: height / 1,
+                  builder: (context) => const Icon(Icons.sports_tennis_sharp),
+                ),
+              ],
+            ),
           ],
+        ),
+        const Padding(
+          padding: EdgeInsets.symmetric(vertical: 34.0, horizontal: 16.0),
+          child: Column(
+            children: [
+              Card(
+                child: TextField(
+                  decoration: InputDecoration(
+                    prefixIcon: Icon(Icons.filter_alt),
+                    suffixIcon: Icon(Icons.search),
+                    hintStyle: TextStyle(fontSize: 15.0, color: Colors.black12),
+                    hintText:
+                        "Search basketball, volleyball, table tennis ... ",
+                  ),
+                ),
+              )
+            ],
+          ),
         ),
       ],
     );

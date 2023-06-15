@@ -27,6 +27,10 @@ class _HomeState extends State<Home> {
 
   @override
   Widget build(BuildContext context) {
+    //size of the window
+    var size = MediaQuery.of(context).size;
+    var height = size.height;
+    var width = size.width;
     return Scaffold(
       extendBody: true,
       body: PageStorage(
@@ -61,7 +65,7 @@ class _HomeState extends State<Home> {
         shape: const CircularNotchedRectangle(),
         notchMargin: 10,
         child: SizedBox(
-          height: 60,
+          height: height / 15,
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -134,7 +138,7 @@ class _HomeState extends State<Home> {
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Icon(Icons.dashboard,
+                        Icon(Icons.group,
                             color: currentTab == 3
                                 ? DesignColors.naviColor
                                 : Colors.grey),
