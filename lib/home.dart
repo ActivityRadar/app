@@ -18,7 +18,7 @@ class _HomeState extends State<Home> {
   final List<Widget> screens = [
     const HomeScreen(),
     const SettingScreen(),
-    const MapScreen(),
+    MapScreen(),
     const CommunityScreen()
   ];
 
@@ -101,7 +101,7 @@ class _HomeState extends State<Home> {
                     minWidth: 100,
                     onPressed: () {
                       setState(() {
-                        currentScreen = const MapScreen();
+                        currentScreen = MapScreen();
                         currentTab = 1;
                       });
                     },

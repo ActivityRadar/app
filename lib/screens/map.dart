@@ -1,11 +1,16 @@
+import 'dart:convert';
+
 import 'package:app/constants/contants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:flutter_map/plugin_api.dart'; // Only import if required functionality is not exposed by default
+import 'package:http/http.dart' as http;
 
 class MapScreen extends StatelessWidget {
-  const MapScreen({Key? key}) : super(key: key);
+  MapScreen({Key? key}) : super(key: key);
+  SearchBar searchBar = SearchBar();
+  MapWidget? mapWidget;
 
   @override
   Widget build(BuildContext context) {
@@ -14,14 +19,13 @@ class MapScreen extends StatelessWidget {
     var height = size.height;
     var width = size.width;
     final mapController = MapController();
+    mapWidget =
+        MapWidget(mapController: mapController, height: height, width: width);
+    searchBar._map = mapWidget;
     return Stack(
       children: [
-        MapWidget(
-          mapController: mapController,
-          height: height,
-          width: width,
-        ),
-        SearchBar(),
+        mapWidget!,
+        searchBar,
         BuildContainer(),
       ],
     );
@@ -81,7 +85,7 @@ class BuildContainer extends StatelessWidget {
 }
 
 class MapWidget extends StatelessWidget {
-  const MapWidget({
+  MapWidget({
     super.key,
     required this.mapController,
     required this.width,
@@ -91,61 +95,157 @@ class MapWidget extends StatelessWidget {
   final MapController mapController;
   final double width;
   final double height;
+  List<Marker> markers = [];
+  dynamic markerLayer = MarkerLayer(markers: []);
+  FlutterMap? map;
+  String _activity = "table_tennis";
+
+  set activity(String activity) {
+    _activity = activity;
+    print("set_activity triggered");
+    performSearch();
+  }
+
+  Future<void> performSearch() async {
+    LatLngBounds bounds = mapController.bounds!;
+    print('${bounds.south}, ${bounds.west}, ${bounds.east}, $_activity');
+
+    // markerLayer = MarkerLayer(markers: );
+    // Future<List<Marker>> futureMarkers = fetchLocations(bounds, _activity);
+    List<Marker> markers_ = await fetchLocations(bounds, _activity);
+    print("fetch locations started");
+
+    // map!.children[1] = FutureBuilder<List<Marker>>(
+    //     // markerLayer = FutureBuilder<List<Marker>>(
+    //     future: futureMarkers,
+    //     builder: (context, snapshot) {
+    //       print("Builder called to check in");
+    //       if (snapshot.connectionState == ConnectionState.done) {
+    //         if (snapshot.hasError) print(snapshot.error);
+    //         if (snapshot.hasData) {
+    //           print(snapshot.data!.length);
+    //           return MarkerLayer(markers: snapshot.data!);
+    //         }
+    //       }
+    //       return const Center(child: CircularProgressIndicator());
+    //     });
+
+    map!.children[1] = MarkerLayer(markers: markers_);
+    // map!.mapController!.move(mapController.center, mapController.zoom);
+    // map!.createState();
+  }
+
+  void onZoom(MapEvent event) {
+    if (event is! MapEventMoveEnd) return;
+    print("move triggered");
+    performSearch();
+  }
 
   @override
   Widget build(BuildContext context) {
-    return FlutterMap(
+    map = FlutterMap(
       mapController: mapController,
       options: MapOptions(
-        center: LatLng(51.5167, 9.9167),
-        zoom: 5.2,
-      ),
+          center: LatLng(51.5167, 9.9167), zoom: 10.2, onMapEvent: onZoom),
       children: [
         TileLayer(
           urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
           subdomains: const ['a', 'b', 'c'],
         ),
-        MarkerLayer(markers: testmarker),
+        markerLayer,
       ],
     );
+    return map!;
   }
 }
 
-Marker test = Marker(
-  point: LatLng(52.5748306, 13.3086758),
-  width: 1,
-  height: 1,
-  builder: (context) => const Icon(Icons.sports_tennis_sharp),
-);
-Marker test2 = Marker(
-  point: LatLng(52.5317128, 13.4496164),
-  width: 1,
-  height: 1,
-  builder: (context) => const Icon(Icons.sports_tennis_sharp),
-);
-var testmarker = [test, test2];
+// class Map extends StatelessWidget {
+//   @override
+//   Widget build(BuildContext context) {
+//
+//   }
+// }
+
+var client = http.Client();
+
+Marker markerFromJson(Map<String, dynamic> json) {
+  var loc = LatLng(
+      json["location"]["coordinates"][1], json["location"]["coordinates"][0]);
+
+  return Marker(
+      point: loc,
+      width: 1,
+      height: 1,
+      builder: (context) => const Icon(Icons.location_pin),
+      anchorPos: AnchorPos.align(AnchorAlign.bottom));
+}
+
+List<Marker> parseMarkers(String responseBody) {
+  final parsed = json.decode(responseBody).cast<Map<String, dynamic>>();
+  return parsed.map<Marker>((json) => markerFromJson(json)).toList();
+}
+
+Future<List<Marker>> fetchLocations(
+    LatLngBounds bounds, String activity) async {
+  // var request =
+  //     http.Request("GET", Uri(path: "http://localhost:8000/locations/bbox"));
+  //
+  // final response =
+  //     await request.send(); // http.get('http://localhost:8000/locations/bbox');
+
+  final response = await http.get(
+      Uri(
+          scheme: "http",
+          host: "localhost",
+          port: 8000,
+          path: '/locations/bbox',
+          queryParameters: {
+            "west": bounds.west.toString(),
+            "east": bounds.east.toString(),
+            "south": bounds.south.toString(),
+            "north": bounds.north.toString(),
+            "activities": activity
+          }),
+      headers: {
+        'Access-Control-Allow-Origin': "*",
+        'Content-Type': 'application/json',
+        'Accept': '*/*'
+      });
+  if (response.statusCode == 200) {
+    return parseMarkers(response.body);
+  } else {
+    throw Exception('Unable to fetch products from the REST API');
+  }
+}
 
 class SearchBar extends StatelessWidget {
-  const SearchBar({
+  SearchBar({
     super.key,
   });
 
+  MapWidget? _map;
+
+  void setActivity(String activity) {
+    _map!.activity = activity;
+  }
+
   @override
   Widget build(BuildContext context) {
-    return const Padding(
-      padding: EdgeInsets.symmetric(vertical: 34.0, horizontal: 16.0),
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 34.0, horizontal: 16.0),
       child: Column(
         children: [
           Card(
-            child: TextField(
-              decoration: InputDecoration(
-                prefixIcon: Icon(Icons.filter_alt),
-                suffixIcon: Icon(Icons.search),
-                hintStyle: TextStyle(fontSize: 15.0, color: Colors.black12),
-                hintText: "Search basketball, volleyball, table tennis ... ",
-              ),
+              child: TextField(
+            decoration: const InputDecoration(
+              prefixIcon: Icon(Icons.filter_alt),
+              suffixIcon: Icon(Icons.search),
+              hintStyle: TextStyle(fontSize: 15.0, color: Colors.black12),
+              hintText: "Search basketball, volleyball, table tennis ... ",
             ),
-          )
+            textInputAction: TextInputAction.search,
+            onSubmitted: setActivity,
+          ))
         ],
       ),
     );
