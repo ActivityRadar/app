@@ -10,7 +10,7 @@ import 'package:http/http.dart' as http;
 class MapScreen extends StatelessWidget {
   MapScreen({Key? key}) : super(key: key);
   SearchBar searchBar = SearchBar();
-  MapWidget? mapWidget;
+  ActivityMarkerMap? mapWidget;
 
   @override
   Widget build(BuildContext context) {
@@ -19,14 +19,14 @@ class MapScreen extends StatelessWidget {
     var height = size.height;
     var width = size.width;
     final mapController = MapController();
-    mapWidget =
-        MapWidget(mapController: mapController, height: height, width: width);
+    mapWidget = ActivityMarkerMap(
+        mapController: mapController, height: height, width: width);
     searchBar._map = mapWidget;
     return Stack(
       children: [
         mapWidget!,
         searchBar,
-        BuildContainer(),
+        const BuildContainer(),
       ],
     );
   }
@@ -84,8 +84,8 @@ class BuildContainer extends StatelessWidget {
   }
 }
 
-class MapWidget extends StatelessWidget {
-  MapWidget({
+class ActivityMarkerMap extends StatefulWidget {
+  ActivityMarkerMap({
     super.key,
     required this.mapController,
     required this.width,
@@ -95,76 +95,64 @@ class MapWidget extends StatelessWidget {
   final MapController mapController;
   final double width;
   final double height;
+  ValueNotifier<String> activity = ValueNotifier("-"); // invalid default
+
+  void setActivity(String activity) {}
+
+  @override
+  _ActivityMarkerMapState createState() {
+    return _ActivityMarkerMapState();
+  }
+}
+
+class _ActivityMarkerMapState extends State<ActivityMarkerMap> {
+  LatLngBounds bounds = LatLngBounds(LatLng(52.37, 12.74), LatLng(53, 13.04));
   List<Marker> markers = [];
-  dynamic markerLayer = MarkerLayer(markers: []);
-  FlutterMap? map;
-  String _activity = "table_tennis";
 
-  set activity(String activity) {
-    _activity = activity;
-    print("set_activity triggered");
-    performSearch();
-  }
-
-  Future<void> performSearch() async {
-    LatLngBounds bounds = mapController.bounds!;
-    print('${bounds.south}, ${bounds.west}, ${bounds.east}, $_activity');
-
-    // markerLayer = MarkerLayer(markers: );
-    // Future<List<Marker>> futureMarkers = fetchLocations(bounds, _activity);
-    List<Marker> markers_ = await fetchLocations(bounds, _activity);
-    print("fetch locations started");
-
-    // map!.children[1] = FutureBuilder<List<Marker>>(
-    //     // markerLayer = FutureBuilder<List<Marker>>(
-    //     future: futureMarkers,
-    //     builder: (context, snapshot) {
-    //       print("Builder called to check in");
-    //       if (snapshot.connectionState == ConnectionState.done) {
-    //         if (snapshot.hasError) print(snapshot.error);
-    //         if (snapshot.hasData) {
-    //           print(snapshot.data!.length);
-    //           return MarkerLayer(markers: snapshot.data!);
-    //         }
-    //       }
-    //       return const Center(child: CircularProgressIndicator());
-    //     });
-
-    map!.children[1] = MarkerLayer(markers: markers_);
-    // map!.mapController!.move(mapController.center, mapController.zoom);
-    // map!.createState();
-  }
-
-  void onZoom(MapEvent event) {
+  void onMapEvent(MapEvent event) {
     if (event is! MapEventMoveEnd) return;
     print("move triggered");
     performSearch();
   }
 
+  Future<void> performSearch() async {
+    bounds = widget.mapController.bounds!;
+    print(
+        '${bounds.south}, ${bounds.west}, ${bounds.east}, ${widget.activity.value}');
+
+    print("fetch locations started");
+    List<Marker> markers_ = await fetchLocations(bounds, widget.activity.value);
+    setState(() {
+      markers = markers_;
+      print("state set... with ${markers.length} items");
+    });
+  }
+
+  @override
+  void initState() {
+    widget.activity.addListener(() {
+      print("set_activity triggered");
+      performSearch();
+    });
+
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
-    map = FlutterMap(
-      mapController: mapController,
-      options: MapOptions(
-          center: LatLng(51.5167, 9.9167), zoom: 10.2, onMapEvent: onZoom),
+    return FlutterMap(
+      mapController: widget.mapController,
+      options: MapOptions(bounds: bounds, onMapEvent: onMapEvent),
       children: [
         TileLayer(
           urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
           subdomains: const ['a', 'b', 'c'],
         ),
-        markerLayer,
+        MarkerLayer(markers: markers),
       ],
     );
-    return map!;
   }
 }
-
-// class Map extends StatelessWidget {
-//   @override
-//   Widget build(BuildContext context) {
-//
-//   }
-// }
 
 var client = http.Client();
 
@@ -174,10 +162,10 @@ Marker markerFromJson(Map<String, dynamic> json) {
 
   return Marker(
       point: loc,
-      width: 1,
-      height: 1,
+      width: 20,
+      height: 20,
       builder: (context) => const Icon(Icons.location_pin),
-      anchorPos: AnchorPos.align(AnchorAlign.bottom));
+      anchorPos: AnchorPos.align(AnchorAlign.top));
 }
 
 List<Marker> parseMarkers(String responseBody) {
@@ -204,7 +192,7 @@ Future<List<Marker>> fetchLocations(
             "east": bounds.east.toString(),
             "south": bounds.south.toString(),
             "north": bounds.north.toString(),
-            "activities": activity
+            if (activity.isNotEmpty) "activities": activity
           }),
       headers: {
         'Access-Control-Allow-Origin': "*",
@@ -223,10 +211,12 @@ class SearchBar extends StatelessWidget {
     super.key,
   });
 
-  MapWidget? _map;
+  ActivityMarkerMap? _map;
 
   void setActivity(String activity) {
-    _map!.activity = activity;
+    _map!.activity.value = activity;
+    _map!.activity.notifyListeners();
+    print('set activity to: $activity');
   }
 
   @override
