@@ -7,25 +7,37 @@ import 'package:latlong2/latlong.dart';
 import 'package:flutter_map/plugin_api.dart'; // Only import if required functionality is not exposed by default
 import 'package:http/http.dart' as http;
 
-class MapScreen extends StatelessWidget {
+class MapScreen extends StatefulWidget {
   MapScreen({Key? key}) : super(key: key);
-  SearchBar searchBar = SearchBar();
+
+  @override
+  MapScreenState createState() {
+    return MapScreenState();
+  }
+}
+
+class MapScreenState extends State<MapScreen> {
+  ValueNotifier<String> activity = ValueNotifier("-");
+  SearchBar? searchBar;
   ActivityMarkerMap? mapWidget;
 
   @override
   Widget build(BuildContext context) {
+    searchBar = SearchBar(mapState: this);
     //size of the window
     var size = MediaQuery.of(context).size;
     var height = size.height;
     var width = size.width;
     final mapController = MapController();
     mapWidget = ActivityMarkerMap(
-        mapController: mapController, height: height, width: width);
-    searchBar._map = mapWidget;
+        mapController: mapController,
+        height: height,
+        width: width,
+        mapState: this);
     return Stack(
       children: [
         mapWidget!,
-        searchBar,
+        searchBar!,
         const BuildContainer(),
       ],
     );
@@ -90,14 +102,13 @@ class ActivityMarkerMap extends StatefulWidget {
     required this.mapController,
     required this.width,
     required this.height,
+    required this.mapState,
   });
 
   final MapController mapController;
   final double width;
   final double height;
-  ValueNotifier<String> activity = ValueNotifier("-"); // invalid default
-
-  void setActivity(String activity) {}
+  MapScreenState mapState;
 
   @override
   _ActivityMarkerMapState createState() {
@@ -118,10 +129,11 @@ class _ActivityMarkerMapState extends State<ActivityMarkerMap> {
   Future<void> performSearch() async {
     bounds = widget.mapController.bounds!;
     print(
-        '${bounds.south}, ${bounds.west}, ${bounds.east}, ${widget.activity.value}');
+        '${bounds.south}, ${bounds.west}, ${bounds.east}, ${widget.mapState.activity.value}');
 
     print("fetch locations started");
-    List<Marker> markers_ = await fetchLocations(bounds, widget.activity.value);
+    List<Marker> markers_ =
+        await fetchLocations(bounds, widget.mapState.activity.value);
     setState(() {
       markers = markers_;
       print("state set... with ${markers.length} items");
@@ -130,7 +142,7 @@ class _ActivityMarkerMapState extends State<ActivityMarkerMap> {
 
   @override
   void initState() {
-    widget.activity.addListener(() {
+    widget.mapState.activity.addListener(() {
       print("set_activity triggered");
       performSearch();
     });
@@ -175,12 +187,6 @@ List<Marker> parseMarkers(String responseBody) {
 
 Future<List<Marker>> fetchLocations(
     LatLngBounds bounds, String activity) async {
-  // var request =
-  //     http.Request("GET", Uri(path: "http://localhost:8000/locations/bbox"));
-  //
-  // final response =
-  //     await request.send(); // http.get('http://localhost:8000/locations/bbox');
-
   final response = await http.get(
       Uri(
           scheme: "http",
@@ -207,15 +213,12 @@ Future<List<Marker>> fetchLocations(
 }
 
 class SearchBar extends StatelessWidget {
-  SearchBar({
-    super.key,
-  });
+  const SearchBar({super.key, required this.mapState});
 
-  ActivityMarkerMap? _map;
+  final MapScreenState mapState;
 
   void setActivity(String activity) {
-    _map!.activity.value = activity;
-    _map!.activity.notifyListeners();
+    mapState.activity.value = activity;
     print('set activity to: $activity');
   }
 
