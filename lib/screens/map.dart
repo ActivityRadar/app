@@ -8,6 +8,7 @@ import 'package:latlong2/latlong.dart';
 import 'package:flutter_map/plugin_api.dart'; // Only import if required functionality is not exposed by default
 import 'package:http/http.dart' as http;
 
+// ignore_for_file: avoid_print
 class MapScreen extends StatefulWidget {
   MapScreen({Key? key}) : super(key: key);
 
@@ -73,7 +74,7 @@ class BuildContainer extends StatelessWidget {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => DetailsScreen(),
+                      builder: (context) => const DetailsScreen(),
                     ),
                   );
                 },
@@ -92,7 +93,7 @@ class BuildContainer extends StatelessWidget {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => DetailsScreen(),
+                      builder: (context) => const DetailsScreen(),
                     ),
                   );
                 },
@@ -111,7 +112,7 @@ class BuildContainer extends StatelessWidget {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => DetailsScreen(),
+                        builder: (context) => const DetailsScreen(),
                       ),
                     );
                   },
@@ -149,7 +150,7 @@ class _ActivityMarkerMapState extends State<ActivityMarkerMap> {
 
   void onMapEvent(MapEvent event) {
     if (event is! MapEventMoveEnd) return;
-    // ignore_for_file: avoid_print
+
     print("move triggered");
     performSearch();
   }
@@ -217,7 +218,7 @@ Future<List<Marker>> fetchLocations(
   final response = await http.get(
       Uri(
           scheme: "http",
-          host: "localhost",
+          host: "192.168.188.164",
           port: 8000,
           path: '/locations/bbox',
           queryParameters: {
