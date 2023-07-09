@@ -18,7 +18,7 @@ class _HomeState extends State<Home> {
   final List<Widget> screens = [
     const HomeScreen(),
     const SettingScreen(),
-    MapScreen(),
+    const MapScreen(),
     const CommunityScreen()
   ];
 
@@ -31,6 +31,7 @@ class _HomeState extends State<Home> {
     var size = MediaQuery.of(context).size;
     var height = size.height;
     var width = size.width;
+    var x = width / 4.5;
     return Scaffold(
       extendBody: true,
       body: PageStorage(
@@ -73,7 +74,7 @@ class _HomeState extends State<Home> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   MaterialButton(
-                    minWidth: 100,
+                    minWidth: x,
                     onPressed: () {
                       setState(() {
                         currentScreen = const HomeScreen();
@@ -98,10 +99,10 @@ class _HomeState extends State<Home> {
                     ),
                   ),
                   MaterialButton(
-                    minWidth: 100,
+                    minWidth: x,
                     onPressed: () {
                       setState(() {
-                        currentScreen = MapScreen();
+                        currentScreen = const MapScreen();
                         currentTab = 1;
                       });
                     },
@@ -128,7 +129,7 @@ class _HomeState extends State<Home> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   MaterialButton(
-                    minWidth: 100,
+                    minWidth: x,
                     onPressed: () {
                       setState(() {
                         currentScreen = const CommunityScreen();
@@ -153,7 +154,7 @@ class _HomeState extends State<Home> {
                     ),
                   ),
                   MaterialButton(
-                    minWidth: 100,
+                    minWidth: x,
                     onPressed: () {
                       setState(() {
                         currentScreen = const SettingScreen();

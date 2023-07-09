@@ -27,7 +27,7 @@ class DetailsScreen extends StatelessWidget {
         actions: <Widget>[
           IconButton(
             onPressed: () {},
-            icon: const Icon(Icons.star_rate),
+            icon: const Icon(Icons.ios_share),
             color: DesignColors.kBackgroundColor,
           ),
         ]);

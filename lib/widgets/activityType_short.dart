@@ -2,8 +2,8 @@ import 'package:app/constants/contants.dart';
 import 'package:flutter/material.dart';
 import 'package:app/widgets/vote.dart';
 
-class BoxesDetails extends StatelessWidget {
-  const BoxesDetails({
+class ActivityDetails extends StatelessWidget {
+  const ActivityDetails({
     super.key,
     required this.imageurl,
     required this.lat,
@@ -21,7 +21,6 @@ class BoxesDetails extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
-    var height = size.height;
     var width = size.width;
     return GestureDetector(
       onTap: press,
@@ -30,24 +29,22 @@ class BoxesDetails extends StatelessWidget {
           color: Colors.white,
           elevation: 14.0,
           borderRadius: BorderRadius.circular(25.0),
-          child: Row(
+          child: const Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
               SizedBox(
-                width: 180,
+                width: 200,
                 height: 200,
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(24.0),
-                  child: Image(
-                    fit: BoxFit.fill,
-                    image: NetworkImage(imageurl),
+                child: Padding(
+                  padding: EdgeInsets.symmetric(vertical: 0.0, horizontal: 5.0),
+                  child: Text(
+                    'Table Tennis',
+                    textAlign: TextAlign.center,
+                    overflow: TextOverflow.ellipsis,
+                    style: TextStyle(fontWeight: FontWeight.bold),
                   ),
                 ),
               ),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: DetailContainer(titel: titel),
-              )
             ],
           ),
         ),

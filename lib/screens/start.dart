@@ -6,8 +6,6 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Size size = MediaQuery.of(context).size;
-
     return const SingleChildScrollView(
       child: Column(
         children: <Widget>[
@@ -41,7 +39,7 @@ class TitleWithCustomUnderline extends StatelessWidget {
           padding: const EdgeInsets.only(left: kDefaultPadding / 4),
           child: Text(
             text,
-            style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+            style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
           ),
         )
       ]),

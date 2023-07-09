@@ -1,7 +1,6 @@
 import 'dart:convert';
 import 'package:app/screens/details_screen.dart';
 import 'package:app/widgets/details_short.dart';
-import 'package:app/constants/contants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
@@ -10,7 +9,7 @@ import 'package:http/http.dart' as http;
 
 // ignore_for_file: avoid_print
 class MapScreen extends StatefulWidget {
-  MapScreen({Key? key}) : super(key: key);
+  const MapScreen({Key? key}) : super(key: key);
 
   @override
   MapScreenState createState() {
@@ -53,11 +52,13 @@ class BuildContainer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var size = MediaQuery.of(context).size;
+    var height = size.height;
     return Align(
       alignment: Alignment.bottomLeft,
       child: Container(
-        margin: const EdgeInsets.symmetric(vertical: 80),
-        height: 130.0,
+        margin: const EdgeInsets.symmetric(vertical: 100),
+        height: height / 7,
         child: ListView(
           scrollDirection: Axis.horizontal,
           children: <Widget>[
