@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:app/screens/details_screen.dart';
 import 'package:app/widgets/details_short.dart';
+import 'package:app/widgets/bar_search.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
@@ -19,12 +20,12 @@ class MapScreen extends StatefulWidget {
 
 class MapScreenState extends State<MapScreen> {
   ValueNotifier<String> activity = ValueNotifier("-");
-  SearchBar? searchBar;
+  Search_Bar? searchBar;
   ActivityMarkerMap? mapWidget;
 
   @override
   Widget build(BuildContext context) {
-    searchBar = SearchBar(mapState: this);
+    searchBar = Search_Bar(mapState: this);
     //size of the window
     var size = MediaQuery.of(context).size;
     var height = size.height;
@@ -147,7 +148,7 @@ class ActivityMarkerMap extends StatefulWidget {
 
 class _ActivityMarkerMapState extends State<ActivityMarkerMap> {
   LatLngBounds bounds = LatLngBounds(LatLng(52.37, 12.74), LatLng(53, 13.04));
-  List<Marker> markers = [];
+  List<MyMarker> markers = [];
 
   void onMapEvent(MapEvent event) {
     if (event is! MapEventMoveEnd) return;
@@ -161,7 +162,7 @@ class _ActivityMarkerMapState extends State<ActivityMarkerMap> {
     print(
         '${bounds.south}, ${bounds.west}, ${bounds.east}, ${widget.mapState.activity.value}');
     print("fetch locations started");
-    List<Marker> markers_ =
+    List<MyMarker> markers_ =
         await fetchLocations(bounds, widget.mapState.activity.value);
     setState(() {
       markers = markers_;
@@ -197,24 +198,44 @@ class _ActivityMarkerMapState extends State<ActivityMarkerMap> {
 
 var client = http.Client();
 
-Marker markerFromJson(Map<String, dynamic> json) {
+class MyMarker extends Marker {
+  MyMarker({
+    required super.point,
+    required super.builder,
+    required super.width,
+    required super.height,
+    required super.anchorPos,
+    //  required this.id
+  });
+
+  // final String id;
+}
+
+MyMarker markerFromJson(Map<String, dynamic> json) {
   var loc = LatLng(
       json["location"]["coordinates"][1], json["location"]["coordinates"][0]);
+  String id = json["id"];
 
-  return Marker(
+  return MyMarker(
       point: loc,
       width: 20,
       height: 20,
-      builder: (context) => const Icon(Icons.location_pin),
+      builder: (context) => IconButton(
+            icon: const Icon(Icons.location_pin),
+            onPressed: () {
+              print("marker pressed with id: ${id}");
+              // TODO: open widget and fetch data
+            },
+          ),
       anchorPos: AnchorPos.align(AnchorAlign.top));
 }
 
-List<Marker> parseMarkers(String responseBody) {
+List<MyMarker> parseMarkers(String responseBody) {
   final parsed = json.decode(responseBody).cast<Map<String, dynamic>>();
-  return parsed.map<Marker>((json) => markerFromJson(json)).toList();
+  return parsed.map<MyMarker>((json) => markerFromJson(json)).toList();
 }
 
-Future<List<Marker>> fetchLocations(
+Future<List<MyMarker>> fetchLocations(
     LatLngBounds bounds, String activity) async {
   final response = await http.get(
       Uri(
@@ -238,38 +259,5 @@ Future<List<Marker>> fetchLocations(
     return parseMarkers(response.body);
   } else {
     throw Exception('Unable to fetch products from the REST API');
-  }
-}
-
-class SearchBar extends StatelessWidget {
-  const SearchBar({super.key, required this.mapState});
-
-  final MapScreenState mapState;
-
-  void setActivity(String activity) {
-    mapState.activity.value = activity;
-    print('set activity to: $activity');
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 34.0, horizontal: 16.0),
-      child: Column(
-        children: [
-          Card(
-              child: TextField(
-            decoration: const InputDecoration(
-              prefixIcon: Icon(Icons.filter_alt),
-              suffixIcon: Icon(Icons.search),
-              hintStyle: TextStyle(fontSize: 15.0, color: Colors.black12),
-              hintText: "Search basketball, volleyball, table tennis ... ",
-            ),
-            textInputAction: TextInputAction.search,
-            onSubmitted: setActivity,
-          ))
-        ],
-      ),
-    );
   }
 }

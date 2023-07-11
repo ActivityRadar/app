@@ -2,6 +2,7 @@ import 'package:app/screens/community.dart';
 import 'package:app/screens/start.dart';
 import 'package:app/screens/map.dart';
 import 'package:app/screens/settings.dart';
+import 'package:app/widgets/bottomsheet.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:app/constants/contants.dart';
@@ -41,23 +42,7 @@ class _HomeState extends State<Home> {
       floatingActionButton: FloatingActionButton(
         backgroundColor: DesignColors.naviColor,
         onPressed: () {
-          showModalBottomSheet(
-              context: context,
-              builder: (context) => Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: <Widget>[
-                      ListTile(
-                        leading: const Icon(Icons.push_pin),
-                        title: const Text("Add Location"),
-                        onTap: () {},
-                      ),
-                      ListTile(
-                        leading: const Icon(Icons.event),
-                        title: const Text("Add Event"),
-                        onTap: () {},
-                      ),
-                    ],
-                  ));
+          BottomSheetAdd(context);
         },
         child: const Icon(Icons.add),
       ),
