@@ -92,3 +92,59 @@ class DetailContainer extends StatelessWidget {
     );
   }
 }
+
+class ReviewContainer extends StatelessWidget {
+  const ReviewContainer({
+    super.key,
+    required this.imageurl,
+    required this.lat,
+    required this.long,
+    required this.titel,
+    required this.press,
+  });
+
+  final String imageurl;
+  final double lat;
+  final double long;
+  final String titel;
+  final void Function() press;
+
+  @override
+  Widget build(BuildContext context) {
+    var size = MediaQuery.of(context).size;
+    double width = size.width;
+    return Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: GestureDetector(
+          onTap: press,
+          child: FittedBox(
+            child: Material(
+              color: Colors.white,
+              elevation: 14.0,
+              borderRadius: BorderRadius.circular(25.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: <Widget>[
+                  SizedBox(
+                    width: width * 2,
+                    height: 200,
+                    child: Padding(
+                      padding:
+                          EdgeInsets.symmetric(vertical: 0.0, horizontal: 5.0),
+                      child: Text(
+                        'Table Tennis',
+                        textAlign: TextAlign.center,
+                        overflow: TextOverflow.ellipsis,
+                        style: TextStyle(fontWeight: FontWeight.bold),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ));
+  }
+
+  myDetailsContainer({required id}) {}
+}
