@@ -1,0 +1,15 @@
+{
+    "language":"English",
+    "map": "Map",
+    "@map": {
+        "description": "The conventional newborn programmer greeting"
+            },
+    "home": "Home",
+    "@home": {"description": "Navi Label for Home "},
+    "setting": "Setting",
+    "@setting": {"description": "Navi Label for Setting "},
+    "community": "Community",
+    "@community": {"description": "Navi Label for Community"}
+
+
+}
