@@ -7,7 +7,6 @@ import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:flutter_map/plugin_api.dart'; // Only import if required functionality is not exposed by default
 import 'package:http/http.dart' as http;
-import 'dart:io';
 
 // ignore_for_file: avoid_print
 class MapScreen extends StatefulWidget {
@@ -21,22 +20,19 @@ class MapScreen extends StatefulWidget {
 
 class MapScreenState extends State<MapScreen> {
   ValueNotifier<String> activity = ValueNotifier("-");
-  Search_Bar? searchBar;
+  MapSearchBar? searchBar;
   ActivityMarkerMap? mapWidget;
 
   @override
   Widget build(BuildContext context) {
-    searchBar = Search_Bar(mapState: this);
+    searchBar = MapSearchBar(mapState: this);
+
     //size of the window
     var size = MediaQuery.of(context).size;
     var height = size.height;
     var width = size.width;
-    final mapController = MapController();
-    mapWidget = ActivityMarkerMap(
-        mapController: mapController,
-        height: height,
-        width: width,
-        mapState: this);
+    mapWidget = ActivityMarkerMap(height: height, width: width, mapState: this);
+
     return Stack(
       children: [
         mapWidget!,
@@ -48,9 +44,7 @@ class MapScreenState extends State<MapScreen> {
 }
 
 class BuildContainer extends StatelessWidget {
-  const BuildContainer({
-    super.key,
-  });
+  const BuildContainer({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -128,21 +122,19 @@ class BuildContainer extends StatelessWidget {
 }
 
 class ActivityMarkerMap extends StatefulWidget {
-  ActivityMarkerMap({
+  const ActivityMarkerMap({
     super.key,
-    required this.mapController,
     required this.width,
     required this.height,
     required this.mapState,
   });
 
-  final MapController mapController;
   final double width;
   final double height;
-  MapScreenState mapState;
+  final MapScreenState mapState;
 
   @override
-  _ActivityMarkerMapState createState() {
+  State<ActivityMarkerMap> createState() {
     return _ActivityMarkerMapState();
   }
 }
@@ -150,16 +142,19 @@ class ActivityMarkerMap extends StatefulWidget {
 class _ActivityMarkerMapState extends State<ActivityMarkerMap> {
   LatLngBounds bounds = LatLngBounds(LatLng(52.37, 12.74), LatLng(53, 13.04));
   List<MyMarker> markers = [];
+  final MapController mapController = MapController();
 
   void onMapEvent(MapEvent event) {
     if (event is! MapEventMoveEnd) return;
 
     print("move triggered");
+    setState(() {
+      bounds = mapController.bounds!;
+    });
     performSearch();
   }
 
   Future<void> performSearch() async {
-    bounds = widget.mapController.bounds!;
     print(
         '${bounds.south}, ${bounds.west}, ${bounds.east}, ${widget.mapState.activity.value}');
     print("fetch locations started");
@@ -184,7 +179,7 @@ class _ActivityMarkerMapState extends State<ActivityMarkerMap> {
   @override
   Widget build(BuildContext context) {
     return FlutterMap(
-      mapController: widget.mapController,
+      mapController: mapController,
       options: MapOptions(bounds: bounds, onMapEvent: onMapEvent),
       children: [
         TileLayer(
@@ -224,7 +219,7 @@ MyMarker markerFromJson(Map<String, dynamic> json) {
       builder: (context) => IconButton(
             icon: const Icon(Icons.location_pin),
             onPressed: () {
-              print("marker pressed with id: ${id}");
+              print("marker pressed with id: $id");
               // TODO: open widget and fetch data
             },
           ),

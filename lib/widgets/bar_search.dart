@@ -1,11 +1,9 @@
 import 'package:app/screens/map.dart';
 import 'package:app/widgets/bottomsheet.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_map/flutter_map.dart';
-import 'package:flutter_map/plugin_api.dart'; //
 
-class Search_Bar extends StatelessWidget {
-  const Search_Bar({
+class MapSearchBar extends StatelessWidget {
+  const MapSearchBar({
     super.key,
     required this.mapState,
   });
@@ -22,6 +20,7 @@ class Search_Bar extends StatelessWidget {
     var size = MediaQuery.of(context).size;
     var height = size.height;
     var width = size.width;
+
     return Padding(
       padding: EdgeInsets.symmetric(vertical: height / 25, horizontal: 16.0),
       child: Column(
