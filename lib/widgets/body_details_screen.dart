@@ -9,17 +9,19 @@ import 'package:app/widgets/vote.dart';
 
 class BodyDetails extends StatefulWidget {
   const BodyDetails({super.key});
+
   @override
   State<BodyDetails> createState() => _BodyDetails();
 }
 
 class _BodyDetails extends State<BodyDetails> {
+  int _current = 0;
+  final CarouselController _controller = CarouselController();
+
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
     var height = size.height;
-    int _current = 0;
-    CarouselController _controller = CarouselController();
 
     return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
       Container(
