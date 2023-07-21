@@ -71,7 +71,8 @@ class BuildContainer extends StatelessWidget {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => const DetailsScreen(),
+                      builder: (context) =>
+                          const DetailsScreen(locationId: "location-id-1"),
                     ),
                   );
                 },
@@ -90,7 +91,8 @@ class BuildContainer extends StatelessWidget {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => const DetailsScreen(),
+                      builder: (context) =>
+                          const DetailsScreen(locationId: "location-id-2"),
                     ),
                   );
                 },
@@ -109,7 +111,8 @@ class BuildContainer extends StatelessWidget {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => const DetailsScreen(),
+                        builder: (context) =>
+                            const DetailsScreen(locationId: "location-id-3"),
                       ),
                     );
                   },

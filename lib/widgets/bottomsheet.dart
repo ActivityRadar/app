@@ -1,7 +1,8 @@
 import 'package:app/screens/addlocation.dart';
 import 'package:flutter/material.dart';
 
-Future<dynamic> BottomSheetAdd(BuildContext context) {
+Future<dynamic> bottomSheetBase(
+    {required BuildContext context, required dynamic builder}) {
   return showModalBottomSheet(
       context: context,
       shape: const RoundedRectangleBorder(
@@ -9,6 +10,12 @@ Future<dynamic> BottomSheetAdd(BuildContext context) {
           top: Radius.circular(25.0),
         ),
       ),
+      builder: builder);
+}
+
+Future<dynamic> bottomSheetAdd(BuildContext context) {
+  return bottomSheetBase(
+      context: context,
       builder: (context) => Column(
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
@@ -33,14 +40,9 @@ Future<dynamic> BottomSheetAdd(BuildContext context) {
           ));
 }
 
-Future<dynamic> BottomSheetFilter(BuildContext context) {
-  return showModalBottomSheet(
+Future<dynamic> bottomSheetFilter(BuildContext context) {
+  return bottomSheetBase(
       context: context,
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(
-          top: Radius.circular(25),
-        ),
-      ),
       builder: (context) => Column(
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
@@ -51,7 +53,7 @@ Future<dynamic> BottomSheetFilter(BuildContext context) {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
                       Padding(
-                        padding: EdgeInsets.only(left: 9.0, top: 9.0),
+                        padding: const EdgeInsets.only(left: 9.0, top: 9.0),
                         child: TextButton(
                           onPressed: () {
                             print("Moin");
