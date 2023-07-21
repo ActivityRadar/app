@@ -18,7 +18,7 @@ class _HomeState extends State<Home> {
   int currentTab = 0;
   final List<Widget> screens = [
     const HomeScreen(),
-    const SettingScreen(),
+    SettingScreen(),
     const MapScreen(),
     const CommunityScreen()
   ];
@@ -42,7 +42,7 @@ class _HomeState extends State<Home> {
       floatingActionButton: FloatingActionButton(
         backgroundColor: DesignColors.naviColor,
         onPressed: () {
-          BottomSheetAdd(context);
+          bottomSheetAdd(context);
         },
         child: const Icon(Icons.add),
       ),
@@ -142,7 +142,7 @@ class _HomeState extends State<Home> {
                     minWidth: x,
                     onPressed: () {
                       setState(() {
-                        currentScreen = const SettingScreen();
+                        currentScreen = SettingScreen();
                         currentTab = 4;
                       });
                     },

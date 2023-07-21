@@ -42,6 +42,7 @@ dependencies:
   intl: any
   http: ^0.13.6
   aws_s3_api: ^2.0.0
+  image_picker: ^1.0.1
   crypto: ^3.0.3
 
 dev_dependencies:

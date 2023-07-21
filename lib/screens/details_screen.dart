@@ -1,9 +1,12 @@
 import 'package:app/constants/contants.dart';
+import 'package:app/widgets/photo_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:app/widgets/body_details_screen.dart';
 
 class DetailsScreen extends StatelessWidget {
-  const DetailsScreen({super.key});
+  const DetailsScreen({super.key, required this.locationId});
+
+  final String locationId;
 
   @override
   Widget build(BuildContext context) {
@@ -28,6 +31,12 @@ class DetailsScreen extends StatelessWidget {
           IconButton(
             onPressed: () {},
             icon: const Icon(Icons.ios_share),
+            color: DesignColors.kBackgroundColor,
+          ),
+          IconButton(
+            onPressed: () => bottomSheetPhotoSourcePicker(
+                context: context, mode: "location", locationId: locationId),
+            icon: const Icon(Icons.add_a_photo),
             color: DesignColors.kBackgroundColor,
           ),
         ]);
