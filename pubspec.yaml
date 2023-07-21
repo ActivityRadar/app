@@ -41,6 +41,8 @@ dependencies:
     sdk: flutter
   intl: any
   http: ^0.13.6
+  aws_s3_api: ^2.0.0
+  crypto: ^3.0.3
 
 dev_dependencies:
   flutter_test:

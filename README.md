@@ -32,3 +32,7 @@ Connect your device or start an emulator and run:
 ```
 flutter run
 ```
+
+## Deployment
+
+We are using AWS S3 as image storage. Look into [our AWS setup](docs/aws.md) for more information on that.
