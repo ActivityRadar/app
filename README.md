@@ -36,3 +36,13 @@ flutter run
 ## Deployment
 
 We are using AWS S3 as image storage. Look into [our AWS setup](docs/aws.md) for more information on that.
+
+## Development
+
+We use `pre-commit` with `ggshield` as commit checker. To set up this, install `pre-commit`,
+for example via `pip install pre-commit`. Then, run `pre-commit install` to set up the commit
+hooks in the `.pre-commit-config.yaml` config.
+As we are using `ggshield` to prevent secret leaks, create a `.env` file in the project root.
+Create a `GitGuardian` account and an API key. Paste that key in the `.env` file like shown in
+the `.env.example`.
+Upon creating a new commit, the hooks should run and tell you if something went wrong.
