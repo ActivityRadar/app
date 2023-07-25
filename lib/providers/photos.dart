@@ -17,8 +17,15 @@ class PhotoService {
   final String bucket = secrets.awsBucketName;
 
   Future<MemoryImage> getPhoto(String id) async {
-    dynamic res = await s3Service.getObject(bucket: bucket, key: id);
-    return MemoryImage(res.body);
+    try {
+      print("Getting photo $id...");
+      dynamic res = await s3Service.getObject(bucket: bucket, key: id);
+      print("Got photo: $id");
+      return MemoryImage(res.body);
+    } catch (e) {
+      print("S3 download failed: $e");
+      rethrow;
+    }
   }
 
   Future<void> uploadPhoto(
@@ -26,7 +33,8 @@ class PhotoService {
     try {
       await s3Service.putObject(bucket: bucket, key: path, body: image.bytes);
     } catch (e) {
-      print(e);
+      print("S3 upload failed: $e");
+      rethrow;
     }
   }
 

@@ -1,5 +1,7 @@
+import 'dart:async';
 import 'dart:convert';
 
+import 'package:flutter_map/plugin_api.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
 
@@ -126,11 +128,32 @@ class RelationService {
 }
 
 class LocationService {
+  static String prefix = "/locations";
+
   void createLocation() {}
 
   void deleteLocation() {}
 
-  void getInBoundingBox() {}
+  Future<http.Response> getDetails(String locationId) async {
+    return await BackendService.instance.sendRequest(
+      "GET",
+      "$prefix/$locationId",
+    );
+  }
+
+  Future<http.Response> getInBoundingBox(
+      LatLngBounds bounds, String activity) async {
+    Map<String, dynamic> queryParams = {
+      "south": bounds.south.toString(),
+      "north": bounds.north.toString(),
+      "west": bounds.west.toString(),
+      "east": bounds.east.toString(),
+      "activities": [activity]
+    };
+
+    return await BackendService.instance
+        .sendRequest("GET", "$prefix/bbox", queryParams: queryParams);
+  }
 
   void getAroundCenter() {}
 }
@@ -147,54 +170,32 @@ class ReviewService {
   void getReviews() {}
 }
 
+class ProfilePhotoService {
+  static String prefix = "/users/me/photo";
 
-// MyMarker markerFromJson(Map<String, dynamic> json) {
-//   var loc = LatLng(
-//       json["location"]["coordinates"][1], json["location"]["coordinates"][0]);
-//   String id = json["id"];
-//
-//   return MyMarker(
-//       point: loc,
-//       width: 20,
-//       height: 20,
-//       builder: (context) => IconButton(
-//             icon: const Icon(Icons.location_pin),
-//             onPressed: () {
-//               print("marker pressed with id: ${id}");
-//               // TODO: open widget and fetch data
-//             },
-//           ),
-//       anchorPos: AnchorPos.align(AnchorAlign.top));
-// }
-//
-// List<MyMarker> parseMarkers(String responseBody) {
-//   final parsed = json.decode(responseBody).cast<Map<String, dynamic>>();
-//   return parsed.map<MyMarker>((json) => markerFromJson(json)).toList();
-// }
-//
-// Future<List<MyMarker>> fetchLocations(
-//     LatLngBounds bounds, String activity) async {
-//   final response = await http.get(
-//       Uri(
-//           scheme: "http",
-//           host: "192.168.188.164",
-//           port: 8000,
-//           path: '/locations/bbox',
-//           queryParameters: {
-//             "west": bounds.west.toString(),
-//             "east": bounds.east.toString(),
-//             "south": bounds.south.toString(),
-//             "north": bounds.north.toString(),
-//             if (activity.isNotEmpty) "activities": activity
-//           }),
-//       headers: {
-//         'Access-Control-Allow-Origin': "*",
-//         'Content-Type': 'application/json',
-//         'Accept': '*/*'
-//       });
-//   if (response.statusCode == 200) {
-//     return parseMarkers(response.body);
-//   } else {
-//     throw Exception('Unable to fetch products from the REST API');
-//   }
-// }
+  Future<http.Response> create(String path) async {
+    return await BackendService.instance
+        .sendRequest("POST", prefix, queryParams: {"photo_url": path});
+  }
+
+  Future<http.Response> delete() async {
+    return await BackendService.instance.sendRequest("DELETE", prefix);
+  }
+}
+
+class LocationPhotoService {
+  static String _prefix(String id) {
+    return "/locations/$id/photos/";
+  }
+
+  Future<http.Response> create(String path, String locationId) async {
+    return await BackendService.instance
+        .sendRequest("POST", _prefix(locationId), body: jsonEncode(path));
+  }
+
+  Future<http.Response> delete(String locationId, String photoId) async {
+    return await BackendService.instance.sendRequest(
+        "DELETE", _prefix(locationId),
+        queryParams: {"photo_id": photoId});
+  }
+}
