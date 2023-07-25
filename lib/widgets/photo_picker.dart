@@ -1,4 +1,5 @@
-import 'package:app/providers/photos.dart';
+import 'package:app/provider/backend.dart';
+import 'package:app/provider/photos.dart';
 import 'package:app/widgets/bottomsheet.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
@@ -67,6 +68,17 @@ Future<dynamic> bottomSheetPhotoSourcePicker(
         extension: photo.path.split(".").last,
         locationId: locationId,
         userId: userId);
+
+    try {
+      if (mode == "location") {
+        await LocationPhotoService().create(path, locationId!);
+      } else {
+        await ProfilePhotoService().create(path);
+      }
+    } catch (e) {
+      print("Creation in backend failed with error $e! Not uploading image...");
+      return null;
+    }
 
     await uploadImage(image: photo, path: path);
 

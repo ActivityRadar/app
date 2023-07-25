@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:app/provider/backend.dart';
 import 'package:app/screens/details_screen.dart';
 import 'package:app/widgets/details_short.dart';
 import 'package:app/widgets/bar_search.dart';
@@ -195,8 +196,6 @@ class _ActivityMarkerMapState extends State<ActivityMarkerMap> {
   }
 }
 
-var client = http.Client();
-
 class MyMarker extends Marker {
   MyMarker({
     required super.point,
@@ -222,41 +221,26 @@ MyMarker markerFromJson(Map<String, dynamic> json) {
       builder: (context) => IconButton(
             icon: const Icon(Icons.location_pin),
             onPressed: () {
-              print("marker pressed with id: $id");
-              // TODO: open widget and fetch data
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => DetailsScreen(locationId: id)));
             },
           ),
       anchorPos: AnchorPos.align(AnchorAlign.top));
 }
 
 List<MyMarker> parseMarkers(String responseBody) {
-  final parsed = json.decode(responseBody).cast<Map<String, dynamic>>();
+  final List parsed =
+      jsonDecode(responseBody); //.cast<List<Map<String, dynamic>>>();
+  if (parsed.isNotEmpty) print(parsed[0]);
+  print(parsed.length);
   return parsed.map<MyMarker>((json) => markerFromJson(json)).toList();
 }
 
 Future<List<MyMarker>> fetchLocations(
     LatLngBounds bounds, String activity) async {
-  final response = await http.get(
-      Uri(
-          scheme: "http",
-          host: "192.168.188.164",
-          port: 8000,
-          path: '/locations/bbox',
-          queryParameters: {
-            "west": bounds.west.toString(),
-            "east": bounds.east.toString(),
-            "south": bounds.south.toString(),
-            "north": bounds.north.toString(),
-            if (activity.isNotEmpty) "activities": activity
-          }),
-      headers: {
-        'Access-Control-Allow-Origin': "*",
-        'Content-Type': 'application/json',
-        'Accept': '*/*'
-      });
-  if (response.statusCode == 200) {
-    return parseMarkers(response.body);
-  } else {
-    throw Exception('Unable to fetch products from the REST API');
-  }
+  http.Response response =
+      await LocationService().getInBoundingBox(bounds, activity);
+  return parseMarkers(response.body);
 }

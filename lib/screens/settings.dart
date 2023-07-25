@@ -1,6 +1,5 @@
 import 'package:app/constants/contants.dart';
-import 'package:app/providers/photos.dart';
-import 'package:app/widgets/photo_picker.dart';
+import 'package:app/provider/photos.dart';
 import 'package:flutter/material.dart';
 
 class SettingScreen extends StatelessWidget {

@@ -44,6 +44,7 @@ dependencies:
   aws_s3_api: ^2.0.0
   image_picker: ^1.0.1
   crypto: ^3.0.3
+  flutter_secure_storage: ^8.0.0
 
 dev_dependencies:
   flutter_test:

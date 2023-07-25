@@ -1,3 +1,4 @@
+import 'package:app/screens/login.dart';
 import 'package:flutter/material.dart';
 
 class CommunityScreen extends StatelessWidget {
@@ -5,9 +6,6 @@ class CommunityScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
-        body: Center(
-      child: Text("community 1"),
-    ));
+    return const LoginScreen();
   }
 }
