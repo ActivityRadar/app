@@ -27,7 +27,7 @@ class BackendService {
 
     String? authToken = await storage.read(key: "token");
     if (authToken != null) {
-      headers['Authentication'] = 'Bearer $authToken';
+      headers['Authorization'] = 'Bearer $authToken';
     }
 
     if (additionalHeaders != null) {
