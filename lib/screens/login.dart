@@ -61,13 +61,15 @@ class _LoginScreenState extends State<LoginScreen> {
                           horizontal: 8, vertical: 16.0),
                       child: Center(
                         child: ElevatedButton(
-                          onPressed: () {
+                          onPressed: () async {
                             if (_formKey.currentState!.validate()) {
                               // Navigate the user to the Home page
                               print(emailController.text);
                               print(passwordController.text);
-                              AuthService.login(emailController.text,
-                                  passwordController.text);
+                              if (await AuthService.login(emailController.text,
+                                  passwordController.text)) {
+                                print("Login successful!");
+                              }
                             } else {
                               ScaffoldMessenger.of(context).showSnackBar(
                                 const SnackBar(
