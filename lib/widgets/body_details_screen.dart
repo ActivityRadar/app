@@ -1,6 +1,8 @@
 import 'package:app/constants/contants.dart';
+import 'package:app/providers/photos.dart';
 import 'package:app/widgets/activityType_short.dart';
 import 'package:app/widgets/details_short.dart';
+import 'package:app/widgets/photo_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:app/widgets/vote.dart';
@@ -8,7 +10,10 @@ import 'package:app/widgets/vote.dart';
 // ignore_for_file: avoid_print
 
 class BodyDetails extends StatefulWidget {
-  const BodyDetails({super.key});
+  const BodyDetails({super.key, required this.data, required this.id});
+
+  final String id;
+  final Map<String, dynamic> data;
 
   @override
   State<BodyDetails> createState() => _BodyDetails();
@@ -18,10 +23,59 @@ class _BodyDetails extends State<BodyDetails> {
   int _current = 0;
   final CarouselController _controller = CarouselController();
 
+  late List<Map<String, dynamic>> images;
+
+  @override
+  void initState() {
+    super.initState();
+    images = [for (var m in widget.data["photos"] ?? []) Map.from(m)];
+  }
+
   @override
   Widget build(BuildContext context) {
+    print(widget.data);
     var size = MediaQuery.of(context).size;
     var height = size.height;
+
+    List<Widget> imageBoxes = images.map<Widget>((photo) {
+      Future<MemoryImage> futImage = PhotoService().getPhoto(photo["url"]);
+      return FutureBuilder(
+        future: futImage,
+        builder: (BuildContext context, AsyncSnapshot snapshot) {
+          BoxDecoration decoration;
+          if (snapshot.hasData) {
+            decoration =
+                BoxDecoration(image: DecorationImage(image: snapshot.data));
+          } else if (snapshot.hasError) {
+            decoration = BoxDecoration(color: Colors.red);
+            print(snapshot.error);
+          } else {
+            decoration = BoxDecoration(color: Colors.grey);
+          }
+
+          return Builder(
+            builder: (BuildContext context) {
+              return Container(
+                  width: MediaQuery.of(context).size.width,
+                  height: MediaQuery.of(context).size.height,
+                  decoration: decoration);
+            },
+          );
+        },
+      );
+    }).toList();
+
+    imageBoxes.add(Builder(
+        builder: (BuildContext context) => GestureDetector(
+              onTap: () => bottomSheetPhotoSourcePicker(
+                  context: context, mode: "location", locationId: widget.id),
+              child: SizedBox(
+                  width: MediaQuery.of(context).size.width,
+                  height: MediaQuery.of(context).size.height,
+                  child: const DecoratedBox(
+                      decoration: BoxDecoration(color: Colors.grey),
+                      child: Icon(Icons.image))),
+            )));
 
     return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
       Container(
@@ -51,18 +105,7 @@ class _BodyDetails extends State<BodyDetails> {
                       },
                       enableInfiniteScroll: true,
                     ),
-                    items: images.map<Widget>((i) {
-                      return Builder(
-                        builder: (BuildContext context) {
-                          return Container(
-                              width: MediaQuery.of(context).size.width,
-                              height: MediaQuery.of(context).size.height,
-                              decoration: BoxDecoration(
-                                  image:
-                                      DecorationImage(image: NetworkImage(i))));
-                        },
-                      );
-                    }).toList(),
+                    items: imageBoxes,
                   ),
                 ],
               ),
@@ -71,24 +114,24 @@ class _BodyDetails extends State<BodyDetails> {
               margin: const EdgeInsets.symmetric(vertical: 2),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
-                children: images.asMap().entries.map((entry) {
-                  return GestureDetector(
-                    onTap: () => _controller.animateToPage(entry.key),
-                    child: Container(
-                      width: 12.0,
-                      height: 12.0,
-                      margin: const EdgeInsets.symmetric(
-                          vertical: 8.0, horizontal: 4.0),
-                      decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          color: (Theme.of(context).brightness ==
-                                      Brightness.light
-                                  ? Colors.white
-                                  : Colors.black)
-                              .withOpacity(_current == entry.key ? 0.9 : 0.4)),
-                    ),
-                  );
-                }).toList(),
+                children: [
+                  for (int i = 0; i < imageBoxes.length; i++)
+                    GestureDetector(
+                        onTap: () => _controller.animateToPage(i),
+                        child: Container(
+                          width: 12.0,
+                          height: 12.0,
+                          margin: const EdgeInsets.symmetric(
+                              vertical: 8.0, horizontal: 4.0),
+                          decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              color: (Theme.of(context).brightness ==
+                                          Brightness.light
+                                      ? Colors.white
+                                      : Colors.black)
+                                  .withOpacity(_current == i ? 0.9 : 0.4)),
+                        ))
+                ],
               ),
             ),
           ],
