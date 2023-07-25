@@ -8,10 +8,8 @@ final storage = FlutterSecureStorage();
 class BackendService {
   var client = http.Client();
   final String apiKey = "";
-  // final String host = "192.168.188.164";
-  final String host = "localhost"; // TODO: make this the domain for production
-  final int port = 8000;
-  final String scheme = "http"; // TODO: make this https for production
+  final String host = "test.activity-radar.com";
+  final String scheme = "https";
 
   static final BackendService _instance = BackendService._internal();
   static BackendService get instance => _instance;
@@ -39,7 +37,7 @@ class BackendService {
 
   Future<http.Response> sendRequest(String command, String path,
       {Object? body,
-      Map<String, String>? queryParams,
+      Map<String, dynamic>? queryParams,
       Map<String, String>? additionalHeaders}) async {
     if (command != "GET" && body == null) {
       throw Exception();
@@ -48,7 +46,6 @@ class BackendService {
     Uri url = Uri(
         scheme: scheme,
         host: host,
-        port: port,
         path: path,
         queryParameters: queryParams ?? {});
     Map<String, String> headers = await getHeaders(additionalHeaders);
@@ -84,7 +81,7 @@ class AuthService {
     Map<String, String> body = {"username": username, "password": password};
 
     try {
-      http.Response res = await BackendService._instance.sendRequest(
+      http.Response res = await BackendService.instance.sendRequest(
           "POST", "/auth/token", body: body, additionalHeaders: {
         "Content-Type": "application/x-www-form-urlencoded"
       });
