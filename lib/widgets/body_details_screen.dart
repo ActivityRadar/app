@@ -1,7 +1,6 @@
 import 'package:app/constants/contants.dart';
-import 'package:app/providers/photos.dart';
+import 'package:app/provider/photos.dart';
 import 'package:app/widgets/activityType_short.dart';
-import 'package:app/widgets/details_short.dart';
 import 'package:app/widgets/photo_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';

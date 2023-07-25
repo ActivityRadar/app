@@ -1,5 +1,5 @@
 import 'package:app/provider/backend.dart';
-import 'package:app/providers/photos.dart';
+import 'package:app/provider/photos.dart';
 import 'package:app/widgets/bottomsheet.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
