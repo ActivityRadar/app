@@ -1,5 +1,4 @@
 import 'dart:convert';
-
 import 'package:app/constants/contants.dart';
 import 'package:app/provider/backend.dart';
 import 'package:app/widgets/photo_picker.dart';
