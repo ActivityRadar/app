@@ -37,10 +37,12 @@ class BackendService {
     return headers;
   }
 
-  Future<http.Response> sendRequest(String command, String path,
+  Future<dynamic> sendRequest(String command, String path,
       {Object? body,
       Map<String, dynamic>? queryParams,
-      Map<String, String>? additionalHeaders}) async {
+      Map<String, String>? additionalHeaders,
+      bool encodeToJson = true,
+      bool decodeFromJson = true}) async {
     if (command != "GET" && body == null) {
       throw Exception();
     }
@@ -51,6 +53,10 @@ class BackendService {
         path: path,
         queryParameters: queryParams ?? {});
     Map<String, String> headers = await getHeaders(additionalHeaders);
+
+    if (encodeToJson) {
+      body = jsonEncode(body);
+    }
 
     Future<http.Response> request;
     switch (command) {
@@ -67,15 +73,22 @@ class BackendService {
     }
     final response = await request;
 
-    if (response.statusCode == 200) {
-      return response;
-    } else {
-      throw Exception(
-          'Request failed! Code ${response.statusCode}, Message: ${response.body}');
+    switch (response.statusCode) {
+      case (200):
+        if (decodeFromJson) {
+          return jsonDecode(response.body);
+        }
+        return response;
+      case (307):
+        print("Temporary redirect!");
+        print(response.body);
+      case (401):
+        print("Not authorized!");
+      default:
+        throw Exception(
+            'Request failed! Code ${response.statusCode}, Message: ${response.body}');
     }
   }
-
-  void authenticate() {}
 }
 
 class AuthService {
@@ -83,12 +96,15 @@ class AuthService {
     Map<String, String> body = {"username": username, "password": password};
 
     try {
-      http.Response res = await BackendService.instance.sendRequest(
-          "POST", "/auth/token", body: body, additionalHeaders: {
-        "Content-Type": "application/x-www-form-urlencoded"
-      });
+      Map<String, dynamic> responseBody = await BackendService.instance
+          .sendRequest("POST", "/auth/token",
+              body: body,
+              encodeToJson: false,
+              additionalHeaders: {
+            "Content-Type": "application/x-www-form-urlencoded",
+          });
 
-      String token = jsonDecode(res.body)["access_token"];
+      String token = responseBody["access_token"];
       await storage.write(key: "token", value: token);
       return true;
     } catch (e) {
