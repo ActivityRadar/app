@@ -47,7 +47,7 @@ def parse_enum(name, component):
     members = component.get("enum")
 
     values = "\n".join([f"  @JsonValue('{m}') {m}," for m in members])
-    template = f"""enum {name} {{\n{values}\n}}"""
+    template = f"""enum {name} {{\n{values}\n}}\n"""
     return template
 
 
