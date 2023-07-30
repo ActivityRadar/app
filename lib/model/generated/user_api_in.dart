@@ -4,7 +4,6 @@
 
 import 'package:json_annotation/json_annotation.dart';
 
-import 'package:app/model/generated/photo_info.dart';
 part 'user_api_in.g.dart';
 
 @JsonSerializable(explicitToJson: true)
@@ -12,14 +11,12 @@ class UserApiIn {
   final String username;
   @JsonKey(name: "display_name")
   final String displayName;
-  final PhotoInfo? avatar;
   final String email;
   final String password;
 
   UserApiIn({
     required this.username,
     required this.displayName,
-    this.avatar,
     required this.email,
     required this.password});
 

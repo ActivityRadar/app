@@ -19,9 +19,10 @@ LocationDetailedApi _$LocationDetailedApiFromJson(Map<String, dynamic> json) =>
           .map((e) => ReviewBase.fromJson(e as Map<String, dynamic>))
           .toList(),
       geometry: json['geometry'],
-      photos: (json['photos'] as List<dynamic>?)
-          ?.map((e) => PhotoInfo.fromJson(e as Map<String, dynamic>))
+      photos: (json['photos'] as List<dynamic>)
+          .map((e) => PhotoInfo.fromJson(e as Map<String, dynamic>))
           .toList(),
+      id: json['id'] as String,
     );
 
 Map<String, dynamic> _$LocationDetailedApiToJson(
@@ -35,5 +36,6 @@ Map<String, dynamic> _$LocationDetailedApiToJson(
       'tags': instance.tags,
       'recent_reviews': instance.recentReviews.map((e) => e.toJson()).toList(),
       'geometry': instance.geometry,
-      'photos': instance.photos?.map((e) => e.toJson()).toList(),
+      'photos': instance.photos.map((e) => e.toJson()).toList(),
+      'id': instance.id,
     };

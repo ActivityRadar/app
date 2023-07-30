@@ -173,7 +173,7 @@ paths:
             application/json:
               schema:
                 items:
-                  $ref: '#/components/schemas/LocationShortApi'
+                  $ref: '#/components/schemas/LocationDetailedApi'
                 type: array
                 title: Response Get Locations Around Locations Around Get
         '422':
@@ -1495,6 +1495,12 @@ components:
             $ref: '#/components/schemas/PhotoInfo'
           type: array
           title: Photos
+        id:
+          type: string
+          title: Id
+          examples:
+          - 5eb7cf5a86d9755df3a6c593
+          - 5eb7cfb05e32e07750a1756a
       type: object
       required:
       - activity_type
@@ -1502,6 +1508,8 @@ components:
       - trust_score
       - tags
       - recent_reviews
+      - photos
+      - id
       title: LocationDetailedApi
     LocationHistoryIn:
       properties:
@@ -1536,12 +1544,6 @@ components:
         name:
           type: string
           title: Name
-        photos:
-          items:
-            $ref: '#/components/schemas/PhotoInfo'
-          type: array
-          title: Photos
-          default: []
         tags:
           type: object
           title: Tags
@@ -1943,8 +1945,6 @@ components:
         display_name:
           type: string
           title: Display Name
-        avatar:
-          $ref: '#/components/schemas/PhotoInfo'
         email:
           type: string
           title: Email
@@ -1966,14 +1966,14 @@ components:
         display_name:
           type: string
           title: Display Name
-        avatar:
-          $ref: '#/components/schemas/PhotoInfo'
         id:
           type: string
           title: Id
           examples:
           - 5eb7cf5a86d9755df3a6c593
           - 5eb7cfb05e32e07750a1756a
+        avatar:
+          $ref: '#/components/schemas/PhotoInfo'
       type: object
       required:
       - username

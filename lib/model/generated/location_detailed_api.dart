@@ -23,7 +23,8 @@ class LocationDetailedApi {
   @JsonKey(name: "recent_reviews")
   final List<ReviewBase> recentReviews;
   final Object? geometry;
-  final List<PhotoInfo>? photos;
+  final List<PhotoInfo> photos;
+  final String id;
 
   LocationDetailedApi({
     required this.activityType,
@@ -34,7 +35,8 @@ class LocationDetailedApi {
     required this.tags,
     required this.recentReviews,
     this.geometry,
-    this.photos});
+    required this.photos,
+    required this.id});
 
   factory LocationDetailedApi.fromJson(Map<String, dynamic> json) => _$LocationDetailedApiFromJson(json);
 

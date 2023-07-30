@@ -5,7 +5,6 @@
 import 'package:json_annotation/json_annotation.dart';
 
 import 'package:app/model/generated/geo_json_location.dart';
-import 'package:app/model/generated/photo_info.dart';
 part 'location_new.g.dart';
 
 @JsonSerializable(explicitToJson: true)
@@ -14,7 +13,6 @@ class LocationNew {
   final String activityType;
   final GeoJsonLocation location;
   final String? name;
-  final List<PhotoInfo>? photos;
   final Object? tags;
   final Object? geometry;
 
@@ -22,7 +20,6 @@ class LocationNew {
     required this.activityType,
     required this.location,
     this.name,
-    this.photos,
     this.tags,
     this.geometry});
 

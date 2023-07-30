@@ -12,14 +12,14 @@ class UserApiOut {
   final String username;
   @JsonKey(name: "display_name")
   final String displayName;
-  final PhotoInfo? avatar;
   final String id;
+  final PhotoInfo? avatar;
 
   UserApiOut({
     required this.username,
     required this.displayName,
-    this.avatar,
-    required this.id});
+    required this.id,
+    this.avatar});
 
   factory UserApiOut.fromJson(Map<String, dynamic> json) => _$UserApiOutFromJson(json);
 
