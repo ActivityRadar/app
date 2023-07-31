@@ -1,17 +1,15 @@
-import 'package:app/provider/backend.dart';
-import 'package:app/screens/foregetpassword.dart';
 import 'package:app/screens/login.dart';
-import 'package:app/screens/toregister.dart';
+import 'package:app/screens/register.dart';
 import 'package:flutter/material.dart';
 
-class LoginandRegisterScreen extends StatefulWidget {
-  const LoginandRegisterScreen({Key? key}) : super(key: key);
+class AuthScreen extends StatefulWidget {
+  const AuthScreen({Key? key}) : super(key: key);
 
   @override
-  State<LoginandRegisterScreen> createState() => _LoginandRegisterScreen();
+  State<AuthScreen> createState() => _AuthScreenState();
 }
 
-class _LoginandRegisterScreen extends State<LoginandRegisterScreen> {
+class _AuthScreenState extends State<AuthScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -36,7 +34,7 @@ class _LoginandRegisterScreen extends State<LoginandRegisterScreen> {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => const ToRegisterScreen(),
+                      builder: (context) => const RegisterScreen(),
                     ),
                   );
                 },

@@ -1,5 +1,4 @@
-import 'package:app/screens/addlocation.dart';
-import 'package:app/screens/addlocationonmap.dart';
+import 'package:app/screens/location_picker.dart';
 import 'package:app/widgets/filter_discipline.dart';
 import 'package:flutter/material.dart';
 
@@ -28,7 +27,7 @@ Future<dynamic> bottomSheetAdd(BuildContext context) {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => const LocationpickerMap(),
+                      builder: (context) => const LocationPickerMap(),
                     ),
                   );
                 },

@@ -1,7 +1,6 @@
 import 'package:app/provider/backend.dart';
-import 'package:app/screens/foregetpassword.dart';
+import 'package:app/screens/forgot_password.dart';
 import 'package:flutter/material.dart';
-import 'package:app/provider/backend.dart';
 
 // ignore_for_file: avoid_print
 class LoginScreen extends StatefulWidget {
