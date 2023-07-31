@@ -6,3 +6,23 @@ class DesignColors {
 }
 
 const double kDefaultPadding = 20.0;
+
+enum Sport {
+  kegeln,
+  Bowling,
+  American_Football,
+  Tischtennis,
+  Table_Soccer,
+  Tennis,
+  Rodelsport
+}
+
+Map<String, String> shorSport = {
+  "9pin": "Kegeln",
+  "10pin": "Bowling",
+  "american_football": "American Football",
+  "table_tennis": "Tischtennis",
+  "table_soccer": "Table Soccer",
+  "tennis": "Tennis",
+  "toboggan": "Rodelsport",
+};

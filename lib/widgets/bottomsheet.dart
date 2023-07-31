@@ -1,4 +1,6 @@
 import 'package:app/screens/addlocation.dart';
+import 'package:app/screens/addlocationonmap.dart';
+import 'package:app/widgets/filter_discipline.dart';
 import 'package:flutter/material.dart';
 
 Future<dynamic> bottomSheetBase(
@@ -26,7 +28,7 @@ Future<dynamic> bottomSheetAdd(BuildContext context) {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => const AddLocation(),
+                      builder: (context) => const LocationpickerMap(),
                     ),
                   );
                 },
@@ -71,11 +73,7 @@ Future<dynamic> bottomSheetFilter(BuildContext context) {
                   ),
                 ],
               ),
-              ListTile(
-                leading: const Icon(Icons.event),
-                title: const Text("Add Event"),
-                onTap: () {},
-              ),
+              FilterDiscipline(),
             ],
           ));
 }

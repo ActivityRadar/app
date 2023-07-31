@@ -1,20 +1,17 @@
 import 'package:app/provider/backend.dart';
-import 'package:app/screens/foregetpassword.dart';
 import 'package:flutter/material.dart';
-import 'package:app/provider/backend.dart';
 
-// ignore_for_file: avoid_print
-class LoginScreen extends StatefulWidget {
-  const LoginScreen({Key? key}) : super(key: key);
+class ForgetPasswordScreen extends StatefulWidget {
+  const ForgetPasswordScreen({Key? key}) : super(key: key);
 
   @override
-  State<LoginScreen> createState() => _LoginScreenState();
+  State<ForgetPasswordScreen> createState() => _ForgetPasswordScreen();
 }
 
-class _LoginScreenState extends State<LoginScreen> {
+class _ForgetPasswordScreen extends State<ForgetPasswordScreen> {
   final _formKey = GlobalKey<FormState>();
   TextEditingController emailController = TextEditingController();
-  TextEditingController passwordController = TextEditingController();
+  TextEditingController emailControllersecond = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -27,7 +24,8 @@ class _LoginScreenState extends State<LoginScreen> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    Text("Login"),
+                    Text("Forget your Password"),
+                    // User/Email Input
                     Padding(
                       padding: const EdgeInsets.symmetric(
                           horizontal: 8, vertical: 16),
@@ -35,51 +33,34 @@ class _LoginScreenState extends State<LoginScreen> {
                         controller: emailController,
                         decoration: const InputDecoration(
                             border: OutlineInputBorder(),
-                            labelText: "Username"),
+                            labelText: "Username/Email"),
                         validator: (value) {
                           if (value == null || value.isEmpty) {
-                            return 'Please enter your username';
+                            return 'Please enter your username/Email';
                           }
                           return null;
                         },
                       ),
                     ),
+                    // Second Email Input
+
                     Padding(
                       padding: const EdgeInsets.symmetric(
-                          horizontal: 8, vertical: 4),
+                          horizontal: 8, vertical: 16),
                       child: TextFormField(
-                        controller: passwordController,
-                        obscureText: true,
+                        controller: emailControllersecond,
                         decoration: const InputDecoration(
                             border: OutlineInputBorder(),
-                            labelText: "Password"),
+                            labelText: "Username/Email"),
                         validator: (value) {
                           if (value == null || value.isEmpty) {
-                            return 'Please enter your password';
+                            return 'Please enter your username/Email';
                           }
                           return null;
                         },
                       ),
                     ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 4, vertical: 1.0),
-                      child: TextButton(
-                        style: TextButton.styleFrom(
-                          textStyle: const TextStyle(fontSize: 10),
-                        ),
-                        onPressed: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) =>
-                                  const ForgetPasswordScreen(),
-                            ),
-                          );
-                        },
-                        child: const Text('Forget password'),
-                      ),
-                    ),
+                    // Second Email Button
                     Padding(
                       padding: const EdgeInsets.symmetric(
                           horizontal: 8, vertical: 16.0),
@@ -89,11 +70,6 @@ class _LoginScreenState extends State<LoginScreen> {
                             if (_formKey.currentState!.validate()) {
                               // Navigate the user to the Home page
                               print(emailController.text);
-                              print(passwordController.text);
-                              if (await AuthService.login(emailController.text,
-                                  passwordController.text)) {
-                                print("Login successful!");
-                              }
                             } else {
                               ScaffoldMessenger.of(context).showSnackBar(
                                 const SnackBar(

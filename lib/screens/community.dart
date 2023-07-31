@@ -1,4 +1,5 @@
 import 'package:app/screens/login.dart';
+import 'package:app/screens/loginandzoregister.dart';
 import 'package:flutter/material.dart';
 
 class CommunityScreen extends StatelessWidget {
@@ -6,6 +7,6 @@ class CommunityScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const LoginScreen();
+    return const LoginandRegisterScreen();
   }
 }

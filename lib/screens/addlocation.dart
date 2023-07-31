@@ -1,9 +1,10 @@
+import 'dart:convert';
 import 'package:app/constants/contants.dart';
-import 'package:app/widgets/activityType_short.dart';
+import 'package:app/widgets/photo_picker.dart';
 import 'package:flutter/material.dart';
-import 'package:app/widgets/body_details_screen.dart';
 import 'package:carousel_slider/carousel_slider.dart';
-import 'package:app/widgets/vote.dart';
+import '../widgets/filter_discipline.dart';
+import 'package:app/provider/backend.dart';
 
 class AddLocation extends StatefulWidget {
   const AddLocation({super.key});
@@ -13,12 +14,19 @@ class AddLocation extends StatefulWidget {
 
 class _AddLocation extends State<AddLocation> {
   @override
+  TextEditingController nameController = TextEditingController();
+  TextEditingController streetController = TextEditingController();
+  TextEditingController locationController = TextEditingController();
+  TextEditingController descriptionController = TextEditingController();
+  var _rating = 0;
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
     var height = size.height;
     double width = size.width;
     int _current = 0;
     CarouselController _controller = CarouselController();
+
+    List<String> species = shorSport.entries.map((entry) => entry.key).toList();
     return Scaffold(
         backgroundColor: DesignColors.kBackgroundColor,
         body: CustomScrollView(
@@ -40,152 +48,201 @@ class _AddLocation extends State<AddLocation> {
               ],
               pinned: true,
               stretch: true,
-              expandedHeight: 240.0,
               flexibleSpace: FlexibleSpaceBar(
-                centerTitle: true,
-                title: Text(
-                  'Tischtennis',
-                  style: TextStyle(
-                      fontWeight: FontWeight.bold, fontSize: width * 0.06),
-                ),
-                background: Stack(
-                  fit: StackFit.expand,
-                  children: <Widget>[
-                    CarouselSlider(
-                      carouselController: _controller,
-                      options: CarouselOptions(
-                        reverse: false,
-                        onPageChanged: (position, reason) {
-                          setState(() {
-                            _current = position;
-                          });
-                        },
-                      ),
-                      items: images.map<Widget>((i) {
-                        return Builder(
-                          builder: (BuildContext context) {
-                            return Container(
-                                width: MediaQuery.of(context).size.width,
-                                height: MediaQuery.of(context).size.height,
-                                decoration: BoxDecoration(
-                                    image: DecorationImage(
-                                        image: NetworkImage(i))));
-                          },
-                        );
-                      }).toList(),
-                    ),
-                  ],
-                ),
-              ),
+                  centerTitle: true,
+                  title: Text(
+                    'Location proposal',
+                    style: TextStyle(
+                        fontWeight: FontWeight.bold, fontSize: width * 0.06),
+                  )),
             ),
             SliverList(
               delegate: SliverChildListDelegate([
-                const Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                Padding(
+                  padding: const EdgeInsets.only(left: 9.0, top: 15.0),
+                  child: Text(
+                    "Name",
+                    style: TextStyle(
+                        color: const Color.fromARGB(182, 0, 0, 0),
+                        fontWeight: FontWeight.bold,
+                        fontSize: width * 0.04),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(9.0),
+                  child: TextField(
+                      controller: nameController,
+                      onChanged: (v) => nameController.text = v,
+                      decoration: const InputDecoration(
+                        filled: true,
+                        fillColor: Color.fromARGB(209, 155, 203, 241),
+                        labelText: 'Name',
+                      )),
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(left: 9.0, top: 15.0),
+                  child: Text(
+                    "Adresse",
+                    style: TextStyle(
+                        color: const Color.fromARGB(182, 0, 0, 0),
+                        fontWeight: FontWeight.bold,
+                        fontSize: width * 0.04),
+                  ),
+                ),
+                Row(
                   children: <Widget>[
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[
-                        Padding(
-                          padding: EdgeInsets.only(left: 9.0, top: 5.0),
-                          child: Text(
-                            "10963 Berlin",
-                            style: TextStyle(
-                                color: Color.fromARGB(88, 91, 91, 91),
-                                fontSize: 15),
-                          ),
-                        ),
-                        Padding(
-                          padding: EdgeInsets.only(left: 9.0),
-                          child: Text(
-                            "Park",
-                            style: TextStyle(
-                                color: Color.fromARGB(88, 91, 91, 91),
-                                fontSize: 15),
-                          ),
-                        )
-                      ],
+                    Expanded(
+                      flex: 3,
+                      child: Padding(
+                        padding: const EdgeInsets.all(9.0),
+                        child: TextField(
+                            controller: streetController,
+                            onChanged: (v) => streetController.text = v,
+                            decoration: const InputDecoration(
+                              filled: true,
+                              fillColor: Color.fromARGB(209, 155, 203, 241),
+                              labelText: 'Street',
+                            )),
+                      ),
                     ),
-                    vote_rate_small(),
+                    const SizedBox(
+                      width: 5,
+                    ),
+                    Expanded(
+                      flex: 1,
+                      child: Padding(
+                        padding: const EdgeInsets.all(9.0),
+                        child: TextField(
+                            controller: streetController,
+                            onChanged: (v) => streetController.text = v,
+                            decoration: const InputDecoration(
+                              filled: true,
+                              fillColor: Color.fromARGB(209, 155, 203, 241),
+                              labelText: 'house number ',
+                            )),
+                      ),
+                    )
+                  ],
+                ),
+                Row(
+                  children: <Widget>[
+                    Expanded(
+                      flex: 3,
+                      child: Padding(
+                        padding: const EdgeInsets.all(9.0),
+                        child: TextField(
+                            controller: streetController,
+                            onChanged: (v) => streetController.text = v,
+                            decoration: const InputDecoration(
+                              filled: true,
+                              fillColor: Color.fromARGB(209, 155, 203, 241),
+                              labelText: 'City',
+                            )),
+                      ),
+                    ),
+                    const SizedBox(
+                      width: 5,
+                    ),
+                    Expanded(
+                      flex: 2,
+                      child: Padding(
+                        padding: const EdgeInsets.all(9.0),
+                        child: TextField(
+                            controller: streetController,
+                            onChanged: (v) => streetController.text = v,
+                            decoration: const InputDecoration(
+                              filled: true,
+                              fillColor: Color.fromARGB(209, 155, 203, 241),
+                              labelText: 'zip code ',
+                            )),
+                      ),
+                    )
                   ],
                 ),
                 Padding(
-                  padding: const EdgeInsets.only(left: 9.0, top: 30.0),
+                  padding: const EdgeInsets.only(left: 9.0, top: 15.0),
+                  child: Text(
+                    "activityType",
+                    style: TextStyle(
+                        color: const Color.fromARGB(182, 0, 0, 0),
+                        fontWeight: FontWeight.bold,
+                        fontSize: width * 0.05),
+                  ),
+                ),
+                FilterDiscipline(),
+                Padding(
+                  padding: const EdgeInsets.only(left: 9.0, top: 15.0),
                   child: Text(
                     "description",
                     style: TextStyle(
                         color: const Color.fromARGB(182, 0, 0, 0),
                         fontWeight: FontWeight.bold,
-                        fontSize: width * 0.05),
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(left: 9.0, top: 10.0),
-                  child: Text(
-                    "Parasdasdasdbasdbsdasjdkjsadhlasjdlasjdlkasjdlkjsadllasjdlkasjdlkjsadlkajsdlkajsdlkjk",
-                    style: TextStyle(
-                        color: const Color.fromARGB(182, 0, 0, 0),
                         fontSize: width * 0.04),
                   ),
                 ),
                 Padding(
-                  padding: const EdgeInsets.only(left: 9.0, top: 15.0),
-                  child: Text(
-                    "activityType",
-                    style: TextStyle(
-                        color: const Color.fromARGB(182, 0, 0, 0),
-                        fontWeight: FontWeight.bold,
-                        fontSize: width * 0.05),
+                  padding: const EdgeInsets.all(9.0),
+                  child: TextField(
+                    controller: nameController,
+                    onChanged: (v) => nameController.text = v,
+                    decoration: const InputDecoration(
+                      filled: true,
+                      fillColor: Color.fromARGB(209, 155, 203, 241),
+                      labelText: 'description',
+                    ),
+                    maxLines: 3,
+                    minLines: 2,
                   ),
                 ),
-                Container(
-                  margin: const EdgeInsets.symmetric(vertical: 10),
-                  height: height / 7,
-                  child: ListView(
-                    scrollDirection: Axis.horizontal,
-                    children: <Widget>[
-                      const SizedBox(width: 10.0),
-                      Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: ActivityDetails(
-                            imageurl:
-                                "https://cdn.pixabay.com/photo/2016/09/05/23/28/blue-1648005_960_720.jpg",
-                            lat: 13.4496164,
-                            long: 52.5317128,
-                            titel: "Tischtennis",
-                            press: () {},
-                          )),
-                    ],
+                Padding(
+                  padding: const EdgeInsets.all(9.0),
+                  child: TextButton(
+                    onPressed: () => bottomSheetPhotoSourcePicker(
+                        context: context,
+                        mode: "location",
+                        locationId: 'asdas'),
+                    //TODO
+                    child: const Text("Bilder hochladen"),
                   ),
                 ),
                 Padding(
                   padding: const EdgeInsets.only(left: 9.0, top: 15.0),
                   child: Text(
-                    "activityType",
+                    "review",
                     style: TextStyle(
                         color: const Color.fromARGB(182, 0, 0, 0),
                         fontWeight: FontWeight.bold,
-                        fontSize: width * 0.05),
+                        fontSize: width * 0.04),
                   ),
                 ),
-                Container(
-                  margin: const EdgeInsets.symmetric(vertical: 10),
-                  height: height / 7,
-                  child: ListView(
-                    scrollDirection: Axis.horizontal,
-                    children: <Widget>[
-                      const SizedBox(width: 10.0),
-                      ReviewContainer(
-                        imageurl:
-                            "https://cdn.pixabay.com/photo/2016/09/05/23/28/blue-1648005_960_720.jpg",
-                        lat: 13.4496164,
-                        long: 52.5317128,
-                        titel: "Tischtennis",
-                        press: () {},
+                Padding(
+                  padding: const EdgeInsets.all(9.0),
+                  child: Row(
+                    children: List.generate(
+                      5,
+                      (index) => IconButton(
+                        icon: index < _rating
+                            ? Icon(Icons.star, size: 32)
+                            : Icon(Icons.star_border, size: 32),
+                        color: DesignColors.naviColor,
+                        onPressed: () {
+                          setState(() {
+                            _rating = index + 1;
+                            print(_rating);
+                          });
+                        },
                       ),
-                    ],
+                    ),
                   ),
-                )
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(9.0),
+                  child: TextButton(
+                    onPressed: () {},
+                    //TODO
+                    child: const Text("Absenden"),
+                  ),
+                ),
               ]),
             ),
           ],
