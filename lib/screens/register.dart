@@ -1,18 +1,15 @@
-import 'package:app/provider/backend.dart';
-import 'package:app/screens/foregetpassword.dart';
-import 'package:app/screens/start.dart';
 import 'package:app/widgets/photo_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
-class ToRegisterScreen extends StatefulWidget {
-  const ToRegisterScreen({Key? key}) : super(key: key);
+class RegisterScreen extends StatefulWidget {
+  const RegisterScreen({Key? key}) : super(key: key);
 
   @override
-  State<ToRegisterScreen> createState() => _ToRegisterScreen();
+  State<RegisterScreen> createState() => _RegisterScreenState();
 }
 
-class _ToRegisterScreen extends State<ToRegisterScreen> {
+class _RegisterScreenState extends State<RegisterScreen> {
   PageController pageController = PageController();
   final _formEmailKey = GlobalKey<FormState>();
   final _formPasswordKey = GlobalKey<FormState>();
@@ -36,20 +33,21 @@ class _ToRegisterScreen extends State<ToRegisterScreen> {
 
   bool validateStructure(String value) {
     String pattern = r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9]).{8,}$';
-    // TODO Password gener
-    RegExp regExp = new RegExp(pattern);
+    // TODO: Password gener
+    RegExp regExp = RegExp(pattern);
     return regExp.hasMatch(value);
   }
 
   void nextPage() {
     pageController.animateToPage(pageController.page!.toInt() + 1,
-        duration: Duration(milliseconds: 400), curve: Curves.easeIn);
+        duration: const Duration(milliseconds: 400), curve: Curves.easeIn);
   }
 
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: PageView(
-        physics: NeverScrollableScrollPhysics(),
+        physics: const NeverScrollableScrollPhysics(),
         controller: pageController,
         children: <Widget>[
           //Email Form
@@ -62,7 +60,8 @@ class _ToRegisterScreen extends State<ToRegisterScreen> {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: <Widget>[
                   Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 8, vertical: 16),
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
                     child: TextFormField(
                       controller: emailController,
                       decoration: const InputDecoration(
@@ -79,7 +78,7 @@ class _ToRegisterScreen extends State<ToRegisterScreen> {
                       },
                     ),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 20,
                   ),
                   Padding(
@@ -115,7 +114,8 @@ class _ToRegisterScreen extends State<ToRegisterScreen> {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: <Widget>[
                   Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 8, vertical: 16),
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
                     child: TextFormField(
                       controller: passwordController,
                       decoration: const InputDecoration(
@@ -137,7 +137,8 @@ class _ToRegisterScreen extends State<ToRegisterScreen> {
                     ),
                   ),
                   Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 8, vertical: 16),
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
                     child: TextFormField(
                       controller: secondpasswordController,
                       decoration: const InputDecoration(
@@ -158,7 +159,7 @@ class _ToRegisterScreen extends State<ToRegisterScreen> {
                       },
                     ),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 20,
                   ),
                   Row(
@@ -197,12 +198,12 @@ class _ToRegisterScreen extends State<ToRegisterScreen> {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: <Widget>[
                 Container(
-                    padding: EdgeInsets.all(15),
+                    padding: const EdgeInsets.all(15),
                     height: MediaQuery.of(context).size.width / 3,
                     child: TextFormField(
                       controller: dateInput,
                       //editing controller of this TextField
-                      decoration: InputDecoration(
+                      decoration: const InputDecoration(
                           icon: Icon(Icons.calendar_today), //icon of text field
                           labelText: "Enter Date" //label text of field
                           ),
@@ -229,7 +230,7 @@ class _ToRegisterScreen extends State<ToRegisterScreen> {
                         } else {}
                       },
                     )),
-                SizedBox(
+                const SizedBox(
                   height: 20,
                 ),
                 Row(
@@ -262,7 +263,8 @@ class _ToRegisterScreen extends State<ToRegisterScreen> {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: <Widget>[
                   Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 8, vertical: 16),
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
                     child: TextFormField(
                       controller: verifycode,
                       decoration: const InputDecoration(
@@ -270,7 +272,7 @@ class _ToRegisterScreen extends State<ToRegisterScreen> {
                           labelText: "Verify Code"),
                     ),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 20,
                   ),
                   Row(
@@ -304,20 +306,18 @@ class _ToRegisterScreen extends State<ToRegisterScreen> {
                 Center(
                   child: ElevatedButton(
                     onPressed: () => bottomSheetPhotoSourcePicker(
-                        context: context,
-                        mode: "profil",
-                        userId: "TODO"), //TODO userID,
-                    child: Text("Profile picture"),
+                        context: context, mode: "profil", userId: "TODO"),
                     style: ElevatedButton.styleFrom(
-                      shape: CircleBorder(),
-                      padding: EdgeInsets.all(100),
+                      shape: const CircleBorder(),
+                      padding: const EdgeInsets.all(100),
                       backgroundColor: Colors.blue, // <-- Button color
                       foregroundColor: const Color.fromARGB(
                           255, 255, 255, 255), // <-- Splash color
-                    ),
+                    ), //TODO userID,
+                    child: const Text("Profile picture"),
                   ),
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 20,
                 ),
                 Row(

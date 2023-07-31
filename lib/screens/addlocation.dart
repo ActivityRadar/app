@@ -1,10 +1,7 @@
-import 'dart:convert';
 import 'package:app/constants/contants.dart';
 import 'package:app/widgets/photo_picker.dart';
 import 'package:flutter/material.dart';
-import 'package:carousel_slider/carousel_slider.dart';
 import '../widgets/filter_discipline.dart';
-import 'package:app/provider/backend.dart';
 
 class AddLocation extends StatefulWidget {
   const AddLocation({super.key});
@@ -13,20 +10,17 @@ class AddLocation extends StatefulWidget {
 }
 
 class _AddLocation extends State<AddLocation> {
-  @override
   TextEditingController nameController = TextEditingController();
   TextEditingController streetController = TextEditingController();
   TextEditingController locationController = TextEditingController();
   TextEditingController descriptionController = TextEditingController();
   var _rating = 0;
+
+  @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
-    var height = size.height;
     double width = size.width;
-    int _current = 0;
-    CarouselController _controller = CarouselController();
 
-    List<String> species = shorSport.entries.map((entry) => entry.key).toList();
     return Scaffold(
         backgroundColor: DesignColors.kBackgroundColor,
         body: CustomScrollView(

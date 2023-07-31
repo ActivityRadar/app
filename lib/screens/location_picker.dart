@@ -6,16 +6,16 @@ import 'package:latlong2/latlong.dart';
 import 'package:flutter_map/plugin_api.dart'; // Only import if required functionality is not exposed by default
 
 // ignore_for_file: avoid_print
-class LocationpickerMap extends StatefulWidget {
-  const LocationpickerMap({Key? key}) : super(key: key);
+class LocationPickerMap extends StatefulWidget {
+  const LocationPickerMap({Key? key}) : super(key: key);
 
   @override
-  LocationpickerMapState createState() {
-    return LocationpickerMapState();
+  LocationPickerMapState createState() {
+    return LocationPickerMapState();
   }
 }
 
-class LocationpickerMapState extends State<LocationpickerMap> {
+class LocationPickerMapState extends State<LocationPickerMap> {
   ValueNotifier<String> activity = ValueNotifier("-");
 
   ActivityMarkerMap? mapWidget;
@@ -31,14 +31,14 @@ class LocationpickerMapState extends State<LocationpickerMap> {
     return Stack(
       children: [
         mapWidget!,
-        const Pinicon(),
+        const PinIcon(),
       ],
     );
   }
 }
 
-class Pinicon extends StatelessWidget {
-  const Pinicon({super.key});
+class PinIcon extends StatelessWidget {
+  const PinIcon({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -65,7 +65,7 @@ class ActivityMarkerMap extends StatefulWidget {
 
   final double width;
   final double height;
-  final LocationpickerMapState mapState;
+  final LocationPickerMapState mapState;
 
   @override
   State<ActivityMarkerMap> createState() {

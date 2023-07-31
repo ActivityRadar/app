@@ -17,7 +17,7 @@ enum Sport {
   Rodelsport
 }
 
-Map<String, String> shorSport = {
+Map<String, String> shortSports = {
   "9pin": "Kegeln",
   "10pin": "Bowling",
   "american_football": "American Football",
