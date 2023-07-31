@@ -233,7 +233,10 @@ class _ActivityMarkerMapState extends State<ActivityMarkerMap> {
   Widget build(BuildContext context) {
     return FlutterMap(
       mapController: mapController,
-      options: MapOptions(bounds: bounds, onMapEvent: onMapEvent),
+      options: MapOptions(
+          bounds: bounds,
+          onMapEvent: onMapEvent,
+          interactiveFlags: InteractiveFlag.all & ~InteractiveFlag.rotate),
       children: [
         TileLayer(
           urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
