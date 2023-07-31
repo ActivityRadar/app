@@ -16,7 +16,8 @@ class SettingScreen extends StatelessWidget {
               icon: const Icon(Icons.arrow_drop_down),
               onPressed: () async {
                 const String photoLink = "logo.png";
-                MemoryImage photo = await PhotoService.getPhoto(photoLink);
+                MemoryImage photo =
+                    await PhotoManager.instance.getPhoto(photoLink);
                 if (context.mounted) {
                   Navigator.push(
                     context,

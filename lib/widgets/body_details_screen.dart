@@ -38,7 +38,7 @@ class _BodyDetails extends State<BodyDetails> {
     var height = size.height;
 
     List<Widget> imageBoxes = images.map<Widget>((photo) {
-      Future<MemoryImage> futImage = PhotoService.getPhoto(photo.url);
+      Future<MemoryImage> futImage = PhotoManager.instance.getPhoto(photo.url);
       return FutureBuilder(
         future: futImage,
         builder: (BuildContext context, AsyncSnapshot snapshot) {

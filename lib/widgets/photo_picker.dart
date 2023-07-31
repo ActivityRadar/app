@@ -18,7 +18,7 @@ Future<XFile?> pickImage(ImageSource source) async {
 
 Future<void> uploadImage({required XFile image, required String path}) async {
   final img = MemoryImage(await image.readAsBytes());
-  await PhotoService.uploadPhoto(image: img, path: path);
+  await PhotoManager.instance.setPhoto(img, path);
 }
 
 class ImageSourceButton extends StatelessWidget {

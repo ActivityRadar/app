@@ -26,7 +26,7 @@ class BoxesDetails extends StatelessWidget {
       thumbnail =
           Future.value(const AssetImage("assets/locationPhotoPlaceholder.jpg"));
     } else {
-      thumbnail = PhotoService.getPhoto(imageUrl!);
+      thumbnail = PhotoManager.instance.getPhoto(imageUrl!);
     }
     return GestureDetector(
       onTap: onPressed,
