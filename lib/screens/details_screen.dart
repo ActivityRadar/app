@@ -1,10 +1,9 @@
-import 'dart:convert';
 import 'package:app/constants/contants.dart';
+import 'package:app/model/generated.dart';
 import 'package:app/provider/backend.dart';
 import 'package:app/widgets/photo_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:app/widgets/body_details_screen.dart';
-import 'package:http/http.dart' as http;
 
 class DetailsScreen extends StatefulWidget {
   const DetailsScreen({super.key, required this.locationId});
@@ -16,7 +15,7 @@ class DetailsScreen extends StatefulWidget {
 }
 
 class _DetailsScreenState extends State<DetailsScreen> {
-  Future<http.Response>? _data;
+  Future<LocationDetailedApi>? _data;
 
   @override
   void initState() {
@@ -28,11 +27,11 @@ class _DetailsScreenState extends State<DetailsScreen> {
   Widget build(BuildContext context) {
     return FutureBuilder(
         future: _data,
-        builder: (BuildContext context, AsyncSnapshot snapshot) {
+        builder: (BuildContext context,
+            AsyncSnapshot<LocationDetailedApi> snapshot) {
           Widget child;
           if (snapshot.hasData) {
-            Map<String, dynamic> map = jsonDecode(snapshot.data.body);
-            child = BodyDetails(id: widget.locationId, data: map);
+            child = BodyDetails(id: widget.locationId, data: snapshot.data!);
           } else if (snapshot.hasError) {
             child = Text("Error: ${snapshot.error}");
           } else {

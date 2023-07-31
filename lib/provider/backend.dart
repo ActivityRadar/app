@@ -1,11 +1,12 @@
 import 'dart:async';
 import 'dart:convert';
 
+import 'package:app/model/generated.dart';
 import 'package:flutter_map/plugin_api.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
 
-final storage = FlutterSecureStorage();
+const storage = FlutterSecureStorage();
 
 class BackendService {
   var client = http.Client();
@@ -114,23 +115,45 @@ class AuthService {
     }
   }
 
-  void changePassword() {}
+  static Future<bool> changePassword(ChangePasswordForm passwordBody) async {
+    try {
+      await BackendService.instance.sendRequest(
+        "PUT",
+        "/users/me/change_password",
+        body: passwordBody.toJson(),
+      );
 
-  void changeEmail() {}
+      return true;
+    } catch (e) {
+      print(e);
+      return false;
+    }
+  }
+
+  static void changeEmail() {}
 }
 
 class UserService {
-  void createUser() {}
+  static String prefix = "/users";
 
-  void deleteUser() {}
+  /// Returns the id of the newly created user.
+  static Future<String> create(UserApiIn userIn) async {
+    var body = userIn.toJson();
+    Map<String, dynamic> responseBody = await BackendService.instance
+        .sendRequest("POST", "$prefix/", body: body);
 
-  void changeUsername() {}
+    return responseBody["id"];
+  }
 
-  void changeDisplayName() {}
+  static void deleteUser() {}
 
-  void findUser() {}
+  static void changeUsername() {}
 
-  void getUserInfo() {}
+  static void changeDisplayName() {}
+
+  static void findUser() {}
+
+  static void getUserInfo() {}
 }
 
 class RelationService {
@@ -146,18 +169,22 @@ class RelationService {
 class LocationService {
   static String prefix = "/locations";
 
-  void createLocation() {}
+  void createLocation(LocationNew location) async {
+    await BackendService.instance
+        .sendRequest("POST", "$prefix/", body: location.toJson());
+  }
 
   void deleteLocation() {}
 
-  Future<http.Response> getDetails(String locationId) async {
-    return await BackendService.instance.sendRequest(
+  Future<LocationDetailedApi> getDetails(String locationId) async {
+    return LocationDetailedApi.fromJson(
+        await BackendService.instance.sendRequest(
       "GET",
       "$prefix/$locationId",
-    );
+    ));
   }
 
-  Future<http.Response> getInBoundingBox(
+  Future<List<LocationShortApi>> getInBoundingBox(
       LatLngBounds bounds, String activity) async {
     Map<String, dynamic> queryParams = {
       "south": bounds.south.toString(),
@@ -167,8 +194,12 @@ class LocationService {
       "activities": [activity]
     };
 
-    return await BackendService.instance
+    var res = await BackendService.instance
         .sendRequest("GET", "$prefix/bbox", queryParams: queryParams);
+
+    var locations = [for (var loc in res) LocationShortApi.fromJson(loc)];
+
+    return locations;
   }
 
   void getAroundCenter() {}

@@ -1,4 +1,6 @@
 import 'dart:convert';
+import 'package:app/model/functions.dart';
+import 'package:app/model/generated.dart';
 import 'package:app/provider/backend.dart';
 import 'package:app/screens/details_screen.dart';
 import 'package:app/widgets/details_short.dart';
@@ -206,41 +208,33 @@ class MyMarker extends Marker {
     //  required this.id
   });
 
-  // final String id;
+  factory MyMarker.fromLocation(LocationShortApi location) {
+    return MyMarker(
+        point: toLatLng(location.location),
+        width: 20,
+        height: 20,
+        builder: (context) => IconButton(
+              icon: const Icon(Icons.location_pin),
+              onPressed: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) =>
+                            DetailsScreen(locationId: location.id)));
+              },
+            ),
+        anchorPos: AnchorPos.align(AnchorAlign.top));
+  }
 }
 
-MyMarker markerFromJson(Map<String, dynamic> json) {
-  var loc = LatLng(
-      json["location"]["coordinates"][1], json["location"]["coordinates"][0]);
-  String id = json["id"];
-
-  return MyMarker(
-      point: loc,
-      width: 20,
-      height: 20,
-      builder: (context) => IconButton(
-            icon: const Icon(Icons.location_pin),
-            onPressed: () {
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => DetailsScreen(locationId: id)));
-            },
-          ),
-      anchorPos: AnchorPos.align(AnchorAlign.top));
-}
-
-List<MyMarker> parseMarkers(String responseBody) {
-  final List parsed =
-      jsonDecode(responseBody); //.cast<List<Map<String, dynamic>>>();
-  if (parsed.isNotEmpty) print(parsed[0]);
-  print(parsed.length);
-  return parsed.map<MyMarker>((json) => markerFromJson(json)).toList();
+List<MyMarker> parseMarkers(List<LocationShortApi> locations) {
+  print(locations.length);
+  return locations.map((loc) => MyMarker.fromLocation(loc)).toList();
 }
 
 Future<List<MyMarker>> fetchLocations(
     LatLngBounds bounds, String activity) async {
-  http.Response response =
+  List<LocationShortApi> locations =
       await LocationService().getInBoundingBox(bounds, activity);
-  return parseMarkers(response.body);
+  return parseMarkers(locations);
 }
