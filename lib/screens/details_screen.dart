@@ -6,9 +6,14 @@ import 'package:flutter/material.dart';
 import 'package:app/widgets/body_details_screen.dart';
 
 class DetailsScreen extends StatefulWidget {
-  const DetailsScreen({super.key, required this.locationId});
+  const DetailsScreen({
+    super.key,
+    this.locationId,
+    this.locationInfo,
+  });
 
-  final String locationId;
+  final String? locationId;
+  final LocationDetailedApi? locationInfo;
 
   @override
   State<DetailsScreen> createState() => _DetailsScreenState();
@@ -20,7 +25,12 @@ class _DetailsScreenState extends State<DetailsScreen> {
   @override
   void initState() {
     super.initState();
-    _data = LocationService().getDetails(widget.locationId);
+    if (widget.locationInfo != null) {
+      // no need to wait if we already have the data
+      _data = Future<LocationDetailedApi>.value(widget.locationInfo);
+    } else {
+      _data = LocationService().getDetails(widget.locationId!);
+    }
   }
 
   @override
@@ -31,7 +41,8 @@ class _DetailsScreenState extends State<DetailsScreen> {
             AsyncSnapshot<LocationDetailedApi> snapshot) {
           Widget child;
           if (snapshot.hasData) {
-            child = BodyDetails(id: widget.locationId, data: snapshot.data!);
+            final id = widget.locationId ?? snapshot.data!.id;
+            child = BodyDetails(id: id, data: snapshot.data!);
           } else if (snapshot.hasError) {
             child = Text("Error: ${snapshot.error}");
           } else {
