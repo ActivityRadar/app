@@ -18,7 +18,7 @@ Future<XFile?> pickImage(ImageSource source) async {
 
 Future<void> uploadImage({required XFile image, required String path}) async {
   final img = MemoryImage(await image.readAsBytes());
-  await PhotoService().uploadPhoto(image: img, path: path);
+  await PhotoService.uploadPhoto(image: img, path: path);
 }
 
 class ImageSourceButton extends StatelessWidget {
@@ -100,13 +100,13 @@ Future<dynamic> bottomSheetPhotoSourcePicker(
                   title: "Gallery",
                   icon: const Icon(Icons.photo),
                   onPressed: () async {
-                    String? key = await _pickAndUpload(ImageSource.gallery);
+                    await _pickAndUpload(ImageSource.gallery);
                   }),
               ImageSourceButton(
                   title: "Camera",
                   icon: const Icon(Icons.camera_alt),
                   onPressed: () async {
-                    String? key = await _pickAndUpload(ImageSource.camera);
+                    await _pickAndUpload(ImageSource.camera);
                   })
             ],
           ));

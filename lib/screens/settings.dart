@@ -5,8 +5,6 @@ import 'package:flutter/material.dart';
 class SettingScreen extends StatelessWidget {
   SettingScreen({Key? key}) : super(key: key);
 
-  final PhotoService ps = PhotoService();
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -18,7 +16,7 @@ class SettingScreen extends StatelessWidget {
               icon: const Icon(Icons.arrow_drop_down),
               onPressed: () async {
                 const String photoLink = "logo.png";
-                MemoryImage photo = await ps.getPhoto(photoLink);
+                MemoryImage photo = await PhotoService.getPhoto(photoLink);
                 if (context.mounted) {
                   Navigator.push(
                     context,

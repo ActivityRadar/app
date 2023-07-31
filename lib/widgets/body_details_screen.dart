@@ -28,7 +28,7 @@ class _BodyDetails extends State<BodyDetails> {
   @override
   void initState() {
     super.initState();
-    images = widget.data.photos ?? [];
+    images = widget.data.photos;
   }
 
   @override
