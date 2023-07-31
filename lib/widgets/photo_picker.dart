@@ -63,11 +63,18 @@ Future<dynamic> bottomSheetPhotoSourcePicker(
       return null;
     }
 
-    String path = PhotoService().createPath(
-        mode: mode,
-        extension: photo.path.split(".").last,
-        locationId: locationId,
-        userId: userId);
+    const allowedExtensions = ["jpg", "jpeg", "png"];
+    final extension = photo.path.split(".").last;
+
+    String ext = allowedExtensions
+        .firstWhere((e) => extension.toLowerCase() == e, orElse: () => "");
+    if (ext == "") {
+      print("Not a valid file name. Needs an extension!");
+      return null;
+    }
+
+    String path = PhotoService.createPath(
+        mode: mode, extension: ext, locationId: locationId, userId: userId);
 
     try {
       if (mode == "location") {
