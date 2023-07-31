@@ -13,11 +13,13 @@ class _RegisterScreenState extends State<RegisterScreen> {
   PageController pageController = PageController();
   final _formEmailKey = GlobalKey<FormState>();
   final _formPasswordKey = GlobalKey<FormState>();
+  final _formUsernameKey = GlobalKey<FormState>();
   final _formCodeKey = GlobalKey<FormState>();
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
   TextEditingController dateInput = TextEditingController();
   TextEditingController secondpasswordController = TextEditingController();
+  TextEditingController usernameController = TextEditingController();
   TextEditingController verifycode = TextEditingController();
 
   @override
@@ -190,6 +192,77 @@ class _RegisterScreenState extends State<RegisterScreen> {
               ),
             ),
           ),
+          //Username Form
+          Form(
+            key: _formUsernameKey,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 14.0),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: <Widget>[
+                  Padding(
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
+                    child: TextFormField(
+                      controller: usernameController,
+                      decoration: const InputDecoration(
+                        border: OutlineInputBorder(),
+                        labelText: "Username",
+                        prefixIcon: Icon(Icons.alternate_email),
+                      ),
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Please enter your Username';
+                        }
+                        if (!RegExp(
+                                r'[a-zA-Z0-9](_(?!(\.|_))|\.(?!(_|\.))|[a-zA-Z0-9]){6,18}[a-zA-Z0-9]')
+                            .hasMatch(value)) {
+                          return "Username is wrong";
+                        }
+
+                        return null;
+                      },
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 8, vertical: 16.0),
+                    child: Center(
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          ElevatedButton(
+                            onPressed: () {
+                              previousPage();
+                            },
+                            child: const Text('Previous'),
+                          ),
+                          ElevatedButton(
+                            onPressed: () {
+                              if (_formUsernameKey.currentState!.validate()) {
+                                nextPage();
+                              } else {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  const SnackBar(
+                                      content: Text('Please fill input')),
+                                );
+                              }
+                            },
+                            child: const Text('Next'),
+                          )
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+
           // birthday
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 14.0),
