@@ -164,8 +164,17 @@ class _ActivityMarkerMapState extends State<ActivityMarkerMap> {
     print(
         '${bounds.south}, ${bounds.west}, ${bounds.east}, ${widget.mapState.activity.value}');
     print("fetch locations started");
-    List<MyMarker> markers_ =
-        await fetchLocations(bounds, widget.mapState.activity.value);
+
+    List<LocationShortApi> locations = await LocationService().getInBoundingBox(
+        toLongLat(bounds.southWest),
+        toLongLat(bounds.northEast),
+        widget.mapState.activity.value);
+    print(locations.length);
+
+    List<MyMarker> markers_ = locations
+        .map((loc) => MyMarker.fromLocation(loc, widget.mapState.onMarkerClick))
+        .toList();
+
     setState(() {
       markers = markers_;
       print("state set... with ${markers.length} items");
@@ -199,17 +208,19 @@ class _ActivityMarkerMapState extends State<ActivityMarkerMap> {
 }
 
 class MyMarker extends Marker {
-  MyMarker({
+  MyMarker(
+    this.location, {
     required super.point,
     required super.builder,
     required super.width,
     required super.height,
     required super.anchorPos,
-    //  required this.id
   });
 
-  factory MyMarker.fromLocation(LocationShortApi location) {
-    return MyMarker(
+  final LocationShortApi location;
+
+  factory MyMarker.fromLocation(LocationShortApi location, Function onPressed) {
+    return MyMarker(location,
         point: toLatLng(location.location),
         width: 20,
         height: 20,
@@ -225,16 +236,4 @@ class MyMarker extends Marker {
             ),
         anchorPos: AnchorPos.align(AnchorAlign.top));
   }
-}
-
-List<MyMarker> parseMarkers(List<LocationShortApi> locations) {
-  print(locations.length);
-  return locations.map((loc) => MyMarker.fromLocation(loc)).toList();
-}
-
-Future<List<MyMarker>> fetchLocations(
-    LatLngBounds bounds, String activity) async {
-  List<LocationShortApi> locations =
-      await LocationService().getInBoundingBox(bounds, activity);
-  return parseMarkers(locations);
 }

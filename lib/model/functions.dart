@@ -7,3 +7,7 @@ import 'generated.dart';
 LatLng toLatLng(GeoJsonLocation location) {
   return LatLng(location.coordinates[1], location.coordinates[0]);
 }
+
+GeoJsonLocation toLongLat(LatLng location) {
+  return GeoJsonLocation(coordinates: [location.longitude, location.latitude]);
+}

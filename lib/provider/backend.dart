@@ -2,7 +2,6 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:app/model/generated.dart';
-import 'package:flutter_map/plugin_api.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
 
@@ -184,25 +183,41 @@ class LocationService {
     ));
   }
 
-  Future<List<LocationShortApi>> getInBoundingBox(
-      LatLngBounds bounds, String activity) async {
+  Future<List<LocationShortApi>> getInBoundingBox(GeoJsonLocation southWest,
+      GeoJsonLocation northEast, String activity) async {
     Map<String, dynamic> queryParams = {
-      "south": bounds.south.toString(),
-      "north": bounds.north.toString(),
-      "west": bounds.west.toString(),
-      "east": bounds.east.toString(),
+      "south": southWest.coordinates[1].toString(),
+      "north": northEast.coordinates[1].toString(),
+      "west": southWest.coordinates[0].toString(),
+      "east": northEast.coordinates[0].toString(),
       "activities": [activity]
     };
 
-    var res = await BackendService.instance
+    List<dynamic> res = await BackendService.instance
         .sendRequest("GET", "$prefix/bbox", queryParams: queryParams);
 
-    var locations = [for (var loc in res) LocationShortApi.fromJson(loc)];
-
-    return locations;
+    return res.map((loc) => LocationShortApi.fromJson(loc)).toList();
   }
 
-  void getAroundCenter() {}
+  Future<List<LocationDetailedApi>> getAroundCenter(GeoJsonLocation center,
+      {String? activity}) async {
+    final List<dynamic> res = await BackendService.instance
+        .sendRequest("GET", "$prefix/around", queryParams: {
+      "long": center.coordinates[0].toString(),
+      "lat": center.coordinates[1].toString(),
+      if (activity != null) "activities": [activity],
+    });
+
+    print(res);
+
+    List<LocationDetailedApi> result =
+        res.map((loc) => LocationDetailedApi.fromJson(loc)).toList();
+
+    print(result.length);
+    print(result[0]);
+
+    return result;
+  }
 }
 
 class ReviewService {
@@ -235,14 +250,14 @@ class LocationPhotoService {
     return "/locations/$id/photos/";
   }
 
-  Future<http.Response> create(String path, String locationId) async {
-    return await BackendService.instance
-        .sendRequest("POST", _prefix(locationId), body: jsonEncode(path));
+  Future<void> create(String path, String locationId) async {
+    await BackendService.instance
+        .sendRequest("POST", _prefix(locationId), body: {"photo_url": path});
   }
 
   Future<http.Response> delete(String locationId, String photoId) async {
     return await BackendService.instance.sendRequest(
         "DELETE", _prefix(locationId),
-        queryParams: {"photo_id": photoId});
+        queryParams: {"photo_url": photoId});
   }
 }
