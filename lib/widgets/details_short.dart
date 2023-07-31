@@ -1,30 +1,35 @@
 import 'package:app/constants/contants.dart';
+import 'package:app/provider/photos.dart';
 import 'package:flutter/material.dart';
 import 'package:app/widgets/vote.dart';
 
 class BoxesDetails extends StatelessWidget {
   const BoxesDetails({
     super.key,
-    required this.imageurl,
-    required this.lat,
-    required this.long,
+    this.imageUrl,
     required this.titel,
-    required this.press,
+    required this.onPressed,
   });
 
-  final String imageurl;
-  final double lat;
-  final double long;
+  final String? imageUrl;
   final String titel;
-  final void Function() press;
+  final void Function() onPressed;
 
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
     var height = size.height;
     var width = size.width;
+
+    late Future thumbnail;
+    if (imageUrl == null) {
+      thumbnail =
+          Future.value(const AssetImage("assets/locationPhotoPlaceholder.jpg"));
+    } else {
+      thumbnail = PhotoService.getPhoto(imageUrl!);
+    }
     return GestureDetector(
-      onTap: press,
+      onTap: onPressed,
       child: FittedBox(
         child: Material(
           color: Colors.white,
@@ -38,9 +43,21 @@ class BoxesDetails extends StatelessWidget {
                 height: 200,
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(24.0),
-                  child: Image(
-                    fit: BoxFit.fill,
-                    image: NetworkImage(imageurl),
+                  child: FutureBuilder(
+                    future: thumbnail,
+                    builder: (BuildContext context, AsyncSnapshot snapshot) {
+                      if (snapshot.hasData) {
+                        return Image(
+                          fit: BoxFit.fill,
+                          image: snapshot.data,
+                        );
+                      } else {
+                        return const Image(
+                            fit: BoxFit.fill,
+                            image: AssetImage(
+                                "assets/locationPhotoLoadingPlaceholder.jpg"));
+                      }
+                    },
                   ),
                 ),
               ),
@@ -54,8 +71,6 @@ class BoxesDetails extends StatelessWidget {
       ),
     );
   }
-
-  myDetailsContainer({required id}) {}
 }
 
 class DetailContainer extends StatelessWidget {
