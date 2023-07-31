@@ -1,11 +1,11 @@
 import 'dart:async';
 import 'dart:convert';
 
-import 'package:flutter_map/plugin_api.dart';
+import 'package:app/model/generated.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
 
-final storage = FlutterSecureStorage();
+const storage = FlutterSecureStorage();
 
 class BackendService {
   var client = http.Client();
@@ -37,10 +37,12 @@ class BackendService {
     return headers;
   }
 
-  Future<http.Response> sendRequest(String command, String path,
+  Future<dynamic> sendRequest(String command, String path,
       {Object? body,
       Map<String, dynamic>? queryParams,
-      Map<String, String>? additionalHeaders}) async {
+      Map<String, String>? additionalHeaders,
+      bool encodeToJson = true,
+      bool decodeFromJson = true}) async {
     if (command != "GET" && body == null) {
       throw Exception();
     }
@@ -51,6 +53,10 @@ class BackendService {
         path: path,
         queryParameters: queryParams ?? {});
     Map<String, String> headers = await getHeaders(additionalHeaders);
+
+    if (encodeToJson) {
+      body = jsonEncode(body);
+    }
 
     Future<http.Response> request;
     switch (command) {
@@ -67,15 +73,22 @@ class BackendService {
     }
     final response = await request;
 
-    if (response.statusCode == 200) {
-      return response;
-    } else {
-      throw Exception(
-          'Request failed! Code ${response.statusCode}, Message: ${response.body}');
+    switch (response.statusCode) {
+      case (200):
+        if (decodeFromJson) {
+          return jsonDecode(response.body);
+        }
+        return response;
+      case (307):
+        print("Temporary redirect!");
+        print(response.body);
+      case (401):
+        print("Not authorized!");
+      default:
+        throw Exception(
+            'Request failed! Code ${response.statusCode}, Message: ${response.body}');
     }
   }
-
-  void authenticate() {}
 }
 
 class AuthService {
@@ -83,12 +96,15 @@ class AuthService {
     Map<String, String> body = {"username": username, "password": password};
 
     try {
-      http.Response res = await BackendService.instance.sendRequest(
-          "POST", "/auth/token", body: body, additionalHeaders: {
-        "Content-Type": "application/x-www-form-urlencoded"
-      });
+      Map<String, dynamic> responseBody = await BackendService.instance
+          .sendRequest("POST", "/auth/token",
+              body: body,
+              encodeToJson: false,
+              additionalHeaders: {
+            "Content-Type": "application/x-www-form-urlencoded",
+          });
 
-      String token = jsonDecode(res.body)["access_token"];
+      String token = responseBody["access_token"];
       await storage.write(key: "token", value: token);
       return true;
     } catch (e) {
@@ -98,23 +114,45 @@ class AuthService {
     }
   }
 
-  void changePassword() {}
+  static Future<bool> changePassword(ChangePasswordForm passwordBody) async {
+    try {
+      await BackendService.instance.sendRequest(
+        "PUT",
+        "/users/me/change_password",
+        body: passwordBody.toJson(),
+      );
 
-  void changeEmail() {}
+      return true;
+    } catch (e) {
+      print(e);
+      return false;
+    }
+  }
+
+  static void changeEmail() {}
 }
 
 class UserService {
-  void createUser() {}
+  static String prefix = "/users";
 
-  void deleteUser() {}
+  /// Returns the id of the newly created user.
+  static Future<String> create(UserApiIn userIn) async {
+    var body = userIn.toJson();
+    Map<String, dynamic> responseBody = await BackendService.instance
+        .sendRequest("POST", "$prefix/", body: body);
 
-  void changeUsername() {}
+    return responseBody["id"];
+  }
 
-  void changeDisplayName() {}
+  static void deleteUser() {}
 
-  void findUser() {}
+  static void changeUsername() {}
 
-  void getUserInfo() {}
+  static void changeDisplayName() {}
+
+  static void findUser() {}
+
+  static void getUserInfo() {}
 }
 
 class RelationService {
@@ -130,32 +168,56 @@ class RelationService {
 class LocationService {
   static String prefix = "/locations";
 
-  void createLocation() {}
+  void createLocation(LocationNew location) async {
+    await BackendService.instance
+        .sendRequest("POST", "$prefix/", body: location.toJson());
+  }
 
   void deleteLocation() {}
 
-  Future<http.Response> getDetails(String locationId) async {
-    return await BackendService.instance.sendRequest(
+  Future<LocationDetailedApi> getDetails(String locationId) async {
+    return LocationDetailedApi.fromJson(
+        await BackendService.instance.sendRequest(
       "GET",
       "$prefix/$locationId",
-    );
+    ));
   }
 
-  Future<http.Response> getInBoundingBox(
-      LatLngBounds bounds, String activity) async {
+  Future<List<LocationShortApi>> getInBoundingBox(GeoJsonLocation southWest,
+      GeoJsonLocation northEast, String activity) async {
     Map<String, dynamic> queryParams = {
-      "south": bounds.south.toString(),
-      "north": bounds.north.toString(),
-      "west": bounds.west.toString(),
-      "east": bounds.east.toString(),
+      "south": southWest.coordinates[1].toString(),
+      "north": northEast.coordinates[1].toString(),
+      "west": southWest.coordinates[0].toString(),
+      "east": northEast.coordinates[0].toString(),
       "activities": [activity]
     };
 
-    return await BackendService.instance
+    List<dynamic> res = await BackendService.instance
         .sendRequest("GET", "$prefix/bbox", queryParams: queryParams);
+
+    return res.map((loc) => LocationShortApi.fromJson(loc)).toList();
   }
 
-  void getAroundCenter() {}
+  Future<List<LocationDetailedApi>> getAroundCenter(GeoJsonLocation center,
+      {String? activity}) async {
+    final List<dynamic> res = await BackendService.instance
+        .sendRequest("GET", "$prefix/around", queryParams: {
+      "long": center.coordinates[0].toString(),
+      "lat": center.coordinates[1].toString(),
+      if (activity != null) "activities": [activity],
+    });
+
+    print(res);
+
+    List<LocationDetailedApi> result =
+        res.map((loc) => LocationDetailedApi.fromJson(loc)).toList();
+
+    print(result.length);
+    print(result[0]);
+
+    return result;
+  }
 }
 
 class ReviewService {
@@ -188,14 +250,14 @@ class LocationPhotoService {
     return "/locations/$id/photos/";
   }
 
-  Future<http.Response> create(String path, String locationId) async {
-    return await BackendService.instance
-        .sendRequest("POST", _prefix(locationId), body: jsonEncode(path));
+  Future<void> create(String path, String locationId) async {
+    await BackendService.instance
+        .sendRequest("POST", _prefix(locationId), body: {"photo_url": path});
   }
 
   Future<http.Response> delete(String locationId, String photoId) async {
     return await BackendService.instance.sendRequest(
         "DELETE", _prefix(locationId),
-        queryParams: {"photo_id": photoId});
+        queryParams: {"photo_url": photoId});
   }
 }

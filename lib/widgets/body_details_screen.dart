@@ -1,4 +1,5 @@
 import 'package:app/constants/contants.dart';
+import 'package:app/model/generated.dart';
 import 'package:app/provider/photos.dart';
 import 'package:app/widgets/activityType_short.dart';
 import 'package:app/widgets/photo_picker.dart';
@@ -12,7 +13,7 @@ class BodyDetails extends StatefulWidget {
   const BodyDetails({super.key, required this.data, required this.id});
 
   final String id;
-  final Map<String, dynamic> data;
+  final LocationDetailedApi data;
 
   @override
   State<BodyDetails> createState() => _BodyDetails();
@@ -22,12 +23,12 @@ class _BodyDetails extends State<BodyDetails> {
   int _current = 0;
   final CarouselController _controller = CarouselController();
 
-  late List<Map<String, dynamic>> images;
+  late List<PhotoInfo> images;
 
   @override
   void initState() {
     super.initState();
-    images = [for (var m in widget.data["photos"] ?? []) Map.from(m)];
+    images = widget.data.photos;
   }
 
   @override
@@ -37,7 +38,7 @@ class _BodyDetails extends State<BodyDetails> {
     var height = size.height;
 
     List<Widget> imageBoxes = images.map<Widget>((photo) {
-      Future<MemoryImage> futImage = PhotoService().getPhoto(photo["url"]);
+      Future<MemoryImage> futImage = PhotoService.getPhoto(photo.url);
       return FutureBuilder(
         future: futImage,
         builder: (BuildContext context, AsyncSnapshot snapshot) {
@@ -46,10 +47,10 @@ class _BodyDetails extends State<BodyDetails> {
             decoration =
                 BoxDecoration(image: DecorationImage(image: snapshot.data));
           } else if (snapshot.hasError) {
-            decoration = BoxDecoration(color: Colors.red);
+            decoration = const BoxDecoration(color: Colors.red);
             print(snapshot.error);
           } else {
-            decoration = BoxDecoration(color: Colors.grey);
+            decoration = const BoxDecoration(color: Colors.grey);
           }
 
           return Builder(

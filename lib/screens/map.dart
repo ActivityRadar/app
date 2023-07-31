@@ -1,4 +1,5 @@
-import 'dart:convert';
+import 'package:app/model/functions.dart';
+import 'package:app/model/generated.dart';
 import 'package:app/provider/backend.dart';
 import 'package:app/screens/details_screen.dart';
 import 'package:app/widgets/details_short.dart';
@@ -7,7 +8,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:flutter_map/plugin_api.dart'; // Only import if required functionality is not exposed by default
-import 'package:http/http.dart' as http;
 
 // ignore_for_file: avoid_print
 class MapScreen extends StatefulWidget {
@@ -21,13 +21,31 @@ class MapScreen extends StatefulWidget {
 
 class MapScreenState extends State<MapScreen> {
   ValueNotifier<String> activity = ValueNotifier("-");
-  MapSearchBar? searchBar;
-  ActivityMarkerMap? mapWidget;
+  late MapSearchBar searchBar;
+  late ActivityMarkerMap mapWidget;
+  bool infoSliderVisible = false;
+  ShortInfoSlider? infoSlider;
+
+  void onMarkerClick(LocationShortApi info) {
+    setState(() {
+      print("info slider build: ${info.id}");
+      infoSlider = ShortInfoSlider(info: info);
+    });
+    if (infoSliderVisible) {
+      // TODO: just change the boxes
+    } else {
+      // TODO: let the slider pop up
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    searchBar = MapSearchBar(mapState: this);
+  }
 
   @override
   Widget build(BuildContext context) {
-    searchBar = MapSearchBar(mapState: this);
-
     //size of the window
     var size = MediaQuery.of(context).size;
     var height = size.height;
@@ -36,16 +54,82 @@ class MapScreenState extends State<MapScreen> {
 
     return Stack(
       children: [
-        mapWidget!,
-        searchBar!,
-        const BuildContainer(),
+        mapWidget,
+        searchBar,
+        if (infoSlider != null) infoSlider!,
       ],
     );
   }
 }
 
-class BuildContainer extends StatelessWidget {
-  const BuildContainer({super.key});
+class ShortInfoBox extends StatelessWidget {
+  const ShortInfoBox({super.key, required this.info});
+
+  final LocationDetailedApi info;
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        const SizedBox(width: 10.0),
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: BoxesDetails(
+            imageUrl: info.photos.isEmpty ? null : info.photos[0].url,
+            titel: info.activityType,
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => DetailsScreen(locationInfo: info),
+                ),
+              );
+            },
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class InfoBoxPlaceholder extends StatelessWidget {
+  const InfoBoxPlaceholder({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        const SizedBox(width: 10.0),
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: BoxesDetails(
+            imageUrl: null,
+            titel: "BLA",
+            onPressed: () {},
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class ShortInfoSlider extends StatefulWidget {
+  const ShortInfoSlider({super.key, required this.info});
+
+  final LocationShortApi info;
+
+  @override
+  State<ShortInfoSlider> createState() => _ShortInfoSliderState();
+}
+
+class _ShortInfoSliderState extends State<ShortInfoSlider> {
+  late Future<List<LocationDetailedApi>> infos;
+
+  @override
+  void initState() {
+    super.initState();
+    infos = LocationService().getAroundCenter(widget.info.location);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -56,69 +140,25 @@ class BuildContainer extends StatelessWidget {
       child: Container(
         margin: const EdgeInsets.symmetric(vertical: 100),
         height: height / 7,
-        child: ListView(
-          scrollDirection: Axis.horizontal,
-          children: <Widget>[
-            const SizedBox(width: 10.0),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: BoxesDetails(
-                imageurl:
-                    "https://cdn.pixabay.com/photo/2016/02/18/23/27/table-tennis-1208383_960_720.jpg",
-                lat: 13.3086758,
-                long: 52.5748306,
-                titel: "Tischtennis",
-                press: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) =>
-                          const DetailsScreen(locationId: "location-id-1"),
-                    ),
-                  );
-                },
-              ),
-            ),
-            const SizedBox(width: 10.0),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: BoxesDetails(
-                imageurl:
-                    "https://cdn.pixabay.com/photo/2014/11/29/17/49/playground-550535_960_720.jpg",
-                lat: 13.4496164,
-                long: 52.5317128,
-                titel: "Tischtennis",
-                press: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) =>
-                          const DetailsScreen(locationId: "location-id-2"),
-                    ),
-                  );
-                },
-              ),
-            ),
-            const SizedBox(width: 10.0),
-            Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: BoxesDetails(
-                  imageurl:
-                      "https://cdn.pixabay.com/photo/2016/09/05/23/28/blue-1648005_960_720.jpg",
-                  lat: 13.4496164,
-                  long: 52.5317128,
-                  titel: "Tischtennis",
-                  press: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) =>
-                            const DetailsScreen(locationId: "location-id-3"),
-                      ),
-                    );
-                  },
-                )),
-          ],
+        child: FutureBuilder(
+          future: infos,
+          builder: (BuildContext context,
+              AsyncSnapshot<List<LocationDetailedApi>> snapshot) {
+            if (snapshot.hasData) {
+              return ListView(
+                  scrollDirection: Axis.horizontal,
+                  children: snapshot.data!
+                      .map((info) => ShortInfoBox(info: info))
+                      .toList());
+            } else if (snapshot.hasError) {
+              print(snapshot.error);
+            }
+            return ListView(scrollDirection: Axis.horizontal, children: const [
+              InfoBoxPlaceholder(),
+              InfoBoxPlaceholder(),
+              InfoBoxPlaceholder()
+            ]);
+          },
         ),
       ),
     );
@@ -162,8 +202,17 @@ class _ActivityMarkerMapState extends State<ActivityMarkerMap> {
     print(
         '${bounds.south}, ${bounds.west}, ${bounds.east}, ${widget.mapState.activity.value}');
     print("fetch locations started");
-    List<MyMarker> markers_ =
-        await fetchLocations(bounds, widget.mapState.activity.value);
+
+    List<LocationShortApi> locations = await LocationService().getInBoundingBox(
+        toLongLat(bounds.southWest),
+        toLongLat(bounds.northEast),
+        widget.mapState.activity.value);
+    print(locations.length);
+
+    List<MyMarker> markers_ = locations
+        .map((loc) => MyMarker.fromLocation(loc, widget.mapState.onMarkerClick))
+        .toList();
+
     setState(() {
       markers = markers_;
       print("state set... with ${markers.length} items");
@@ -197,50 +246,28 @@ class _ActivityMarkerMapState extends State<ActivityMarkerMap> {
 }
 
 class MyMarker extends Marker {
-  MyMarker({
+  MyMarker(
+    this.location, {
     required super.point,
     required super.builder,
     required super.width,
     required super.height,
     required super.anchorPos,
-    //  required this.id
   });
 
-  // final String id;
-}
+  final LocationShortApi location;
 
-MyMarker markerFromJson(Map<String, dynamic> json) {
-  var loc = LatLng(
-      json["location"]["coordinates"][1], json["location"]["coordinates"][0]);
-  String id = json["id"];
-
-  return MyMarker(
-      point: loc,
-      width: 20,
-      height: 20,
-      builder: (context) => IconButton(
-            icon: const Icon(Icons.location_pin),
-            onPressed: () {
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => DetailsScreen(locationId: id)));
-            },
-          ),
-      anchorPos: AnchorPos.align(AnchorAlign.top));
-}
-
-List<MyMarker> parseMarkers(String responseBody) {
-  final List parsed =
-      jsonDecode(responseBody); //.cast<List<Map<String, dynamic>>>();
-  if (parsed.isNotEmpty) print(parsed[0]);
-  print(parsed.length);
-  return parsed.map<MyMarker>((json) => markerFromJson(json)).toList();
-}
-
-Future<List<MyMarker>> fetchLocations(
-    LatLngBounds bounds, String activity) async {
-  http.Response response =
-      await LocationService().getInBoundingBox(bounds, activity);
-  return parseMarkers(response.body);
+  factory MyMarker.fromLocation(LocationShortApi location, Function onPressed) {
+    return MyMarker(location,
+        point: toLatLng(location.location),
+        width: 20,
+        height: 20,
+        builder: (context) => IconButton(
+              icon: const Icon(Icons.location_pin),
+              onPressed: () {
+                onPressed(location);
+              },
+            ),
+        anchorPos: AnchorPos.align(AnchorAlign.top));
+  }
 }

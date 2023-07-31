@@ -18,7 +18,7 @@ Future<XFile?> pickImage(ImageSource source) async {
 
 Future<void> uploadImage({required XFile image, required String path}) async {
   final img = MemoryImage(await image.readAsBytes());
-  await PhotoService().uploadPhoto(image: img, path: path);
+  await PhotoService.uploadPhoto(image: img, path: path);
 }
 
 class ImageSourceButton extends StatelessWidget {
@@ -63,11 +63,18 @@ Future<dynamic> bottomSheetPhotoSourcePicker(
       return null;
     }
 
-    String path = PhotoService().createPath(
-        mode: mode,
-        extension: photo.path.split(".").last,
-        locationId: locationId,
-        userId: userId);
+    const allowedExtensions = ["jpg", "jpeg", "png"];
+    final extension = photo.path.split(".").last;
+
+    String ext = allowedExtensions
+        .firstWhere((e) => extension.toLowerCase() == e, orElse: () => "");
+    if (ext == "") {
+      print("Not a valid file name. Needs an extension!");
+      return null;
+    }
+
+    String path = PhotoService.createPath(
+        mode: mode, extension: ext, locationId: locationId, userId: userId);
 
     try {
       if (mode == "location") {
@@ -100,13 +107,13 @@ Future<dynamic> bottomSheetPhotoSourcePicker(
                   title: "Gallery",
                   icon: const Icon(Icons.photo),
                   onPressed: () async {
-                    String? key = await _pickAndUpload(ImageSource.gallery);
+                    await _pickAndUpload(ImageSource.gallery);
                   }),
               ImageSourceButton(
                   title: "Camera",
                   icon: const Icon(Icons.camera_alt),
                   onPressed: () async {
-                    String? key = await _pickAndUpload(ImageSource.camera);
+                    await _pickAndUpload(ImageSource.camera);
                   })
             ],
           ));
