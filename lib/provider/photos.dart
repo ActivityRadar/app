@@ -16,9 +16,8 @@ class PhotoService {
 
   static Future<MemoryImage> getPhoto(String id) async {
     try {
-      print("Getting photo $id...");
+      print("Downloading photo $id...");
       dynamic res = await s3Service.getObject(bucket: bucket, key: id);
-      print("Got photo: $id");
       return MemoryImage(res.body);
     } catch (e) {
       print("S3 download failed: $e");
@@ -72,5 +71,36 @@ class PhotoService {
     var random = Random.secure();
     var values = List<int>.generate(len, (i) => random.nextInt(255));
     return sha1.convert(utf8.encode(base64Encode(values))).toString();
+  }
+}
+
+/// A class for managing downloaded images to not redonwload them all the time.
+/// TODO: Store files not in memory, but in phone storage.
+class PhotoManager {
+  final Map<String, MemoryImage> _storage = {};
+
+  static final PhotoManager _instance = PhotoManager._internal();
+  static PhotoManager get instance => _instance;
+  PhotoManager._internal();
+
+  Future<MemoryImage> getPhoto(String url) async {
+    if (!_storage.containsKey(url)) {
+      final img = await PhotoService.getPhoto(url);
+      _storage[url] = img;
+    } else {
+      print("Got image from storage!");
+    }
+
+    return _storage[url]!;
+  }
+
+  Future<bool> setPhoto(MemoryImage img, String url) async {
+    try {
+      await PhotoService.uploadPhoto(image: img, path: url);
+      _storage[url] = img;
+      return true;
+    } catch (e) {
+      return false;
+    }
   }
 }
