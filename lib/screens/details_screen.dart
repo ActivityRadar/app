@@ -1,3 +1,4 @@
+import 'package:app/model/generated/review_with_id.dart';
 import 'package:flutter/material.dart';
 
 import 'package:carousel_slider/carousel_slider.dart';
@@ -181,7 +182,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
                 )
               ],
             ),
-            RatingSummary(count: 0, average: info.averageRating),
+            RatingSummary(count: 0, average: info.reviews.averageRating),
           ],
         ),
         Padding(
@@ -233,7 +234,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
             ],
           ),
         ),
-        ReviewList(reviews: info.recentReviews, width: width, height: height)
+        ReviewList(reviews: info.reviews.recent, width: width, height: height)
       ]),
     );
   }
@@ -347,7 +348,7 @@ class ReviewList extends StatelessWidget {
       required this.width,
       required this.height});
 
-  final List<ReviewBase> reviews;
+  final List<ReviewWithId> reviews;
   final double width;
   final double height;
 
@@ -374,7 +375,7 @@ class ReviewList extends StatelessWidget {
 class ReviewBox extends StatelessWidget {
   const ReviewBox({super.key, required this.review});
 
-  final ReviewBase review;
+  final ReviewWithId review;
 
   @override
   Widget build(BuildContext context) {
