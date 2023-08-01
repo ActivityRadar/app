@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:readmore/readmore.dart';
 
 import 'package:app/constants/contants.dart';
 import 'package:app/model/generated.dart';
@@ -232,6 +233,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
             ],
           ),
         ),
+        ReviewList(reviews: info.recentReviews, width: width, height: height)
       ]),
     );
   }
@@ -337,7 +339,104 @@ class _PhotoSliderState extends State<PhotoSlider> {
     ]);
   }
 }
+
+class ReviewList extends StatelessWidget {
+  const ReviewList(
+      {super.key,
+      required this.reviews,
+      required this.width,
+      required this.height});
+
+  final List<ReviewBase> reviews;
+  final double width;
+  final double height;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        Padding(
+          padding: const EdgeInsets.only(left: 9.0, top: 15.0),
+          child: Text(
+            "Reviews",
+            style: TextStyle(
+                color: const Color.fromARGB(182, 0, 0, 0),
+                fontWeight: FontWeight.bold,
+                fontSize: width * 0.05),
           ),
-        ]);
+        ),
+        for (var review in reviews) ReviewBox(review: review)
+      ],
+    );
+  }
+}
+
+class ReviewBox extends StatelessWidget {
+  const ReviewBox({super.key, required this.review});
+
+  final ReviewBase review;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 3.0),
+      child: Container(
+          decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(15),
+              border: Border.all(color: Colors.black, width: 2)),
+          child: Column(
+            children: [
+              Row(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.all(12.0),
+                    child: ClipOval(
+                        child: Image.asset(
+                            "assets/locationPhotoLoadingPlaceholder.jpg",
+                            width: 50,
+                            height: 50,
+                            fit: BoxFit.cover)),
+                  ),
+                  Column(
+                    children: [
+                      RatingScore(score: review.overallRating),
+                      Text("@${review.userId}")
+                    ],
+                  ),
+                  const Spacer(),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Text(
+                        "${DateTime.now().difference(DateTime.parse(review.creationDate)).inDays} days ago"),
+                  )
+                ],
+              ),
+              Padding(
+                padding:
+                    const EdgeInsets.symmetric(vertical: 8.0, horizontal: 10.0),
+                child: SizedBox(
+                    width: double.infinity,
+                    child: ExpandableText(text: review.text)),
+              )
+            ],
+          )),
+    );
+  }
+}
+
+class ExpandableText extends StatelessWidget {
+  const ExpandableText({super.key, required this.text});
+
+  final String text;
+
+  @override
+  Widget build(BuildContext context) {
+    return ReadMoreText(text,
+        trimLines: 3,
+        style: const TextStyle(color: Colors.black),
+        colorClickableText: Colors.grey,
+        trimMode: TrimMode.Line,
+        trimCollapsedText: "More",
+        trimExpandedText: " Less");
   }
 }
