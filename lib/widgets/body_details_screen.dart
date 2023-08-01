@@ -7,8 +7,6 @@ import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:app/widgets/vote.dart';
 
-// ignore_for_file: avoid_print
-
 class BodyDetails extends StatefulWidget {
   const BodyDetails({super.key, required this.data, required this.id});
 
@@ -165,7 +163,7 @@ class _BodyDetails extends State<BodyDetails> {
                   )
                 ],
               ),
-              vote_rate_small(),
+              RatingSummary(),
             ],
           ),
           Column(
