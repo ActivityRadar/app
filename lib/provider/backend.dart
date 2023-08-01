@@ -152,7 +152,12 @@ class UserService {
 
   static void findUser() {}
 
-  static void getUserInfo() {}
+  static Future<UserApiOut> getUserInfo(String id) async {
+    Map<String, dynamic> responseBody =
+        await BackendService.instance.sendRequest("GET", "$prefix/$id");
+
+    return UserApiOut.fromJson(responseBody);
+  }
 }
 
 class RelationService {
