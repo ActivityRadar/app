@@ -4,14 +4,14 @@
 
 import 'package:json_annotation/json_annotation.dart';
 
-import 'package:app/model/generated/review_out.dart';
+import 'package:app/model/generated/review_with_id.dart';
 part 'reviews_page.g.dart';
 
 @JsonSerializable(explicitToJson: true)
 class ReviewsPage {
   @JsonKey(name: "next_offset")
   final int? nextOffset;
-  final List<ReviewOut> reviews;
+  final List<ReviewWithId> reviews;
 
   ReviewsPage({
     this.nextOffset,

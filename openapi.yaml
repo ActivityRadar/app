@@ -452,7 +452,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/ReviewInfo'
+              $ref: '#/components/schemas/ReviewBase'
         required: true
       responses:
         '200':
@@ -498,7 +498,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/ReviewInfo'
+              $ref: '#/components/schemas/ReviewBase'
         required: true
       responses:
         '200':
@@ -623,6 +623,147 @@ paths:
           default: true
         name: confirm
         in: query
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - OAuth2PasswordBearer: []
+  /locations/{location_id}/photos/:
+    post:
+      tags:
+      - locations
+      - photos
+      summary: Add Photo
+      operationId: add_photo
+      parameters:
+      - required: true
+        schema:
+          type: string
+          title: Location Id
+          examples:
+          - 5eb7cf5a86d9755df3a6c593
+          - 5eb7cfb05e32e07750a1756a
+        name: location_id
+        in: path
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PhotoUrl'
+        required: true
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - OAuth2PasswordBearer: []
+  /locations/{location_id}/photos/{photo_id}:
+    delete:
+      tags:
+      - locations
+      - photos
+      summary: Remove Photo
+      operationId: remove_photo
+      parameters:
+      - required: true
+        schema:
+          type: string
+          title: Location Id
+          examples:
+          - 5eb7cf5a86d9755df3a6c593
+          - 5eb7cfb05e32e07750a1756a
+        name: location_id
+        in: path
+      - required: true
+        schema:
+          type: string
+          title: Photo Url
+        name: photo_url
+        in: query
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - OAuth2PasswordBearer: []
+  /locations/{location_id}/photos/{photo_id}/report:
+    put:
+      tags:
+      - locations
+      - photos
+      summary: Report Photo
+      operationId: report_photo
+      parameters:
+      - required: true
+        schema:
+          type: string
+          title: Location Id
+          examples:
+          - 5eb7cf5a86d9755df3a6c593
+          - 5eb7cfb05e32e07750a1756a
+        name: location_id
+        in: path
+      - required: true
+        schema:
+          type: string
+          title: Photo Id
+        name: photo_id
+        in: path
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - OAuth2PasswordBearer: []
+  /users/{user_id}/report-avatar:
+    put:
+      tags:
+      - users
+      summary: Report Profile Photo
+      operationId: report_profile_photo
+      parameters:
+      - required: true
+        schema:
+          type: string
+          title: User Id
+          examples:
+          - 5eb7cf5a86d9755df3a6c593
+          - 5eb7cfb05e32e07750a1756a
+        name: user_id
+        in: path
       responses:
         '200':
           description: Successful Response
@@ -1020,6 +1161,68 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - OAuth2PasswordBearer: []
+  /users/me/photo/:
+    get:
+      tags:
+      - users
+      - me
+      - profile_photo
+      summary: Get Profile Photo
+      description: 'This does not have to be implemented, as the user gets the photo
+        info with the
+
+        GET /users/me request anyways'
+      operationId: get_profile_photo
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+      security:
+      - OAuth2PasswordBearer: []
+    post:
+      tags:
+      - users
+      - me
+      - profile_photo
+      summary: Create Profile Photo
+      operationId: create_profile_photo
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PhotoUrl'
+        required: true
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - OAuth2PasswordBearer: []
+    delete:
+      tags:
+      - users
+      - me
+      - profile_photo
+      summary: Delete Profile Photo
+      operationId: delete_profile_photo
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
       security:
       - OAuth2PasswordBearer: []
   /offers/:
@@ -1473,17 +1676,9 @@ components:
         trust_score:
           type: integer
           title: Trust Score
-        average_rating:
-          type: number
-          title: Average Rating
         tags:
           type: object
           title: Tags
-        recent_reviews:
-          items:
-            $ref: '#/components/schemas/ReviewBase'
-          type: array
-          title: Recent Reviews
         geometry:
           anyOf:
           - $ref: '#/components/schemas/GeoJsonLocation'
@@ -1495,6 +1690,8 @@ components:
             $ref: '#/components/schemas/PhotoInfo'
           type: array
           title: Photos
+        reviews:
+          $ref: '#/components/schemas/ReviewsSummary'
         id:
           type: string
           title: Id
@@ -1507,8 +1704,8 @@ components:
       - location
       - trust_score
       - tags
-      - recent_reviews
       - photos
+      - reviews
       - id
       title: LocationDetailedApi
     LocationHistoryIn:
@@ -1544,6 +1741,9 @@ components:
         name:
           type: string
           title: Name
+        trust_score:
+          type: integer
+          title: Trust Score
         tags:
           type: object
           title: Tags
@@ -1558,6 +1758,7 @@ components:
       required:
       - activity_type
       - location
+      - trust_score
       title: LocationNew
     LocationShortApi:
       properties:
@@ -1566,6 +1767,12 @@ components:
           title: Activity Type
         location:
           $ref: '#/components/schemas/GeoJsonLocation'
+        name:
+          type: string
+          title: Name
+        trust_score:
+          type: integer
+          title: Trust Score
         id:
           type: string
           title: Id
@@ -1576,6 +1783,7 @@ components:
       required:
       - activity_type
       - location
+      - trust_score
       - id
       title: LocationShortApi
     OfferIn:
@@ -1731,6 +1939,15 @@ components:
       - url
       - creation_date
       title: PhotoInfo
+    PhotoUrl:
+      properties:
+        url:
+          type: string
+          title: Url
+      type: object
+      required:
+      - url
+      title: PhotoUrl
     PlainMessage:
       properties:
         sender:
@@ -1787,6 +2004,9 @@ components:
           examples:
           - 5eb7cf5a86d9755df3a6c593
           - 5eb7cfb05e32e07750a1756a
+        title:
+          type: string
+          title: Title
         text:
           type: string
           title: Text
@@ -1796,26 +2016,15 @@ components:
         details:
           type: object
           title: Details
-        creation_date:
-          type: string
-          format: date-time
-          title: Creation Date
-        user_id:
-          type: string
-          title: User Id
-          examples:
-          - 5eb7cf5a86d9755df3a6c593
-          - 5eb7cfb05e32e07750a1756a
       type: object
       required:
       - location_id
+      - title
       - text
       - overall_rating
       - details
-      - creation_date
-      - user_id
       title: ReviewBase
-    ReviewInfo:
+    ReviewWithId:
       properties:
         location_id:
           type: string
@@ -1823,36 +2032,9 @@ components:
           examples:
           - 5eb7cf5a86d9755df3a6c593
           - 5eb7cfb05e32e07750a1756a
-        text:
+        title:
           type: string
-          title: Text
-        overall_rating:
-          type: number
-          title: Overall Rating
-        details:
-          type: object
-          title: Details
-      type: object
-      required:
-      - location_id
-      - text
-      - overall_rating
-      - details
-      title: ReviewInfo
-    ReviewOut:
-      properties:
-        _id:
-          type: string
-          title: ' Id'
-          examples:
-          - 5eb7cf5a86d9755df3a6c593
-          - 5eb7cfb05e32e07750a1756a
-        location_id:
-          type: string
-          title: Location Id
-          examples:
-          - 5eb7cf5a86d9755df3a6c593
-          - 5eb7cfb05e32e07750a1756a
+          title: Title
         text:
           type: string
           title: Text
@@ -1872,33 +2054,23 @@ components:
           examples:
           - 5eb7cf5a86d9755df3a6c593
           - 5eb7cfb05e32e07750a1756a
+        id:
+          type: string
+          title: Id
+          examples:
+          - 5eb7cf5a86d9755df3a6c593
+          - 5eb7cfb05e32e07750a1756a
       type: object
       required:
-      - _id
       - location_id
+      - title
       - text
       - overall_rating
       - details
       - creation_date
       - user_id
-      title: ReviewOut
-      description: 'Document Mapping class.
-
-
-        Fields:
-
-
-        - `id` - MongoDB document ObjectID "_id" field.
-
-        Mapped to the PydanticObjectId class
-
-
-        Inherited from:
-
-
-        - Pydantic BaseModel
-
-        - [UpdateMethods](https://roman-right.github.io/beanie/api/interfaces/#aggregatemethods)'
+      - id
+      title: ReviewWithId
     ReviewsPage:
       properties:
         next_offset:
@@ -1906,13 +2078,32 @@ components:
           title: Next Offset
         reviews:
           items:
-            $ref: '#/components/schemas/ReviewOut'
+            $ref: '#/components/schemas/ReviewWithId'
           type: array
           title: Reviews
       type: object
       required:
       - reviews
       title: ReviewsPage
+    ReviewsSummary:
+      properties:
+        average_rating:
+          type: number
+          title: Average Rating
+        count:
+          type: integer
+          title: Count
+        recent:
+          items:
+            $ref: '#/components/schemas/ReviewWithId'
+          type: array
+          title: Recent
+      type: object
+      required:
+      - average_rating
+      - count
+      - recent
+      title: ReviewsSummary
     TagChange:
       properties:
         mode:

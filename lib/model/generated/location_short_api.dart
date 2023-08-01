@@ -12,11 +12,16 @@ class LocationShortApi {
   @JsonKey(name: "activity_type")
   final String activityType;
   final GeoJsonLocation location;
+  final String? name;
+  @JsonKey(name: "trust_score")
+  final int trustScore;
   final String id;
 
   LocationShortApi({
     required this.activityType,
     required this.location,
+    this.name,
+    required this.trustScore,
     required this.id});
 
   factory LocationShortApi.fromJson(Map<String, dynamic> json) => _$LocationShortApiFromJson(json);

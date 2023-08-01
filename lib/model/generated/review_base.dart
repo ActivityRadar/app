@@ -10,22 +10,18 @@ part 'review_base.g.dart';
 class ReviewBase {
   @JsonKey(name: "location_id")
   final String locationId;
+  final String title;
   final String text;
   @JsonKey(name: "overall_rating")
   final double overallRating;
   final Object details;
-  @JsonKey(name: "creation_date")
-  final String creationDate;
-  @JsonKey(name: "user_id")
-  final String userId;
 
   ReviewBase({
     required this.locationId,
+    required this.title,
     required this.text,
     required this.overallRating,
-    required this.details,
-    required this.creationDate,
-    required this.userId});
+    required this.details});
 
   factory ReviewBase.fromJson(Map<String, dynamic> json) => _$ReviewBaseFromJson(json);
 
