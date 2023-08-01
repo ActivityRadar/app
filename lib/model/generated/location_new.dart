@@ -13,6 +13,8 @@ class LocationNew {
   final String activityType;
   final GeoJsonLocation location;
   final String? name;
+  @JsonKey(name: "trust_score")
+  final int trustScore;
   final Object? tags;
   final Object? geometry;
 
@@ -20,6 +22,7 @@ class LocationNew {
     required this.activityType,
     required this.location,
     this.name,
+    required this.trustScore,
     this.tags,
     this.geometry});
 

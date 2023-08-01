@@ -5,8 +5,8 @@
 import 'package:json_annotation/json_annotation.dart';
 
 import 'package:app/model/generated/geo_json_location.dart';
-import 'package:app/model/generated/review_base.dart';
 import 'package:app/model/generated/photo_info.dart';
+import 'package:app/model/generated/reviews_summary.dart';
 part 'location_detailed_api.g.dart';
 
 @JsonSerializable(explicitToJson: true)
@@ -17,13 +17,10 @@ class LocationDetailedApi {
   final String? name;
   @JsonKey(name: "trust_score")
   final int trustScore;
-  @JsonKey(name: "average_rating")
-  final double? averageRating;
   final Object tags;
-  @JsonKey(name: "recent_reviews")
-  final List<ReviewBase> recentReviews;
   final Object? geometry;
   final List<PhotoInfo> photos;
+  final ReviewsSummary reviews;
   final String id;
 
   LocationDetailedApi({
@@ -31,11 +28,10 @@ class LocationDetailedApi {
     required this.location,
     this.name,
     required this.trustScore,
-    this.averageRating,
     required this.tags,
-    required this.recentReviews,
     this.geometry,
     required this.photos,
+    required this.reviews,
     required this.id});
 
   factory LocationDetailedApi.fromJson(Map<String, dynamic> json) => _$LocationDetailedApiFromJson(json);

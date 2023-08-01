@@ -9,7 +9,7 @@ part of 'reviews_page.dart';
 ReviewsPage _$ReviewsPageFromJson(Map<String, dynamic> json) => ReviewsPage(
       nextOffset: json['next_offset'] as int?,
       reviews: (json['reviews'] as List<dynamic>)
-          .map((e) => ReviewOut.fromJson(e as Map<String, dynamic>))
+          .map((e) => ReviewWithId.fromJson(e as Map<String, dynamic>))
           .toList(),
     );
 

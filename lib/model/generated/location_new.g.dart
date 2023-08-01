@@ -11,6 +11,7 @@ LocationNew _$LocationNewFromJson(Map<String, dynamic> json) => LocationNew(
       location:
           GeoJsonLocation.fromJson(json['location'] as Map<String, dynamic>),
       name: json['name'] as String?,
+      trustScore: json['trust_score'] as int,
       tags: json['tags'],
       geometry: json['geometry'],
     );
@@ -20,6 +21,7 @@ Map<String, dynamic> _$LocationNewToJson(LocationNew instance) =>
       'activity_type': instance.activityType,
       'location': instance.location.toJson(),
       'name': instance.name,
+      'trust_score': instance.trustScore,
       'tags': instance.tags,
       'geometry': instance.geometry,
     };

@@ -13,15 +13,12 @@ LocationDetailedApi _$LocationDetailedApiFromJson(Map<String, dynamic> json) =>
           GeoJsonLocation.fromJson(json['location'] as Map<String, dynamic>),
       name: json['name'] as String?,
       trustScore: json['trust_score'] as int,
-      averageRating: (json['average_rating'] as num?)?.toDouble(),
       tags: json['tags'] as Object,
-      recentReviews: (json['recent_reviews'] as List<dynamic>)
-          .map((e) => ReviewBase.fromJson(e as Map<String, dynamic>))
-          .toList(),
       geometry: json['geometry'],
       photos: (json['photos'] as List<dynamic>)
           .map((e) => PhotoInfo.fromJson(e as Map<String, dynamic>))
           .toList(),
+      reviews: ReviewsSummary.fromJson(json['reviews'] as Map<String, dynamic>),
       id: json['id'] as String,
     );
 
@@ -32,10 +29,9 @@ Map<String, dynamic> _$LocationDetailedApiToJson(
       'location': instance.location.toJson(),
       'name': instance.name,
       'trust_score': instance.trustScore,
-      'average_rating': instance.averageRating,
       'tags': instance.tags,
-      'recent_reviews': instance.recentReviews.map((e) => e.toJson()).toList(),
       'geometry': instance.geometry,
       'photos': instance.photos.map((e) => e.toJson()).toList(),
+      'reviews': instance.reviews.toJson(),
       'id': instance.id,
     };
