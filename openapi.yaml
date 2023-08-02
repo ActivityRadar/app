@@ -830,6 +830,40 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/HTTPValidationError'
+  /users/id:
+    get:
+      tags:
+      - users
+      summary: Get User Infos
+      operationId: get_user_infos
+      parameters:
+      - required: true
+        schema:
+          items:
+            type: string
+            examples:
+            - 5eb7cf5a86d9755df3a6c593
+            - 5eb7cfb05e32e07750a1756a
+          type: array
+          title: Q
+        name: q
+        in: query
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/UserApiOut'
+                type: array
+                title: Response Get User Infos Users Id Get
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
   /users/reset_password:
     put:
       tags:
@@ -1080,7 +1114,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/UserApiOut'
+                $ref: '#/components/schemas/UserDetailed'
       security:
       - OAuth2PasswordBearer: []
     put:
@@ -1594,6 +1628,28 @@ paths:
       - OAuth2PasswordBearer: []
 components:
   schemas:
+    AuthType:
+      type: string
+      enum:
+      - password
+      - apple
+      - google
+      title: AuthType
+      description: An enumeration.
+    Authentication:
+      properties:
+        type:
+          $ref: '#/components/schemas/AuthType'
+        password_hash:
+          type: string
+          title: Password Hash
+        email:
+          type: string
+          title: Email
+      type: object
+      required:
+      - type
+      title: Authentication
     ChangePasswordForm:
       properties:
         new_password:
@@ -2171,6 +2227,53 @@ components:
       - display_name
       - id
       title: UserApiOut
+    UserDetailed:
+      properties:
+        username:
+          type: string
+          title: Username
+        display_name:
+          type: string
+          title: Display Name
+        trust_score:
+          type: integer
+          title: Trust Score
+        avatar:
+          $ref: '#/components/schemas/PhotoInfo'
+        ip_address:
+          type: string
+          format: ipvanyaddress
+          title: Ip Address
+        creation_date:
+          type: string
+          format: date-time
+          title: Creation Date
+        last_location:
+          $ref: '#/components/schemas/GeoJsonLocation'
+        authentication:
+          $ref: '#/components/schemas/Authentication'
+        archived_until:
+          type: string
+          format: date-time
+          title: Archived Until
+        admin:
+          type: boolean
+          title: Admin
+        id:
+          type: string
+          title: Id
+          examples:
+          - 5eb7cf5a86d9755df3a6c593
+          - 5eb7cfb05e32e07750a1756a
+      type: object
+      required:
+      - username
+      - display_name
+      - trust_score
+      - creation_date
+      - authentication
+      - id
+      title: UserDetailed
     UserRelation:
       properties:
         _id:

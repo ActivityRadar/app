@@ -12,7 +12,7 @@ LocationNew _$LocationNewFromJson(Map<String, dynamic> json) => LocationNew(
           GeoJsonLocation.fromJson(json['location'] as Map<String, dynamic>),
       name: json['name'] as String?,
       trustScore: json['trust_score'] as int,
-      tags: json['tags'],
+      tags: json['tags'] as Map<String, dynamic>?,
       geometry: json['geometry'] as Map<String, dynamic>?,
     );
 

@@ -9,7 +9,7 @@ part 'geo_json_feature_collection.g.dart';
 @JsonSerializable(explicitToJson: true)
 class GeoJsonFeatureCollection {
   final String? type;
-  final List<Object> geometries;
+  final List<Map<String, dynamic>> geometries;
 
   GeoJsonFeatureCollection({
     this.type,

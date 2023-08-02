@@ -11,7 +11,7 @@ ReviewBase _$ReviewBaseFromJson(Map<String, dynamic> json) => ReviewBase(
       title: json['title'] as String,
       text: json['text'] as String,
       overallRating: (json['overall_rating'] as num).toDouble(),
-      details: json['details'] as Object,
+      details: json['details'] as Map<String, dynamic>,
     );
 
 Map<String, dynamic> _$ReviewBaseToJson(ReviewBase instance) =>

@@ -11,7 +11,7 @@ GeoJsonFeatureCollection _$GeoJsonFeatureCollectionFromJson(
     GeoJsonFeatureCollection(
       type: json['type'] as String?,
       geometries: (json['geometries'] as List<dynamic>)
-          .map((e) => e as Object)
+          .map((e) => e as Map<String, dynamic>)
           .toList(),
     );
 
