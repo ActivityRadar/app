@@ -11,7 +11,7 @@ class SettingScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    const double collapsedHeight = 60;
+    const double collapsedHeight = 90;
     const double expandedHeight = 160;
 
     return Scaffold(
