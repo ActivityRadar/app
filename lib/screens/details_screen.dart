@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:readmore/readmore.dart';
 
-import 'package:app/constants/contants.dart';
+import 'package:app/constants/constants.dart';
 import 'package:app/model/generated.dart';
 import 'package:app/provider/backend.dart';
 import 'package:app/provider/photos.dart';

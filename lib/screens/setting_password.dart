@@ -1,4 +1,4 @@
-import 'package:app/constants/contants.dart';
+import 'package:app/constants/constants.dart';
 import 'package:flutter/material.dart';
 
 class PasswordSwitch extends StatelessWidget {

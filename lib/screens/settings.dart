@@ -1,4 +1,4 @@
-import 'package:app/constants/contants.dart';
+import 'package:app/constants/constants.dart';
 import 'package:app/screens/setting_password.dart';
 import 'package:app/screens/settings_email.dart';
 import 'package:app/screens/settings_name.dart';
@@ -92,15 +92,16 @@ class SettingScreen extends StatelessWidget {
                     side: const BorderSide(
                       color: Color.fromARGB(51, 241, 241, 241),
                     ),
-                    borderRadius: BorderRadius.circular(radiusborda),
+                    borderRadius: BorderRadius.circular(AppStyle.cornerRadius),
                   ),
                   child: Column(
                     children: [
                       ListTile(
                         shape: const RoundedRectangleBorder(
                             borderRadius: BorderRadius.only(
-                                topLeft: Radius.circular(radiusborda),
-                                topRight: Radius.circular(radiusborda))),
+                                topLeft: Radius.circular(AppStyle.cornerRadius),
+                                topRight:
+                                    Radius.circular(AppStyle.cornerRadius))),
                         tileColor: Colors.white,
                         title: const Text('Username and Displayname'),
                         onTap: () {
@@ -178,8 +179,10 @@ class SettingScreen extends StatelessWidget {
                       ListTile(
                         shape: const RoundedRectangleBorder(
                             borderRadius: BorderRadius.only(
-                                bottomLeft: Radius.circular(radiusborda),
-                                bottomRight: Radius.circular(radiusborda))),
+                                bottomLeft:
+                                    Radius.circular(AppStyle.cornerRadius),
+                                bottomRight:
+                                    Radius.circular(AppStyle.cornerRadius))),
                         tileColor: Colors.white,
                         title: const Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -210,14 +213,15 @@ class SettingScreen extends StatelessWidget {
                     side: const BorderSide(
                       color: Color.fromARGB(51, 241, 241, 241),
                     ),
-                    borderRadius: BorderRadius.circular(radiusborda),
+                    borderRadius: BorderRadius.circular(AppStyle.cornerRadius),
                   ),
                   child: Column(children: [
                     ListTile(
                       shape: const RoundedRectangleBorder(
                           borderRadius: BorderRadius.only(
-                              topLeft: Radius.circular(radiusborda),
-                              topRight: Radius.circular(radiusborda))),
+                              topLeft: Radius.circular(AppStyle.cornerRadius),
+                              topRight:
+                                  Radius.circular(AppStyle.cornerRadius))),
                       tileColor: Colors.white,
                       title: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -252,8 +256,10 @@ class SettingScreen extends StatelessWidget {
                     const ListTile(
                       shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.only(
-                              bottomLeft: Radius.circular(radiusborda),
-                              bottomRight: Radius.circular(radiusborda))),
+                              bottomLeft:
+                                  Radius.circular(AppStyle.cornerRadius),
+                              bottomRight:
+                                  Radius.circular(AppStyle.cornerRadius))),
                       tileColor: Colors.white,
                       title: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -275,15 +281,17 @@ class SettingScreen extends StatelessWidget {
                     side: const BorderSide(
                       color: Color.fromARGB(51, 241, 241, 241),
                     ),
-                    borderRadius: BorderRadius.circular(radiusborda),
+                    borderRadius: BorderRadius.circular(AppStyle.cornerRadius),
                   ),
                   child: const Column(
                     children: [
                       ListTile(
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.only(
-                                topRight: Radius.circular(radiusborda),
-                                topLeft: Radius.circular(radiusborda))),
+                                topRight:
+                                    Radius.circular(AppStyle.cornerRadius),
+                                topLeft:
+                                    Radius.circular(AppStyle.cornerRadius))),
                         tileColor: Colors.white,
                         title: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,

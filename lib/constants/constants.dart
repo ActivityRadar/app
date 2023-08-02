@@ -6,7 +6,11 @@ class DesignColors {
   static const Color kBackgroundColor = Colors.white;
 }
 
-const double radiusborda = 20;
+class AppStyle {
+  static const double cornerRadius = 20;
+  static const double kDefaultPadding = 20.0;
+}
+
 const double kDefaultPadding = 20.0;
 
 enum Sport {

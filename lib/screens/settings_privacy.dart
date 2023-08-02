@@ -1,4 +1,4 @@
-import 'package:app/constants/contants.dart';
+import 'package:app/constants/constants.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
@@ -42,7 +42,8 @@ class _PrivacySettingPageState extends State<PrivacySettingPage> {
                       side: const BorderSide(
                         color: Color.fromARGB(51, 241, 241, 241),
                       ),
-                      borderRadius: BorderRadius.circular(radiusborda),
+                      borderRadius:
+                          BorderRadius.circular(AppStyle.cornerRadius),
                     ),
                     child: Column(
                       children: [
@@ -74,7 +75,8 @@ class _PrivacySettingPageState extends State<PrivacySettingPage> {
                       side: const BorderSide(
                         color: Color.fromARGB(51, 241, 241, 241),
                       ),
-                      borderRadius: BorderRadius.circular(radiusborda),
+                      borderRadius:
+                          BorderRadius.circular(AppStyle.cornerRadius),
                     ),
                     child: const Column(
                       children: [
@@ -108,8 +110,8 @@ class _ExpandableTileState extends State<ExpandableTile> {
       ListTile(
         shape: const RoundedRectangleBorder(
             borderRadius: BorderRadius.only(
-                topLeft: Radius.circular(radiusborda),
-                topRight: Radius.circular(radiusborda))),
+                topLeft: Radius.circular(AppStyle.cornerRadius),
+                topRight: Radius.circular(AppStyle.cornerRadius))),
         title: const Text('Sichtbarkeit auf dem Map'),
         trailing: Switch(
           // This bool value toggles the switch.
@@ -174,7 +176,7 @@ class _ExpandableTileState extends State<ExpandableTile> {
           )),
           SizedBox(
               height: 300,
-              child: ActivityMarkerMap(
+              child: RadiusSelectionMap(
                 height: 10,
                 width: 10,
                 radius: _currentSliderValue,
@@ -186,8 +188,8 @@ class _ExpandableTileState extends State<ExpandableTile> {
   }
 }
 
-class ActivityMarkerMap extends StatefulWidget {
-  const ActivityMarkerMap({
+class RadiusSelectionMap extends StatefulWidget {
+  const RadiusSelectionMap({
     super.key,
     required this.radius,
     required this.width,
@@ -199,12 +201,12 @@ class ActivityMarkerMap extends StatefulWidget {
   final double radius;
 
   @override
-  State<ActivityMarkerMap> createState() {
-    return _ActivityMarkerMapState();
+  State<RadiusSelectionMap> createState() {
+    return _RadiusSelectionMapState();
   }
 }
 
-class _ActivityMarkerMapState extends State<ActivityMarkerMap> {
+class _RadiusSelectionMapState extends State<RadiusSelectionMap> {
   LatLngBounds bounds = LatLngBounds(LatLng(52.37, 12.74), LatLng(50, 13.04));
   final MapController mapController = MapController();
 
