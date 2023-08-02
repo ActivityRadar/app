@@ -1,5 +1,3 @@
-import 'package:app/model/generated/review_with_id.dart';
-import 'package:app/provider/user_manager.dart';
 import 'package:flutter/material.dart';
 
 import 'package:carousel_slider/carousel_slider.dart';
@@ -9,6 +7,7 @@ import 'package:app/constants/contants.dart';
 import 'package:app/model/generated.dart';
 import 'package:app/provider/backend.dart';
 import 'package:app/provider/photos.dart';
+import 'package:app/provider/user_manager.dart';
 import 'package:app/widgets/activityType_short.dart';
 import 'package:app/widgets/photo_picker.dart';
 import 'package:app/widgets/vote.dart';
@@ -456,18 +455,41 @@ class ReviewBox extends StatelessWidget {
                         padding: const EdgeInsets.all(8.0),
                         child: Text(
                             "${DateTime.now().difference(review.creationDate).inDays} days ago"),
-                      )
+                      ),
+                      IconButton(
+                          // TODO: open menu (report, edit, delete)
+                          onPressed: () {},
+                          icon: const Icon(Icons.more_vert))
                     ],
                   );
                 },
               ),
               Padding(
                 padding:
-                    const EdgeInsets.symmetric(vertical: 8.0, horizontal: 10.0),
+                    const EdgeInsets.only(top: 8.0, left: 10.0, right: 10.0),
                 child: SizedBox(
                     width: double.infinity,
                     child: ExpandableText(text: review.text)),
-              )
+              ),
+              Padding(
+                  padding: const EdgeInsets.symmetric(
+                      vertical: 4.0, horizontal: 10.0),
+                  child: Row(
+                    children: [
+                      const Text(
+                          "X out of Y people found this helpful", // TODO: make dynamic
+                          style: TextStyle(color: Colors.grey)),
+                      const Spacer(),
+                      IconButton(
+                          onPressed: () {}, // TODO: send thumbs up
+                          icon:
+                              const Icon(Icons.thumb_up, color: Colors.green)),
+                      IconButton(
+                          onPressed: () {}, // TODO: send thumbs down
+                          icon:
+                              const Icon(Icons.thumb_down, color: Colors.red)),
+                    ],
+                  ))
             ],
           )),
     );
