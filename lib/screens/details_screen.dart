@@ -29,10 +29,12 @@ class DetailsScreen extends StatefulWidget {
 
 class _DetailsScreenState extends State<DetailsScreen> {
   Future<LocationDetailedApi>? _data;
+  late String locationId;
 
   @override
   void initState() {
     super.initState();
+    locationId = widget.locationId ?? widget.locationInfo!.id;
     if (widget.locationInfo != null) {
       // no need to wait if we already have the data
       _data = Future<LocationDetailedApi>.value(widget.locationInfo);
@@ -86,7 +88,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
 
   void _addPhoto() {
     bottomSheetPhotoSourcePicker(
-        context: context, mode: "location", locationId: widget.locationId);
+        context: context, mode: "location", locationId: locationId);
   }
 
   SliverAppBar _appBarPlaceHolder(double width) {
@@ -190,7 +192,8 @@ class _DetailsScreenState extends State<DetailsScreen> {
                 )
               ],
             ),
-            RatingSummary(count: 0, average: info.reviews.averageRating),
+            RatingSummary(
+                count: info.reviews.count, average: info.reviews.averageRating),
           ],
         ),
         Padding(
@@ -410,10 +413,18 @@ class ReviewBox extends StatelessWidget {
                 builder: (BuildContext context, AsyncSnapshot snapshot) {
                   Image? image;
                   String username;
+                  const double diameter = 50.0;
+                  print(
+                      "futurebuilder exec, ${snapshot.hasData}, ${snapshot.hasError}");
                   if (snapshot.hasData) {
                     if (snapshot.data != null) {
-                      image = snapshot.data;
+                      image = Image(
+                          image: snapshot.data,
+                          width: diameter,
+                          height: diameter);
                     }
+                  } else if (snapshot.hasError) {
+                    print(snapshot.error);
                   }
 
                   if (userInfo != null) {
@@ -424,8 +435,8 @@ class ReviewBox extends StatelessWidget {
 
                   image ??= Image.asset(
                       "assets/locationPhotoLoadingPlaceholder.jpg",
-                      width: 50,
-                      height: 50,
+                      width: diameter,
+                      height: diameter,
                       fit: BoxFit.cover);
 
                   return Row(
