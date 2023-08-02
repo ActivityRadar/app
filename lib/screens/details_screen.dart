@@ -1,4 +1,3 @@
-import 'package:app/model/generated/review_with_id.dart';
 import 'package:flutter/material.dart';
 
 import 'package:carousel_slider/carousel_slider.dart';
@@ -8,6 +7,7 @@ import 'package:app/constants/contants.dart';
 import 'package:app/model/generated.dart';
 import 'package:app/provider/backend.dart';
 import 'package:app/provider/photos.dart';
+import 'package:app/provider/user_manager.dart';
 import 'package:app/widgets/activityType_short.dart';
 import 'package:app/widgets/photo_picker.dart';
 import 'package:app/widgets/vote.dart';
@@ -28,10 +28,12 @@ class DetailsScreen extends StatefulWidget {
 
 class _DetailsScreenState extends State<DetailsScreen> {
   Future<LocationDetailedApi>? _data;
+  late String locationId;
 
   @override
   void initState() {
     super.initState();
+    locationId = widget.locationId ?? widget.locationInfo!.id;
     if (widget.locationInfo != null) {
       // no need to wait if we already have the data
       _data = Future<LocationDetailedApi>.value(widget.locationInfo);
@@ -56,6 +58,13 @@ class _DetailsScreenState extends State<DetailsScreen> {
           Widget? appBar;
           if (snapshot.hasData) {
             final locInfo = snapshot.data!;
+
+            // fetch the data first, this is not awaited, so it might cause problems...
+            UserInfoManager.instance.fetchInfoList([
+              ...locInfo.reviews.recent.map((r) => r.userId).toList(),
+              ...locInfo.photos.map((p) => p.userId).toList()
+            ]).ignore();
+
             appBar = _appBar(width, controller, current, locInfo);
             body = _contentList(width, height, locInfo);
           } else if (snapshot.hasError) {
@@ -78,7 +87,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
 
   void _addPhoto() {
     bottomSheetPhotoSourcePicker(
-        context: context, mode: "location", locationId: widget.locationId);
+        context: context, mode: "location", locationId: locationId);
   }
 
   SliverAppBar _appBarPlaceHolder(double width) {
@@ -182,7 +191,8 @@ class _DetailsScreenState extends State<DetailsScreen> {
                 )
               ],
             ),
-            RatingSummary(count: 0, average: info.reviews.averageRating),
+            RatingSummary(
+                count: info.reviews.count, average: info.reviews.averageRating),
           ],
         ),
         Padding(
@@ -379,6 +389,16 @@ class ReviewBox extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    UserApiOut? userInfo;
+    Future<MemoryImage?> photo =
+        UserInfoManager.instance.getUserInfo(review.userId).then((info) {
+      userInfo = info;
+      if (info.avatar != null) {
+        return PhotoManager.instance.getPhoto(info.avatar!.url);
+      }
+      return null;
+    });
+
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 3.0),
       child: Container(
@@ -387,38 +407,89 @@ class ReviewBox extends StatelessWidget {
               border: Border.all(color: Colors.black, width: 2)),
           child: Column(
             children: [
-              Row(
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.all(12.0),
-                    child: ClipOval(
-                        child: Image.asset(
-                            "assets/locationPhotoLoadingPlaceholder.jpg",
-                            width: 50,
-                            height: 50,
-                            fit: BoxFit.cover)),
-                  ),
-                  Column(
+              FutureBuilder(
+                future: photo,
+                builder: (BuildContext context, AsyncSnapshot snapshot) {
+                  Image? image;
+                  String username;
+                  const double diameter = 50.0;
+                  print(
+                      "futurebuilder exec, ${snapshot.hasData}, ${snapshot.hasError}");
+                  if (snapshot.hasData) {
+                    if (snapshot.data != null) {
+                      image = Image(
+                          image: snapshot.data,
+                          width: diameter,
+                          height: diameter);
+                    }
+                  } else if (snapshot.hasError) {
+                    print(snapshot.error);
+                  }
+
+                  if (userInfo != null) {
+                    username = userInfo!.username;
+                  } else {
+                    username = review.userId.substring(0, 6).toUpperCase();
+                  }
+
+                  image ??= Image.asset(
+                      "assets/locationPhotoLoadingPlaceholder.jpg",
+                      width: diameter,
+                      height: diameter,
+                      fit: BoxFit.cover);
+
+                  return Row(
                     children: [
-                      RatingScore(score: review.overallRating),
-                      Text("@${review.userId}")
+                      Padding(
+                        padding: const EdgeInsets.all(12.0),
+                        child: ClipOval(child: image),
+                      ),
+                      Column(
+                        children: [
+                          RatingScore(score: review.overallRating),
+                          Text("@$username")
+                        ],
+                      ),
+                      const Spacer(),
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Text(
+                            "${DateTime.now().difference(review.creationDate).inDays} days ago"),
+                      ),
+                      IconButton(
+                          // TODO: open menu (report, edit, delete)
+                          onPressed: () {},
+                          icon: const Icon(Icons.more_vert))
                     ],
-                  ),
-                  const Spacer(),
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Text(
-                        "${DateTime.now().difference(DateTime.parse(review.creationDate)).inDays} days ago"),
-                  )
-                ],
+                  );
+                },
               ),
               Padding(
                 padding:
-                    const EdgeInsets.symmetric(vertical: 8.0, horizontal: 10.0),
+                    const EdgeInsets.only(top: 8.0, left: 10.0, right: 10.0),
                 child: SizedBox(
                     width: double.infinity,
                     child: ExpandableText(text: review.text)),
-              )
+              ),
+              Padding(
+                  padding: const EdgeInsets.symmetric(
+                      vertical: 4.0, horizontal: 10.0),
+                  child: Row(
+                    children: [
+                      const Text(
+                          "X out of Y people found this helpful", // TODO: make dynamic
+                          style: TextStyle(color: Colors.grey)),
+                      const Spacer(),
+                      IconButton(
+                          onPressed: () {}, // TODO: send thumbs up
+                          icon:
+                              const Icon(Icons.thumb_up, color: Colors.green)),
+                      IconButton(
+                          onPressed: () {}, // TODO: send thumbs down
+                          icon:
+                              const Icon(Icons.thumb_down, color: Colors.red)),
+                    ],
+                  ))
             ],
           )),
     );

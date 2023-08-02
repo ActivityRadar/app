@@ -7,10 +7,10 @@ part of 'offer_in.dart';
 // **************************************************************************
 
 OfferIn _$OfferInFromJson(Map<String, dynamic> json) => OfferIn(
-      location: json['location'] as Object,
+      location: json['location'] as Map<String, dynamic>,
       activity:
           (json['activity'] as List<dynamic>).map((e) => e as String).toList(),
-      time: json['time'] as Object,
+      time: json['time'] as Map<String, dynamic>,
       description: json['description'] as String,
       visibility: $enumDecode(_$OfferVisibilityEnumMap, json['visibility']),
     );

@@ -10,7 +10,7 @@ part 'tag_change.g.dart';
 @JsonSerializable(explicitToJson: true)
 class TagChange {
   final TagChangeType mode;
-  final Object content;
+  final Map<String, dynamic> content;
 
   TagChange({
     required this.mode,

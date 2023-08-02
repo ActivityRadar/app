@@ -13,7 +13,7 @@ LocationNew _$LocationNewFromJson(Map<String, dynamic> json) => LocationNew(
       name: json['name'] as String?,
       trustScore: json['trust_score'] as int,
       tags: json['tags'],
-      geometry: json['geometry'],
+      geometry: json['geometry'] as Map<String, dynamic>?,
     );
 
 Map<String, dynamic> _$LocationNewToJson(LocationNew instance) =>

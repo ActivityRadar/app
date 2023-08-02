@@ -9,7 +9,7 @@ part 'plain_message.g.dart';
 @JsonSerializable(explicitToJson: true)
 class PlainMessage {
   final String sender;
-  final String time;
+  final DateTime time;
   final String text;
 
   PlainMessage({

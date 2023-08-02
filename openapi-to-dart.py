@@ -28,18 +28,18 @@ def to_snake_case(name):
     return camel_pattern.sub("_", name).lower()
 
 
-def to_dart_type(t):
+def to_dart_type(t, format=None):
     match t:
         case "integer":
             return "int"
-        case "object":
-            return "Object"
         case "string":
+            if format == "date-time":
+                return "DateTime"
             return "String"
         case "number":
             return "double"
         case _:
-            return "Object"
+            return "Map<String, dynamic>"
 
 
 def parse_enum(name, component):
@@ -68,24 +68,26 @@ def generate_dart_classes_new(components):
         imports = []
 
         for property_name, property_info in properties.items():
-            property_type = property_info.get("type", "Object")
+            p_type = property_info.get("type", "Object")
+            p_fmt = property_info.get("format", None)
             is_required = property_name in required_properties
             property_name_camel_case = to_camel_case(property_name)
 
-            if property_type == "array":
+            if p_type == "array":
                 item_info = property_info.get("items", {})
                 item_type = item_info.get("type", "Object")
+                item_fmt = item_info.get("fmt", None)
                 if "$ref" in item_info:
                     item_type = item_info["$ref"].split("/")[-1]
-                    property_type = f"List<{item_type}>"
+                    dart_type = f"List<{item_type}>"
                     imports.append(item_type)
                 else:
-                    property_type = f"List<{to_dart_type(item_type)}>"
+                    dart_type = f"List<{to_dart_type(item_type, item_fmt)}>"
             elif "$ref" in property_info:
-                property_type = property_info["$ref"].split("/")[-1]
-                imports.append(property_type)
+                dart_type = property_info["$ref"].split("/")[-1]
+                imports.append(dart_type)
             else:
-                property_type = to_dart_type(property_type)
+                dart_type = to_dart_type(p_type, p_fmt)
 
             null_suffix = "" if is_required else "?"
             class_property_names_and_req.append((property_name_camel_case, is_required))
@@ -96,7 +98,7 @@ def generate_dart_classes_new(components):
 
             class_properties.append(
                 json_key
-                + f"  final {property_type}{null_suffix} {property_name_camel_case};"
+                + f"  final {dart_type}{null_suffix} {property_name_camel_case};"
             )
 
         class_template = (

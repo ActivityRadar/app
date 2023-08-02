@@ -152,7 +152,21 @@ class UserService {
 
   static void findUser() {}
 
-  static void getUserInfo() {}
+  static Future<UserApiOut> getUserInfo(String id) async {
+    final q = {"q": id};
+    final responseBody = await BackendService.instance
+        .sendRequest("GET", "$prefix/id", queryParams: q);
+
+    return UserApiOut.fromJson(responseBody[0]);
+  }
+
+  static Future<List<UserApiOut>> getInfoBulk(List<String> ids) async {
+    final q = {"q": ids};
+    final responseBody = await BackendService.instance
+        .sendRequest("GET", "$prefix/id", queryParams: q);
+
+    return responseBody.map((info) => UserApiOut.fromJson(info)).toList();
+  }
 }
 
 class RelationService {
@@ -237,7 +251,7 @@ class ProfilePhotoService {
 
   Future<http.Response> create(String path) async {
     return await BackendService.instance
-        .sendRequest("POST", prefix, queryParams: {"photo_url": path});
+        .sendRequest("POST", prefix, body: PhotoUrl(url: path));
   }
 
   Future<http.Response> delete() async {
@@ -252,12 +266,13 @@ class LocationPhotoService {
 
   Future<void> create(String path, String locationId) async {
     await BackendService.instance
-        .sendRequest("POST", _prefix(locationId), body: {"photo_url": path});
+        .sendRequest("POST", _prefix(locationId), body: PhotoUrl(url: path));
   }
 
   Future<http.Response> delete(String locationId, String photoId) async {
     return await BackendService.instance.sendRequest(
-        "DELETE", _prefix(locationId),
-        queryParams: {"photo_url": photoId});
+      "DELETE",
+      "${_prefix(locationId)}/$photoId",
+    );
   }
 }

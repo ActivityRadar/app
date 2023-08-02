@@ -8,13 +8,13 @@ part of 'plain_message.dart';
 
 PlainMessage _$PlainMessageFromJson(Map<String, dynamic> json) => PlainMessage(
       sender: json['sender'] as String,
-      time: json['time'] as String,
+      time: DateTime.parse(json['time'] as String),
       text: json['text'] as String,
     );
 
 Map<String, dynamic> _$PlainMessageToJson(PlainMessage instance) =>
     <String, dynamic>{
       'sender': instance.sender,
-      'time': instance.time,
+      'time': instance.time.toIso8601String(),
       'text': instance.text,
     };

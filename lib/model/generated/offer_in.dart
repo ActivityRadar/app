@@ -9,9 +9,9 @@ part 'offer_in.g.dart';
 
 @JsonSerializable(explicitToJson: true)
 class OfferIn {
-  final Object location;
+  final Map<String, dynamic> location;
   final List<String> activity;
-  final Object time;
+  final Map<String, dynamic> time;
   final String description;
   final OfferVisibility visibility;
 
