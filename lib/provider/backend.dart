@@ -153,10 +153,19 @@ class UserService {
   static void findUser() {}
 
   static Future<UserApiOut> getUserInfo(String id) async {
-    Map<String, dynamic> responseBody =
-        await BackendService.instance.sendRequest("GET", "$prefix/$id");
+    final q = {"id": id};
+    List<Map<String, dynamic>> responseBody = await BackendService.instance
+        .sendRequest("GET", "$prefix/id", queryParams: q);
 
-    return UserApiOut.fromJson(responseBody);
+    return UserApiOut.fromJson(responseBody[0]);
+  }
+
+  static Future<List<UserApiOut>> getInfoBulk(List<String> ids) async {
+    final q = {"id": ids};
+    List<Map<String, dynamic>> responseBody = await BackendService.instance
+        .sendRequest("GET", "$prefix/id", queryParams: q);
+
+    return responseBody.map((info) => UserApiOut.fromJson(info)).toList();
   }
 }
 
