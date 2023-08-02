@@ -1,4 +1,5 @@
 import 'package:app/model/generated/review_with_id.dart';
+import 'package:app/provider/user_manager.dart';
 import 'package:flutter/material.dart';
 
 import 'package:carousel_slider/carousel_slider.dart';
@@ -56,6 +57,13 @@ class _DetailsScreenState extends State<DetailsScreen> {
           Widget? appBar;
           if (snapshot.hasData) {
             final locInfo = snapshot.data!;
+
+            // fetch the data first, this is not awaited, so it might cause problems...
+            UserInfoManager.instance.fetchInfoList([
+              ...locInfo.reviews.recent.map((r) => r.userId).toList(),
+              ...locInfo.photos.map((p) => p.userId).toList()
+            ]).ignore();
+
             appBar = _appBar(width, controller, current, locInfo);
             body = _contentList(width, height, locInfo);
           } else if (snapshot.hasError) {
@@ -379,6 +387,16 @@ class ReviewBox extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    UserApiOut? userInfo;
+    Future<MemoryImage?> photo =
+        UserInfoManager.instance.getUserInfo(review.userId).then((info) {
+      userInfo = info;
+      if (info.avatar != null) {
+        return PhotoManager.instance.getPhoto(info.avatar!.url);
+      }
+      return null;
+    });
+
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 3.0),
       child: Container(
@@ -387,30 +405,50 @@ class ReviewBox extends StatelessWidget {
               border: Border.all(color: Colors.black, width: 2)),
           child: Column(
             children: [
-              Row(
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.all(12.0),
-                    child: ClipOval(
-                        child: Image.asset(
-                            "assets/locationPhotoLoadingPlaceholder.jpg",
-                            width: 50,
-                            height: 50,
-                            fit: BoxFit.cover)),
-                  ),
-                  Column(
+              FutureBuilder(
+                future: photo,
+                builder: (BuildContext context, AsyncSnapshot snapshot) {
+                  Image? image;
+                  String username;
+                  if (snapshot.hasData) {
+                    if (snapshot.data != null) {
+                      image = snapshot.data;
+                    }
+                  }
+
+                  if (userInfo != null) {
+                    username = userInfo!.username;
+                  } else {
+                    username = review.userId.substring(0, 6).toUpperCase();
+                  }
+
+                  image ??= Image.asset(
+                      "assets/locationPhotoLoadingPlaceholder.jpg",
+                      width: 50,
+                      height: 50,
+                      fit: BoxFit.cover);
+
+                  return Row(
                     children: [
-                      RatingScore(score: review.overallRating),
-                      Text("@${review.userId}")
+                      Padding(
+                        padding: const EdgeInsets.all(12.0),
+                        child: ClipOval(child: image),
+                      ),
+                      Column(
+                        children: [
+                          RatingScore(score: review.overallRating),
+                          Text("@$username")
+                        ],
+                      ),
+                      const Spacer(),
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Text(
+                            "${DateTime.now().difference(review.creationDate).inDays} days ago"),
+                      )
                     ],
-                  ),
-                  const Spacer(),
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Text(
-                        "${DateTime.now().difference(DateTime.parse(review.creationDate)).inDays} days ago"),
-                  )
-                ],
+                  );
+                },
               ),
               Padding(
                 padding:
