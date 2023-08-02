@@ -9,7 +9,9 @@ part of 'offer_time_single.dart';
 OfferTimeSingle _$OfferTimeSingleFromJson(Map<String, dynamic> json) =>
     OfferTimeSingle(
       type: json['type'] as String?,
-      times: (json['times'] as List<dynamic>).map((e) => e as Object).toList(),
+      times: (json['times'] as List<dynamic>)
+          .map((e) => e as Map<String, dynamic>)
+          .toList(),
     );
 
 Map<String, dynamic> _$OfferTimeSingleToJson(OfferTimeSingle instance) =>

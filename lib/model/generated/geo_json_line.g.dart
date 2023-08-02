@@ -9,7 +9,7 @@ part of 'geo_json_line.dart';
 GeoJsonLine _$GeoJsonLineFromJson(Map<String, dynamic> json) => GeoJsonLine(
       type: json['type'] as String?,
       coordinates: (json['coordinates'] as List<dynamic>)
-          .map((e) => e as Object)
+          .map((e) => e as Map<String, dynamic>)
           .toList(),
     );
 

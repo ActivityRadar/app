@@ -8,7 +8,7 @@ part 'validation_error.g.dart';
 
 @JsonSerializable(explicitToJson: true)
 class ValidationError {
-  final List<Object> loc;
+  final List<Map<String, dynamic>> loc;
   final String msg;
   final String type;
 

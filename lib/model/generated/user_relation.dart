@@ -13,7 +13,7 @@ class UserRelation {
   final String? Id;
   final List<String> users;
   @JsonKey(name: "creation_date")
-  final String creationDate;
+  final DateTime creationDate;
   final RelationStatus status;
 
   UserRelation({

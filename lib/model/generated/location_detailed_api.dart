@@ -18,7 +18,7 @@ class LocationDetailedApi {
   @JsonKey(name: "trust_score")
   final int trustScore;
   final Object tags;
-  final Object? geometry;
+  final Map<String, dynamic>? geometry;
   final List<PhotoInfo> photos;
   final ReviewsSummary reviews;
   final String id;

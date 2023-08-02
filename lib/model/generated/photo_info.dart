@@ -12,7 +12,7 @@ class PhotoInfo {
   final String userId;
   final String url;
   @JsonKey(name: "creation_date")
-  final String creationDate;
+  final DateTime creationDate;
 
   PhotoInfo({
     required this.userId,

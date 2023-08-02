@@ -14,7 +14,7 @@ LocationDetailedApi _$LocationDetailedApiFromJson(Map<String, dynamic> json) =>
       name: json['name'] as String?,
       trustScore: json['trust_score'] as int,
       tags: json['tags'] as Object,
-      geometry: json['geometry'],
+      geometry: json['geometry'] as Map<String, dynamic>?,
       photos: (json['photos'] as List<dynamic>)
           .map((e) => PhotoInfo.fromJson(e as Map<String, dynamic>))
           .toList(),

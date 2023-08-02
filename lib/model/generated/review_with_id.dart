@@ -16,7 +16,7 @@ class ReviewWithId {
   final double overallRating;
   final Object details;
   @JsonKey(name: "creation_date")
-  final String creationDate;
+  final DateTime creationDate;
   @JsonKey(name: "user_id")
   final String userId;
   final String id;

@@ -12,7 +12,7 @@ ReviewWithId _$ReviewWithIdFromJson(Map<String, dynamic> json) => ReviewWithId(
       text: json['text'] as String,
       overallRating: (json['overall_rating'] as num).toDouble(),
       details: json['details'] as Object,
-      creationDate: json['creation_date'] as String,
+      creationDate: DateTime.parse(json['creation_date'] as String),
       userId: json['user_id'] as String,
       id: json['id'] as String,
     );
@@ -24,7 +24,7 @@ Map<String, dynamic> _$ReviewWithIdToJson(ReviewWithId instance) =>
       'text': instance.text,
       'overall_rating': instance.overallRating,
       'details': instance.details,
-      'creation_date': instance.creationDate,
+      'creation_date': instance.creationDate.toIso8601String(),
       'user_id': instance.userId,
       'id': instance.id,
     };

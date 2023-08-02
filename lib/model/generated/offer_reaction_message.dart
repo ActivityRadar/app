@@ -9,7 +9,7 @@ part 'offer_reaction_message.g.dart';
 @JsonSerializable(explicitToJson: true)
 class OfferReactionMessage {
   final String sender;
-  final String time;
+  final DateTime time;
   final String text;
   @JsonKey(name: "offer_id")
   final String offerId;

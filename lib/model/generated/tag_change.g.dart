@@ -8,7 +8,7 @@ part of 'tag_change.dart';
 
 TagChange _$TagChangeFromJson(Map<String, dynamic> json) => TagChange(
       mode: $enumDecode(_$TagChangeTypeEnumMap, json['mode']),
-      content: json['content'] as Object,
+      content: json['content'] as Map<String, dynamic>,
     );
 
 Map<String, dynamic> _$TagChangeToJson(TagChange instance) => <String, dynamic>{

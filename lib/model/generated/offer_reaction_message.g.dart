@@ -10,7 +10,7 @@ OfferReactionMessage _$OfferReactionMessageFromJson(
         Map<String, dynamic> json) =>
     OfferReactionMessage(
       sender: json['sender'] as String,
-      time: json['time'] as String,
+      time: DateTime.parse(json['time'] as String),
       text: json['text'] as String,
       offerId: json['offer_id'] as String,
     );
@@ -19,7 +19,7 @@ Map<String, dynamic> _$OfferReactionMessageToJson(
         OfferReactionMessage instance) =>
     <String, dynamic>{
       'sender': instance.sender,
-      'time': instance.time,
+      'time': instance.time.toIso8601String(),
       'text': instance.text,
       'offer_id': instance.offerId,
     };
