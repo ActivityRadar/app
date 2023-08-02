@@ -8,8 +8,8 @@ class UserInfoManager {
   static UserInfoManager get instance => _instance;
   UserInfoManager._internal();
 
-  Future<UserApiOut> getUserInfo(String id) async {
-    if (!_storage.containsKey(id)) {
+  Future<UserApiOut> getUserInfo(String id, {bool force = false}) async {
+    if (!_storage.containsKey(id) || force) {
       final u = await UserService.getUserInfo(id);
       _storage[id] = u;
     }
@@ -17,10 +17,10 @@ class UserInfoManager {
     return _storage[id]!;
   }
 
-  Future<void> fetchInfoList(List<String> ids) async {
+  Future<void> fetchInfoList(List<String> ids, {bool force = false}) async {
     List<String> notStored = [];
     for (var id in ids) {
-      if (!_storage.containsKey(id)) {
+      if (!_storage.containsKey(id) || force) {
         notStored.add(id);
       }
     }
@@ -33,8 +33,9 @@ class UserInfoManager {
     }
   }
 
-  Future<List<UserApiOut>> getInfoList(List<String> ids) async {
-    await fetchInfoList(ids);
+  Future<List<UserApiOut>> getInfoList(List<String> ids,
+      {bool force = false}) async {
+    await fetchInfoList(ids, force: force);
     return ids.map((id) => _storage[id]!).toList();
   }
 }

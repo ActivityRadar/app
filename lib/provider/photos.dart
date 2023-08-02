@@ -83,8 +83,8 @@ class PhotoManager {
   static PhotoManager get instance => _instance;
   PhotoManager._internal();
 
-  Future<MemoryImage> getPhoto(String url) async {
-    if (!_storage.containsKey(url)) {
+  Future<MemoryImage> getPhoto(String url, {bool force = false}) async {
+    if (!_storage.containsKey(url) || force) {
       final img = await PhotoService.getPhoto(url);
       _storage[url] = img;
     } else {
