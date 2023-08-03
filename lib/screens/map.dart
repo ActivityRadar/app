@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:app/model/functions.dart';
 import 'package:app/model/generated.dart';
 import 'package:app/provider/backend.dart';
@@ -6,6 +8,7 @@ import 'package:app/widgets/details_short.dart';
 import 'package:app/widgets/bar_search.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
+import 'package:flutter_map_marker_cluster/flutter_map_marker_cluster.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:flutter_map/plugin_api.dart'; // Only import if required functionality is not exposed by default
 
@@ -231,6 +234,15 @@ class _ActivityMarkerMapState extends State<ActivityMarkerMap> {
 
   @override
   Widget build(BuildContext context) {
+    const maxBubbleSize = 40;
+    const minBubbleSize = 15;
+    const exponent = 1.3;
+    final nAll = markers.length;
+    double bubbleSizeByNumber(n) =>
+        (n / nAll) * (maxBubbleSize - minBubbleSize) + minBubbleSize;
+    // TODO: find a more robust scaling system
+    double bubbleScale(s) => pow(s, exponent).toDouble();
+
     return FlutterMap(
       mapController: mapController,
       options: MapOptions(
@@ -242,7 +254,33 @@ class _ActivityMarkerMapState extends State<ActivityMarkerMap> {
           urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
           subdomains: const ['a', 'b', 'c'],
         ),
-        MarkerLayer(markers: markers),
+        MarkerClusterLayerWidget(
+            options: MarkerClusterLayerOptions(
+          maxClusterRadius: bubbleScale(maxBubbleSize).ceil(),
+          computeSize: (ms) {
+            // ATTENTION: This function called for every cluster every time the
+            // cluster is rerendered. So, very often. Dont do too much computation here.
+            final s = bubbleScale(bubbleSizeByNumber(ms.length));
+            // print("$l, $nAll, $r, $s");
+
+            return Size(s, s);
+          },
+          markers: markers,
+          builder: (context, ms) {
+            return Container(
+              decoration: const BoxDecoration(
+                  shape: BoxShape.circle, color: Colors.blue),
+              child: Center(
+                child: Text(
+                  // TODO: one marker might actually indicate multiple instances
+                  // like 2 table_tennis tables. So this will have to be adjusted.
+                  ms.length.toString(),
+                  style: const TextStyle(color: Colors.white),
+                ),
+              ),
+            );
+          },
+        ))
       ],
     );
   }
