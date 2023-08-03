@@ -1,3 +1,4 @@
+import 'package:app/constants/constants.dart';
 import 'package:app/widgets/photo_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -34,10 +35,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
   }
 
   bool validateStructure(String value) {
-    String pattern = r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9]).{8,}$';
-    // TODO: Password gener
-    RegExp regExp = RegExp(pattern);
-    return regExp.hasMatch(value);
+    // TODO: Password gener;
+    return RegExps.password.hasMatch(value);
   }
 
   void nextPage() {
@@ -72,7 +71,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         if (value == null || value.isEmpty) {
                           return 'Please enter your Email';
                         }
-                        if (!RegExp(r'\S+@\S+\.\S+').hasMatch(value)) {
+                        if (!RegExps.email.hasMatch(value)) {
                           return "Email is wrong";
                         }
 
@@ -215,9 +214,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         if (value == null || value.isEmpty) {
                           return 'Please enter your Username';
                         }
-                        if (!RegExp(
-                                r'[a-zA-Z0-9](_(?!(\.|_))|\.(?!(_|\.))|[a-zA-Z0-9]){6,18}[a-zA-Z0-9]')
-                            .hasMatch(value)) {
+                        if (!RegExps.username.hasMatch(value)) {
                           return "Username is wrong";
                         }
 

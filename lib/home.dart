@@ -5,7 +5,7 @@ import 'package:app/screens/settings.dart';
 import 'package:app/widgets/bottomsheet.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:app/constants/contants.dart';
+import 'package:app/constants/constants.dart';
 
 class Home extends StatefulWidget {
   const Home({super.key});
