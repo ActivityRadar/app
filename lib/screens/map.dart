@@ -191,12 +191,20 @@ class _ActivityMarkerMapState extends State<ActivityMarkerMap> {
   final MapController mapController = MapController();
 
   void onMapEvent(MapEvent event, BuildContext context) {
+    final s = Provider.of<AppState>(context, listen: false);
+
+    // every event has these
+    s.zoom = event.zoom;
+    s.center = event.center;
+
     if (event is! MapEventMoveEnd) return;
 
     print("move triggered");
+
+    s.mapPosition = mapController.bounds!;
+
     setState(() {
       bounds = mapController.bounds!;
-      Provider.of<AppState>(context, listen: false).mapPosition = bounds;
     });
     performSearch();
   }

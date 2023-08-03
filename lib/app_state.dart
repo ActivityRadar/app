@@ -11,6 +11,18 @@ class AppState extends ChangeNotifier {
 
   Locale _locale = Locale("de");
 
+  LatLngBounds _mapPosition =
+      LatLngBounds(LatLng(52.67, 12.04), LatLng(53.3, 12.74));
+
+  LatLngBounds get mapPosition => _mapPosition;
+  set mapPosition(LatLngBounds b) {
+    print("set to $b");
+    _mapPosition = b;
+  }
+
+  double zoom = 13;
+  LatLng center = LatLng(52.9, 12.5);
+
   void updateUserInfo() async {
     _currentUser = await UserService.getCurrentUserInfo();
   }
@@ -21,14 +33,5 @@ class AppState extends ChangeNotifier {
 
   bool get isAllowedToCreateLocation {
     return currentUser == null ? false : (currentUser!.trustScore >= 100);
-  }
-
-  LatLngBounds _mapPosition =
-      LatLngBounds(LatLng(52.67, 12.04), LatLng(53.3, 12.74));
-
-  LatLngBounds get mapPosition => _mapPosition;
-  set mapPosition(LatLngBounds b) {
-    print("set to $b");
-    _mapPosition = b;
   }
 }
