@@ -4,6 +4,16 @@ A mobile app for finding public sports facilities in your neighborhood
 
 ## Setup
 
+### Clone this repo
+
+Install the repository with its submodule(s) using this command:
+
+```sh
+git clone --recurse-submodules https://github.com/ActivityRadar/app
+```
+
+### Set up flutter
+
 The first point of setup is installing `flutter`. For that, consult the
 [official guide](https://docs.flutter.dev/get-started/install/) for your OS.
 
@@ -46,3 +56,9 @@ As we are using `ggshield` to prevent secret leaks, create a `.env` file in the 
 Create a `GitGuardian` account and an API key. Paste that key in the `.env` file like shown in
 the `.env.example`.
 Upon creating a new commit, the hooks should run and tell you if something went wrong.
+
+Use this command to fetch updates from the shared submodule.
+
+```sh
+git submodule update --remote shared
+```
