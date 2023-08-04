@@ -2,8 +2,9 @@ import 'package:app/model/functions.dart';
 import 'package:app/model/generated.dart';
 import 'package:app/provider/backend.dart';
 import 'package:app/screens/details_screen.dart';
-import 'package:app/widgets/details_short.dart';
+import 'package:app/widgets/short_info_box.dart';
 import 'package:app/widgets/bar_search.dart';
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
@@ -62,57 +63,6 @@ class MapScreenState extends State<MapScreen> {
   }
 }
 
-class ShortInfoBox extends StatelessWidget {
-  const ShortInfoBox({super.key, required this.info});
-
-  final LocationDetailedApi info;
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      children: [
-        const SizedBox(width: 10.0),
-        Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: BoxesDetails(
-            imageUrl: info.photos.isEmpty ? null : info.photos[0].url,
-            titel: info.activityType,
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => DetailsScreen(locationInfo: info),
-                ),
-              );
-            },
-          ),
-        ),
-      ],
-    );
-  }
-}
-
-class InfoBoxPlaceholder extends StatelessWidget {
-  const InfoBoxPlaceholder({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      children: [
-        const SizedBox(width: 10.0),
-        Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: BoxesDetails(
-            imageUrl: null,
-            titel: "BLA",
-            onPressed: () {},
-          ),
-        ),
-      ],
-    );
-  }
-}
-
 class ShortInfoSlider extends StatefulWidget {
   const ShortInfoSlider({super.key, required this.info});
 
@@ -123,6 +73,8 @@ class ShortInfoSlider extends StatefulWidget {
 }
 
 class _ShortInfoSliderState extends State<ShortInfoSlider> {
+  int _current = 0;
+  final CarouselController _controller = CarouselController();
   late Future<List<LocationDetailedApi>> infos;
 
   @override
@@ -135,29 +87,74 @@ class _ShortInfoSliderState extends State<ShortInfoSlider> {
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
     var height = size.height;
+    final verticalSpace = height / 6;
+    final horizontalSpace = size.width;
+    const viewportFraction = 0.8;
+
     return Align(
-      alignment: Alignment.bottomLeft,
+      alignment: Alignment.bottomCenter,
       child: Container(
-        margin: const EdgeInsets.symmetric(vertical: 100),
-        height: height / 7,
+        margin: const EdgeInsets.only(bottom: 100),
+        height: verticalSpace,
         child: FutureBuilder(
           future: infos,
           builder: (BuildContext context,
               AsyncSnapshot<List<LocationDetailedApi>> snapshot) {
+            late List<Widget> boxes;
             if (snapshot.hasData) {
-              return ListView(
-                  scrollDirection: Axis.horizontal,
-                  children: snapshot.data!
-                      .map((info) => ShortInfoBox(info: info))
-                      .toList());
-            } else if (snapshot.hasError) {
-              print(snapshot.error);
+              boxes = snapshot.data!
+                  .map((info) => ShortInfoBox(
+                        info: info,
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) =>
+                                  DetailsScreen(locationInfo: info),
+                            ),
+                          );
+                        },
+                      ))
+                  .toList();
+            } else {
+              if (snapshot.hasError) print(snapshot.error);
+              boxes = [
+                for (int i = 0; i < 5; i++)
+                  ShortInfoBox(
+                    info: null,
+                    onPressed: () {},
+                  )
+              ];
             }
-            return ListView(scrollDirection: Axis.horizontal, children: const [
-              InfoBoxPlaceholder(),
-              InfoBoxPlaceholder(),
-              InfoBoxPlaceholder()
-            ]);
+            return CarouselSlider(
+                items: boxes
+                    .map((b) => SizedBox(
+                          height: verticalSpace,
+                          width: horizontalSpace * 0.9,
+                          child: Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 8.0),
+                              child: b),
+                        ))
+                    .toList(),
+                carouselController: _controller,
+                options: CarouselOptions(
+                  // ratio between width and height
+                  aspectRatio:
+                      horizontalSpace / verticalSpace * 1 / viewportFraction,
+                  // how much space does the focused box take
+                  viewportFraction: viewportFraction,
+                  scrollDirection: Axis.horizontal,
+                  enableInfiniteScroll: false,
+                  // enlargeCenterPage: true,
+                  // enlargeFactor: 0.3,
+                  onPageChanged: (position, reason) {
+                    setState(() {
+                      print("state set!");
+                      _current = position;
+                    });
+                  },
+                ));
           },
         ),
       ),

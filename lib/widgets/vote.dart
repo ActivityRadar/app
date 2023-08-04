@@ -86,17 +86,17 @@ class RatingSummary extends StatelessWidget {
     required this.average,
   });
 
-  final int count;
+  final int? count;
   final double? average;
 
   @override
   Widget build(BuildContext context) {
     return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
         RatingScore(score: average),
         Text(
-          "($count)",
+          "(${count ?? '?'})",
           style: const TextStyle(
             color: Colors.black54,
             fontSize: 18.0,
