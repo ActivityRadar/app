@@ -5,8 +5,8 @@ import 'package:app/provider/photos.dart';
 import 'package:flutter/material.dart';
 import 'package:app/widgets/vote.dart';
 
-class BoxesDetails extends StatelessWidget {
-  const BoxesDetails({
+class ShortInfoBox extends StatelessWidget {
+  const ShortInfoBox({
     super.key,
     required this.info,
     required this.onPressed,
@@ -69,7 +69,7 @@ class BoxesDetails extends StatelessWidget {
                 SizedBox(
                     height: height,
                     width: infoWidth,
-                    child: DetailContainer(info: info))
+                    child: InfoContainer(info: info))
               ],
             ),
           ),
@@ -79,8 +79,8 @@ class BoxesDetails extends StatelessWidget {
   }
 }
 
-class DetailContainer extends StatelessWidget {
-  const DetailContainer({
+class InfoContainer extends StatelessWidget {
+  const InfoContainer({
     super.key,
     required this.info,
   });

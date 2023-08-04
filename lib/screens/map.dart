@@ -63,39 +63,6 @@ class MapScreenState extends State<MapScreen> {
   }
 }
 
-class ShortInfoBox extends StatelessWidget {
-  const ShortInfoBox({super.key, required this.info});
-
-  final LocationDetailedApi info;
-
-  @override
-  Widget build(BuildContext context) {
-    return BoxesDetails(
-      info: info,
-      onPressed: () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => DetailsScreen(locationInfo: info),
-          ),
-        );
-      },
-    );
-  }
-}
-
-class InfoBoxPlaceholder extends StatelessWidget {
-  const InfoBoxPlaceholder({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return BoxesDetails(
-      info: null,
-      onPressed: () {},
-    );
-  }
-}
-
 class ShortInfoSlider extends StatefulWidget {
   const ShortInfoSlider({super.key, required this.info});
 
@@ -136,14 +103,27 @@ class _ShortInfoSliderState extends State<ShortInfoSlider> {
             late List<Widget> boxes;
             if (snapshot.hasData) {
               boxes = snapshot.data!
-                  .map((info) => ShortInfoBox(info: info))
+                  .map((info) => ShortInfoBox(
+                        info: info,
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) =>
+                                  DetailsScreen(locationInfo: info),
+                            ),
+                          );
+                        },
+                      ))
                   .toList();
             } else {
               if (snapshot.hasError) print(snapshot.error);
               boxes = [
-                const InfoBoxPlaceholder(),
-                const InfoBoxPlaceholder(),
-                const InfoBoxPlaceholder()
+                for (int i = 0; i < 5; i++)
+                  ShortInfoBox(
+                    info: null,
+                    onPressed: () {},
+                  )
               ];
             }
             return CarouselSlider(
