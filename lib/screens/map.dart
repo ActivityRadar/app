@@ -299,6 +299,7 @@ class _ActivityMarkerMapState extends State<ActivityMarkerMap>
         MarkerClusterLayerWidget(
             options: MarkerClusterLayerOptions(
           maxClusterRadius: bubbleScale(maxBubbleSize).ceil(),
+          disableClusteringAtZoom: 14,
           computeSize: (ms) {
             // ATTENTION: This function called for every cluster every time the
             // cluster is rerendered. So, very often. Dont do too much computation here.
