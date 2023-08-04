@@ -308,7 +308,7 @@ class _ActivityMarkerMapState extends State<ActivityMarkerMap>
 
             return Size(s, s);
           },
-          markers: markers,
+          markers: List.from(markers),
           builder: (context, ms) {
             return Container(
               decoration: const BoxDecoration(
