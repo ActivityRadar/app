@@ -47,6 +47,7 @@ dependencies:
   flutter_secure_storage: ^8.0.0
   json_annotation: ^4.8.0
   readmore: ^2.2.0
+  flutter_map_marker_cluster: any
 
 dev_dependencies:
   flutter_test:
