@@ -35,8 +35,7 @@ class MapScreenState extends State<MapScreen> {
 
   void onMarkerClick(LocationShortApi info) {
     setState(() {
-      print("info slider build: ${info.id}");
-      infoSlider = ShortInfoSlider(info: info);
+      infoSlider = ShortInfoSlider(key: UniqueKey(), info: info);
     });
     if (infoSliderVisible) {
       // TODO: just change the boxes
@@ -60,11 +59,7 @@ class MapScreenState extends State<MapScreen> {
     mapWidget = ActivityMarkerMap(height: height, width: width, mapState: this);
 
     return Stack(
-      children: [
-        mapWidget,
-        searchBar,
-        if (infoSlider != null) infoSlider!,
-      ],
+      children: [mapWidget, searchBar, if (infoSlider != null) infoSlider!],
     );
   }
 }
