@@ -30,6 +30,7 @@ class _HomeState extends State<Home> {
   Widget build(BuildContext context) {
     //size of the window
     var size = MediaQuery.of(context).size;
+    final isKeyboardVisible = MediaQuery.of(context).viewInsets.bottom != 0;
     var height = size.height;
     var width = size.width;
     var x = width / 4.5;
@@ -39,13 +40,15 @@ class _HomeState extends State<Home> {
         bucket: bucket,
         child: currentScreen,
       ),
-      floatingActionButton: FloatingActionButton(
-        backgroundColor: DesignColors.naviColor,
-        onPressed: () {
-          bottomSheetAdd(context);
-        },
-        child: const Icon(Icons.add),
-      ),
+      floatingActionButton: isKeyboardVisible
+          ? null
+          : FloatingActionButton(
+              backgroundColor: DesignColors.naviColor,
+              onPressed: () {
+                bottomSheetAdd(context);
+              },
+              child: const Icon(Icons.add),
+            ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       bottomNavigationBar: BottomAppBar(
         shape: const CircularNotchedRectangle(),
