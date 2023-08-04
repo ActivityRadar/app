@@ -1,4 +1,6 @@
 import 'package:app/constants/constants.dart';
+import 'package:app/model/functions.dart';
+import 'package:app/model/generated.dart';
 import 'package:app/provider/photos.dart';
 import 'package:flutter/material.dart';
 import 'package:app/widgets/vote.dart';
@@ -6,106 +8,124 @@ import 'package:app/widgets/vote.dart';
 class BoxesDetails extends StatelessWidget {
   const BoxesDetails({
     super.key,
-    this.imageUrl,
-    required this.titel,
+    required this.info,
     required this.onPressed,
   });
 
-  final String? imageUrl;
-  final String titel;
+  final LocationDetailedApi? info;
   final void Function() onPressed;
 
   @override
   Widget build(BuildContext context) {
-    var size = MediaQuery.of(context).size;
-    var height = size.height;
-    var width = size.width;
+    return LayoutBuilder(
+        builder: (BuildContext context, BoxConstraints constraints) {
+      final height = constraints.maxHeight;
+      final width = constraints.maxWidth;
+      print("$height, $width");
 
-    late Future thumbnail;
-    if (imageUrl == null) {
-      thumbnail =
-          Future.value(const AssetImage("assets/locationPhotoPlaceholder.jpg"));
-    } else {
-      thumbnail = PhotoManager.instance.getPhoto(imageUrl!);
-    }
-    return GestureDetector(
-      onTap: onPressed,
-      child: FittedBox(
-        child: Material(
-          color: Colors.white,
-          elevation: 14.0,
-          borderRadius: BorderRadius.circular(25.0),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: <Widget>[
-              SizedBox(
-                width: 180,
-                height: 200,
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(24.0),
-                  child: FutureBuilder(
-                    future: thumbnail,
-                    builder: (BuildContext context, AsyncSnapshot snapshot) {
-                      if (snapshot.hasData) {
-                        return Image(
-                          fit: BoxFit.fill,
-                          image: snapshot.data,
-                        );
-                      } else {
-                        return const Image(
+      final thumbnailDiameter = height;
+      final infoWidth = width - height;
+
+      late Future thumbnail;
+      if (info == null || info!.photos.isEmpty) {
+        thumbnail = Future.value(
+            const AssetImage("assets/locationPhotoPlaceholder.jpg"));
+      } else {
+        thumbnail = PhotoManager.instance.getPhoto(info!.photos[0].url);
+      }
+      return GestureDetector(
+        onTap: onPressed,
+        child: FittedBox(
+          child: Material(
+            color: Colors.white,
+            elevation: 4.0,
+            borderRadius: BorderRadius.circular(25.0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: <Widget>[
+                SizedBox(
+                  width: thumbnailDiameter,
+                  height: thumbnailDiameter,
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(24.0),
+                    child: FutureBuilder(
+                      future: thumbnail,
+                      builder: (BuildContext context, AsyncSnapshot snapshot) {
+                        if (snapshot.hasData) {
+                          return Image(
                             fit: BoxFit.fill,
-                            image: AssetImage(
-                                "assets/locationPhotoLoadingPlaceholder.jpg"));
-                      }
-                    },
+                            image: snapshot.data,
+                          );
+                        } else {
+                          return const Image(
+                              fit: BoxFit.fill,
+                              image: AssetImage(
+                                  "assets/locationPhotoLoadingPlaceholder.jpg"));
+                        }
+                      },
+                    ),
                   ),
                 ),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: DetailContainer(titel: titel),
-              )
-            ],
+                SizedBox(
+                    height: height,
+                    width: infoWidth,
+                    child: DetailContainer(info: info))
+              ],
+            ),
           ),
         ),
-      ),
-    );
+      );
+    });
   }
 }
 
 class DetailContainer extends StatelessWidget {
   const DetailContainer({
     super.key,
-    required this.titel,
+    required this.info,
   });
 
-  final String titel;
+  final LocationDetailedApi? info;
 
   @override
   Widget build(BuildContext context) {
+    var count, avg, title;
+    if (info != null) {
+      count = info!.reviews.count;
+      avg = info!.reviews.averageRating;
+      title = getTitle(info!);
+    } else {
+      count = null;
+      avg = null;
+      title = "action";
+    }
+
     return Column(
-      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
+        const Spacer(),
         Padding(
           padding: const EdgeInsets.only(left: 8.0),
           child: Text(
-            titel,
+            title,
+            textAlign: TextAlign.center,
             style: const TextStyle(
                 color: DesignColors.naviColor,
-                fontSize: 24.0,
+                // fontSize: 24.0,
                 fontWeight: FontWeight.bold),
           ),
         ),
-        const SizedBox(height: 5.0),
-        const vote_rate(),
-        const SizedBox(height: 5.0),
+        const Spacer(),
+        RatingSummary(count: count, average: avg),
+        const Spacer(),
         const Text(
           "KM entfernt",
           style: TextStyle(
               color: Colors.black54,
-              fontSize: 18.0,
+              // fontSize: 18.0,
               fontWeight: FontWeight.bold),
-        )
+        ),
+        const Spacer(),
       ],
     );
   }
