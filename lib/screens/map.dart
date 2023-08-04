@@ -189,6 +189,7 @@ class _ActivityMarkerMapState extends State<ActivityMarkerMap> {
   late LatLngBounds bounds;
   List<LocationMarker> markers = [];
   final MapController mapController = MapController();
+  String? focusedLocationId;
 
   void onMapEvent(MapEvent event, BuildContext context) {
     final s = Provider.of<AppState>(context, listen: false);
@@ -209,6 +210,31 @@ class _ActivityMarkerMapState extends State<ActivityMarkerMap> {
     performSearch();
   }
 
+  void onMarkerClick(LocationShortApi loc) {
+    setState(() {
+      final oldFocused = focusedLocationId;
+      focusedLocationId = loc.id;
+      if (oldFocused != null) {
+        final idx = markers.indexWhere((m) => m.location.id == oldFocused);
+        final unfocusedMarker = createMarker(markers[idx].location);
+        markers.removeAt(idx);
+        markers.add(unfocusedMarker);
+      }
+
+      markers.removeWhere((m) => m.location.id == loc.id);
+      markers.add(createMarker(loc));
+    });
+  }
+
+  LocationMarker createMarker(LocationShortApi loc) {
+    return LocationMarker.fromLocation(loc, onPressed: (loc) {
+      widget.mapState.onMarkerClick(loc);
+      onMarkerClick(loc);
+    },
+        onDoubleTap: onMarkerDoubleTap,
+        focused: (focusedLocationId != null && loc.id == focusedLocationId));
+  }
+
   Future<void> performSearch() async {
     print(
         '${bounds.south}, ${bounds.west}, ${bounds.east}, ${widget.mapState.activity.value}');
@@ -220,10 +246,8 @@ class _ActivityMarkerMapState extends State<ActivityMarkerMap> {
         widget.mapState.activity.value);
     print(locations.length);
 
-    List<LocationMarker> markers_ = locations
-        .map((loc) =>
-            LocationMarker.fromLocation(loc, widget.mapState.onMarkerClick))
-        .toList();
+    List<LocationMarker> markers_ =
+        locations.map((loc) => createMarker(loc)).toList();
 
     setState(() {
       markers = markers_;
@@ -309,10 +333,16 @@ class LocationMarker extends Marker {
 
   final LocationShortApi location;
 
-  factory LocationMarker.fromLocation(
-      LocationShortApi location, Function onPressed) {
-    const size = 40.0;
-    final m = LocationMarker(location,
+  factory LocationMarker.fromLocation(LocationShortApi location,
+      {Function(LocationShortApi)? onPressed,
+      Function()? onDoubleTap,
+      bool focused = false}) {
+    final size = focused ? 45.0 : 40.0;
+    final color = focused ? Colors.red : Colors.black;
+
+    if (focused) print("is focused");
+
+    return LocationMarker(location,
         point: toLatLng(location.location),
         width: size,
         // adjust for weird padding-like issue
@@ -321,10 +351,7 @@ class LocationMarker extends Marker {
         anchorPos:
             AnchorPos.align(AnchorAlign.top), // top for "above the position"
         builder: (context) => GestureDetector(
-            onTap: () => onPressed(location),
-            child: const Icon(Icons.location_on, size: size)));
-
-    print(m.width);
-    return m;
+            onTap: () => onPressed == null ? {} : onPressed(location),
+            child: Icon(Icons.location_on, color: color, size: size)));
   }
 }
