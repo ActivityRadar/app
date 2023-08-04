@@ -2,7 +2,7 @@ import 'package:app/model/functions.dart';
 import 'package:app/model/generated.dart';
 import 'package:app/provider/backend.dart';
 import 'package:app/screens/details_screen.dart';
-import 'package:app/widgets/details_short.dart';
+import 'package:app/widgets/short_info_box.dart';
 import 'package:app/widgets/bar_search.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
