@@ -1,4 +1,4 @@
-import 'package:app/screens/widgets_page.dart';
+import 'package:app/widgets/bottomsheet.dart';
 import 'package:flutter/material.dart';
 
 import 'package:carousel_slider/carousel_slider.dart';
@@ -30,6 +30,110 @@ class DetailsScreen extends StatefulWidget {
 class _DetailsScreenState extends State<DetailsScreen> {
   Future<LocationDetailedApi>? _data;
   late String locationId;
+  var _rating = 0;
+  TextEditingController usernameController = TextEditingController();
+  TextEditingController desController = TextEditingController();
+  void _showModalBottomSheet(BuildContext context) {
+    bottomSheetBase(
+        context: context,
+        builder: (context) {
+          return SingleChildScrollView(
+              padding: EdgeInsets.only(
+                  bottom: MediaQuery.of(context).viewInsets.bottom),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: <Widget>[
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: <Widget>[
+                      Padding(
+                        padding: const EdgeInsets.only(left: 9.0, top: 9.0),
+                        child: TextButton(
+                          onPressed: () => Navigator.pop(context),
+                          child: const Text('Cancel'),
+                        ),
+                      ),
+                      const Text(
+                        "Review",
+                        style: TextStyle(
+                            fontSize: 15, fontWeight: FontWeight.bold),
+                      ),
+                      TextButton(
+                        onPressed: () => Navigator.pop(context),
+                        child: const Text('Send'), //TODO backend
+                      ),
+                    ],
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(9.0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: List.generate(
+                        5,
+                        (index) => IconButton(
+                          icon: index < _rating
+                              ? const Icon(Icons.star, size: 32)
+                              : const Icon(Icons.star_border, size: 32),
+                          color: DesignColors.naviColor,
+                          onPressed: () {
+                            setState(() {
+                              _rating = index + 1;
+                              print(_rating);
+                            });
+                          },
+                        ),
+                      ),
+                    ),
+                  ),
+                  TextFormField(
+                    controller: usernameController,
+                    textAlign: TextAlign.start,
+                    decoration: const InputDecoration(
+                      hintText: 'Titel',
+                      border: UnderlineInputBorder(
+                        borderSide: BorderSide.none,
+                      ),
+                      focusedErrorBorder: UnderlineInputBorder(
+                        borderSide: BorderSide(color: Colors.red),
+                      ),
+                      errorBorder: UnderlineInputBorder(
+                        borderSide: BorderSide(color: Colors.red),
+                      ),
+                      enabledBorder: UnderlineInputBorder(
+                        borderSide: BorderSide(color: Colors.blue),
+                      ),
+                      focusedBorder: UnderlineInputBorder(
+                        borderSide: BorderSide(color: Colors.blue),
+                      ),
+                    ),
+                  ),
+                  TextFormField(
+                    maxLines: 5,
+                    controller: desController,
+                    textAlign: TextAlign.start,
+                    decoration: const InputDecoration(
+                      hintText: 'Beschreibung',
+                      border: UnderlineInputBorder(
+                        borderSide: BorderSide.none,
+                      ),
+                      focusedErrorBorder: UnderlineInputBorder(
+                        borderSide: BorderSide(color: Colors.red),
+                      ),
+                      errorBorder: UnderlineInputBorder(
+                        borderSide: BorderSide(color: Colors.red),
+                      ),
+                      enabledBorder: UnderlineInputBorder(
+                        borderSide: BorderSide.none,
+                      ),
+                      focusedBorder: UnderlineInputBorder(
+                        borderSide: BorderSide.none,
+                      ),
+                    ),
+                  ),
+                ],
+              ));
+        });
+  }
 
   @override
   void initState() {
@@ -464,10 +568,11 @@ class ReviewBox extends StatelessWidget {
                       ),
                       Text(
                         "${DateTime.now().difference(review.creationDate).inDays} days ago",
-                        style: TextStyle(color: Colors.black38, fontSize: 11),
+                        style: const TextStyle(
+                            color: Colors.black38, fontSize: 11),
                       ),
                     ]),
-                    ReviewPopupMenuCard(),
+                    const ReviewPopupMenuCard(),
                   ],
                 ),
               ]);
@@ -562,19 +667,19 @@ void _showDialog(BuildContext context) {
     context: context,
     builder: (BuildContext context) {
       return AlertDialog(
-        title: Text('Report as inappropriate'),
-        content: Text(
+        title: const Text('Report as inappropriate'),
+        content: const Text(
             'Thank you for contributing to the safety and respect of our community. If you believe that this content violates our policies or is inappropriate, please click on Report.   Your message will be treated confidentially and verified by our moderation team. '),
         actions: <Widget>[
           Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
             TextButton(
-              child: Text('Cancel'),
+              child: const Text('Cancel'),
               onPressed: () {
                 Navigator.of(context).pop(); // Dialog schließen
               },
             ),
             TextButton(
-              child: Text('Send'),
+              child: const Text('Send'),
               onPressed: () {
                 Navigator.of(context).pop(); // Dialog schließen
               },
