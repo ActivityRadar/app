@@ -48,6 +48,7 @@ class MapScreenState extends State<MapScreen> {
   void initState() {
     super.initState();
     searchBar = MapSearchBar(mapState: this);
+    mapWidget = ActivityMarkerMap(mapState: this);
   }
 
   @override
@@ -56,7 +57,6 @@ class MapScreenState extends State<MapScreen> {
     var size = MediaQuery.of(context).size;
     var height = size.height;
     var width = size.width;
-    mapWidget = ActivityMarkerMap(height: height, width: width, mapState: this);
 
     return Stack(
       children: [mapWidget, searchBar, if (infoSlider != null) infoSlider!],
@@ -166,13 +166,9 @@ class _ShortInfoSliderState extends State<ShortInfoSlider> {
 class ActivityMarkerMap extends StatefulWidget {
   const ActivityMarkerMap({
     super.key,
-    required this.width,
-    required this.height,
     required this.mapState,
   });
 
-  final double width;
-  final double height;
   final MapScreenState mapState;
 
   @override
