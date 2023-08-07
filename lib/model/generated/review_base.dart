@@ -14,7 +14,7 @@ class ReviewBase {
   final String text;
   @JsonKey(name: "overall_rating")
   final double overallRating;
-  final Object details;
+  final Map<String, dynamic> details;
 
   ReviewBase({
     required this.locationId,

@@ -167,6 +167,13 @@ class UserService {
 
     return responseBody.map((info) => UserApiOut.fromJson(info)).toList();
   }
+
+  static Future<UserDetailed> getCurrentUserInfo() async {
+    final responseBody =
+        await BackendService.instance.sendRequest("GET", "$prefix/me");
+
+    return UserDetailed.fromJson(responseBody);
+  }
 }
 
 class RelationService {

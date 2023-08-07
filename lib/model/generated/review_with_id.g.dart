@@ -11,7 +11,7 @@ ReviewWithId _$ReviewWithIdFromJson(Map<String, dynamic> json) => ReviewWithId(
       title: json['title'] as String,
       text: json['text'] as String,
       overallRating: (json['overall_rating'] as num).toDouble(),
-      details: json['details'] as Object,
+      details: json['details'] as Map<String, dynamic>,
       creationDate: DateTime.parse(json['creation_date'] as String),
       userId: json['user_id'] as String,
       id: json['id'] as String,

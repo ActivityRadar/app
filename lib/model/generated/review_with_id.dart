@@ -14,7 +14,7 @@ class ReviewWithId {
   final String text;
   @JsonKey(name: "overall_rating")
   final double overallRating;
-  final Object details;
+  final Map<String, dynamic> details;
   @JsonKey(name: "creation_date")
   final DateTime creationDate;
   @JsonKey(name: "user_id")

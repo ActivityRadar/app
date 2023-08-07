@@ -15,7 +15,7 @@ class LocationNew {
   final String? name;
   @JsonKey(name: "trust_score")
   final int trustScore;
-  final Object? tags;
+  final Map<String, dynamic>? tags;
   final Map<String, dynamic>? geometry;
 
   LocationNew({

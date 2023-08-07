@@ -10,9 +10,9 @@ part 'location_history_in.g.dart';
 class LocationHistoryIn {
   @JsonKey(name: "location_id")
   final String locationId;
-  final Object? before;
-  final Object? after;
-  final Object? tags;
+  final Map<String, dynamic>? before;
+  final Map<String, dynamic>? after;
+  final Map<String, dynamic>? tags;
 
   LocationHistoryIn({
     required this.locationId,

@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:app/app_state.dart';
 import 'package:app/model/functions.dart';
 import 'package:app/model/generated.dart';
 import 'package:app/provider/backend.dart';
@@ -11,7 +12,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:flutter_map_marker_cluster/flutter_map_marker_cluster.dart';
 import 'package:latlong2/latlong.dart';
-import 'package:flutter_map/plugin_api.dart'; // Only import if required functionality is not exposed by default
+import 'package:flutter_map/plugin_api.dart';
+import 'package:provider/provider.dart';
 
 // ignore_for_file: avoid_print
 class MapScreen extends StatefulWidget {
@@ -184,14 +186,23 @@ class ActivityMarkerMap extends StatefulWidget {
 }
 
 class _ActivityMarkerMapState extends State<ActivityMarkerMap> {
-  LatLngBounds bounds = LatLngBounds(LatLng(52.37, 12.74), LatLng(53, 13.04));
+  late LatLngBounds bounds;
   List<MyMarker> markers = [];
   final MapController mapController = MapController();
 
-  void onMapEvent(MapEvent event) {
+  void onMapEvent(MapEvent event, BuildContext context) {
+    final s = Provider.of<AppState>(context, listen: false);
+
+    // every event has these
+    s.zoom = event.zoom;
+    s.center = event.center;
+
     if (event is! MapEventMoveEnd) return;
 
     print("move triggered");
+
+    s.mapPosition = mapController.bounds!;
+
     setState(() {
       bounds = mapController.bounds!;
     });
@@ -240,11 +251,13 @@ class _ActivityMarkerMapState extends State<ActivityMarkerMap> {
     // TODO: find a more robust scaling system
     double bubbleScale(s) => pow(s, exponent).toDouble();
 
+    bounds = Provider.of<AppState>(context).mapPosition;
+
     return FlutterMap(
       mapController: mapController,
       options: MapOptions(
           bounds: bounds,
-          onMapEvent: onMapEvent,
+          onMapEvent: (event) => onMapEvent(event, context),
           interactiveFlags: InteractiveFlag.all & ~InteractiveFlag.rotate),
       children: [
         TileLayer(

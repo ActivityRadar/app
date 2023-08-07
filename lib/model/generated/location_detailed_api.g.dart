@@ -13,7 +13,7 @@ LocationDetailedApi _$LocationDetailedApiFromJson(Map<String, dynamic> json) =>
           GeoJsonLocation.fromJson(json['location'] as Map<String, dynamic>),
       name: json['name'] as String?,
       trustScore: json['trust_score'] as int,
-      tags: json['tags'] as Object,
+      tags: json['tags'] as Map<String, dynamic>,
       geometry: json['geometry'] as Map<String, dynamic>?,
       photos: (json['photos'] as List<dynamic>)
           .map((e) => PhotoInfo.fromJson(e as Map<String, dynamic>))
