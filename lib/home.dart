@@ -2,6 +2,7 @@ import 'package:app/screens/community.dart';
 import 'package:app/screens/start.dart';
 import 'package:app/screens/map.dart';
 import 'package:app/screens/settings.dart';
+import 'package:app/screens/widgets_page.dart';
 import 'package:app/widgets/bottomsheet.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -121,7 +122,7 @@ class _HomeState extends State<Home> {
                     minWidth: x,
                     onPressed: () {
                       setState(() {
-                        currentScreen = const CommunityScreen();
+                        currentScreen = const WidgetsGird();
                         currentTab = 3;
                       });
                     },
