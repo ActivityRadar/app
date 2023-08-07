@@ -128,12 +128,7 @@ Future<dynamic> writeReview(BuildContext context) {
                             ? const Icon(Icons.star, size: 32)
                             : const Icon(Icons.star_border, size: 32),
                         color: DesignColors.naviColor,
-                        onPressed: () {
-                          setState(() {
-                            rating = index + 1;
-                            print(rating);
-                          });
-                        },
+                        onPressed: () {},
                       ),
                     ),
                   ),
@@ -187,5 +182,3 @@ Future<dynamic> writeReview(BuildContext context) {
             ));
       });
 }
-
-void setState(Null Function() param0) {}
