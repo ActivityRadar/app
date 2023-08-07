@@ -12,6 +12,7 @@ import 'package:app/provider/user_manager.dart';
 import 'package:app/widgets/activityType_short.dart';
 import 'package:app/widgets/photo_picker.dart';
 import 'package:app/widgets/vote.dart';
+import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 
 class DetailsScreen extends StatefulWidget {
   const DetailsScreen({
@@ -69,24 +70,23 @@ class _DetailsScreenState extends State<DetailsScreen> {
                   Padding(
                     padding: const EdgeInsets.all(9.0),
                     child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: List.generate(
-                        5,
-                        (index) => IconButton(
-                          icon: index < _rating
-                              ? Icon(Icons.star, size: 32)
-                              : Icon(Icons.star_border, size: 32),
-                          color: DesignColors.naviColor,
-                          onPressed: () {
-                            setState(() {
-                              _rating = index + 1;
-                              print(index);
-                              print(_rating);
-                            });
-                          },
-                        ),
-                      ),
-                    ),
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          RatingBar.builder(
+                            minRating: 0,
+                            direction: Axis.horizontal,
+                            allowHalfRating: false,
+                            itemCount: 5,
+                            itemPadding: EdgeInsets.symmetric(horizontal: 4.0),
+                            itemBuilder: (context, _) => Icon(
+                              Icons.star,
+                              color: DesignColors.naviColor,
+                            ),
+                            onRatingUpdate: (rating) {
+                              print(rating);
+                            },
+                          ),
+                        ]),
                   ),
                   Padding(
                     padding: const EdgeInsets.only(left: 9.0, top: 15.0),
