@@ -14,6 +14,7 @@ import 'package:flutter_map_marker_cluster/flutter_map_marker_cluster.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:flutter_map/plugin_api.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_map_animations/flutter_map_animations.dart';
 
 // ignore_for_file: avoid_print
 class MapScreen extends StatefulWidget {
@@ -185,10 +186,12 @@ class ActivityMarkerMap extends StatefulWidget {
   }
 }
 
-class _ActivityMarkerMapState extends State<ActivityMarkerMap> {
+class _ActivityMarkerMapState extends State<ActivityMarkerMap>
+    with TickerProviderStateMixin {
   late LatLngBounds bounds;
   List<LocationMarker> markers = [];
-  final MapController mapController = MapController();
+  late final AnimatedMapController mapController =
+      AnimatedMapController(vsync: this);
   String? focusedLocationId;
 
   void onMapEvent(MapEvent event, BuildContext context) {
@@ -224,6 +227,10 @@ class _ActivityMarkerMapState extends State<ActivityMarkerMap> {
       markers.removeWhere((m) => m.location.id == loc.id);
       markers.add(createMarker(loc));
     });
+  }
+
+  void onMarkerDoubleTap() {
+    mapController.animatedZoomIn();
   }
 
   LocationMarker createMarker(LocationShortApi loc) {
@@ -352,6 +359,7 @@ class LocationMarker extends Marker {
             AnchorPos.align(AnchorAlign.top), // top for "above the position"
         builder: (context) => GestureDetector(
             onTap: () => onPressed == null ? {} : onPressed(location),
+            onDoubleTap: onDoubleTap,
             child: Icon(Icons.location_on, color: color, size: size)));
   }
 }
