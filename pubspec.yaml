@@ -34,21 +34,29 @@ dependencies:
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.2
-  flutter_map: ^4.0.0
-  latlong2: ^0.8.2
+  flutter_map: ^5.0.0
+  flutter_map_animations: ^0.4.0
+  latlong2: any
   carousel_slider: ^4.2.1
   flutter_localizations:
     sdk: flutter
   intl: any
-  http: ^0.13.6
+  http: ^0.13.6 # TODO: update to 1.1.0 when aws_s3_api is updated
   aws_s3_api: ^2.0.0
   image_picker: ^1.0.1
   crypto: ^3.0.3
   flutter_secure_storage: ^8.0.0
   json_annotation: ^4.8.0
   readmore: ^2.2.0
-  flutter_map_marker_cluster: any
   provider: ^6.0.5
+  flutter_map_marker_cluster:
+    git:
+      url: https://github.com/lpongetti/flutter_map_marker_cluster
+      ref: dee9902
+    # see https://github.com/lpongetti/flutter_map_marker_cluster/pull/173
+
+dependency_overrides:
+  http: ^1.1.0 # needed to update aws_s3_api dependency
 
 dev_dependencies:
   flutter_test:

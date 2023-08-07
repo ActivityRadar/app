@@ -3,12 +3,13 @@ import 'package:app/widgets/bottomsheet.dart';
 import 'package:flutter/material.dart';
 
 class MapSearchBar extends StatelessWidget {
-  const MapSearchBar({
+  MapSearchBar({
     super.key,
     required this.mapState,
   });
 
   final MapScreenState mapState;
+  TextEditingController textController = TextEditingController();
 
   void setActivity(String activity) {
     mapState.activity.value = activity;
@@ -30,7 +31,7 @@ class MapSearchBar extends StatelessWidget {
                 borderRadius: BorderRadius.circular(80),
               ),
               child: TextField(
-                controller: TextEditingController(),
+                controller: textController,
                 decoration: InputDecoration(
                   prefixIcon: IconButton(
                     icon: Icon(Icons.filter_alt),
@@ -41,7 +42,7 @@ class MapSearchBar extends StatelessWidget {
                   suffixIcon: IconButton(
                     icon: const Icon(Icons.search),
                     onPressed: () {
-                      setActivity(TextEditingController().text);
+                      setActivity(textController.text);
                     },
                   ),
                   hintStyle:

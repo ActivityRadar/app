@@ -14,6 +14,7 @@ import 'package:flutter_map_marker_cluster/flutter_map_marker_cluster.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:flutter_map/plugin_api.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_map_animations/flutter_map_animations.dart';
 
 // ignore_for_file: avoid_print
 class MapScreen extends StatefulWidget {
@@ -34,8 +35,7 @@ class MapScreenState extends State<MapScreen> {
 
   void onMarkerClick(LocationShortApi info) {
     setState(() {
-      print("info slider build: ${info.id}");
-      infoSlider = ShortInfoSlider(info: info);
+      infoSlider = ShortInfoSlider(key: UniqueKey(), info: info);
     });
     if (infoSliderVisible) {
       // TODO: just change the boxes
@@ -48,6 +48,7 @@ class MapScreenState extends State<MapScreen> {
   void initState() {
     super.initState();
     searchBar = MapSearchBar(mapState: this);
+    mapWidget = ActivityMarkerMap(mapState: this);
   }
 
   @override
@@ -56,14 +57,9 @@ class MapScreenState extends State<MapScreen> {
     var size = MediaQuery.of(context).size;
     var height = size.height;
     var width = size.width;
-    mapWidget = ActivityMarkerMap(height: height, width: width, mapState: this);
 
     return Stack(
-      children: [
-        mapWidget,
-        searchBar,
-        if (infoSlider != null) infoSlider!,
-      ],
+      children: [mapWidget, searchBar, if (infoSlider != null) infoSlider!],
     );
   }
 }
@@ -170,13 +166,9 @@ class _ShortInfoSliderState extends State<ShortInfoSlider> {
 class ActivityMarkerMap extends StatefulWidget {
   const ActivityMarkerMap({
     super.key,
-    required this.width,
-    required this.height,
     required this.mapState,
   });
 
-  final double width;
-  final double height;
   final MapScreenState mapState;
 
   @override
@@ -185,10 +177,13 @@ class ActivityMarkerMap extends StatefulWidget {
   }
 }
 
-class _ActivityMarkerMapState extends State<ActivityMarkerMap> {
+class _ActivityMarkerMapState extends State<ActivityMarkerMap>
+    with TickerProviderStateMixin {
   late LatLngBounds bounds;
-  List<MyMarker> markers = [];
-  final MapController mapController = MapController();
+  List<LocationMarker> markers = [];
+  late final AnimatedMapController mapController =
+      AnimatedMapController(vsync: this);
+  String? focusedLocationId;
 
   void onMapEvent(MapEvent event, BuildContext context) {
     final s = Provider.of<AppState>(context, listen: false);
@@ -201,12 +196,41 @@ class _ActivityMarkerMapState extends State<ActivityMarkerMap> {
 
     print("move triggered");
 
-    s.mapPosition = mapController.bounds!;
+    s.mapPosition = mapController.mapController.bounds!;
 
     setState(() {
-      bounds = mapController.bounds!;
+      bounds = mapController.mapController.bounds!;
     });
     performSearch();
+  }
+
+  void onMarkerClick(LocationShortApi loc) {
+    setState(() {
+      final oldFocused = focusedLocationId;
+      focusedLocationId = loc.id;
+      if (oldFocused != null) {
+        final idx = markers.indexWhere((m) => m.location.id == oldFocused);
+        final unfocusedMarker = createMarker(markers[idx].location);
+        markers.removeAt(idx);
+        markers.add(unfocusedMarker);
+      }
+
+      markers.removeWhere((m) => m.location.id == loc.id);
+      markers.add(createMarker(loc));
+    });
+  }
+
+  void onMarkerDoubleTap() {
+    mapController.animatedZoomIn();
+  }
+
+  LocationMarker createMarker(LocationShortApi loc) {
+    return LocationMarker.fromLocation(loc, onPressed: (loc) {
+      widget.mapState.onMarkerClick(loc);
+      onMarkerClick(loc);
+    },
+        onDoubleTap: onMarkerDoubleTap,
+        focused: (focusedLocationId != null && loc.id == focusedLocationId));
   }
 
   Future<void> performSearch() async {
@@ -220,9 +244,8 @@ class _ActivityMarkerMapState extends State<ActivityMarkerMap> {
         widget.mapState.activity.value);
     print(locations.length);
 
-    List<MyMarker> markers_ = locations
-        .map((loc) => MyMarker.fromLocation(loc, widget.mapState.onMarkerClick))
-        .toList();
+    List<LocationMarker> markers_ =
+        locations.map((loc) => createMarker(loc)).toList();
 
     setState(() {
       markers = markers_;
@@ -254,7 +277,7 @@ class _ActivityMarkerMapState extends State<ActivityMarkerMap> {
     bounds = Provider.of<AppState>(context).mapPosition;
 
     return FlutterMap(
-      mapController: mapController,
+      mapController: mapController.mapController,
       options: MapOptions(
           bounds: bounds,
           onMapEvent: (event) => onMapEvent(event, context),
@@ -267,6 +290,7 @@ class _ActivityMarkerMapState extends State<ActivityMarkerMap> {
         MarkerClusterLayerWidget(
             options: MarkerClusterLayerOptions(
           maxClusterRadius: bubbleScale(maxBubbleSize).ceil(),
+          disableClusteringAtZoom: 14,
           computeSize: (ms) {
             // ATTENTION: This function called for every cluster every time the
             // cluster is rerendered. So, very often. Dont do too much computation here.
@@ -275,7 +299,7 @@ class _ActivityMarkerMapState extends State<ActivityMarkerMap> {
 
             return Size(s, s);
           },
-          markers: markers,
+          markers: List.from(markers),
           builder: (context, ms) {
             return Container(
               decoration: const BoxDecoration(
@@ -296,29 +320,38 @@ class _ActivityMarkerMapState extends State<ActivityMarkerMap> {
   }
 }
 
-class MyMarker extends Marker {
-  MyMarker(
+class LocationMarker extends Marker {
+  LocationMarker(
     this.location, {
     required super.point,
     required super.builder,
-    required super.width,
-    required super.height,
-    required super.anchorPos,
+    super.width,
+    super.height,
+    super.anchorPos,
   });
 
   final LocationShortApi location;
 
-  factory MyMarker.fromLocation(LocationShortApi location, Function onPressed) {
-    return MyMarker(location,
+  factory LocationMarker.fromLocation(LocationShortApi location,
+      {Function(LocationShortApi)? onPressed,
+      Function()? onDoubleTap,
+      bool focused = false}) {
+    final size = focused ? 45.0 : 40.0;
+    final color = focused ? Colors.red : Colors.black;
+
+    if (focused) print("is focused");
+
+    return LocationMarker(location,
         point: toLatLng(location.location),
-        width: 20,
-        height: 20,
-        builder: (context) => IconButton(
-              icon: const Icon(Icons.location_pin),
-              onPressed: () {
-                onPressed(location);
-              },
-            ),
-        anchorPos: AnchorPos.align(AnchorAlign.top));
+        width: size,
+        // adjust for weird padding-like issue
+        // this might be because the Icon itself has a small padding
+        height: size * 9 / 10,
+        anchorPos:
+            AnchorPos.align(AnchorAlign.top), // top for "above the position"
+        builder: (context) => GestureDetector(
+            onTap: () => onPressed == null ? {} : onPressed(location),
+            onDoubleTap: onDoubleTap,
+            child: Icon(Icons.location_on, color: color, size: size)));
   }
 }
