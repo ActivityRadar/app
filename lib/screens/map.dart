@@ -187,7 +187,7 @@ class ActivityMarkerMap extends StatefulWidget {
 
 class _ActivityMarkerMapState extends State<ActivityMarkerMap> {
   late LatLngBounds bounds;
-  List<MyMarker> markers = [];
+  List<LocationMarker> markers = [];
   final MapController mapController = MapController();
 
   void onMapEvent(MapEvent event, BuildContext context) {
@@ -220,8 +220,9 @@ class _ActivityMarkerMapState extends State<ActivityMarkerMap> {
         widget.mapState.activity.value);
     print(locations.length);
 
-    List<MyMarker> markers_ = locations
-        .map((loc) => MyMarker.fromLocation(loc, widget.mapState.onMarkerClick))
+    List<LocationMarker> markers_ = locations
+        .map((loc) =>
+            LocationMarker.fromLocation(loc, widget.mapState.onMarkerClick))
         .toList();
 
     setState(() {
@@ -296,29 +297,34 @@ class _ActivityMarkerMapState extends State<ActivityMarkerMap> {
   }
 }
 
-class MyMarker extends Marker {
-  MyMarker(
+class LocationMarker extends Marker {
+  LocationMarker(
     this.location, {
     required super.point,
     required super.builder,
-    required super.width,
-    required super.height,
-    required super.anchorPos,
+    super.width,
+    super.height,
+    super.anchorPos,
   });
 
   final LocationShortApi location;
 
-  factory MyMarker.fromLocation(LocationShortApi location, Function onPressed) {
-    return MyMarker(location,
+  factory LocationMarker.fromLocation(
+      LocationShortApi location, Function onPressed) {
+    const size = 40.0;
+    final m = LocationMarker(location,
         point: toLatLng(location.location),
-        width: 20,
-        height: 20,
-        builder: (context) => IconButton(
-              icon: const Icon(Icons.location_pin),
-              onPressed: () {
-                onPressed(location);
-              },
-            ),
-        anchorPos: AnchorPos.align(AnchorAlign.top));
+        width: size,
+        // adjust for weird padding-like issue
+        // this might be because the Icon itself has a small padding
+        height: size * 9 / 10,
+        anchorPos:
+            AnchorPos.align(AnchorAlign.top), // top for "above the position"
+        builder: (context) => GestureDetector(
+            onTap: () => onPressed(location),
+            child: const Icon(Icons.location_on, size: size)));
+
+    print(m.width);
+    return m;
   }
 }
