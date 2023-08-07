@@ -205,10 +205,10 @@ class _ActivityMarkerMapState extends State<ActivityMarkerMap>
 
     print("move triggered");
 
-    s.mapPosition = mapController.bounds!;
+    s.mapPosition = mapController.mapController.bounds!;
 
     setState(() {
-      bounds = mapController.bounds!;
+      bounds = mapController.mapController.bounds!;
     });
     performSearch();
   }
@@ -286,7 +286,7 @@ class _ActivityMarkerMapState extends State<ActivityMarkerMap>
     bounds = Provider.of<AppState>(context).mapPosition;
 
     return FlutterMap(
-      mapController: mapController,
+      mapController: mapController.mapController,
       options: MapOptions(
           bounds: bounds,
           onMapEvent: (event) => onMapEvent(event, context),
