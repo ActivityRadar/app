@@ -1,3 +1,4 @@
+import 'package:app/widgets/bottomsheet.dart';
 import 'package:flutter/material.dart';
 
 import 'package:carousel_slider/carousel_slider.dart';
@@ -11,6 +12,7 @@ import 'package:app/provider/user_manager.dart';
 import 'package:app/widgets/activityType_short.dart';
 import 'package:app/widgets/photo_picker.dart';
 import 'package:app/widgets/vote.dart';
+import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 
 class DetailsScreen extends StatefulWidget {
   const DetailsScreen({
@@ -29,6 +31,122 @@ class DetailsScreen extends StatefulWidget {
 class _DetailsScreenState extends State<DetailsScreen> {
   Future<LocationDetailedApi>? _data;
   late String locationId;
+
+  TextEditingController usernameController = TextEditingController();
+  TextEditingController desController = TextEditingController();
+
+  Future<void> _showReviewBottomSheet(BuildContext context) async {
+    var _rating = 0;
+    bottomSheetBase(
+        context: context,
+        builder: (context) {
+          return SingleChildScrollView(
+              padding: EdgeInsets.only(
+                  bottom: MediaQuery.of(context).viewInsets.bottom),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: <Widget>[
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: <Widget>[
+                      Padding(
+                        padding: const EdgeInsets.only(left: 9.0, top: 9.0),
+                        child: TextButton(
+                          onPressed: () => Navigator.pop(context),
+                          child: const Text('Cancel'),
+                        ),
+                      ),
+                      const Text(
+                        "Review",
+                        style: TextStyle(
+                            fontSize: 15, fontWeight: FontWeight.bold),
+                      ),
+                      TextButton(
+                        onPressed: () => Navigator.pop(context),
+                        child: const Text('Send'), //TODO backend
+                      ),
+                    ],
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(9.0),
+                    child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          RatingBar.builder(
+                            minRating: 0,
+                            direction: Axis.horizontal,
+                            allowHalfRating: false,
+                            itemCount: 5,
+                            itemPadding: EdgeInsets.symmetric(horizontal: 4.0),
+                            itemBuilder: (context, _) => Icon(
+                              Icons.star,
+                              color: DesignColors.naviColor,
+                            ),
+                            onRatingUpdate: (rating) {
+                              print(rating);
+                            },
+                          ),
+                        ]),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(left: 9.0, top: 15.0),
+                    child: Column(children: [
+                      TextFormField(
+                        controller: usernameController,
+                        textAlign: TextAlign.start,
+                        decoration: const InputDecoration(
+                          hintText: 'Titel',
+                          border: UnderlineInputBorder(
+                            borderSide: BorderSide.none,
+                          ),
+                          focusedErrorBorder: UnderlineInputBorder(
+                            borderSide: BorderSide(color: Colors.red),
+                          ),
+                          errorBorder: UnderlineInputBorder(
+                            borderSide: BorderSide(color: Colors.red),
+                          ),
+                          enabledBorder: UnderlineInputBorder(
+                            borderSide: BorderSide(
+                              color: Colors.blue,
+                            ),
+                          ),
+                          focusedBorder: UnderlineInputBorder(
+                            borderSide: BorderSide(
+                              color: Colors.blue,
+                              width: 2.0,
+                            ),
+                          ),
+                        ),
+                      ),
+                      TextFormField(
+                        maxLines: 5,
+                        controller: desController,
+                        textAlign: TextAlign.start,
+                        decoration: const InputDecoration(
+                          hintText: 'Description',
+                          border: UnderlineInputBorder(
+                            borderSide: BorderSide.none,
+                          ),
+                          focusedErrorBorder: UnderlineInputBorder(
+                            borderSide: BorderSide(color: Colors.red),
+                          ),
+                          errorBorder: UnderlineInputBorder(
+                            borderSide: BorderSide(color: Colors.red),
+                          ),
+                          enabledBorder: UnderlineInputBorder(
+                            borderSide: BorderSide.none,
+                          ),
+                          focusedBorder: UnderlineInputBorder(
+                            borderSide: BorderSide.none,
+                          ),
+                        ),
+                      ),
+                    ]),
+                  ),
+                ],
+              ));
+        });
+  }
 
   @override
   void initState() {
@@ -244,6 +362,35 @@ class _DetailsScreenState extends State<DetailsScreen> {
             ],
           ),
         ),
+        Padding(
+            padding: const EdgeInsets.only(left: 9.0, top: 15.0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  "Reviews",
+                  style: TextStyle(
+                      color: const Color.fromARGB(182, 0, 0, 0),
+                      fontWeight: FontWeight.bold,
+                      fontSize: width * 0.05),
+                ),
+                Padding(
+                    padding: const EdgeInsets.only(
+                      right: 9.0,
+                    ),
+                    child: Row(children: [
+                      TextButton(
+                        style: TextButton.styleFrom(
+                          textStyle: const TextStyle(
+                              fontSize: 15, color: Colors.black54),
+                        ),
+                        onPressed: () => _showReviewBottomSheet(context),
+                        child: const Text('review'),
+                      ),
+                      Icon(Icons.edit_note),
+                    ])),
+              ],
+            )),
         ReviewList(reviews: info.reviews.recent, width: width, height: height)
       ]),
     );
@@ -366,17 +513,11 @@ class ReviewList extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        Padding(
-          padding: const EdgeInsets.only(left: 9.0, top: 15.0),
-          child: Text(
-            "Reviews",
-            style: TextStyle(
-                color: const Color.fromARGB(182, 0, 0, 0),
-                fontWeight: FontWeight.bold,
-                fontSize: width * 0.05),
-          ),
-        ),
-        for (var review in reviews) ReviewBox(review: review)
+        for (var review in reviews) ...[
+          ReviewBox(review: review),
+          ReviewBox(review: review),
+          ReviewBox(review: review)
+        ]
       ],
     );
   }
@@ -402,99 +543,106 @@ class ReviewBox extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 3.0),
       child: Container(
-          decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(15),
-              border: Border.all(color: Colors.black, width: 2)),
-          child: Column(
-            children: [
-              FutureBuilder(
-                future: photo,
-                builder: (BuildContext context, AsyncSnapshot snapshot) {
-                  Image? image;
-                  String username;
-                  const double diameter = 50.0;
-                  print(
-                      "futurebuilder exec, ${snapshot.hasData}, ${snapshot.hasError}");
-                  if (snapshot.hasData) {
-                    if (snapshot.data != null) {
-                      image = Image(
-                          image: snapshot.data,
-                          width: diameter,
-                          height: diameter);
-                    }
-                  } else if (snapshot.hasError) {
-                    print(snapshot.error);
-                  }
+          child: Card(
+              child: Column(
+        children: [
+          // Name, Profilimage,
+          FutureBuilder(
+            future: photo,
+            builder: (BuildContext context, AsyncSnapshot snapshot) {
+              Image? image;
+              String username;
+              String displayName;
 
-                  if (userInfo != null) {
-                    username = userInfo!.username;
-                  } else {
-                    username = review.userId.substring(0, 6).toUpperCase();
-                  }
+              const double diameter = 50.0;
+              print(
+                  "futurebuilder exec, ${snapshot.hasData}, ${snapshot.hasError}");
+              if (snapshot.hasData) {
+                if (snapshot.data != null) {
+                  image = Image(
+                      image: snapshot.data, width: diameter, height: diameter);
+                }
+              } else if (snapshot.hasError) {
+                print(snapshot.error);
+              }
 
-                  image ??= Image.asset(
-                      "assets/locationPhotoLoadingPlaceholder.jpg",
-                      width: diameter,
-                      height: diameter,
-                      fit: BoxFit.cover);
+              if (userInfo != null) {
+                username = userInfo!.username;
+              } else {
+                username = review.userId.substring(0, 6).toUpperCase();
+              }
 
-                  return Row(
-                    children: [
+              if (userInfo != null) {
+                displayName = userInfo!.displayName;
+              } else {
+                displayName = review.userId.substring(0, 6).toUpperCase();
+              }
+
+              image ??= Image.asset(
+                  "assets/locationPhotoLoadingPlaceholder.jpg",
+                  width: diameter,
+                  height: diameter,
+                  fit: BoxFit.cover);
+
+              return Column(children: [
+                Row(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.all(12.0),
+                      child: ClipOval(child: image),
+                    ),
+                    Text("@$displayName"),
+                    const Spacer(),
+                    Column(children: [
                       Padding(
-                        padding: const EdgeInsets.all(12.0),
-                        child: ClipOval(child: image),
+                        padding: const EdgeInsets.only(left: 12.0),
+                        child: RatingScore(score: review.overallRating),
                       ),
-                      Column(
-                        children: [
-                          RatingScore(score: review.overallRating),
-                          Text("@$username")
-                        ],
+                      Text(
+                        "${DateTime.now().difference(review.creationDate).inDays} days ago",
+                        style: const TextStyle(
+                            color: Colors.black38, fontSize: 11),
                       ),
-                      const Spacer(),
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Text(
-                            "${DateTime.now().difference(review.creationDate).inDays} days ago"),
-                      ),
-                      IconButton(
-                          // TODO: open menu (report, edit, delete)
-                          onPressed: () {},
-                          icon: const Icon(Icons.more_vert))
-                    ],
-                  );
-                },
-              ),
-              Padding(
-                padding:
-                    const EdgeInsets.only(top: 8.0, left: 10.0, right: 10.0),
-                child: SizedBox(
-                    width: double.infinity,
-                    child: ExpandableText(text: review.text)),
-              ),
-              Padding(
-                  padding: const EdgeInsets.symmetric(
-                      vertical: 4.0, horizontal: 10.0),
-                  child: Row(
-                    children: [
-                      const Text(
-                          "X out of Y people found this helpful", // TODO: make dynamic
-                          style: TextStyle(color: Colors.grey)),
-                      const Spacer(),
-                      IconButton(
-                          onPressed: () {}, // TODO: send thumbs up
-                          icon:
-                              const Icon(Icons.thumb_up, color: Colors.green)),
-                      IconButton(
-                          onPressed: () {}, // TODO: send thumbs down
-                          icon:
-                              const Icon(Icons.thumb_down, color: Colors.red)),
-                    ],
-                  ))
-            ],
-          )),
+                    ]),
+                    const ReviewPopupMenuCard(),
+                  ],
+                ),
+              ]);
+            },
+          ),
+
+          Padding(
+            padding: const EdgeInsets.only(top: 8.0, left: 10.0, right: 10.0),
+            child: SizedBox(
+                width: double.infinity,
+                child: ExpandableText(text: review.text)),
+          ),
+          Padding(
+              padding:
+                  const EdgeInsets.symmetric(vertical: 4.0, horizontal: 10.0),
+              child: Row(
+                children: [
+                  const Text(
+                      "X out of Y people found this helpful", // TODO: make dynamic
+                      style: TextStyle(color: Colors.grey)),
+                  const Spacer(),
+                  IconButton(
+                      onPressed: () {}, // TODO: send thumbs up
+                      icon: const Icon(Icons.thumb_up,
+                          color: Color.fromARGB(142, 0, 0, 0))),
+                  IconButton(
+                      onPressed: () {}, // TODO: send thumbs down
+                      icon: const Icon(Icons.thumb_down,
+                          color: Color.fromARGB(142, 244, 67, 54))),
+                ],
+              ))
+        ],
+      ))),
     );
   }
 }
+
+enum ReviewPopupMenuItem { report }
 
 class ExpandableText extends StatelessWidget {
   const ExpandableText({super.key, required this.text});
@@ -511,4 +659,66 @@ class ExpandableText extends StatelessWidget {
         trimCollapsedText: "More",
         trimExpandedText: " Less");
   }
+}
+
+class ReviewPopupMenuCard extends StatefulWidget {
+  const ReviewPopupMenuCard({super.key});
+
+  @override
+  State<ReviewPopupMenuCard> createState() => _ReviewPopupMenuCardState();
+}
+
+class _ReviewPopupMenuCardState extends State<ReviewPopupMenuCard> {
+  ReviewPopupMenuItem? selectedMenu;
+
+  @override
+  Widget build(BuildContext context) {
+    return PopupMenuButton<ReviewPopupMenuItem>(
+      initialValue: selectedMenu,
+      // Callback that sets the selected popup menu item.
+      onSelected: (ReviewPopupMenuItem item) {
+        setState(() {
+          selectedMenu = item;
+        });
+      },
+      itemBuilder: (BuildContext context) =>
+          <PopupMenuEntry<ReviewPopupMenuItem>>[
+        PopupMenuItem<ReviewPopupMenuItem>(
+          value: ReviewPopupMenuItem.report,
+          child: const Text('Report as inappropriate',
+              style: TextStyle(fontSize: 14)),
+          onTap: () => _showDialog(context),
+        ),
+      ],
+    );
+  }
+}
+
+void _showDialog(BuildContext context) {
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return AlertDialog(
+        title: const Text('Report as inappropriate'),
+        content: const Text(
+            'Thank you for contributing to the safety and respect of our community. If you believe that this content violates our policies or is inappropriate, please click on Report.   Your message will be treated confidentially and verified by our moderation team. '),
+        actions: <Widget>[
+          Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+            TextButton(
+              child: const Text('Cancel'),
+              onPressed: () {
+                Navigator.of(context).pop(); // Dialog schließen
+              },
+            ),
+            TextButton(
+              child: const Text('Send'),
+              onPressed: () {
+                Navigator.of(context).pop(); // Dialog schließen
+              },
+            ),
+          ])
+        ],
+      );
+    },
+  );
 }
