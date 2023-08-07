@@ -11,8 +11,6 @@ class AppStyle {
   static const double kDefaultPadding = 20.0;
 }
 
-const double kDefaultPadding = 20.0;
-
 enum Sport {
   kegeln,
   Bowling,
