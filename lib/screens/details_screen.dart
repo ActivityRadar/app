@@ -30,10 +30,12 @@ class DetailsScreen extends StatefulWidget {
 class _DetailsScreenState extends State<DetailsScreen> {
   Future<LocationDetailedApi>? _data;
   late String locationId;
-  var _rating = 0;
+
   TextEditingController usernameController = TextEditingController();
   TextEditingController desController = TextEditingController();
-  void _showModalBottomSheet(BuildContext context) {
+
+  Future<void> _showReviewBottomSheet(BuildContext context) async {
+    var _rating = 0;
     bottomSheetBase(
         context: context,
         builder: (context) {
@@ -72,12 +74,13 @@ class _DetailsScreenState extends State<DetailsScreen> {
                         5,
                         (index) => IconButton(
                           icon: index < _rating
-                              ? const Icon(Icons.star, size: 32)
-                              : const Icon(Icons.star_border, size: 32),
+                              ? Icon(Icons.star, size: 32)
+                              : Icon(Icons.star_border, size: 32),
                           color: DesignColors.naviColor,
                           onPressed: () {
                             setState(() {
                               _rating = index + 1;
+                              print(index);
                               print(_rating);
                             });
                           },
@@ -85,50 +88,60 @@ class _DetailsScreenState extends State<DetailsScreen> {
                       ),
                     ),
                   ),
-                  TextFormField(
-                    controller: usernameController,
-                    textAlign: TextAlign.start,
-                    decoration: const InputDecoration(
-                      hintText: 'Titel',
-                      border: UnderlineInputBorder(
-                        borderSide: BorderSide.none,
+                  Padding(
+                    padding: const EdgeInsets.only(left: 9.0, top: 15.0),
+                    child: Column(children: [
+                      TextFormField(
+                        controller: usernameController,
+                        textAlign: TextAlign.start,
+                        decoration: const InputDecoration(
+                          hintText: 'Titel',
+                          border: UnderlineInputBorder(
+                            borderSide: BorderSide.none,
+                          ),
+                          focusedErrorBorder: UnderlineInputBorder(
+                            borderSide: BorderSide(color: Colors.red),
+                          ),
+                          errorBorder: UnderlineInputBorder(
+                            borderSide: BorderSide(color: Colors.red),
+                          ),
+                          enabledBorder: UnderlineInputBorder(
+                            borderSide: BorderSide(
+                              color: Colors.blue,
+                            ),
+                          ),
+                          focusedBorder: UnderlineInputBorder(
+                            borderSide: BorderSide(
+                              color: Colors.blue,
+                              width: 2.0,
+                            ),
+                          ),
+                        ),
                       ),
-                      focusedErrorBorder: UnderlineInputBorder(
-                        borderSide: BorderSide(color: Colors.red),
+                      TextFormField(
+                        maxLines: 5,
+                        controller: desController,
+                        textAlign: TextAlign.start,
+                        decoration: const InputDecoration(
+                          hintText: 'Description',
+                          border: UnderlineInputBorder(
+                            borderSide: BorderSide.none,
+                          ),
+                          focusedErrorBorder: UnderlineInputBorder(
+                            borderSide: BorderSide(color: Colors.red),
+                          ),
+                          errorBorder: UnderlineInputBorder(
+                            borderSide: BorderSide(color: Colors.red),
+                          ),
+                          enabledBorder: UnderlineInputBorder(
+                            borderSide: BorderSide.none,
+                          ),
+                          focusedBorder: UnderlineInputBorder(
+                            borderSide: BorderSide.none,
+                          ),
+                        ),
                       ),
-                      errorBorder: UnderlineInputBorder(
-                        borderSide: BorderSide(color: Colors.red),
-                      ),
-                      enabledBorder: UnderlineInputBorder(
-                        borderSide: BorderSide(color: Colors.blue),
-                      ),
-                      focusedBorder: UnderlineInputBorder(
-                        borderSide: BorderSide(color: Colors.blue),
-                      ),
-                    ),
-                  ),
-                  TextFormField(
-                    maxLines: 5,
-                    controller: desController,
-                    textAlign: TextAlign.start,
-                    decoration: const InputDecoration(
-                      hintText: 'Beschreibung',
-                      border: UnderlineInputBorder(
-                        borderSide: BorderSide.none,
-                      ),
-                      focusedErrorBorder: UnderlineInputBorder(
-                        borderSide: BorderSide(color: Colors.red),
-                      ),
-                      errorBorder: UnderlineInputBorder(
-                        borderSide: BorderSide(color: Colors.red),
-                      ),
-                      enabledBorder: UnderlineInputBorder(
-                        borderSide: BorderSide.none,
-                      ),
-                      focusedBorder: UnderlineInputBorder(
-                        borderSide: BorderSide.none,
-                      ),
-                    ),
+                    ]),
                   ),
                 ],
               ));
@@ -349,6 +362,35 @@ class _DetailsScreenState extends State<DetailsScreen> {
             ],
           ),
         ),
+        Padding(
+            padding: const EdgeInsets.only(left: 9.0, top: 15.0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  "Reviews",
+                  style: TextStyle(
+                      color: const Color.fromARGB(182, 0, 0, 0),
+                      fontWeight: FontWeight.bold,
+                      fontSize: width * 0.05),
+                ),
+                Padding(
+                    padding: const EdgeInsets.only(
+                      right: 9.0,
+                    ),
+                    child: Row(children: [
+                      TextButton(
+                        style: TextButton.styleFrom(
+                          textStyle: const TextStyle(
+                              fontSize: 15, color: Colors.black54),
+                        ),
+                        onPressed: () => _showReviewBottomSheet(context),
+                        child: const Text('review'),
+                      ),
+                      Icon(Icons.edit_note),
+                    ])),
+              ],
+            )),
         ReviewList(reviews: info.reviews.recent, width: width, height: height)
       ]),
     );
@@ -471,16 +513,6 @@ class ReviewList extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        Padding(
-          padding: const EdgeInsets.only(left: 9.0, top: 15.0),
-          child: Text(
-            "Reviews",
-            style: TextStyle(
-                color: const Color.fromARGB(182, 0, 0, 0),
-                fontWeight: FontWeight.bold,
-                fontSize: width * 0.05),
-          ),
-        ),
         for (var review in reviews) ...[
           ReviewBox(review: review),
           ReviewBox(review: review),
