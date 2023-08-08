@@ -9,7 +9,7 @@ import re
 import yaml
 
 # Read the yaml file
-with open("openapi.yaml", "r") as file:
+with open("shared/openapi.yaml", "r") as file:
     openapi_schema = yaml.safe_load(file)
 
 # Extract components
