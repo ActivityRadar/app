@@ -18,7 +18,7 @@ class LocationPickerMap extends StatefulWidget {
 class LocationPickerMapState extends State<LocationPickerMap> {
   ValueNotifier<String> activity = ValueNotifier("-");
 
-  ActivityMarkerMap? mapWidget;
+  LocationMarkerMap? mapWidget;
 
   @override
   Widget build(BuildContext context) {
@@ -26,7 +26,7 @@ class LocationPickerMapState extends State<LocationPickerMap> {
     var size = MediaQuery.of(context).size;
     var height = size.height;
     var width = size.width;
-    mapWidget = ActivityMarkerMap(height: height, width: width, mapState: this);
+    mapWidget = LocationMarkerMap(height: height, width: width, mapState: this);
 
     return Stack(
       children: [
@@ -55,8 +55,8 @@ class PinIcon extends StatelessWidget {
   }
 }
 
-class ActivityMarkerMap extends StatefulWidget {
-  const ActivityMarkerMap({
+class LocationMarkerMap extends StatefulWidget {
+  const LocationMarkerMap({
     super.key,
     required this.width,
     required this.height,
@@ -68,12 +68,12 @@ class ActivityMarkerMap extends StatefulWidget {
   final LocationPickerMapState mapState;
 
   @override
-  State<ActivityMarkerMap> createState() {
-    return _ActivityMarkerMapState();
+  State<LocationMarkerMap> createState() {
+    return _LocationMarkerMapState();
   }
 }
 
-class _ActivityMarkerMapState extends State<ActivityMarkerMap> {
+class _LocationMarkerMapState extends State<LocationMarkerMap> {
   LatLngBounds bounds = LatLngBounds(LatLng(52.37, 12.74), LatLng(53, 13.04));
   final MapController mapController = MapController();
 

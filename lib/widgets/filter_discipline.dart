@@ -23,6 +23,7 @@ class _FilterDisciplineState extends State<FilterDiscipline> {
             return FilterChip(
               label: Text(exercise.name),
               selected: filters.contains(exercise),
+              selectedColor: DesignColors.naviColor,
               onSelected: (bool selected) {
                 setState(() {
                   if (selected) {

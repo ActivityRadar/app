@@ -3,12 +3,34 @@ import 'dart:core';
 
 class DesignColors {
   static const Color naviColor = Color.fromARGB(255, 0, 131, 238);
-  static const Color kBackgroundColor = Colors.white;
+  static const Color kBackgroundColor = Color.fromARGB(255, 248, 248, 248);
 }
 
 class AppStyle {
   static const double cornerRadius = 20;
   static const double kDefaultPadding = 20.0;
+}
+
+class AppInputBorders {
+  static const OutlineInputBorder border = OutlineInputBorder(
+    borderSide: BorderSide.none,
+  );
+
+  static const OutlineInputBorder focusedBorder = OutlineInputBorder(
+    borderSide: BorderSide.none,
+  );
+
+  static const OutlineInputBorder enabledBorder = OutlineInputBorder(
+    borderSide: BorderSide.none,
+  );
+
+  static const OutlineInputBorder focusedErrorBorder = OutlineInputBorder(
+    borderSide: BorderSide.none,
+  );
+
+  static const OutlineInputBorder errorBorder = OutlineInputBorder(
+    borderSide: BorderSide.none,
+  );
 }
 
 enum Sport {
