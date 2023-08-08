@@ -219,10 +219,16 @@ for path, content in paths.items():
             input_args_string = f"\n{indent(input_args_string, 2)}"
 
         # construct the query Map if any are given
-        query_params = [x[1] for x in input_args if x[3] == "query"]
+        query_params = [x for x in input_args if x[3] == "query"]
         q_string = ""
         if len(query_params) > 0:
-            lines = ",\n".join([f'"{q}": {to_camel_case(q)}' for q in query_params])
+            lines = []
+            for q in query_params:
+                prefix = ""
+                if not q[2]:  # required?
+                    prefix = f"if ({q[1]} != null) "
+                lines.append(f'{prefix}"{q[1]}": {to_camel_case(q[1])}')
+            lines = ",\n".join(lines)
             q_string = f"""final Map<String, dynamic> q = {{\n{indent(lines, 2)}}};\n"""
 
         # path_params = [x for x in input_args if x[3] == "path"]
