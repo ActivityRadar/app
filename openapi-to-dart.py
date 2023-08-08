@@ -61,6 +61,19 @@ def to_dart_type(property):
         return "Map<String, dynamic>", []
 
 
+def is_basic_dart_type(t):
+    if t in ["String", "int", "bool"]:
+        return True
+
+    if t.startswith("Map"):
+        return True
+
+    if t.startswith("List"):
+        return True
+
+    return False
+
+
 def parse_enum(name, component):
     type_ = component.get("type")
     members = component.get("enum")
@@ -177,7 +190,7 @@ export_file.close()
 def indent(string, indent=2):
     indent_str = " " * indent
     lines = string.split("\n")
-    return "\n".join([f"{indent_str}{line}" for line in lines] + [""])
+    return "\n".join([f"{indent_str}{line}" for line in lines])
 
 
 paths = openapi_schema.get("paths", None)
@@ -208,6 +221,33 @@ for path, content in paths.items():
                 )
             )
 
+        request_body = info.get("requestBody")
+        send_body_arg = ""
+        if request_body is not None:
+
+            def process_body_schema(body):
+                if "application/json" in body.get("content"):
+                    body_schema = (
+                        body.get("content").get("application/json").get("schema")
+                    )
+                elif "application/x-www-form-urlencoded" in body.get("content"):
+                    body_schema = (
+                        body.get("content")
+                        .get("application/x-www-form-urlencoded")
+                        .get("schema")
+                    )
+                else:
+                    return ""
+
+                r = body.get("required", False)
+                input_args.append((body_schema, "data", r, "body"))
+                if is_basic_dart_type(to_dart_type(body_schema)[0]):
+                    return "body: data"
+                else:
+                    return "body: data.toJson()"
+
+            send_body_arg = process_body_schema(request_body)
+
         input_args_string = ",\n".join(
             [
                 ("required " if r else "")
@@ -215,8 +255,13 @@ for path, content in paths.items():
                 for s, n, r, _ in input_args
             ]
         )
-        if len(input_args) > 1:
-            input_args_string = f"\n{indent(input_args_string, 2)}"
+
+        if len(input_args) == 0:
+            input_args_string = ""
+        elif len(input_args) == 1:
+            input_args_string = f"{{{input_args_string}}}\n"
+        else:
+            input_args_string = f"{{\n{indent(input_args_string, 2)}\n}}"
 
         # construct the query Map if any are given
         query_params = [x for x in input_args if x[3] == "query"]
@@ -225,11 +270,15 @@ for path, content in paths.items():
             lines = []
             for q in query_params:
                 prefix = ""
+                q_snake = q[1]
+                q_camel = to_camel_case(q_snake)
                 if not q[2]:  # required?
-                    prefix = f"if ({q[1]} != null) "
-                lines.append(f'{prefix}"{q[1]}": {to_camel_case(q[1])}')
+                    prefix = f"if ({q_camel} != null) "
+                lines.append(f'{prefix}"{q_snake}": {q_camel}')
             lines = ",\n".join(lines)
-            q_string = f"""final Map<String, dynamic> q = {{\n{indent(lines, 2)}}};\n"""
+            q_string = (
+                f"""final Map<String, dynamic> __q = {{\n{indent(lines, 2)}\n}};\n"""
+            )
 
         # path_params = [x for x in input_args if x[3] == "path"]
         for i, seg in enumerate(path_segments):
@@ -239,10 +288,13 @@ for path, content in paths.items():
         format_path_string = '"' + "/".join(path_segments) + '"'
         send_request_args = [f"HttpMethod.{method}", f"{format_path_string}"]
         if q_string != "":
-            send_request_args.append("queryParams: q")
+            send_request_args.append("queryParams: __q")
 
-        response = info.get("responses").get("'200'")
+        if send_body_arg != "":
+            send_request_args.append(send_body_arg)
+
         return_type = "void"
+        response = info.get("responses").get("200")
         try:
             respSchema = response.get("content").get("application/json").get("schema")
             if respSchema:
@@ -251,34 +303,46 @@ for path, content in paths.items():
         except Exception:
             pass
 
-        try:
-            requestBody = (
-                response.get("content")
-                .get("application/x-www-form-urlencoded")
-                .get("schema")
-            )
-        except Exception:
-            pass
+        return_statement = ""
+        if return_type != "void":
+            if return_type.startswith("List"):
+                t = return_type.removeprefix("List<")[:-1]
+                return_statement = (
+                    f"return responseBody.map((item) => {t}.fromJson(item)).to_list();"
+                )
+            else:
+                if is_basic_dart_type(return_type):
+                    return_statement = "return responseBody;"
+                else:
+                    return_statement = f"return {return_type}.fromJson(responseBody);"
+
+            return_statement = "\n" + return_statement
 
         send_request_args_string = ",\n".join(send_request_args)
+        send_request_prefix = ""
+        if return_type != "void":
+            send_request_prefix = f"final responseBody = "
+
         function_body = (
-            f"{q_string}final responseBody = "
-            f"await sendRequest(\n{indent(send_request_args_string, 2)});"
+            f"{q_string}"
+            f"{send_request_prefix}await BackendService.instance.sendRequest(\n{indent(send_request_args_string, 2)}\n);"
+            f"{return_statement}"
         )
         function_string = (
             f"/// {info.get('summary', '')}\n"
             f"Future<{return_type}> {to_camel_case(info.get('operationId'))}"
-            f"({{{input_args_string}}}) async {{\n"
-            f"{indent(function_body, 2)}}}"
+            f"({input_args_string}) async {{\n"
+            f"{indent(function_body, 2)}\n}}"
         )
 
         classes[class_].append(function_string)
 
 for class_, functions in classes.items():
     with open(f"lib/provider/generated/{class_}_provider.dart", "w") as f:
-        f.write("import 'package:app/provider/backend.dart';\n")
+        f.write("import 'package:app/model/generated.dart';\n")
+        f.write("import 'package:app/provider/backend.dart';\n\n")
 
-        f.write(f"class {to_camel_case(class_)}Provider extends BackendService {{")
+        f.write(f"class {class_.title()}Provider {{")
         for fun in functions:
-            f.write(f"\n{indent(fun, 2)}")
-        f.write("}")
+            f.write(f"\n{indent(fun, 2)}\n")
+        f.write("}\n")
