@@ -28,18 +28,37 @@ def to_snake_case(name):
     return camel_pattern.sub("_", name).lower()
 
 
-def to_dart_type(t, format=None):
-    match t:
-        case "integer":
-            return "int"
-        case "string":
-            if format == "date-time":
-                return "DateTime"
-            return "String"
-        case "number":
-            return "double"
-        case _:
-            return "Map<String, dynamic>"
+def to_dart_type(property):
+    p_type = property.get("type", "Object")
+    p_fmt = property.get("format", None)
+
+    imports = []
+
+    if p_type == "array":
+        item_info = property.get("items", {})
+        item_type = item_info.get("type", "Object")
+        if "$ref" in item_info:
+            item_type = item_info["$ref"].split("/")[-1]
+            imports.append(item_type)
+            return f"List<{item_type}>", imports
+        else:
+            t, imp = to_dart_type(item_info)
+            imports.extend(imp)
+            return f"List<{t}>", imports
+    elif "$ref" in property:
+        dart_type = property["$ref"].split("/")[-1]
+        imports.append(dart_type)
+        return dart_type, imports
+    elif p_type == "integer":
+        return "int", []
+    elif p_type == "string":
+        if p_fmt == "date-time":
+            return "DateTime", []
+        return "String", []
+    elif p_type == "number":
+        return "double", []
+    else:
+        return "Map<String, dynamic>", []
 
 
 def parse_enum(name, component):
@@ -73,21 +92,8 @@ def generate_dart_classes_new(components):
             is_required = property_name in required_properties
             property_name_camel_case = to_camel_case(property_name)
 
-            if p_type == "array":
-                item_info = property_info.get("items", {})
-                item_type = item_info.get("type", "Object")
-                item_fmt = item_info.get("fmt", None)
-                if "$ref" in item_info:
-                    item_type = item_info["$ref"].split("/")[-1]
-                    dart_type = f"List<{item_type}>"
-                    imports.append(item_type)
-                else:
-                    dart_type = f"List<{to_dart_type(item_type, item_fmt)}>"
-            elif "$ref" in property_info:
-                dart_type = property_info["$ref"].split("/")[-1]
-                imports.append(dart_type)
-            else:
-                dart_type = to_dart_type(p_type, p_fmt)
+            dart_type, imports_ = to_dart_type(property_info)
+            imports.extend(imports_)
 
             null_suffix = "" if is_required else "?"
             class_property_names_and_req.append((property_name_camel_case, is_required))
@@ -163,3 +169,110 @@ for name, t in enum_templates:
     export_file.write(f"export 'generated/{snake_case}.dart' show {name};\n")
 
 export_file.close()
+
+
+""" HERE COMES THE GENERATING OF ENDPOINT CLASSES AND FUNCTIONS """
+
+
+def indent(string, indent=2):
+    indent_str = " " * indent
+    lines = string.split("\n")
+    return "\n".join([f"{indent_str}{line}" for line in lines] + [""])
+
+
+paths = openapi_schema.get("paths", None)
+classes = {}
+
+for path, content in paths.items():
+    for method, info in content.items():
+        # print(f"{method} {path} {info.get('operationId')}")
+        path_segments = path.split("/")
+        class_ = path_segments[1]
+        if class_ not in classes:
+            classes[class_] = []
+
+        parameters = info.get("parameters", [])
+
+        # list of tuples,
+        # each being parameter schema, name, required bool, and where the param is applied
+        input_args = []
+
+        for param in parameters:
+            schema_ = param.get("schema")
+            input_args.append(
+                (
+                    schema_,  # .get("$ref").split("/")[-1],
+                    param.get("name"),
+                    param.get("required", False),
+                    param.get("in"),
+                )
+            )
+
+        input_args_string = ",\n".join(
+            [
+                ("required " if r else "")
+                + f"{to_dart_type(s)[0]}{'' if r else '?'} {to_camel_case(n)}"
+                for s, n, r, _ in input_args
+            ]
+        )
+        if len(input_args) > 1:
+            input_args_string = f"\n{indent(input_args_string, 2)}"
+
+        # construct the query Map if any are given
+        query_params = [x[1] for x in input_args if x[3] == "query"]
+        q_string = ""
+        if len(query_params) > 0:
+            lines = ",\n".join([f'"{q}": {to_camel_case(q)}' for q in query_params])
+            q_string = f"""final Map<String, dynamic> q = {{\n{indent(lines, 2)}}};\n"""
+
+        # path_params = [x for x in input_args if x[3] == "path"]
+        for i, seg in enumerate(path_segments):
+            if seg.startswith("{"):
+                path_segments[i] = f"${to_camel_case(seg[1:-1])}"
+
+        format_path_string = '"' + "/".join(path_segments) + '"'
+        send_request_args = [f"HttpMethod.{method}", f"{format_path_string}"]
+        if q_string != "":
+            send_request_args.append("queryParams: q")
+
+        response = info.get("responses").get("'200'")
+        return_type = "void"
+        try:
+            respSchema = response.get("content").get("application/json").get("schema")
+            if respSchema:
+                t, _ = to_dart_type(respSchema)
+                return_type = t
+        except Exception:
+            pass
+
+        try:
+            requestBody = (
+                response.get("content")
+                .get("application/x-www-form-urlencoded")
+                .get("schema")
+            )
+        except Exception:
+            pass
+
+        send_request_args_string = ",\n".join(send_request_args)
+        function_body = (
+            f"{q_string}final responseBody = "
+            f"await sendRequest(\n{indent(send_request_args_string, 2)});"
+        )
+        function_string = (
+            f"/// {info.get('summary', '')}\n"
+            f"Future<{return_type}> {to_camel_case(info.get('operationId'))}"
+            f"({{{input_args_string}}}) async {{\n"
+            f"{indent(function_body, 2)}}}"
+        )
+
+        classes[class_].append(function_string)
+
+for class_, functions in classes.items():
+    with open(f"lib/provider/generated/{class_}_provider.dart", "w") as f:
+        f.write("import 'package:app/provider/backend.dart';\n")
+
+        f.write(f"class {to_camel_case(class_)}Provider extends BackendService {{")
+        for fun in functions:
+            f.write(f"\n{indent(fun, 2)}")
+        f.write("}")

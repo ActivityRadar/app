@@ -7,6 +7,8 @@ import 'package:http/http.dart' as http;
 
 const storage = FlutterSecureStorage();
 
+enum HttpMethod { get, post, put, delete }
+
 class BackendService {
   var client = http.Client();
   final String apiKey = "";
@@ -37,13 +39,13 @@ class BackendService {
     return headers;
   }
 
-  Future<dynamic> sendRequest(String command, String path,
+  Future<dynamic> sendRequest(HttpMethod method, String path,
       {Object? body,
       Map<String, dynamic>? queryParams,
       Map<String, String>? additionalHeaders,
       bool encodeToJson = true,
       bool decodeFromJson = true}) async {
-    if (command != "GET" && body == null) {
+    if (method != HttpMethod.get && body == null) {
       throw Exception();
     }
 
@@ -59,14 +61,14 @@ class BackendService {
     }
 
     Future<http.Response> request;
-    switch (command) {
-      case "GET":
+    switch (method) {
+      case HttpMethod.get:
         request = client.get(url, headers: headers);
-      case "POST":
+      case HttpMethod.post:
         request = client.post(url, body: body, headers: headers);
-      case "PUT":
+      case HttpMethod.put:
         request = client.put(url, body: body, headers: headers);
-      case "DELETE":
+      case HttpMethod.delete:
         request = client.delete(url, body: body, headers: headers);
       default:
         throw Exception();
@@ -97,7 +99,7 @@ class AuthService {
 
     try {
       Map<String, dynamic> responseBody = await BackendService.instance
-          .sendRequest("POST", "/auth/token",
+          .sendRequest(HttpMethod.post, "/auth/token",
               body: body,
               encodeToJson: false,
               additionalHeaders: {
@@ -117,7 +119,7 @@ class AuthService {
   static Future<bool> changePassword(ChangePasswordForm passwordBody) async {
     try {
       await BackendService.instance.sendRequest(
-        "PUT",
+        HttpMethod.put,
         "/users/me/change_password",
         body: passwordBody.toJson(),
       );
@@ -139,7 +141,7 @@ class UserService {
   static Future<String> create(UserApiIn userIn) async {
     var body = userIn.toJson();
     Map<String, dynamic> responseBody = await BackendService.instance
-        .sendRequest("POST", "$prefix/", body: body);
+        .sendRequest(HttpMethod.post, "$prefix/", body: body);
 
     return responseBody["id"];
   }
@@ -155,7 +157,7 @@ class UserService {
   static Future<UserApiOut> getUserInfo(String id) async {
     final q = {"q": id};
     final responseBody = await BackendService.instance
-        .sendRequest("GET", "$prefix/id", queryParams: q);
+        .sendRequest(HttpMethod.get, "$prefix/id", queryParams: q);
 
     return UserApiOut.fromJson(responseBody[0]);
   }
@@ -163,14 +165,14 @@ class UserService {
   static Future<List<UserApiOut>> getInfoBulk(List<String> ids) async {
     final q = {"q": ids};
     final responseBody = await BackendService.instance
-        .sendRequest("GET", "$prefix/id", queryParams: q);
+        .sendRequest(HttpMethod.get, "$prefix/id", queryParams: q);
 
     return responseBody.map((info) => UserApiOut.fromJson(info)).toList();
   }
 
   static Future<UserDetailed> getCurrentUserInfo() async {
     final responseBody =
-        await BackendService.instance.sendRequest("GET", "$prefix/me");
+        await BackendService.instance.sendRequest(HttpMethod.get, "$prefix/me");
 
     return UserDetailed.fromJson(responseBody);
   }
@@ -191,7 +193,7 @@ class LocationService {
 
   void createLocation(LocationNew location) async {
     await BackendService.instance
-        .sendRequest("POST", "$prefix/", body: location.toJson());
+        .sendRequest(HttpMethod.post, "$prefix/", body: location.toJson());
   }
 
   void deleteLocation() {}
@@ -199,7 +201,7 @@ class LocationService {
   Future<LocationDetailedApi> getDetails(String locationId) async {
     return LocationDetailedApi.fromJson(
         await BackendService.instance.sendRequest(
-      "GET",
+      HttpMethod.get,
       "$prefix/$locationId",
     ));
   }
@@ -215,7 +217,7 @@ class LocationService {
     };
 
     List<dynamic> res = await BackendService.instance
-        .sendRequest("GET", "$prefix/bbox", queryParams: queryParams);
+        .sendRequest(HttpMethod.get, "$prefix/bbox", queryParams: queryParams);
 
     return res.map((loc) => LocationShortApi.fromJson(loc)).toList();
   }
@@ -223,7 +225,7 @@ class LocationService {
   Future<List<LocationDetailedApi>> getAroundCenter(GeoJsonLocation center,
       {String? activity}) async {
     final List<dynamic> res = await BackendService.instance
-        .sendRequest("GET", "$prefix/around", queryParams: {
+        .sendRequest(HttpMethod.get, "$prefix/around", queryParams: {
       "long": center.coordinates[0].toString(),
       "lat": center.coordinates[1].toString(),
       if (activity != null) "activities": [activity],
@@ -257,12 +259,12 @@ class ProfilePhotoService {
   static String prefix = "/users/me/photo";
 
   Future<http.Response> create(String path) async {
-    return await BackendService.instance
-        .sendRequest("POST", prefix, body: PhotoUrl(url: path));
+    return await BackendService.instance.sendRequest(HttpMethod.post, prefix,
+        body: PhotoUrl(url: path).toJson());
   }
 
   Future<http.Response> delete() async {
-    return await BackendService.instance.sendRequest("DELETE", prefix);
+    return await BackendService.instance.sendRequest(HttpMethod.delete, prefix);
   }
 }
 
@@ -272,13 +274,14 @@ class LocationPhotoService {
   }
 
   Future<void> create(String path, String locationId) async {
-    await BackendService.instance
-        .sendRequest("POST", _prefix(locationId), body: PhotoUrl(url: path));
+    await BackendService.instance.sendRequest(
+        HttpMethod.post, _prefix(locationId),
+        body: PhotoUrl(url: path).toJson());
   }
 
   Future<http.Response> delete(String locationId, String photoId) async {
     return await BackendService.instance.sendRequest(
-      "DELETE",
+      HttpMethod.delete,
       "${_prefix(locationId)}/$photoId",
     );
   }
