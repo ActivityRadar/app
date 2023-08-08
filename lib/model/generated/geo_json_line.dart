@@ -9,7 +9,7 @@ part 'geo_json_line.g.dart';
 @JsonSerializable(explicitToJson: true)
 class GeoJsonLine {
   final String? type;
-  final List<Map<String, dynamic>> coordinates;
+  final List<List<double>> coordinates;
 
   GeoJsonLine({
     this.type,
