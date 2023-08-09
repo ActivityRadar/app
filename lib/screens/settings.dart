@@ -1,4 +1,5 @@
 import 'package:app/constants/constants.dart';
+import 'package:app/screens/auth.dart';
 import 'package:app/screens/setting_password.dart';
 import 'package:app/screens/settings_email.dart';
 import 'package:app/screens/settings_name.dart';
@@ -21,6 +22,21 @@ class SettingScreen extends StatelessWidget {
           collapsedHeight: collapsedHeight,
           pinned: true,
           backgroundColor: DesignColors.kBackgroundColor,
+          leading: TextButton(
+            style: TextButton.styleFrom(
+              textStyle:
+                  const TextStyle(fontSize: 13, fontWeight: FontWeight.bold),
+            ),
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const AuthScreen(),
+                ),
+              );
+            },
+            child: const Text('Login'),
+          ),
           actions: <Widget>[
             TextButton(
               style: TextButton.styleFrom(
@@ -28,7 +44,7 @@ class SettingScreen extends StatelessWidget {
                     const TextStyle(fontSize: 13, fontWeight: FontWeight.bold),
               ),
               onPressed: () {},
-              child: const Text('loggout'),
+              child: const Text('logout'),
             ),
           ],
           flexibleSpace: LayoutBuilder(
@@ -338,7 +354,7 @@ class SettingScreen extends StatelessWidget {
                         fontSize: 13, fontWeight: FontWeight.bold),
                   ),
                   onPressed: () {},
-                  child: const Text('loggout'),
+                  child: const Text('logout'),
                 ),
                 TextButton(
                   style: TextButton.styleFrom(
