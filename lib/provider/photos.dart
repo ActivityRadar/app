@@ -96,6 +96,7 @@ class PhotoManager {
     return _storage[url]!;
   }
 
+  /// gets the thumbnail for a photo, if no thumbnail is found, use the actual photo instead
   Future<MemoryImage> getThumbnail(String url) async {
     late final img;
     try {
