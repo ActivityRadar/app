@@ -1,4 +1,5 @@
 import 'package:app/constants/constants.dart';
+import 'package:app/widgets/customsnackbar.dart';
 import 'package:flutter/material.dart';
 
 class EmailSwitch extends StatelessWidget {
@@ -19,8 +20,9 @@ class EmailSwitch extends StatelessWidget {
           ),
           onPressed: () {
             Navigator.pop(context);
-            ScaffoldMessenger.of(context)
-                .showSnackBar(const SnackBar(content: Text('Cancel')));
+            ScaffoldMessenger.of(context).showSnackBar(
+              messageSnackBar('Cancel'),
+            );
           },
           child: const Text(
             'Cancel',
@@ -38,7 +40,7 @@ class EmailSwitch extends StatelessWidget {
                 Navigator.pop(context);
               } else {
                 ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(content: Text('Please fill input')),
+                  messageSnackBar('Please fill input'),
                 );
               }
             },

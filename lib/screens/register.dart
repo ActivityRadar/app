@@ -1,4 +1,5 @@
 import 'package:app/constants/constants.dart';
+import 'package:app/widgets/customsnackbar.dart';
 import 'package:app/widgets/photo_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -93,8 +94,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             nextPage();
                           } else {
                             ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(
-                                  content: Text('Please fill input')),
+                              messageSnackBar('Please fill input'),
                             );
                           }
                         },
@@ -181,8 +181,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             nextPage();
                           } else {
                             ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(
-                                  content: Text('Please fill input')),
+                              messageSnackBar('Please fill input'),
                             );
                           }
                         },
@@ -249,8 +248,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                 nextPage();
                               } else {
                                 ScaffoldMessenger.of(context).showSnackBar(
-                                  const SnackBar(
-                                      content: Text('Please fill input')),
+                                  messageSnackBar('Please fill input'),
                                 );
                               }
                             },

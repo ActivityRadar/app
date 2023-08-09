@@ -4,6 +4,7 @@ import 'package:app/provider/generated/users_provider.dart';
 import 'package:app/provider/photos.dart';
 import 'package:app/widgets/bottomsheet.dart';
 import 'package:app/widgets/photo_picker.dart';
+import 'package:app/widgets/customsnackbar.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -31,8 +32,9 @@ class DisplayNameSwitch extends StatelessWidget {
             ),
             onPressed: () {
               Navigator.pop(context);
-              ScaffoldMessenger.of(context)
-                  .showSnackBar(const SnackBar(content: Text('Cancel')));
+              ScaffoldMessenger.of(context).showSnackBar(
+                messageSnackBar('Cancel'),
+              );
             },
             child: const Text(
               'Cancel',
@@ -54,7 +56,7 @@ class DisplayNameSwitch extends StatelessWidget {
                   }
                 } else {
                   ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(content: Text('Enter a valid username!')),
+                    messageSnackBar("Enter a valid username!"),
                   );
                   ok = false;
                   print("Invalid new username!");

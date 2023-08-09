@@ -1,6 +1,7 @@
 import 'package:app/app_state.dart';
 import 'package:app/provider/backend.dart';
 import 'package:app/screens/forgot_password.dart';
+import 'package:app/widgets/customsnackbar.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -109,18 +110,18 @@ void handleLogin(BuildContext context, String username, String password,
       if (success) {
         Provider.of<AppState>(context, listen: false).updateUserInfo();
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Login successful!')),
+          messageSnackBar('Login successful!'),
         );
         Navigator.of(context).pop();
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Login failed!')),
+          messageSnackBar('Login failed!'),
         );
       }
     });
   } else {
     ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text('Please fill input')),
+      messageSnackBar('Please fill input!'),
     );
   }
 }
