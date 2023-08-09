@@ -344,7 +344,7 @@ for path, content in paths.items():
         )
         function_string = (
             f"/// {info.get('summary', '')}\n"
-            f"Future<{return_type}> {to_camel_case(info.get('operationId'))}"
+            f"static Future<{return_type}> {to_camel_case(info.get('operationId'))}"
             f"({input_args_string}) async {{\n"
             f"{indent(function_body, 2)}\n}}"
         )
