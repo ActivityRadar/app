@@ -48,8 +48,13 @@ class UsersProvider {
 
   /// Unarchive User
   Future<void> unarchiveUser({required LoginBody data}) async {
-    await BackendService.instance
-        .sendRequest(HttpMethod.put, "/users/reactivate", body: data.toJson());
+    await BackendService.instance.sendRequest(
+        HttpMethod.put, "/users/reactivate",
+        body: data.toJson(),
+        additionalHeaders: {
+          "Content-Type": "application/x-www-form-urlencoded"
+        },
+        encodeToJson: false);
   }
 
   /// Report User
@@ -105,8 +110,12 @@ class UsersProvider {
 
   /// Delete User
   Future<void> deleteUser({required LoginBody data}) async {
-    await BackendService.instance
-        .sendRequest(HttpMethod.delete, "/users/me/", body: data.toJson());
+    await BackendService.instance.sendRequest(HttpMethod.delete, "/users/me/",
+        body: data.toJson(),
+        additionalHeaders: {
+          "Content-Type": "application/x-www-form-urlencoded"
+        },
+        encodeToJson: false);
   }
 
   /// Change User Password
