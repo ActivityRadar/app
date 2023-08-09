@@ -223,9 +223,13 @@ for path, content in paths.items():
 
         request_body = info.get("requestBody")
         send_body_arg = ""
+        additional_headers = None
+        encode_to_json = True
         if request_body is not None:
 
             def process_body_schema(body):
+                add_headers = None
+                enc_json = True
                 if "application/json" in body.get("content"):
                     body_schema = (
                         body.get("content").get("application/json").get("schema")
@@ -236,17 +240,21 @@ for path, content in paths.items():
                         .get("application/x-www-form-urlencoded")
                         .get("schema")
                     )
+                    add_headers = 'additionalHeaders: {"Content-Type": "application/x-www-form-urlencoded"}'
+                    enc_json = False
                 else:
-                    return ""
+                    return "", None, True
 
                 r = body.get("required", False)
                 input_args.append((body_schema, "data", r, "body"))
                 if is_basic_dart_type(to_dart_type(body_schema)[0]):
-                    return "body: data"
+                    return "body: data", add_headers, enc_json
                 else:
-                    return "body: data.toJson()"
+                    return "body: data.toJson()", add_headers, enc_json
 
-            send_body_arg = process_body_schema(request_body)
+            send_body_arg, additional_headers, encode_to_json = process_body_schema(
+                request_body
+            )
 
         input_args_string = ",\n".join(
             [
@@ -293,6 +301,12 @@ for path, content in paths.items():
         if send_body_arg != "":
             send_request_args.append(send_body_arg)
 
+        if additional_headers:
+            send_request_args.append(additional_headers)
+
+        if not encode_to_json:
+            send_request_args.append("encodeToJson: false")
+
         return_type = "void"
         response = info.get("responses").get("200")
         try:
@@ -330,7 +344,7 @@ for path, content in paths.items():
         )
         function_string = (
             f"/// {info.get('summary', '')}\n"
-            f"Future<{return_type}> {to_camel_case(info.get('operationId'))}"
+            f"static Future<{return_type}> {to_camel_case(info.get('operationId'))}"
             f"({input_args_string}) async {{\n"
             f"{indent(function_body, 2)}\n}}"
         )

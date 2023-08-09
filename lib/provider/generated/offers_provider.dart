@@ -3,20 +3,20 @@ import 'package:app/provider/backend.dart';
 
 class OffersProvider {
   /// Get Offers
-  Future<void> getOffers({required List<String> id}) async {
+  static Future<void> getOffers({required List<String> id}) async {
     final Map<String, dynamic> __q = {"id": id};
     await BackendService.instance
         .sendRequest(HttpMethod.get, "/offers/", queryParams: __q);
   }
 
   /// Create Offer
-  Future<void> createOffer({required OfferIn data}) async {
+  static Future<void> createOffer({required OfferIn data}) async {
     await BackendService.instance
         .sendRequest(HttpMethod.post, "/offers/", body: data.toJson());
   }
 
   /// Get Offers At Location
-  Future<void> getOffersAtLocation(
+  static Future<void> getOffersAtLocation(
       {required String locationId,
       DateTime? timeFrom,
       DateTime? timeUntil}) async {
@@ -30,7 +30,7 @@ class OffersProvider {
   }
 
   /// Get Offers In Area
-  Future<void> getOffersInArea(
+  static Future<void> getOffersInArea(
       {required double long,
       required double lat,
       required double radius,
@@ -50,7 +50,7 @@ class OffersProvider {
   }
 
   /// Set Offer Status
-  Future<void> setOfferStatus(
+  static Future<void> setOfferStatus(
       {required String offerId, required OfferStatus status}) async {
     final Map<String, dynamic> __q = {"status": status};
     await BackendService.instance
@@ -58,7 +58,7 @@ class OffersProvider {
   }
 
   /// Contact Offerer
-  Future<void> contactOfferer(
+  static Future<void> contactOfferer(
       {required String offerId, required String message}) async {
     final Map<String, dynamic> __q = {"message": message};
     await BackendService.instance
@@ -66,7 +66,7 @@ class OffersProvider {
   }
 
   /// Delete Offer
-  Future<void> deleteOffer({required String offerId}) async {
+  static Future<void> deleteOffer({required String offerId}) async {
     await BackendService.instance
         .sendRequest(HttpMethod.delete, "/offers/$offerId");
   }
