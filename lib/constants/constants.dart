@@ -16,22 +16,24 @@ class AppInputBorders {
     borderSide: BorderSide.none,
   );
 
-  static const OutlineInputBorder focusedBorder = OutlineInputBorder(
+  static const OutlineInputBorder focused = OutlineInputBorder(
     borderSide: BorderSide.none,
   );
 
-  static const OutlineInputBorder enabledBorder = OutlineInputBorder(
+  static const OutlineInputBorder enabled = OutlineInputBorder(
     borderSide: BorderSide.none,
   );
 
-  static const OutlineInputBorder focusedErrorBorder = OutlineInputBorder(
+  static const OutlineInputBorder focusedError = OutlineInputBorder(
     borderSide: BorderSide.none,
   );
 
-  static const OutlineInputBorder errorBorder = OutlineInputBorder(
+  static const OutlineInputBorder error = OutlineInputBorder(
     borderSide: BorderSide.none,
   );
 }
+
+enum ReviewPopupMenuItem { report }
 
 enum Sport {
   kegeln,

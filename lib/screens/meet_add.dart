@@ -82,21 +82,12 @@ class _AddMeet extends State<AddMeet> {
                               onChanged: (v) => nameController.text = v,
                               decoration: const InputDecoration(
                                 hintText: 'Titel',
-                                border: UnderlineInputBorder(
-                                  borderSide: BorderSide.none,
-                                ),
-                                focusedErrorBorder: UnderlineInputBorder(
-                                  borderSide: BorderSide.none,
-                                ),
-                                errorBorder: UnderlineInputBorder(
-                                  borderSide: BorderSide.none,
-                                ),
-                                enabledBorder: UnderlineInputBorder(
-                                  borderSide: BorderSide.none,
-                                ),
-                                focusedBorder: UnderlineInputBorder(
-                                  borderSide: BorderSide.none,
-                                ),
+                                border: AppInputBorders.border,
+                                focusedErrorBorder:
+                                    AppInputBorders.focusedError,
+                                errorBorder: AppInputBorders.error,
+                                enabledBorder: AppInputBorders.enabled,
+                                focusedBorder: AppInputBorders.focused,
                               ),
                             ),
                           ),
@@ -109,10 +100,10 @@ class _AddMeet extends State<AddMeet> {
                               decoration: const InputDecoration(
                                 border: AppInputBorders.border,
                                 focusedErrorBorder:
-                                    AppInputBorders.focusedErrorBorder,
-                                errorBorder: AppInputBorders.errorBorder,
-                                enabledBorder: AppInputBorders.enabledBorder,
-                                focusedBorder: AppInputBorders.focusedBorder,
+                                    AppInputBorders.focusedError,
+                                errorBorder: AppInputBorders.error,
+                                enabledBorder: AppInputBorders.enabled,
+                                focusedBorder: AppInputBorders.focused,
                                 labelText: 'description',
                               ),
                               maxLines: 3,

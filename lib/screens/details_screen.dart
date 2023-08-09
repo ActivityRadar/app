@@ -642,8 +642,6 @@ class ReviewBox extends StatelessWidget {
   }
 }
 
-enum ReviewPopupMenuItem { report }
-
 class ExpandableText extends StatelessWidget {
   const ExpandableText({super.key, required this.text});
 

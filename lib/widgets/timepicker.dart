@@ -21,6 +21,7 @@ class _DateTimePickerState extends State<DateTimePicker> {
           lastDate: today.add(const Duration(days: 14)),
         ) ??
         selectedDate;
+    _selectTime();
     if (picked != selectedDate) {
       setState(() {
         selectedDate = picked;

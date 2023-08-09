@@ -143,8 +143,6 @@ class MeetPage extends StatelessWidget {
   }
 }
 
-enum SampleItem { itemOne, itemTwo, itemThree }
-
 class MeetPopupMenuCard extends StatefulWidget {
   const MeetPopupMenuCard({super.key});
 
@@ -153,21 +151,22 @@ class MeetPopupMenuCard extends StatefulWidget {
 }
 
 class _MeetPopupMenuCardState extends State<MeetPopupMenuCard> {
-  SampleItem? selectedMenu;
+  ReviewPopupMenuItem? selectedMenu;
 
   @override
   Widget build(BuildContext context) {
-    return PopupMenuButton<SampleItem>(
+    return PopupMenuButton<ReviewPopupMenuItem>(
       initialValue: selectedMenu,
       // Callback that sets the selected popup menu item.
-      onSelected: (SampleItem item) {
+      onSelected: (ReviewPopupMenuItem item) {
         setState(() {
           selectedMenu = item;
         });
       },
-      itemBuilder: (BuildContext context) => <PopupMenuEntry<SampleItem>>[
-        PopupMenuItem<SampleItem>(
-          value: SampleItem.itemOne,
+      itemBuilder: (BuildContext context) =>
+          <PopupMenuEntry<ReviewPopupMenuItem>>[
+        PopupMenuItem<ReviewPopupMenuItem>(
+          value: ReviewPopupMenuItem.report,
           child: const Text('Report as inappropriate',
               style: TextStyle(fontSize: 14)),
           onTap: () => _showDialog(context),

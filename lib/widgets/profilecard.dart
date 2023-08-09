@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-class ProfilCard extends StatelessWidget {
-  const ProfilCard({
+class ProfileCard extends StatelessWidget {
+  const ProfileCard({
     super.key,
     required this.height,
   });
@@ -59,7 +59,7 @@ class ProfilCard extends StatelessWidget {
                           ],
                         ),
                         height: 10,
-                        width: 220.0,
+                        width: 180.0,
                         child: Row(
                           mainAxisSize: MainAxisSize.min,
                           children: <Widget>[
@@ -82,7 +82,7 @@ class ProfilCard extends StatelessWidget {
                               'Level: 5',
                               style: TextStyle(fontSize: 10),
                             ),
-                            SizedBox(width: 160),
+                            Spacer(),
                             Padding(
                               padding: EdgeInsets.only(left: 2),
                               child: Text(

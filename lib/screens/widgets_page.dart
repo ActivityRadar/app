@@ -3,11 +3,11 @@ import 'package:app/screens/meet_add.dart';
 import 'package:app/screens/meet_page.dart';
 import 'package:app/widgets/meet_card.dart';
 import 'package:app/widgets/meet_map.dart';
-import 'package:app/widgets/profilcard.dart';
+import 'package:app/widgets/profilecard.dart';
 import 'package:flutter/material.dart';
 
-class WidgetsGird extends StatelessWidget {
-  const WidgetsGird({super.key});
+class TestWidget extends StatelessWidget {
+  const TestWidget({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -15,13 +15,13 @@ class WidgetsGird extends StatelessWidget {
 
     return const MaterialApp(
       title: title,
-      home: Scaffold(body: ProfilBar()),
+      home: Scaffold(body: ProfileBar()),
     );
   }
 }
 
-class ProfilBar extends StatelessWidget {
-  const ProfilBar({
+class ProfileBar extends StatelessWidget {
+  const ProfileBar({
     super.key,
   });
 
@@ -35,7 +35,7 @@ class ProfilBar extends StatelessWidget {
       home: Scaffold(
         body: Column(
           children: [
-            ProfilCard(height: height),
+            ProfileCard(height: height),
             const SizedBox(
               width: 500, // Breite der Karte
               height: 200, // Höhe der Karte
