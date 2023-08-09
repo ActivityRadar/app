@@ -1,11 +1,13 @@
 import 'dart:convert';
 import 'dart:math';
+import 'dart:typed_data';
 
 import 'package:crypto/crypto.dart';
 import 'package:flutter/material.dart';
 import 'package:aws_s3_api/s3-2006-03-01.dart';
 
 import 'package:app/constants/secrets.dart' as secrets;
+import 'package:flutter_image_compress/flutter_image_compress.dart';
 
 AwsClientCredentials credentials = AwsClientCredentials(
     accessKey: secrets.awsAccessKey, secretKey: secrets.awsSecretKey);
@@ -94,10 +96,40 @@ class PhotoManager {
     return _storage[url]!;
   }
 
+  Future<MemoryImage> getThumbnail(String url) async {
+    late final img;
+    try {
+      img = await getPhoto(getThumbnailUrl(url));
+    } catch (e) {
+      print(e);
+      img = await getPhoto(url);
+    }
+
+    return img;
+  }
+
+  String getThumbnailUrl(String url) {
+    return "$url.thm";
+  }
+
+  Future<MemoryImage> compress(Uint8List bytes, int size) async {
+    final compressed = await FlutterImageCompress.compressWithList(bytes,
+        minWidth: size, minHeight: size);
+    return MemoryImage(compressed);
+  }
+
   Future<bool> setPhoto(MemoryImage img, String url) async {
     try {
-      await PhotoService.uploadPhoto(image: img, path: url);
-      _storage[url] = img;
+      // compress image and upload as thumbnail first
+      final thumbnail = await compress(img.bytes, 300);
+      final thumbnailUrl = getThumbnailUrl(url);
+      await PhotoService.uploadPhoto(image: thumbnail, path: thumbnailUrl);
+      _storage[thumbnailUrl] = thumbnail;
+
+      // now compress to avoid uploading big images
+      final downsized = await compress(img.bytes, 1000);
+      await PhotoService.uploadPhoto(image: downsized, path: url);
+      _storage[url] = downsized;
       return true;
     } catch (e) {
       return false;

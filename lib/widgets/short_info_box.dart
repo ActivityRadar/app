@@ -31,7 +31,7 @@ class ShortInfoBox extends StatelessWidget {
         thumbnail = Future.value(
             const AssetImage("assets/locationPhotoPlaceholder.jpg"));
       } else {
-        thumbnail = PhotoManager.instance.getPhoto(info!.photos[0].url);
+        thumbnail = PhotoManager.instance.getThumbnail(info!.photos[0].url);
       }
       return GestureDetector(
         onTap: onPressed,
