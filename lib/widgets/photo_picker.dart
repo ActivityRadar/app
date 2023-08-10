@@ -78,12 +78,13 @@ Future<dynamic> bottomSheetPhotoSourcePicker(
     String path = PhotoService.createPath(
         mode: mode, extension: ext, locationId: locationId, userId: userId);
 
+    final photoData = PhotoUrl(url: path);
     try {
-      final data = PhotoUrl(url: path);
       if (mode == "location") {
-        await LocationsProvider.addPhoto(locationId: locationId!, data: data);
+        await LocationsProvider.addPhoto(
+            locationId: locationId!, data: photoData);
       } else {
-        await UsersProvider.createProfilePhoto(data: data);
+        await UsersProvider.createProfilePhoto(data: photoData);
       }
     } catch (e) {
       print("Creation in backend failed with error $e! Not uploading image...");
@@ -95,9 +96,10 @@ Future<dynamic> bottomSheetPhotoSourcePicker(
     // if the photo could not be uploaded, the info is deleted in the backend too
     if (!uploaded) {
       if (mode == "location") {
-        await LocationPhotoService().delete(path, locationId!);
+        await LocationsProvider.removePhoto(
+            locationId: locationId!, data: photoData);
       } else {
-        await ProfilePhotoService().delete();
+        await UsersProvider.deleteProfilePhoto();
       }
     }
 
