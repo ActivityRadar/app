@@ -1,7 +1,7 @@
 import 'package:app/constants/constants.dart';
 import 'package:app/screens/meet_page.dart';
 import 'package:app/widgets/meet_map.dart';
-
+import 'package:app/constants/design.dart';
 import 'package:flutter/material.dart';
 
 class MeetCard extends StatelessWidget {

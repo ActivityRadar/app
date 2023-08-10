@@ -1,5 +1,5 @@
 import 'package:app/constants/constants.dart';
-import 'package:app/widgets/customsnackbar.dart';
+import 'package:app/widgets/custom_snackbar.dart';
 import 'package:flutter/material.dart';
 
 class PasswordSwitch extends StatelessWidget {

@@ -1,3 +1,4 @@
+import 'package:app/widgets/custom_text.dart';
 import 'package:flutter/material.dart';
 
 class vote_rate extends StatelessWidget {
@@ -10,13 +11,7 @@ class vote_rate extends StatelessWidget {
     return const Row(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: <Widget>[
-        Text(
-          "4.1",
-          style: TextStyle(
-            color: Colors.black54,
-            fontSize: 18.0,
-          ),
-        ),
+        SmallText(text: "4.1"),
         Icon(
           Icons.star,
           color: Colors.amber,
@@ -42,13 +37,7 @@ class vote_rate extends StatelessWidget {
           color: Colors.amber,
           size: 15.0,
         ),
-        Text(
-          "(243)",
-          style: TextStyle(
-            color: Colors.black54,
-            fontSize: 18.0,
-          ),
-        )
+        SmallText(text: "(243)"),
       ],
     );
   }
@@ -63,19 +52,33 @@ class RatingScore extends StatelessWidget {
   Widget build(BuildContext context) {
     String scoreString = score == null ? "-" : score.toString();
     return Row(children: [
-      Text(
-        scoreString,
-        style: const TextStyle(
-          color: Colors.black54,
-          fontSize: 18.0,
-        ),
-      ),
+      CustomText(text: scoreString),
       const Icon(
         Icons.star,
         color: Colors.amber,
         size: 15.0,
       )
     ]);
+  }
+}
+
+class CustomText extends StatelessWidget {
+  const CustomText({
+    super.key,
+    required this.text,
+  });
+
+  final String text;
+
+  @override
+  Widget build(BuildContext context) {
+    return Text(
+      text,
+      style: const TextStyle(
+        color: Colors.black54,
+        fontSize: 18.0,
+      ),
+    );
   }
 }
 
@@ -95,13 +98,7 @@ class RatingSummary extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
         RatingScore(score: average),
-        Text(
-          "(${count ?? '?'})",
-          style: const TextStyle(
-            color: Colors.black54,
-            fontSize: 18.0,
-          ),
-        )
+        SmallText(text: "(${count ?? '?'})"),
       ],
     );
   }

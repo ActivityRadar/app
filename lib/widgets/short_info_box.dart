@@ -4,6 +4,7 @@ import 'package:app/model/generated.dart';
 import 'package:app/provider/photos.dart';
 import 'package:flutter/material.dart';
 import 'package:app/widgets/vote.dart';
+import 'package:app/constants/design.dart';
 
 class ShortInfoBox extends StatelessWidget {
   const ShortInfoBox({

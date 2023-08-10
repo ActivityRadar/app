@@ -1,7 +1,7 @@
 import 'package:app/app_state.dart';
 import 'package:app/provider/backend.dart';
 import 'package:app/screens/forgot_password.dart';
-import 'package:app/widgets/customsnackbar.dart';
+import 'package:app/widgets/custom_snackbar.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 

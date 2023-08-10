@@ -1,6 +1,7 @@
 import 'package:app/app_state.dart';
 import 'package:app/constants/constants.dart';
 import 'package:app/model/generated.dart';
+import 'package:app/constants/design.dart';
 import 'package:app/provider/backend.dart';
 import 'package:app/screens/auth.dart';
 import 'package:app/screens/setting_password.dart';

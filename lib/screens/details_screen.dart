@@ -1,3 +1,4 @@
+import 'package:app/constants/design.dart';
 import 'package:app/widgets/bottomsheet.dart';
 import 'package:app/widgets/login_reminder.dart';
 import 'package:flutter/material.dart';

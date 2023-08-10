@@ -1,4 +1,5 @@
 import 'package:app/constants/constants.dart';
+import 'package:app/constants/design.dart';
 import 'package:app/widgets/photo_picker.dart';
 import 'package:flutter/material.dart';
 import '../widgets/filter_discipline.dart';

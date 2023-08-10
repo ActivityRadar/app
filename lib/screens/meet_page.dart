@@ -1,4 +1,5 @@
 import 'package:app/constants/constants.dart';
+import 'package:app/constants/design.dart';
 import 'package:app/widgets/meet_map.dart';
 import 'package:flutter/material.dart';
 
@@ -104,6 +105,46 @@ class MeetPage extends StatelessWidget {
                         TextButton(
                             onPressed: () {}, child: Text("Anfrage senden")),
                       ]),
+                  Center(
+                    child: Text(
+                      "Table Tennis",
+                      style: TextStyle(
+                          color: const Color.fromARGB(182, 0, 0, 0),
+                          fontWeight: FontWeight.bold,
+                          fontSize: width * 0.05),
+                    ),
+                  ),
+                  Padding(
+                      padding: const EdgeInsets.only(left: 9.0, top: 10.0),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            "Time",
+                            style: TextStyle(
+                                color: const Color.fromARGB(182, 0, 0, 0),
+                                fontWeight: FontWeight.bold,
+                                fontSize: width * 0.05),
+                          ),
+                          Text(
+                            "11:00",
+                            style: TextStyle(
+                                color: const Color.fromARGB(182, 0, 0, 0),
+                                fontWeight: FontWeight.bold,
+                                fontSize: width * 0.05),
+                          ),
+                        ],
+                      )),
+                  Padding(
+                    padding: const EdgeInsets.only(left: 9.0, top: 10.0),
+                    child: Text(
+                      "description",
+                      style: TextStyle(
+                          color: const Color.fromARGB(182, 0, 0, 0),
+                          fontWeight: FontWeight.bold,
+                          fontSize: width * 0.05),
+                    ),
+                  ),
                   Padding(
                     padding: const EdgeInsets.only(left: 9.0, top: 10.0),
                     child: Text(
