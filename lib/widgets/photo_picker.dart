@@ -16,9 +16,9 @@ Future<XFile?> pickImage(ImageSource source) async {
   return image;
 }
 
-Future<void> uploadImage({required XFile image, required String path}) async {
+Future<bool> uploadImage({required XFile image, required String path}) async {
   final img = MemoryImage(await image.readAsBytes());
-  await PhotoManager.instance.setPhoto(img, path);
+  return await PhotoManager.instance.setPhoto(img, path);
 }
 
 class ImageSourceButton extends StatelessWidget {
@@ -87,7 +87,16 @@ Future<dynamic> bottomSheetPhotoSourcePicker(
       return null;
     }
 
-    await uploadImage(image: photo, path: path);
+    final uploaded = await uploadImage(image: photo, path: path);
+
+    // if the photo could not be uploaded, the info is deleted in the backend too
+    if (!uploaded) {
+      if (mode == "location") {
+        await LocationPhotoService().delete(path, locationId!);
+      } else {
+        await ProfilePhotoService().delete();
+      }
+    }
 
     if (context.mounted) Navigator.of(context).pop();
 

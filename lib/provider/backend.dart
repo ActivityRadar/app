@@ -28,7 +28,7 @@ class TokenManager {
 enum HttpMethod { get, post, put, delete }
 
 class BackendService {
-  var client = http.Client();
+  final client = http.Client();
   final String apiKey = "";
   final String host = "test.activity-radar.com";
   final String scheme = "https";
@@ -297,7 +297,7 @@ class LocationPhotoService {
         body: PhotoUrl(url: path).toJson());
   }
 
-  Future<http.Response> delete(String locationId, String photoId) async {
+  Future<http.Response> delete(String photoId, String locationId) async {
     return await BackendService.instance.sendRequest(
       HttpMethod.delete,
       "${_prefix(locationId)}/$photoId",

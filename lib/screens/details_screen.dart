@@ -540,7 +540,7 @@ class ReviewBox extends StatelessWidget {
         UserInfoManager.instance.getUserInfo(review.userId).then((info) {
       userInfo = info;
       if (info.avatar != null) {
-        return PhotoManager.instance.getPhoto(info.avatar!.url);
+        return PhotoManager.instance.getThumbnail(info.avatar!.url);
       }
       return null;
     });

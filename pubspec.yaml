@@ -54,6 +54,7 @@ dependencies:
     git:
       url: https://github.com/lpongetti/flutter_map_marker_cluster
       ref: dee9902
+  flutter_image_compress: ^2.0.4
     # see https://github.com/lpongetti/flutter_map_marker_cluster/pull/173
 
 dependency_overrides:
