@@ -205,8 +205,10 @@ class _DetailsScreenState extends State<DetailsScreen> {
   }
 
   void _addPhoto() {
-    bottomSheetPhotoSourcePicker(
-        context: context, mode: "location", locationId: locationId);
+    conditionalShowLoginReminder(
+        context: context,
+        loggedInCallback: () => bottomSheetPhotoSourcePicker(
+            context: context, mode: "location", locationId: locationId));
   }
 
   SliverAppBar _appBarPlaceHolder(double width) {

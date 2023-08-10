@@ -63,10 +63,6 @@ class BackendService {
       Map<String, String>? additionalHeaders,
       bool encodeToJson = true,
       bool decodeFromJson = true}) async {
-    if (method != HttpMethod.get && body == null) {
-      throw Exception();
-    }
-
     Uri url = Uri(
         scheme: scheme,
         host: host,
@@ -74,7 +70,7 @@ class BackendService {
         queryParameters: queryParams ?? {});
     Map<String, String> headers = await getHeaders(additionalHeaders);
 
-    if (encodeToJson) {
+    if (encodeToJson && body != null) {
       body = jsonEncode(body);
     }
 
