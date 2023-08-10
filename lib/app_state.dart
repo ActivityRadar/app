@@ -1,5 +1,5 @@
 import 'package:app/model/generated.dart';
-import 'package:app/provider/backend.dart';
+import 'package:app/provider/generated/users_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_map/plugin_api.dart';
 import 'package:latlong2/latlong.dart';
@@ -24,7 +24,11 @@ class AppState extends ChangeNotifier {
   LatLng center = LatLng(52.9, 12.5);
 
   void updateUserInfo() async {
-    _currentUser = await UserService.getCurrentUserInfo();
+    _currentUser = await UsersProvider.getThisUser();
+  }
+
+  void logout() {
+    _currentUser = null;
   }
 
   bool get isLoggedIn {
