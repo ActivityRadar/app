@@ -5,7 +5,25 @@ import 'package:app/model/generated.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
 
-const storage = FlutterSecureStorage();
+class TokenManager {
+  static const storage = FlutterSecureStorage();
+
+  static final TokenManager _instance = TokenManager._internal();
+  static TokenManager get instance => _instance;
+  TokenManager._internal();
+
+  Future<String?> getToken() async {
+    return await storage.read(key: "token");
+  }
+
+  Future<void> setToken(String? token) async {
+    await storage.write(key: "token", value: token);
+  }
+
+  Future<void> deleteToken() async {
+    await storage.write(key: "token", value: null);
+  }
+}
 
 enum HttpMethod { get, post, put, delete }
 
@@ -27,7 +45,7 @@ class BackendService {
       'Accept': 'application/json',
     };
 
-    String? authToken = await storage.read(key: "token");
+    String? authToken = await TokenManager.instance.getToken();
     if (authToken != null) {
       headers['Authorization'] = 'Bearer $authToken';
     }
@@ -107,7 +125,7 @@ class AuthService {
           });
 
       String token = responseBody["access_token"];
-      await storage.write(key: "token", value: token);
+      await TokenManager.instance.setToken(token);
       return true;
     } catch (e) {
       print("Login failed!");

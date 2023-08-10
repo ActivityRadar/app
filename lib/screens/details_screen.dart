@@ -1,4 +1,5 @@
 import 'package:app/widgets/bottomsheet.dart';
+import 'package:app/widgets/login_reminder.dart';
 import 'package:flutter/material.dart';
 
 import 'package:carousel_slider/carousel_slider.dart';
@@ -384,7 +385,11 @@ class _DetailsScreenState extends State<DetailsScreen> {
                           textStyle: const TextStyle(
                               fontSize: 15, color: Colors.black54),
                         ),
-                        onPressed: () => _showReviewBottomSheet(context),
+                        onPressed: () => conditionalShowLoginReminder(
+                            context: context,
+                            loggedInCallback: () async {
+                              _showReviewBottomSheet(context);
+                            }),
                         child: const Text('review'),
                       ),
                       Icon(Icons.edit_note),

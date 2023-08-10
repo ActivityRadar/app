@@ -1,4 +1,6 @@
+import 'package:app/app_state.dart';
 import 'package:app/constants/constants.dart';
+import 'package:app/provider/backend.dart';
 import 'package:app/screens/auth.dart';
 import 'package:app/screens/setting_password.dart';
 import 'package:app/screens/settings_email.dart';
@@ -6,6 +8,7 @@ import 'package:app/screens/settings_name.dart';
 import 'package:app/screens/settings_privacy.dart';
 
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class SettingScreen extends StatelessWidget {
   const SettingScreen({Key? key}) : super(key: key);
@@ -43,7 +46,7 @@ class SettingScreen extends StatelessWidget {
                 textStyle:
                     const TextStyle(fontSize: 13, fontWeight: FontWeight.bold),
               ),
-              onPressed: () {},
+              onPressed: () => handleLogout(context),
               child: const Text('logout'),
             ),
           ],
@@ -353,7 +356,7 @@ class SettingScreen extends StatelessWidget {
                     textStyle: const TextStyle(
                         fontSize: 13, fontWeight: FontWeight.bold),
                   ),
-                  onPressed: () {},
+                  onPressed: () => handleLogout(context),
                   child: const Text('logout'),
                 ),
                 TextButton(
@@ -401,4 +404,12 @@ class PhotoShower extends StatelessWidget {
       body: Image(image: image),
     );
   }
+}
+
+void handleLogout(BuildContext context) {
+  Provider.of<AppState>(context, listen: false).logout();
+  TokenManager.instance.deleteToken();
+  ScaffoldMessenger.of(context).showSnackBar(
+    const SnackBar(content: Text('Logged out!')),
+  );
 }
