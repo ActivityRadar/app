@@ -23,12 +23,14 @@ class AppState extends ChangeNotifier {
   double zoom = 13;
   LatLng center = LatLng(52.9, 12.5);
 
-  void updateUserInfo() async {
+  Future<void> updateUserInfo() async {
     _currentUser = await UsersProvider.getThisUser();
+    notifyListeners();
   }
 
   void logout() {
     _currentUser = null;
+    notifyListeners();
   }
 
   bool get isLoggedIn {
