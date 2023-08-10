@@ -92,6 +92,9 @@ class DisplayNameSwitch extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.only(top: 8, bottom: 4),
               child: GestureDetector(
+                  onTap: () {
+                    bottomSheetAvatarAction(context);
+                  },
                   child: avatarFutureBuilder(
                     context: context,
                     radius: 50,
@@ -232,5 +235,60 @@ Widget avatarFutureBuilder({
           img = const AssetImage('assets/locationPhotoPlaceholder.jpg');
         }
         return CircleAvatar(backgroundImage: img, radius: radius);
+      });
+}
+
+Future<void> bottomSheetAvatarAction(BuildContext context) async {
+  final state = Provider.of<AppState>(context, listen: false);
+  final currentAvatar = state.currentUser!.avatar;
+  final userId = state.currentUser!.id;
+
+  Future<void> updateAndReturn({bool returnAfter = true}) async {
+    Future f = state.updateUserInfo();
+    if (returnAfter) {
+      f.then((_) => Navigator.of(context).pop());
+    }
+  }
+
+  if (currentAvatar == null) {
+    avatarPicker(context, userId)
+        .then((_) => updateAndReturn(returnAfter: false));
+  } else {
+    bottomSheetBase(
+        context: context,
+        builder: (context) {
+          return Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              ListTile(
+                leading: const Icon(Icons.delete),
+                title: const Text("Delete current photo"),
+                onTap: () {
+                  UsersProvider.deleteProfilePhoto()
+                      .then((_) => updateAndReturn());
+                  // TODO: do something to show the user that the photo is gone
+                },
+              ),
+              ListTile(
+                leading: const Icon(Icons.upload),
+                title: const Text("Set new photo"),
+                onTap: () {
+                  avatarPicker(context, userId).then((_) => updateAndReturn());
+                },
+              )
+            ],
+          );
+        });
+  }
+}
+
+Future<void> avatarPicker(BuildContext context, String userId) async {
+  await bottomSheetPhotoSourcePicker(
+      context: context,
+      mode: "profile-picture",
+      userId: userId,
+      onUploadCallback: (url) {
+        // TODO: display image in widget (make DisplayNameSwitch stateful
+        // and give it a refresh function that is called here)
       });
 }
