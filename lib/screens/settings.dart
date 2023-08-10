@@ -1,5 +1,6 @@
 import 'package:app/app_state.dart';
 import 'package:app/constants/constants.dart';
+import 'package:app/model/generated.dart';
 import 'package:app/provider/backend.dart';
 import 'package:app/screens/auth.dart';
 import 'package:app/screens/setting_password.dart';
@@ -18,6 +19,8 @@ class SettingScreen extends StatelessWidget {
     const double collapsedHeight = 90;
     const double expandedHeight = 160;
 
+    final state = Provider.of<AppState>(context);
+
     return Scaffold(
       body: CustomScrollView(slivers: <Widget>[
         SliverAppBar(
@@ -25,37 +28,43 @@ class SettingScreen extends StatelessWidget {
           collapsedHeight: collapsedHeight,
           pinned: true,
           backgroundColor: DesignColors.kBackgroundColor,
-          leading: TextButton(
-            style: TextButton.styleFrom(
-              textStyle:
-                  const TextStyle(fontSize: 13, fontWeight: FontWeight.bold),
-            ),
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => const AuthScreen(),
+          leading: state.isLoggedIn
+              ? null
+              : TextButton(
+                  style: TextButton.styleFrom(
+                    textStyle: const TextStyle(
+                        fontSize: 13, fontWeight: FontWeight.bold),
+                  ),
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const AuthScreen(),
+                      ),
+                    );
+                  },
+                  child: const Text('Login'),
                 ),
-              );
-            },
-            child: const Text('Login'),
-          ),
           actions: <Widget>[
-            TextButton(
-              style: TextButton.styleFrom(
-                textStyle:
-                    const TextStyle(fontSize: 13, fontWeight: FontWeight.bold),
+            if (state.isLoggedIn)
+              TextButton(
+                style: TextButton.styleFrom(
+                  textStyle: const TextStyle(
+                      fontSize: 13, fontWeight: FontWeight.bold),
+                ),
+                onPressed: () => handleLogout(context),
+                child: const Text('logout'),
               ),
-              onPressed: () => handleLogout(context),
-              child: const Text('logout'),
-            ),
           ],
           flexibleSpace: LayoutBuilder(
             builder: (BuildContext context, BoxConstraints constraints) {
               return FlexibleSpaceBar(
                 //ToDo error beim scrollen
                 titlePadding: const EdgeInsets.all(16.0),
-                title: _appBarAvatar(context),
+                title: state.isLoggedIn
+                    ? _appBarAvatar(context)
+                    : const Text("Not signed in!",
+                        style: TextStyle(color: Colors.black)),
                 centerTitle: true,
               );
             },
@@ -66,127 +75,8 @@ class SettingScreen extends StatelessWidget {
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
-                const Padding(
-                  padding: EdgeInsets.only(top: 8, left: 15, bottom: 4),
-                  child: Text(
-                    "Konto",
-                  ),
-                ),
-                Card(
-                  shape: RoundedRectangleBorder(
-                    side: const BorderSide(
-                      color: Color.fromARGB(51, 241, 241, 241),
-                    ),
-                    borderRadius: BorderRadius.circular(AppStyle.cornerRadius),
-                  ),
-                  child: Column(
-                    children: [
-                      ListTile(
-                        shape: const RoundedRectangleBorder(
-                            borderRadius: BorderRadius.only(
-                                topLeft: Radius.circular(AppStyle.cornerRadius),
-                                topRight:
-                                    Radius.circular(AppStyle.cornerRadius))),
-                        tileColor: Colors.white,
-                        title: const Text('Username and Displayname'),
-                        onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => const DisplayNameSwitch(),
-                            ),
-                          );
-                        },
-                      ),
-                      const Divider(height: 0),
-                      ListTile(
-                        tileColor: Colors.white,
-                        title: const Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: <Widget>[
-                            Text('Displayname'),
-                            Text(
-                              'Max Mustermann',
-                              style: TextStyle(color: Colors.black26),
-                            ),
-                          ],
-                        ),
-                        onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => const DisplayNameSwitch(),
-                            ),
-                          );
-                        },
-                      ),
-                      const Divider(height: 0),
-                      ListTile(
-                        tileColor: Colors.white,
-                        title: const Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: <Widget>[
-                            Text('E-Mail'),
-                            Text(
-                              'max@mustermann.de',
-                              style: TextStyle(color: Colors.black26),
-                            ),
-                          ],
-                        ),
-                        onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => const EmailSwitch(),
-                            ),
-                          );
-                        },
-                      ),
-                      const Divider(height: 0),
-                      ListTile(
-                        tileColor: Colors.white,
-                        title: const Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: <Widget>[
-                            Text('Password'),
-                          ],
-                        ),
-                        onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => const PasswordSwitch(),
-                            ),
-                          );
-                        },
-                      ),
-                      const Divider(height: 0),
-                      ListTile(
-                        shape: const RoundedRectangleBorder(
-                            borderRadius: BorderRadius.only(
-                                bottomLeft:
-                                    Radius.circular(AppStyle.cornerRadius),
-                                bottomRight:
-                                    Radius.circular(AppStyle.cornerRadius))),
-                        tileColor: Colors.white,
-                        title: const Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: <Widget>[
-                            Text('Privacy'),
-                          ],
-                        ),
-                        onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => const PrivacySettingPage(),
-                            ),
-                          );
-                        },
-                      ),
-                    ],
-                  ),
-                ),
+                if (state.isLoggedIn)
+                  ..._accountSettings(context, state.currentUser!),
                 ..._appSettings(context),
                 ..._legalSettings(context)
               ],
@@ -197,14 +87,15 @@ class SettingScreen extends StatelessWidget {
               children: [
                 const Text("App-Version: Beta",
                     style: TextStyle(color: Colors.black45)),
-                TextButton(
-                  style: TextButton.styleFrom(
-                    textStyle: const TextStyle(
-                        fontSize: 13, fontWeight: FontWeight.bold),
+                if (state.isLoggedIn)
+                  TextButton(
+                    style: TextButton.styleFrom(
+                      textStyle: const TextStyle(
+                          fontSize: 13, fontWeight: FontWeight.bold),
+                    ),
+                    onPressed: () => handleLogout(context),
+                    child: const Text('logout'),
                   ),
-                  onPressed: () => handleLogout(context),
-                  child: const Text('logout'),
-                ),
                 TextButton(
                   style: TextButton.styleFrom(
                     textStyle: const TextStyle(
@@ -225,6 +116,164 @@ class SettingScreen extends StatelessWidget {
       ]),
     );
   }
+
+  Widget _appBarAvatar(BuildContext context) {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.end,
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        Stack(alignment: Alignment.center, children: [
+          avatarFutureBuilder(context: context, radius: 40),
+          Positioned(
+            bottom: 0,
+            right: 0,
+            child: GestureDetector(
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const DisplayNameSwitch(),
+                  ),
+                );
+              },
+              child: const CircleAvatar(
+                  radius: 8,
+                  child: Center(
+                    child: Icon(
+                      Icons.edit,
+                      size: 8,
+                    ),
+                  )),
+            ),
+          ),
+        ]),
+      ],
+    );
+  }
+
+  List<Widget> _accountSettings(BuildContext context, UserDetailed userInfo) {
+    return [
+      const Padding(
+        padding: EdgeInsets.only(top: 8, left: 15, bottom: 4),
+        child: Text(
+          "Konto",
+        ),
+      ),
+      Card(
+        shape: RoundedRectangleBorder(
+          side: const BorderSide(
+            color: Color.fromARGB(51, 241, 241, 241),
+          ),
+          borderRadius: BorderRadius.circular(AppStyle.cornerRadius),
+        ),
+        child: Column(
+          children: [
+            ListTile(
+              shape: const RoundedRectangleBorder(
+                  borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(AppStyle.cornerRadius),
+                      topRight: Radius.circular(AppStyle.cornerRadius))),
+              tileColor: Colors.white,
+              title: const Text('Username and Displayname'),
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const DisplayNameSwitch(),
+                  ),
+                );
+              },
+            ),
+            const Divider(height: 0),
+            ListTile(
+              tileColor: Colors.white,
+              title: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: <Widget>[
+                  const Text('Displayname'),
+                  Text(
+                    userInfo.displayName,
+                    style: const TextStyle(color: Colors.black26),
+                  ),
+                ],
+              ),
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const DisplayNameSwitch(),
+                  ),
+                );
+              },
+            ),
+            const Divider(height: 0),
+            ListTile(
+              tileColor: Colors.white,
+              title: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: <Widget>[
+                  Text('E-Mail'),
+                  Text(
+                    userInfo.authentication.email ?? "none@none.com",
+                    style: TextStyle(color: Colors.black26),
+                  ),
+                ],
+              ),
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const EmailSwitch(),
+                  ),
+                );
+              },
+            ),
+            const Divider(height: 0),
+            ListTile(
+              tileColor: Colors.white,
+              title: const Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: <Widget>[
+                  Text('Password'),
+                ],
+              ),
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const PasswordSwitch(),
+                  ),
+                );
+              },
+            ),
+            const Divider(height: 0),
+            ListTile(
+              shape: const RoundedRectangleBorder(
+                  borderRadius: BorderRadius.only(
+                      bottomLeft: Radius.circular(AppStyle.cornerRadius),
+                      bottomRight: Radius.circular(AppStyle.cornerRadius))),
+              tileColor: Colors.white,
+              title: const Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: <Widget>[
+                  Text('Privacy'),
+                ],
+              ),
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const PrivacySettingPage(),
+                  ),
+                );
+              },
+            ),
+          ],
+        ),
+      ),
+    ];
+  }
+
   List<Widget> _appSettings(BuildContext context) {
     return [
       const Padding(
