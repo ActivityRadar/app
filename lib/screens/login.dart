@@ -1,6 +1,8 @@
+import 'package:app/app_state.dart';
 import 'package:app/provider/backend.dart';
 import 'package:app/screens/forgot_password.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 // ignore_for_file: avoid_print
 class LoginScreen extends StatefulWidget {
@@ -12,7 +14,7 @@ class LoginScreen extends StatefulWidget {
 
 class _LoginScreenState extends State<LoginScreen> {
   final _formKey = GlobalKey<FormState>();
-  TextEditingController emailController = TextEditingController();
+  TextEditingController usernameController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
 
   @override
@@ -31,7 +33,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       padding: const EdgeInsets.symmetric(
                           horizontal: 8, vertical: 16),
                       child: TextFormField(
-                        controller: emailController,
+                        controller: usernameController,
                         decoration: const InputDecoration(
                             border: OutlineInputBorder(),
                             labelText: "Username"),
@@ -84,27 +86,39 @@ class _LoginScreenState extends State<LoginScreen> {
                           horizontal: 8, vertical: 16.0),
                       child: Center(
                         child: ElevatedButton(
-                          onPressed: () async {
-                            if (_formKey.currentState!.validate()) {
-                              // Navigate the user to the Home page
-                              print(emailController.text);
-                              print(passwordController.text);
-                              if (await AuthService.login(emailController.text,
-                                  passwordController.text)) {
-                                print("Login successful!");
-                              }
-                            } else {
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(
-                                    content: Text('Please fill input')),
-                              );
-                            }
+                          onPressed: () {
+                            handleLogin(context, usernameController.text,
+                                passwordController.text, _formKey);
                           },
                           child: const Text('Submit'),
                         ),
                       ),
                     ),
                   ]))),
+    );
+  }
+}
+
+void handleLogin(BuildContext context, String username, String password,
+    GlobalKey<FormState> formKey) {
+  if (formKey.currentState!.validate()) {
+    // Navigate the user to the Home page
+    AuthService.login(username, password).then((success) {
+      if (success) {
+        Provider.of<AppState>(context, listen: false).updateUserInfo();
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Login successful!')),
+        );
+        Navigator.of(context).pop();
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Login failed!')),
+        );
+      }
+    });
+  } else {
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(content: Text('Please fill input')),
     );
   }
 }
