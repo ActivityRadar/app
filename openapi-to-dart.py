@@ -330,12 +330,14 @@ for path, content in paths.items():
             pass
 
         return_statement = ""
+        response_body_type = ""
         if return_type != "void":
             if return_type.startswith("List"):
                 t = return_type.removeprefix("List<")[:-1]
                 return_statement = (
-                    f"return responseBody.map((item) => {t}.fromJson(item)).to_list();"
+                    f"return responseBody.map((item) => {t}.fromJson(item)).toList();"
                 )
+                response_body_type = "List "
             else:
                 if is_standart_dart_type(return_type):
                     return_statement = "return responseBody;"
@@ -347,7 +349,7 @@ for path, content in paths.items():
         send_request_args_string = ",\n".join(send_request_args)
         send_request_prefix = ""
         if return_type != "void":
-            send_request_prefix = f"final responseBody = "
+            send_request_prefix = f"final {response_body_type}responseBody = "
 
         function_body = (
             f"{q_string}"
