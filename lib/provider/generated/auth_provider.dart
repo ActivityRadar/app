@@ -3,12 +3,14 @@ import 'package:app/provider/backend.dart';
 
 class AuthProvider {
   /// Login
-  static Future<void> login({required LoginBody data}) async {
-    await BackendService.instance.sendRequest(HttpMethod.post, "/auth/token",
+  static Future<AuthTokenBody> login({required LoginBody data}) async {
+    final responseBody = await BackendService.instance.sendRequest(
+        HttpMethod.post, "/auth/token",
         body: data.toJson(),
         additionalHeaders: {
           "Content-Type": "application/x-www-form-urlencoded"
         },
         encodeToJson: false);
+    return AuthTokenBody.fromJson(responseBody);
   }
 }
