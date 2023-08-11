@@ -17,11 +17,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
   final _formUsernameKey = GlobalKey<FormState>();
   final _formCodeKey = GlobalKey<FormState>();
   TextEditingController emailController = TextEditingController();
-  TextEditingController passwordController = TextEditingController();
-  TextEditingController dateInput = TextEditingController();
-  TextEditingController secondpasswordController = TextEditingController();
   TextEditingController usernameController = TextEditingController();
-  TextEditingController verifycode = TextEditingController();
+  TextEditingController dateInput = TextEditingController();
+  TextEditingController passwordController = TextEditingController();
+  TextEditingController passwordRepeatController = TextEditingController();
+  TextEditingController verifyCode = TextEditingController();
 
   @override
   void initState() {
@@ -65,6 +65,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
                     child: TextFormField(
                       controller: emailController,
+                      keyboardType: TextInputType.emailAddress,
                       decoration: const InputDecoration(
                           border: OutlineInputBorder(), labelText: "email"),
                       validator: (value) {
@@ -118,6 +119,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     padding:
                         const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
                     child: TextFormField(
+                      obscureText: true,
                       controller: passwordController,
                       decoration: const InputDecoration(
                           border: OutlineInputBorder(), labelText: "Password"),
@@ -126,7 +128,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           return 'Please enter your Password';
                         }
                         if (passwordController.text !=
-                            secondpasswordController.text) {
+                            passwordRepeatController.text) {
                           return 'Password is not the same ';
                         }
                         if (validateStructure(passwordController.text)) {
@@ -141,7 +143,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     padding:
                         const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
                     child: TextFormField(
-                      controller: secondpasswordController,
+                      obscureText: true,
+                      controller: passwordRepeatController,
                       decoration: const InputDecoration(
                           border: OutlineInputBorder(), labelText: "Password"),
                       validator: (secondvalue) {
@@ -151,7 +154,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         if (passwordController.text != secondvalue) {
                           return 'Password is not the same';
                         }
-                        if (validateStructure(secondpasswordController.text)) {
+                        if (validateStructure(passwordRepeatController.text)) {
                         } else {
                           return 'Password rules units';
                         }
@@ -204,6 +207,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     padding:
                         const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
                     child: TextFormField(
+                      autocorrect: false,
+                      keyboardType: TextInputType.visiblePassword,
                       controller: usernameController,
                       decoration: const InputDecoration(
                         border: OutlineInputBorder(),
@@ -336,7 +341,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     padding:
                         const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
                     child: TextFormField(
-                      controller: verifycode,
+                      controller: verifyCode,
                       decoration: const InputDecoration(
                           border: OutlineInputBorder(),
                           labelText: "Verify Code"),

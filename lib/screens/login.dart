@@ -33,6 +33,8 @@ class _LoginScreenState extends State<LoginScreen> {
                       padding: const EdgeInsets.symmetric(
                           horizontal: 8, vertical: 16),
                       child: TextFormField(
+                        autocorrect: false,
+                        keyboardType: TextInputType.visiblePassword,
                         controller: usernameController,
                         decoration: const InputDecoration(
                             border: OutlineInputBorder(),

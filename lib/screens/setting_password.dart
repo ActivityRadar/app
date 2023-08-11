@@ -10,7 +10,7 @@ class PasswordSwitch extends StatelessWidget {
 
     TextEditingController oldPasswordController = TextEditingController();
     TextEditingController newPasswordController = TextEditingController();
-    TextEditingController newPasswordsecondController = TextEditingController();
+    TextEditingController newPasswordRepeatController = TextEditingController();
 
     return Scaffold(
       appBar: AppBar(
@@ -63,6 +63,7 @@ class PasswordSwitch extends StatelessWidget {
                 padding:
                     const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
                 child: TextFormField(
+                  obscureText: true,
                   controller: oldPasswordController,
                   decoration: const InputDecoration(
                       border: UnderlineInputBorder(
@@ -103,6 +104,7 @@ class PasswordSwitch extends StatelessWidget {
                 padding:
                     const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
                 child: TextFormField(
+                  obscureText: true,
                   controller: newPasswordController,
                   decoration: const InputDecoration(
                       border: UnderlineInputBorder(
@@ -137,7 +139,8 @@ class PasswordSwitch extends StatelessWidget {
                 padding:
                     const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
                 child: TextFormField(
-                  controller: newPasswordsecondController,
+                  obscureText: true,
+                  controller: newPasswordRepeatController,
                   decoration: const InputDecoration(
                       border: UnderlineInputBorder(
                         borderSide: BorderSide.none,

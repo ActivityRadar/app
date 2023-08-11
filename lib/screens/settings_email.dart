@@ -62,6 +62,7 @@ class EmailSwitch extends StatelessWidget {
                     const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
                 child: TextFormField(
                   controller: emailController,
+                  keyboardType: TextInputType.emailAddress,
                   decoration: const InputDecoration(
                       border: UnderlineInputBorder(
                         borderSide: BorderSide.none,
