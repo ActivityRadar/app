@@ -8,7 +8,7 @@ class DesignColors {
 class AppStyle {
   static const double cornerRadius = 20;
   static const double cornerRadiusSearch = 80;
-  static const double cornerRadiusBottomSheet = 20;
+  static const double cornerRadiusBottomSheet = 25.0;
   static const double kDefaultPadding = 20.0;
 }
 

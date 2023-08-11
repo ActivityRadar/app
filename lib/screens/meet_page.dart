@@ -43,16 +43,9 @@ class MeetPage extends StatelessWidget {
                                 children: [
                                   Padding(
                                     padding: EdgeInsets.only(left: 12.0),
-                                    child: Chip(
-                                        label: Text(
-                                          "Table Tennis",
-                                          style: TextStyle(
-                                              color:
-                                                  DesignColors.kBackgroundColor,
-                                              fontSize: 10),
-                                        ),
-                                        backgroundColor:
-                                            DesignColors.naviColor),
+                                    child: CustomChip(
+                                      text: "Table Tennis",
+                                    ),
                                   ),
                                   Padding(
                                       padding: EdgeInsets.only(right: 12.0),
@@ -139,6 +132,26 @@ class MeetPage extends StatelessWidget {
         )
       ]),
     );
+  }
+}
+
+class CustomChip extends StatelessWidget {
+  const CustomChip({
+    super.key,
+    required this.text,
+  });
+
+  final String text;
+
+  @override
+  Widget build(BuildContext context) {
+    return Chip(
+        label: Text(
+          text,
+          style: const TextStyle(
+              color: DesignColors.kBackgroundColor, fontSize: 10),
+        ),
+        backgroundColor: DesignColors.naviColor);
   }
 }
 

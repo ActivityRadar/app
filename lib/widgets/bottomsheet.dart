@@ -2,6 +2,8 @@
 import 'package:app/constants/design.dart';
 import 'package:app/constants/constants.dart';
 import 'package:app/screens/location_picker.dart';
+import 'package:app/widgets/custom_text.dart';
+import 'package:app/widgets/custom_textbutton.dart';
 import 'package:app/widgets/filter_discipline.dart';
 import 'package:flutter/material.dart';
 
@@ -12,7 +14,7 @@ Future<dynamic> bottomSheetBase(
       isScrollControlled: true,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(
-          top: Radius.circular(25.0),
+          top: Radius.circular(AppStyle.cornerRadiusBottomSheet),
         ),
       ),
       builder: builder);
@@ -61,20 +63,18 @@ Future<dynamic> bottomSheetFilter(BuildContext context) {
                     children: <Widget>[
                       Padding(
                         padding: const EdgeInsets.only(left: 9.0, top: 9.0),
-                        child: TextButton(
+                        child: CustomTextButton(
+                          text: 'Reset',
                           onPressed: () {
                             print("Moin");
                           },
-                          child: const Text('Reset'),
                         ),
                       ),
                     ],
                   ),
-                  TextButton(
-                    onPressed: () {
-                      print("Moin");
-                    },
-                    child: const Text('filter'),
+                  CustomTextButton(
+                    text: 'filter',
+                    onPressed: () {},
                   ),
                 ],
               ),
@@ -87,6 +87,9 @@ Future<dynamic> writeReview(BuildContext context) {
   var rating = 0;
   TextEditingController usernameController = TextEditingController();
   TextEditingController desController = TextEditingController();
+  var size = MediaQuery.of(context).size;
+  var height = size.height;
+  double width = size.width;
   return bottomSheetBase(
       context: context,
       builder: (context) {
@@ -101,19 +104,18 @@ Future<dynamic> writeReview(BuildContext context) {
                   children: <Widget>[
                     Padding(
                       padding: const EdgeInsets.only(left: 9.0, top: 9.0),
-                      child: TextButton(
+                      child: CustomTextButton(
+                        text: 'Cancel',
                         onPressed: () => Navigator.pop(context),
-                        child: const Text('Cancel'),
                       ),
                     ),
-                    const Text(
-                      "Review",
-                      style:
-                          TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
+                    MediumText(
+                      text: "Review",
+                      width: width,
                     ),
-                    TextButton(
+                    CustomTextButton(
+                      text: 'Send',
                       onPressed: () => Navigator.pop(context),
-                      child: const Text('Send'), //TODO backend
                     ),
                   ],
                 ),
