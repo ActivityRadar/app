@@ -63,14 +63,19 @@ def to_dart_type(property):
         return "Map<String, dynamic>", []
 
 
-def is_basic_dart_type(t):
-    if t in ["String", "int", "bool"]:
+def is_standart_dart_type(t):
+    if is_basic_dart_type(t):
         return True
 
     if t.startswith("Map"):
         return True
 
     if t.startswith("List"):
+        return True
+
+
+def is_basic_dart_type(t):
+    if t in ["String", "int", "bool", "double"]:
         return True
 
     return False
@@ -249,7 +254,7 @@ for path, content in paths.items():
 
                 r = body.get("required", False)
                 input_args.append((body_schema, "data", r, "body"))
-                if is_basic_dart_type(to_dart_type(body_schema)[0]):
+                if is_standart_dart_type(to_dart_type(body_schema)[0]):
                     return "body: data", add_headers, enc_json
                 else:
                     return "body: data.toJson()", add_headers, enc_json
@@ -284,7 +289,12 @@ for path, content in paths.items():
                 q_camel = to_camel_case(q_snake)
                 if not q[2]:  # required?
                     prefix = f"if ({q_camel} != null) "
-                lines.append(f'{prefix}"{q_snake}": {q_camel}')
+
+                # if the arg is bool, int, double or String, it will be converted to String
+                conversion = (
+                    ".toString()" if is_basic_dart_type(to_dart_type(q[0])[0]) else ""
+                )
+                lines.append(f'{prefix}"{q_snake}": {q_camel}{conversion}')
             lines = ",\n".join(lines)
             q_string = (
                 f"""final Map<String, dynamic> __q = {{\n{indent(lines, 2)}\n}};\n"""
@@ -327,7 +337,7 @@ for path, content in paths.items():
                     f"return responseBody.map((item) => {t}.fromJson(item)).to_list();"
                 )
             else:
-                if is_basic_dart_type(return_type):
+                if is_standart_dart_type(return_type):
                     return_statement = "return responseBody;"
                 else:
                     return_statement = f"return {return_type}.fromJson(responseBody);"
