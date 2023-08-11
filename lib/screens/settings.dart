@@ -87,7 +87,7 @@ class SettingScreen extends StatelessWidget {
               children: [
                 const Text("App-Version: Beta",
                     style: TextStyle(color: Colors.black45)),
-                if (state.isLoggedIn)
+                if (state.isLoggedIn) ...[
                   TextButton(
                     style: TextButton.styleFrom(
                       textStyle: const TextStyle(
@@ -96,14 +96,15 @@ class SettingScreen extends StatelessWidget {
                     onPressed: () => handleLogout(context),
                     child: const Text('logout'),
                   ),
-                TextButton(
-                  style: TextButton.styleFrom(
-                    textStyle: const TextStyle(
-                        fontSize: 13, fontWeight: FontWeight.bold),
+                  TextButton(
+                    style: TextButton.styleFrom(
+                      textStyle: const TextStyle(
+                          fontSize: 13, fontWeight: FontWeight.bold),
+                    ),
+                    onPressed: () {},
+                    child: const Text('Konto löschen'),
                   ),
-                  onPressed: () {},
-                  child: const Text('Konto löschen'),
-                ),
+                ]
               ],
             ),
             Padding(
