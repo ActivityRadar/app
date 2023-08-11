@@ -9,7 +9,7 @@ import 'package:app/model/generated/photo_info.dart';
 import 'package:app/model/generated/reviews_summary.dart';
 part 'location_detailed_api.g.dart';
 
-@JsonSerializable(explicitToJson: true)
+@JsonSerializable(explicitToJson: true, includeIfNull: false)
 class LocationDetailedApi {
   @JsonKey(name: "activity_type")
   final String activityType;

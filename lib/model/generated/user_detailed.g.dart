@@ -28,17 +28,26 @@ UserDetailed _$UserDetailedFromJson(Map<String, dynamic> json) => UserDetailed(
       id: json['id'] as String,
     );
 
-Map<String, dynamic> _$UserDetailedToJson(UserDetailed instance) =>
-    <String, dynamic>{
-      'username': instance.username,
-      'display_name': instance.displayName,
-      'trust_score': instance.trustScore,
-      'avatar': instance.avatar?.toJson(),
-      'ip_address': instance.ipAddress,
-      'creation_date': instance.creationDate.toIso8601String(),
-      'last_location': instance.lastLocation?.toJson(),
-      'authentication': instance.authentication.toJson(),
-      'archived_until': instance.archivedUntil?.toIso8601String(),
-      'admin': instance.admin,
-      'id': instance.id,
-    };
+Map<String, dynamic> _$UserDetailedToJson(UserDetailed instance) {
+  final val = <String, dynamic>{
+    'username': instance.username,
+    'display_name': instance.displayName,
+    'trust_score': instance.trustScore,
+  };
+
+  void writeNotNull(String key, dynamic value) {
+    if (value != null) {
+      val[key] = value;
+    }
+  }
+
+  writeNotNull('avatar', instance.avatar?.toJson());
+  writeNotNull('ip_address', instance.ipAddress);
+  val['creation_date'] = instance.creationDate.toIso8601String();
+  writeNotNull('last_location', instance.lastLocation?.toJson());
+  val['authentication'] = instance.authentication.toJson();
+  writeNotNull('archived_until', instance.archivedUntil?.toIso8601String());
+  writeNotNull('admin', instance.admin);
+  val['id'] = instance.id;
+  return val;
+}

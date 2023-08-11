@@ -127,9 +127,7 @@ def generate_dart_classes_new(components):
                 + f"  final {dart_type}{null_suffix} {property_name_camel_case};"
             )
 
-        class_template = (
-            f"@JsonSerializable(explicitToJson: true)\nclass {class_name} {{\n"
-        )
+        class_template = f"@JsonSerializable(explicitToJson: true, includeIfNull: false)\nclass {class_name} {{\n"
         class_template += "\n".join(class_properties)
         class_template += "\n\n"
 

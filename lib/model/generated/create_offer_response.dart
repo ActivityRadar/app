@@ -6,7 +6,7 @@ import 'package:json_annotation/json_annotation.dart';
 
 part 'create_offer_response.g.dart';
 
-@JsonSerializable(explicitToJson: true)
+@JsonSerializable(explicitToJson: true, includeIfNull: false)
 class CreateOfferResponse {
   @JsonKey(name: "offer_id")
   final String offerId;

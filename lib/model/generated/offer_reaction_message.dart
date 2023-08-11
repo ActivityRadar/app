@@ -6,7 +6,7 @@ import 'package:json_annotation/json_annotation.dart';
 
 part 'offer_reaction_message.g.dart';
 
-@JsonSerializable(explicitToJson: true)
+@JsonSerializable(explicitToJson: true, includeIfNull: false)
 class OfferReactionMessage {
   final String sender;
   final DateTime time;

@@ -14,8 +14,16 @@ OfferTimeSingle _$OfferTimeSingleFromJson(Map<String, dynamic> json) =>
           .toList(),
     );
 
-Map<String, dynamic> _$OfferTimeSingleToJson(OfferTimeSingle instance) =>
-    <String, dynamic>{
-      'type': instance.type,
-      'times': instance.times,
-    };
+Map<String, dynamic> _$OfferTimeSingleToJson(OfferTimeSingle instance) {
+  final val = <String, dynamic>{};
+
+  void writeNotNull(String key, dynamic value) {
+    if (value != null) {
+      val[key] = value;
+    }
+  }
+
+  writeNotNull('type', instance.type);
+  val['times'] = instance.times;
+  return val;
+}

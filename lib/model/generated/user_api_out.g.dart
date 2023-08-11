@@ -15,10 +15,19 @@ UserApiOut _$UserApiOutFromJson(Map<String, dynamic> json) => UserApiOut(
           : PhotoInfo.fromJson(json['avatar'] as Map<String, dynamic>),
     );
 
-Map<String, dynamic> _$UserApiOutToJson(UserApiOut instance) =>
-    <String, dynamic>{
-      'username': instance.username,
-      'display_name': instance.displayName,
-      'id': instance.id,
-      'avatar': instance.avatar?.toJson(),
-    };
+Map<String, dynamic> _$UserApiOutToJson(UserApiOut instance) {
+  final val = <String, dynamic>{
+    'username': instance.username,
+    'display_name': instance.displayName,
+    'id': instance.id,
+  };
+
+  void writeNotNull(String key, dynamic value) {
+    if (value != null) {
+      val[key] = value;
+    }
+  }
+
+  writeNotNull('avatar', instance.avatar?.toJson());
+  return val;
+}

@@ -6,7 +6,7 @@ import 'package:json_annotation/json_annotation.dart';
 
 part 'message_out.g.dart';
 
-@JsonSerializable(explicitToJson: true)
+@JsonSerializable(explicitToJson: true, includeIfNull: false)
 class MessageOut {
   @JsonKey(name: "chat_id")
   final String chatId;

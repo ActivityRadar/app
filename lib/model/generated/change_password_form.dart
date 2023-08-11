@@ -6,7 +6,7 @@ import 'package:json_annotation/json_annotation.dart';
 
 part 'change_password_form.g.dart';
 
-@JsonSerializable(explicitToJson: true)
+@JsonSerializable(explicitToJson: true, includeIfNull: false)
 class ChangePasswordForm {
   @JsonKey(name: "new_password")
   final String newPassword;

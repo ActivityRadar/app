@@ -6,7 +6,7 @@ import 'package:json_annotation/json_annotation.dart';
 
 part 'geo_json_feature_collection.g.dart';
 
-@JsonSerializable(explicitToJson: true)
+@JsonSerializable(explicitToJson: true, includeIfNull: false)
 class GeoJsonFeatureCollection {
   final String? type;
   final List<Map<String, dynamic>> geometries;

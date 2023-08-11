@@ -7,7 +7,7 @@ import 'package:json_annotation/json_annotation.dart';
 import 'package:app/model/generated/review_with_id.dart';
 part 'reviews_summary.g.dart';
 
-@JsonSerializable(explicitToJson: true)
+@JsonSerializable(explicitToJson: true, includeIfNull: false)
 class ReviewsSummary {
   @JsonKey(name: "average_rating")
   final double averageRating;

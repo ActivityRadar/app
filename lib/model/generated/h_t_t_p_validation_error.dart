@@ -7,7 +7,7 @@ import 'package:json_annotation/json_annotation.dart';
 import 'package:app/model/generated/validation_error.dart';
 part 'h_t_t_p_validation_error.g.dart';
 
-@JsonSerializable(explicitToJson: true)
+@JsonSerializable(explicitToJson: true, includeIfNull: false)
 class HTTPValidationError {
   final List<ValidationError>? detail;
 

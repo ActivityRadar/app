@@ -7,7 +7,7 @@ import 'package:json_annotation/json_annotation.dart';
 import 'package:app/model/generated/tag_change_type.dart';
 part 'tag_change.g.dart';
 
-@JsonSerializable(explicitToJson: true)
+@JsonSerializable(explicitToJson: true, includeIfNull: false)
 class TagChange {
   final TagChangeType mode;
   final Map<String, dynamic> content;

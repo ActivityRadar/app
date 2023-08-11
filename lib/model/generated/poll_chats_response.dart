@@ -7,7 +7,7 @@ import 'package:json_annotation/json_annotation.dart';
 import 'package:app/model/generated/message_out.dart';
 part 'poll_chats_response.g.dart';
 
-@JsonSerializable(explicitToJson: true)
+@JsonSerializable(explicitToJson: true, includeIfNull: false)
 class PollChatsResponse {
   final List<MessageOut> messages;
   @JsonKey(name: "poll_time")

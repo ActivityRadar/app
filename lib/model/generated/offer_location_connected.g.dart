@@ -16,8 +16,16 @@ OfferLocationConnected _$OfferLocationConnectedFromJson(
     );
 
 Map<String, dynamic> _$OfferLocationConnectedToJson(
-        OfferLocationConnected instance) =>
-    <String, dynamic>{
-      'coords': instance.coords?.toJson(),
-      'id': instance.id,
-    };
+    OfferLocationConnected instance) {
+  final val = <String, dynamic>{};
+
+  void writeNotNull(String key, dynamic value) {
+    if (value != null) {
+      val[key] = value;
+    }
+  }
+
+  writeNotNull('coords', instance.coords?.toJson());
+  val['id'] = instance.id;
+  return val;
+}

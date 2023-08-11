@@ -9,7 +9,7 @@ import 'package:app/model/generated/geo_json_location.dart';
 import 'package:app/model/generated/authentication.dart';
 part 'user_detailed.g.dart';
 
-@JsonSerializable(explicitToJson: true)
+@JsonSerializable(explicitToJson: true, includeIfNull: false)
 class UserDetailed {
   final String username;
   @JsonKey(name: "display_name")

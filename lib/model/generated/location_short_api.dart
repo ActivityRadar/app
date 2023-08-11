@@ -7,7 +7,7 @@ import 'package:json_annotation/json_annotation.dart';
 import 'package:app/model/generated/geo_json_location.dart';
 part 'location_short_api.g.dart';
 
-@JsonSerializable(explicitToJson: true)
+@JsonSerializable(explicitToJson: true, includeIfNull: false)
 class LocationShortApi {
   @JsonKey(name: "activity_type")
   final String activityType;

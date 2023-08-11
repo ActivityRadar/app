@@ -14,10 +14,19 @@ LocationHistoryIn _$LocationHistoryInFromJson(Map<String, dynamic> json) =>
       tags: json['tags'] as Map<String, dynamic>?,
     );
 
-Map<String, dynamic> _$LocationHistoryInToJson(LocationHistoryIn instance) =>
-    <String, dynamic>{
-      'location_id': instance.locationId,
-      'before': instance.before,
-      'after': instance.after,
-      'tags': instance.tags,
-    };
+Map<String, dynamic> _$LocationHistoryInToJson(LocationHistoryIn instance) {
+  final val = <String, dynamic>{
+    'location_id': instance.locationId,
+  };
+
+  void writeNotNull(String key, dynamic value) {
+    if (value != null) {
+      val[key] = value;
+    }
+  }
+
+  writeNotNull('before', instance.before);
+  writeNotNull('after', instance.after);
+  writeNotNull('tags', instance.tags);
+  return val;
+}

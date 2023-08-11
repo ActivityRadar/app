@@ -14,8 +14,16 @@ GeoJsonLine _$GeoJsonLineFromJson(Map<String, dynamic> json) => GeoJsonLine(
           .toList(),
     );
 
-Map<String, dynamic> _$GeoJsonLineToJson(GeoJsonLine instance) =>
-    <String, dynamic>{
-      'type': instance.type,
-      'coordinates': instance.coordinates,
-    };
+Map<String, dynamic> _$GeoJsonLineToJson(GeoJsonLine instance) {
+  final val = <String, dynamic>{};
+
+  void writeNotNull(String key, dynamic value) {
+    if (value != null) {
+      val[key] = value;
+    }
+  }
+
+  writeNotNull('type', instance.type);
+  val['coordinates'] = instance.coordinates;
+  return val;
+}

@@ -22,16 +22,24 @@ LocationDetailedApi _$LocationDetailedApiFromJson(Map<String, dynamic> json) =>
       id: json['id'] as String,
     );
 
-Map<String, dynamic> _$LocationDetailedApiToJson(
-        LocationDetailedApi instance) =>
-    <String, dynamic>{
-      'activity_type': instance.activityType,
-      'location': instance.location.toJson(),
-      'name': instance.name,
-      'trust_score': instance.trustScore,
-      'tags': instance.tags,
-      'geometry': instance.geometry,
-      'photos': instance.photos.map((e) => e.toJson()).toList(),
-      'reviews': instance.reviews.toJson(),
-      'id': instance.id,
-    };
+Map<String, dynamic> _$LocationDetailedApiToJson(LocationDetailedApi instance) {
+  final val = <String, dynamic>{
+    'activity_type': instance.activityType,
+    'location': instance.location.toJson(),
+  };
+
+  void writeNotNull(String key, dynamic value) {
+    if (value != null) {
+      val[key] = value;
+    }
+  }
+
+  writeNotNull('name', instance.name);
+  val['trust_score'] = instance.trustScore;
+  val['tags'] = instance.tags;
+  writeNotNull('geometry', instance.geometry);
+  val['photos'] = instance.photos.map((e) => e.toJson()).toList();
+  val['reviews'] = instance.reviews.toJson();
+  val['id'] = instance.id;
+  return val;
+}

@@ -6,7 +6,7 @@ import 'package:json_annotation/json_annotation.dart';
 
 part 'geo_json_line.g.dart';
 
-@JsonSerializable(explicitToJson: true)
+@JsonSerializable(explicitToJson: true, includeIfNull: false)
 class GeoJsonLine {
   final String? type;
   final List<List<double>> coordinates;

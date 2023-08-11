@@ -6,7 +6,7 @@ import 'package:json_annotation/json_annotation.dart';
 
 part 'user_api_in.g.dart';
 
-@JsonSerializable(explicitToJson: true)
+@JsonSerializable(explicitToJson: true, includeIfNull: false)
 class UserApiIn {
   final String username;
   @JsonKey(name: "display_name")

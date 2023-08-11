@@ -6,7 +6,7 @@ import 'package:json_annotation/json_annotation.dart';
 
 part 'photo_info.g.dart';
 
-@JsonSerializable(explicitToJson: true)
+@JsonSerializable(explicitToJson: true, includeIfNull: false)
 class PhotoInfo {
   @JsonKey(name: "user_id")
   final String userId;

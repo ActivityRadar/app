@@ -6,7 +6,7 @@ import 'package:json_annotation/json_annotation.dart';
 
 part 'login_body.g.dart';
 
-@JsonSerializable(explicitToJson: true)
+@JsonSerializable(explicitToJson: true, includeIfNull: false)
 class LoginBody {
   @JsonKey(name: "grant_type")
   final String? grantType;

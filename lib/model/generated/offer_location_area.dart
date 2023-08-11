@@ -7,7 +7,7 @@ import 'package:json_annotation/json_annotation.dart';
 import 'package:app/model/generated/geo_json_location.dart';
 part 'offer_location_area.g.dart';
 
-@JsonSerializable(explicitToJson: true)
+@JsonSerializable(explicitToJson: true, includeIfNull: false)
 class OfferLocationArea {
   final GeoJsonLocation coords;
   final double radius;

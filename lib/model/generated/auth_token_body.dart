@@ -6,7 +6,7 @@ import 'package:json_annotation/json_annotation.dart';
 
 part 'auth_token_body.g.dart';
 
-@JsonSerializable(explicitToJson: true)
+@JsonSerializable(explicitToJson: true, includeIfNull: false)
 class AuthTokenBody {
   @JsonKey(name: "access_token")
   final String accessToken;

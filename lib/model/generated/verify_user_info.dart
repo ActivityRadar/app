@@ -6,7 +6,7 @@ import 'package:json_annotation/json_annotation.dart';
 
 part 'verify_user_info.g.dart';
 
-@JsonSerializable(explicitToJson: true)
+@JsonSerializable(explicitToJson: true, includeIfNull: false)
 class VerifyUserInfo {
   final String id;
   @JsonKey(name: "verification_code")

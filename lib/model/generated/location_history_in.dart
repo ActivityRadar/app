@@ -6,7 +6,7 @@ import 'package:json_annotation/json_annotation.dart';
 
 part 'location_history_in.g.dart';
 
-@JsonSerializable(explicitToJson: true)
+@JsonSerializable(explicitToJson: true, includeIfNull: false)
 class LocationHistoryIn {
   @JsonKey(name: "location_id")
   final String locationId;

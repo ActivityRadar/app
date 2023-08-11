@@ -6,7 +6,7 @@ import 'package:json_annotation/json_annotation.dart';
 
 part 'offer_time_flexible.g.dart';
 
-@JsonSerializable(explicitToJson: true)
+@JsonSerializable(explicitToJson: true, includeIfNull: false)
 class OfferTimeFlexible {
   final String? type;
 

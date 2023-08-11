@@ -6,7 +6,7 @@ import 'package:json_annotation/json_annotation.dart';
 
 part 'review_base.g.dart';
 
-@JsonSerializable(explicitToJson: true)
+@JsonSerializable(explicitToJson: true, includeIfNull: false)
 class ReviewBase {
   @JsonKey(name: "location_id")
   final String locationId;

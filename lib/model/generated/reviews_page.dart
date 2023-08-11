@@ -7,7 +7,7 @@ import 'package:json_annotation/json_annotation.dart';
 import 'package:app/model/generated/review_with_id.dart';
 part 'reviews_page.g.dart';
 
-@JsonSerializable(explicitToJson: true)
+@JsonSerializable(explicitToJson: true, includeIfNull: false)
 class ReviewsPage {
   @JsonKey(name: "next_offset")
   final int? nextOffset;

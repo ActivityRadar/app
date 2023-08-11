@@ -6,7 +6,7 @@ import 'package:json_annotation/json_annotation.dart';
 
 part 'validation_error.g.dart';
 
-@JsonSerializable(explicitToJson: true)
+@JsonSerializable(explicitToJson: true, includeIfNull: false)
 class ValidationError {
   final List<Map<String, dynamic>> loc;
   final String msg;

@@ -13,8 +13,16 @@ ReviewsPage _$ReviewsPageFromJson(Map<String, dynamic> json) => ReviewsPage(
           .toList(),
     );
 
-Map<String, dynamic> _$ReviewsPageToJson(ReviewsPage instance) =>
-    <String, dynamic>{
-      'next_offset': instance.nextOffset,
-      'reviews': instance.reviews.map((e) => e.toJson()).toList(),
-    };
+Map<String, dynamic> _$ReviewsPageToJson(ReviewsPage instance) {
+  final val = <String, dynamic>{};
+
+  void writeNotNull(String key, dynamic value) {
+    if (value != null) {
+      val[key] = value;
+    }
+  }
+
+  writeNotNull('next_offset', instance.nextOffset);
+  val['reviews'] = instance.reviews.map((e) => e.toJson()).toList();
+  return val;
+}
