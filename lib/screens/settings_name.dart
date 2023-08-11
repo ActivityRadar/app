@@ -218,9 +218,7 @@ Widget avatarFutureBuilder({
 
   if (state.currentUser!.avatar == null) {
     return CircleAvatar(
-        // TODO: use a different picture here, as placeholder for empty avatar
-        backgroundImage:
-            const AssetImage("assets/locationPhotoPlaceholder.jpg"),
+        backgroundImage: AssetImages.avatarEmpty,
         radius: radius);
   }
 
@@ -232,7 +230,7 @@ Widget avatarFutureBuilder({
         if (snapshot.hasData) {
           img = snapshot.data;
         } else {
-          img = const AssetImage('assets/locationPhotoPlaceholder.jpg');
+          img = AssetImages.avatarLoading;
         }
         return CircleAvatar(backgroundImage: img, radius: radius);
       });

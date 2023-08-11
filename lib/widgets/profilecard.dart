@@ -1,3 +1,4 @@
+import 'package:app/constants/constants.dart';
 import 'package:flutter/material.dart';
 
 class ProfileCard extends StatelessWidget {
@@ -24,8 +25,7 @@ class ProfileCard extends StatelessWidget {
             child: Row(
               children: [
                 const CircleAvatar(
-                  backgroundImage: AssetImage(
-                      'assets/locationPhotoLoadingPlaceholder.jpg'), // Beispielbild
+                  backgroundImage: AssetImages.locationLoading,
                   radius: 43,
                 ),
                 const SizedBox(width: 0.5),
