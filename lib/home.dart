@@ -4,6 +4,8 @@ import 'package:app/screens/map.dart';
 import 'package:app/screens/settings.dart';
 import 'package:app/screens/widgets_page.dart';
 import 'package:app/widgets/bottomsheet.dart';
+import 'package:app/widgets/custom_icon.dart';
+import 'package:app/widgets/custom_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:app/constants/constants.dart';
@@ -75,17 +77,10 @@ class _HomeState extends State<Home> {
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Icon(Icons.home,
-                            color: currentTab == 0
-                                ? DesignColors.naviColor
-                                : Colors.grey),
-                        Text(
-                          AppLocalizations.of(context)!.home,
-                          style: TextStyle(
-                              color: currentTab == 0
-                                  ? DesignColors.naviColor
-                                  : Colors.grey),
-                        )
+                        NaviIcon(icon: Icons.home, currentTab: currentTab == 0),
+                        NaviText(
+                            text: AppLocalizations.of(context)!.home,
+                            currentTab: currentTab == 0)
                       ],
                     ),
                   ),
@@ -100,17 +95,11 @@ class _HomeState extends State<Home> {
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Icon(Icons.map_sharp,
-                            color: currentTab == 1
-                                ? DesignColors.naviColor
-                                : Colors.grey),
-                        Text(
-                          AppLocalizations.of(context)!.map,
-                          style: TextStyle(
-                              color: currentTab == 1
-                                  ? DesignColors.naviColor
-                                  : Colors.grey),
-                        )
+                        NaviIcon(
+                            icon: Icons.map_sharp, currentTab: currentTab == 1),
+                        NaviText(
+                            text: AppLocalizations.of(context)!.map,
+                            currentTab: currentTab == 1),
                       ],
                     ),
                   ),
@@ -128,21 +117,13 @@ class _HomeState extends State<Home> {
                       });
                     },
                     child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Icon(Icons.group,
-                            color: currentTab == 3
-                                ? DesignColors.naviColor
-                                : Colors.grey),
-                        Text(
-                          'Community',
-                          style: TextStyle(
-                              color: currentTab == 3
-                                  ? DesignColors.naviColor
-                                  : Colors.grey),
-                        )
-                      ],
-                    ),
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          NaviIcon(
+                              icon: Icons.group, currentTab: currentTab == 3),
+                          NaviText(
+                              text: 'Community', currentTab: currentTab == 3),
+                        ]),
                   ),
                   MaterialButton(
                     minWidth: x,
@@ -155,17 +136,9 @@ class _HomeState extends State<Home> {
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Icon(Icons.settings,
-                            color: currentTab == 4
-                                ? DesignColors.naviColor
-                                : Colors.grey),
-                        Text(
-                          'Setting',
-                          style: TextStyle(
-                              color: currentTab == 4
-                                  ? DesignColors.naviColor
-                                  : Colors.grey),
-                        )
+                        NaviIcon(
+                            icon: Icons.settings, currentTab: currentTab == 4),
+                        NaviText(text: "Setting", currentTab: currentTab == 4),
                       ],
                     ),
                   ),

@@ -1,5 +1,6 @@
 import 'package:app/constants/constants.dart';
 import 'package:app/constants/design.dart';
+import 'package:app/widgets/custom_text.dart';
 import 'package:app/widgets/meet_map.dart';
 import 'package:flutter/material.dart';
 
@@ -119,62 +120,20 @@ class MeetPage extends StatelessWidget {
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Text(
-                            "Time",
-                            style: TextStyle(
-                                color: const Color.fromARGB(182, 0, 0, 0),
-                                fontWeight: FontWeight.bold,
-                                fontSize: width * 0.05),
-                          ),
-                          Text(
-                            "11:00",
-                            style: TextStyle(
-                                color: const Color.fromARGB(182, 0, 0, 0),
-                                fontWeight: FontWeight.bold,
-                                fontSize: width * 0.05),
-                          ),
+                          TitleText(text: "Time", width: width),
+                          TitleText(text: '11:00', width: width),
                         ],
                       )),
                   Padding(
                     padding: const EdgeInsets.only(left: 9.0, top: 10.0),
-                    child: Text(
-                      "description",
-                      style: TextStyle(
-                          color: const Color.fromARGB(182, 0, 0, 0),
-                          fontWeight: FontWeight.bold,
-                          fontSize: width * 0.05),
-                    ),
+                    child: TitleText(text: "description", width: width),
                   ),
                   Padding(
-                    padding: const EdgeInsets.only(left: 9.0, top: 10.0),
-                    child: Text(
-                      "description",
-                      style: TextStyle(
-                          color: const Color.fromARGB(182, 0, 0, 0),
-                          fontWeight: FontWeight.bold,
-                          fontSize: width * 0.05),
-                    ),
-                  ),
-                  Padding(
-                    padding: EdgeInsets.all(9.0),
-                    child: Text(
-                        'Moin Moin Moin Moin Moin Moin Moin Moin Moin Moin Moin Moin Moin Moin Moin Moin Moin Moin Moin Moin Moin Moin Moin Moin '),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(left: 9.0, top: 10.0),
-                    child: Text(
-                      "description",
-                      style: TextStyle(
-                          color: const Color.fromARGB(182, 0, 0, 0),
-                          fontWeight: FontWeight.bold,
-                          fontSize: width * 0.05),
-                    ),
-                  ),
-                  Padding(
-                    padding: EdgeInsets.all(9.0),
-                    child: Text(
-                        'Moin Moin Moin Moin Moin Moin Moin Moin Moin Moin Moin Moin Moin Moin Moin Moin Moin Moin Moin Moin Moin Moin Moin Moin '),
-                  ),
+                      padding: EdgeInsets.all(9.0),
+                      child: DescriptionText(
+                          text:
+                              "Moin, Moin, Moin, Moin, Moin, Moin, Moin, Moin, Moin, Moin, Moin, Moin, Moin, Moin, Moin, Moin, Moin, Moin, Moin, Moin, Moin, Moin, Moin, Moin, Moin, Moin, Moin, Moin, ",
+                          width: width)),
                 ]),
           ]),
         )
