@@ -86,8 +86,7 @@ class MeetPage extends StatelessWidget {
                             Padding(
                                 padding: EdgeInsets.only(left: 10, top: 60)),
                             CircleAvatar(
-                              backgroundImage: AssetImage(
-                                  'assets/locationPhotoLoadingPlaceholder.jpg'), // Beispielbild
+                              backgroundImage: AssetImages.avatarEmpty,
                               radius: 20,
                             ),
                             SizedBox(

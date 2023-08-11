@@ -37,7 +37,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
   TextEditingController desController = TextEditingController();
 
   Future<void> _showReviewBottomSheet(BuildContext context) async {
-    var _rating = 0;
+    var rating = 0;
     bottomSheetBase(
         context: context,
         builder: (context) {
@@ -78,8 +78,9 @@ class _DetailsScreenState extends State<DetailsScreen> {
                             direction: Axis.horizontal,
                             allowHalfRating: false,
                             itemCount: 5,
-                            itemPadding: EdgeInsets.symmetric(horizontal: 4.0),
-                            itemBuilder: (context, _) => Icon(
+                            itemPadding:
+                                const EdgeInsets.symmetric(horizontal: 4.0),
+                            itemBuilder: (context, _) => const Icon(
                               Icons.star,
                               color: DesignColors.naviColor,
                             ),
@@ -394,7 +395,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
                             }),
                         child: const Text('review'),
                       ),
-                      Icon(Icons.edit_note),
+                      const Icon(Icons.edit_note),
                     ])),
               ],
             )),
@@ -557,20 +558,16 @@ class ReviewBox extends StatelessWidget {
           FutureBuilder(
             future: photo,
             builder: (BuildContext context, AsyncSnapshot snapshot) {
-              Image? image;
+              ImageProvider? image;
               String username;
               String displayName;
 
               const double diameter = 50.0;
-              print(
-                  "futurebuilder exec, ${snapshot.hasData}, ${snapshot.hasError}");
               if (snapshot.hasData) {
-                if (snapshot.data != null) {
-                  image = Image(
-                      image: snapshot.data, width: diameter, height: diameter);
-                }
+                image = snapshot.data ?? AssetImages.avatarEmpty;
               } else if (snapshot.hasError) {
                 print(snapshot.error);
+                image = AssetImages.avatarError;
               }
 
               if (userInfo != null) {
@@ -585,18 +582,19 @@ class ReviewBox extends StatelessWidget {
                 displayName = review.userId.substring(0, 6).toUpperCase();
               }
 
-              image ??= Image.asset(
-                  "assets/locationPhotoLoadingPlaceholder.jpg",
-                  width: diameter,
-                  height: diameter,
-                  fit: BoxFit.cover);
+              image ??= AssetImages.avatarLoading;
 
               return Column(children: [
                 Row(
                   children: [
                     Padding(
                       padding: const EdgeInsets.all(12.0),
-                      child: ClipOval(child: image),
+                      child: ClipOval(
+                          child: Image(
+                              image: image,
+                              width: diameter,
+                              height: diameter,
+                              fit: BoxFit.cover)),
                     ),
                     Text("@$displayName"),
                     const Spacer(),

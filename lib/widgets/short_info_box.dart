@@ -28,8 +28,7 @@ class ShortInfoBox extends StatelessWidget {
 
       late Future thumbnail;
       if (info == null || info!.photos.isEmpty) {
-        thumbnail = Future.value(
-            const AssetImage("assets/locationPhotoPlaceholder.jpg"));
+        thumbnail = Future.value(AssetImages.locationEmpty);
       } else {
         thumbnail = PhotoManager.instance.getThumbnail(info!.photos[0].url);
       }
@@ -59,8 +58,7 @@ class ShortInfoBox extends StatelessWidget {
                         } else {
                           return const Image(
                               fit: BoxFit.fill,
-                              image: AssetImage(
-                                  "assets/locationPhotoLoadingPlaceholder.jpg"));
+                              image: AssetImages.locationLoading);
                         }
                       },
                     ),

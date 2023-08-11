@@ -66,3 +66,17 @@ class RegExps {
   static RegExp email =
       RegExp(r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$');
 }
+
+class AssetImages {
+  static const locationLoading =
+      AssetImage("assets/locationPhotoLoadingPlaceholder.jpg");
+  static const locationEmpty =
+      AssetImage("assets/locationPhotoPlaceholder.jpg");
+  static const locationError =
+      AssetImage("assets/locationPhotoPlaceholder.jpg");
+
+  static const avatarLoading =
+      AssetImage("assets/locationPhotoLoadingPlaceholder.jpg");
+  static const avatarEmpty = AssetImage("assets/locationPhotoPlaceholder.jpg");
+  static const avatarError = AssetImage("assets/locationPhotoPlaceholder.jpg");
+}
