@@ -84,8 +84,16 @@ class _RegisterScreenState extends State<RegisterScreen> {
         children: <Widget>[
           Center(
             child: ElevatedButton(
-              onPressed: () => bottomSheetPhotoSourcePicker(
-                  context: context, mode: "profil", userId: "TODO"),
+              onPressed: () async {
+                await bottomSheetPhotoSourcePicker(
+                        context: context,
+                        mode: "profile-picture",
+                        userId: newUserId)
+                    .then((_) {
+                  Provider.of<AppState>(context, listen: false)
+                      .updateUserInfo();
+                }).then((_) => Navigator.of(context).pop());
+              },
               style: ElevatedButton.styleFrom(
                 shape: const CircleBorder(),
                 padding: const EdgeInsets.all(100),
