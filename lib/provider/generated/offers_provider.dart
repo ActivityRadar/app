@@ -38,9 +38,9 @@ class OffersProvider {
       DateTime? timeUntil,
       List<String>? activities}) async {
     final Map<String, dynamic> __q = {
-      "long": long,
-      "lat": lat,
-      "radius": radius,
+      "long": long.toString(),
+      "lat": lat.toString(),
+      "radius": radius.toString(),
       if (timeFrom != null) "time_from": timeFrom,
       if (timeUntil != null) "time_until": timeUntil,
       if (activities != null) "activities": activities
@@ -60,7 +60,7 @@ class OffersProvider {
   /// Contact Offerer
   static Future<void> contactOfferer(
       {required String offerId, required String message}) async {
-    final Map<String, dynamic> __q = {"message": message};
+    final Map<String, dynamic> __q = {"message": message.toString()};
     await BackendService.instance
         .sendRequest(HttpMethod.put, "/offers/$offerId", queryParams: __q);
   }

@@ -11,10 +11,10 @@ class UsersProvider {
   /// Find Users By Name
   static Future<List<UserApiOut>> findUsersByName(
       {required String search}) async {
-    final Map<String, dynamic> __q = {"search": search};
-    final responseBody = await BackendService.instance
+    final Map<String, dynamic> __q = {"search": search.toString()};
+    final List responseBody = await BackendService.instance
         .sendRequest(HttpMethod.get, "/users/", queryParams: __q);
-    return responseBody.map((item) => UserApiOut.fromJson(item)).to_list();
+    return responseBody.map((item) => UserApiOut.fromJson(item)).toList();
   }
 
   /// Create User
@@ -34,9 +34,9 @@ class UsersProvider {
   static Future<List<UserApiOut>> getUserInfos(
       {required List<String> q}) async {
     final Map<String, dynamic> __q = {"q": q};
-    final responseBody = await BackendService.instance
+    final List responseBody = await BackendService.instance
         .sendRequest(HttpMethod.get, "/users/id", queryParams: __q);
-    return responseBody.map((item) => UserApiOut.fromJson(item)).to_list();
+    return responseBody.map((item) => UserApiOut.fromJson(item)).toList();
   }
 
   /// Request Reset Password
@@ -68,7 +68,7 @@ class UsersProvider {
 
   /// Check Email Taken
   static Future<bool> checkEmailTaken({required String email}) async {
-    final Map<String, dynamic> __q = {"email": email};
+    final Map<String, dynamic> __q = {"email": email.toString()};
     final responseBody = await BackendService.instance
         .sendRequest(HttpMethod.get, "/users/check-email", queryParams: __q);
     return responseBody;
@@ -100,16 +100,16 @@ class UsersProvider {
 
   /// Get All Friends
   static Future<List<UserApiOut>> getAllFriends() async {
-    final responseBody = await BackendService.instance
+    final List responseBody = await BackendService.instance
         .sendRequest(HttpMethod.get, "/users/friends/");
-    return responseBody.map((item) => UserApiOut.fromJson(item)).to_list();
+    return responseBody.map((item) => UserApiOut.fromJson(item)).toList();
   }
 
   /// Get Received Friend Requests
   static Future<List<UserRelation>> getReceivedFriendRequests() async {
-    final responseBody = await BackendService.instance
+    final List responseBody = await BackendService.instance
         .sendRequest(HttpMethod.get, "/users/friends/open");
-    return responseBody.map((item) => UserRelation.fromJson(item)).to_list();
+    return responseBody.map((item) => UserRelation.fromJson(item)).toList();
   }
 
   /// Get This User

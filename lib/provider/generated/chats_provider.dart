@@ -11,7 +11,7 @@ class ChatsProvider {
 
   /// Start Chat
   static Future<String> startChat({required String partnerId}) async {
-    final Map<String, dynamic> __q = {"partner_id": partnerId};
+    final Map<String, dynamic> __q = {"partner_id": partnerId.toString()};
     final responseBody = await BackendService.instance
         .sendRequest(HttpMethod.post, "/chats/", queryParams: __q);
     return responseBody;
@@ -20,7 +20,7 @@ class ChatsProvider {
   /// Send Message
   static Future<void> sendMessage(
       {required String chatId, required Map<String, dynamic> data}) async {
-    final Map<String, dynamic> __q = {"chat_id": chatId};
+    final Map<String, dynamic> __q = {"chat_id": chatId.toString()};
     await BackendService.instance.sendRequest(HttpMethod.post, "/chats/message",
         queryParams: __q, body: data);
   }
