@@ -18,9 +18,11 @@ class UsersProvider {
   }
 
   /// Create User
-  static Future<void> createUser({required UserApiIn data}) async {
-    await BackendService.instance
+  static Future<CreateUserResponse> createUser(
+      {required UserApiIn data}) async {
+    final responseBody = await BackendService.instance
         .sendRequest(HttpMethod.post, "/users/", body: data.toJson());
+    return CreateUserResponse.fromJson(responseBody);
   }
 
   /// Verify New User

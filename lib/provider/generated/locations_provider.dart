@@ -70,9 +70,11 @@ class LocationsProvider {
   }
 
   /// Create New Location
-  static Future<void> createNewLocation({required LocationNew data}) async {
-    await BackendService.instance
+  static Future<CreateLocationResponse> createNewLocation(
+      {required LocationNew data}) async {
+    final responseBody = await BackendService.instance
         .sendRequest(HttpMethod.post, "/locations/", body: data.toJson());
+    return CreateLocationResponse.fromJson(responseBody);
   }
 
   /// Get Location History

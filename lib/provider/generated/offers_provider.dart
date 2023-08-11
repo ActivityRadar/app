@@ -10,9 +10,11 @@ class OffersProvider {
   }
 
   /// Create Offer
-  static Future<void> createOffer({required OfferIn data}) async {
-    await BackendService.instance
+  static Future<CreateOfferResponse> createOffer(
+      {required OfferIn data}) async {
+    final responseBody = await BackendService.instance
         .sendRequest(HttpMethod.post, "/offers/", body: data.toJson());
+    return CreateOfferResponse.fromJson(responseBody);
   }
 
   /// Get Offers At Location

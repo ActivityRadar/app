@@ -3,10 +3,12 @@ import 'package:app/provider/backend.dart';
 
 class ChatsProvider {
   /// Poll Users Chats
-  static Future<void> pollUsersChats({required DateTime lastPollTime}) async {
+  static Future<PollChatsResponse> pollUsersChats(
+      {required DateTime lastPollTime}) async {
     final Map<String, dynamic> __q = {"last_poll_time": lastPollTime};
-    await BackendService.instance
+    final responseBody = await BackendService.instance
         .sendRequest(HttpMethod.get, "/chats/", queryParams: __q);
+    return PollChatsResponse.fromJson(responseBody);
   }
 
   /// Start Chat
