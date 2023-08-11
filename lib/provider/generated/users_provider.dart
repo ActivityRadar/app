@@ -23,6 +23,14 @@ class UsersProvider {
         .sendRequest(HttpMethod.post, "/users/", body: data.toJson());
   }
 
+  /// Verify New User
+  static Future<Map<String, dynamic>> verifyNewUser(
+      {required VerifyUserInfo data}) async {
+    final responseBody = await BackendService.instance
+        .sendRequest(HttpMethod.post, "/users/verify", body: data.toJson());
+    return responseBody;
+  }
+
   /// Get User Infos
   static Future<List<UserApiOut>> getUserInfos(
       {required List<String> q}) async {
@@ -57,6 +65,15 @@ class UsersProvider {
           "Content-Type": "application/x-www-form-urlencoded"
         },
         encodeToJson: false);
+  }
+
+  /// Check Email Taken
+  static Future<Map<String, dynamic>> checkEmailTaken(
+      {required String email}) async {
+    final Map<String, dynamic> __q = {"email": email};
+    final responseBody = await BackendService.instance
+        .sendRequest(HttpMethod.get, "/users/check-email", queryParams: __q);
+    return responseBody;
   }
 
   /// Report User

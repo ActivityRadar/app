@@ -31,6 +31,7 @@ export 'generated/user_api_out.dart' show UserApiOut;
 export 'generated/user_detailed.dart' show UserDetailed;
 export 'generated/user_relation.dart' show UserRelation;
 export 'generated/validation_error.dart' show ValidationError;
+export 'generated/verify_user_info.dart' show VerifyUserInfo;
 export 'generated/login_body.dart' show LoginBody;
 export 'generated/auth_type.dart' show AuthType;
 export 'generated/offer_status.dart' show OfferStatus;
