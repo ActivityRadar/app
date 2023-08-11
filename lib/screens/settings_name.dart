@@ -113,6 +113,7 @@ class DisplayNameSwitch extends StatelessWidget {
                           horizontal: 8, vertical: 16),
                       child: TextFormField(
                         controller: usernameController,
+                        keyboardType: TextInputType.visiblePassword,
                         decoration: const InputDecoration(
                           border: UnderlineInputBorder(
                             borderSide: BorderSide.none,
