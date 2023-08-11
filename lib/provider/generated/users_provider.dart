@@ -24,8 +24,7 @@ class UsersProvider {
   }
 
   /// Verify New User
-  static Future<Map<String, dynamic>> verifyNewUser(
-      {required VerifyUserInfo data}) async {
+  static Future<bool> verifyNewUser({required VerifyUserInfo data}) async {
     final responseBody = await BackendService.instance
         .sendRequest(HttpMethod.post, "/users/verify", body: data.toJson());
     return responseBody;
@@ -68,8 +67,7 @@ class UsersProvider {
   }
 
   /// Check Email Taken
-  static Future<Map<String, dynamic>> checkEmailTaken(
-      {required String email}) async {
+  static Future<bool> checkEmailTaken({required String email}) async {
     final Map<String, dynamic> __q = {"email": email};
     final responseBody = await BackendService.instance
         .sendRequest(HttpMethod.get, "/users/check-email", queryParams: __q);

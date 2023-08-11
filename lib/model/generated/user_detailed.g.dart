@@ -24,7 +24,7 @@ UserDetailed _$UserDetailedFromJson(Map<String, dynamic> json) => UserDetailed(
       archivedUntil: json['archived_until'] == null
           ? null
           : DateTime.parse(json['archived_until'] as String),
-      admin: json['admin'] as Map<String, dynamic>?,
+      admin: json['admin'] as bool?,
       id: json['id'] as String,
     );
 

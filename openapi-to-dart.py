@@ -57,6 +57,8 @@ def to_dart_type(property):
         return "String", []
     elif p_type == "number":
         return "double", []
+    elif p_type == "boolean":
+        return "bool", []
     else:
         return "Map<String, dynamic>", []
 

@@ -146,7 +146,7 @@ class LocationsProvider {
 
   /// Set Confirmation
   static Future<void> setConfirmation(
-      {required String locationId, Map<String, dynamic>? confirm}) async {
+      {required String locationId, bool? confirm}) async {
     final Map<String, dynamic> __q = {if (confirm != null) "confirm": confirm};
     await BackendService.instance.sendRequest(
         HttpMethod.put, "/locations/$locationId/reviews/confirmation",

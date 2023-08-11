@@ -26,7 +26,7 @@ class UserDetailed {
   final Authentication authentication;
   @JsonKey(name: "archived_until")
   final DateTime? archivedUntil;
-  final Map<String, dynamic>? admin;
+  final bool? admin;
   final String id;
 
   UserDetailed(
