@@ -29,20 +29,21 @@ class UserDetailed {
   final Map<String, dynamic>? admin;
   final String id;
 
-  UserDetailed({
-    required this.username,
-    required this.displayName,
-    required this.trustScore,
-    this.avatar,
-    this.ipAddress,
-    required this.creationDate,
-    this.lastLocation,
-    required this.authentication,
-    this.archivedUntil,
-    this.admin,
-    required this.id});
+  UserDetailed(
+      {required this.username,
+      required this.displayName,
+      required this.trustScore,
+      this.avatar,
+      this.ipAddress,
+      required this.creationDate,
+      this.lastLocation,
+      required this.authentication,
+      this.archivedUntil,
+      this.admin,
+      required this.id});
 
-  factory UserDetailed.fromJson(Map<String, dynamic> json) => _$UserDetailedFromJson(json);
+  factory UserDetailed.fromJson(Map<String, dynamic> json) =>
+      _$UserDetailedFromJson(json);
 
   Map<String, dynamic> toJson() => _$UserDetailedToJson(this);
 }

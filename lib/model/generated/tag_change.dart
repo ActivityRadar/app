@@ -12,11 +12,10 @@ class TagChange {
   final TagChangeType mode;
   final Map<String, dynamic> content;
 
-  TagChange({
-    required this.mode,
-    required this.content});
+  TagChange({required this.mode, required this.content});
 
-  factory TagChange.fromJson(Map<String, dynamic> json) => _$TagChangeFromJson(json);
+  factory TagChange.fromJson(Map<String, dynamic> json) =>
+      _$TagChangeFromJson(json);
 
   Map<String, dynamic> toJson() => _$TagChangeToJson(this);
 }

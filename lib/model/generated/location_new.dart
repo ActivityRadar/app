@@ -18,15 +18,16 @@ class LocationNew {
   final Map<String, dynamic>? tags;
   final Map<String, dynamic>? geometry;
 
-  LocationNew({
-    required this.activityType,
-    required this.location,
-    this.name,
-    required this.trustScore,
-    this.tags,
-    this.geometry});
+  LocationNew(
+      {required this.activityType,
+      required this.location,
+      this.name,
+      required this.trustScore,
+      this.tags,
+      this.geometry});
 
-  factory LocationNew.fromJson(Map<String, dynamic> json) => _$LocationNewFromJson(json);
+  factory LocationNew.fromJson(Map<String, dynamic> json) =>
+      _$LocationNewFromJson(json);
 
   Map<String, dynamic> toJson() => _$LocationNewToJson(this);
 }

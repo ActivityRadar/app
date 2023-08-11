@@ -11,11 +11,10 @@ class OfferTimeSingle {
   final String? type;
   final List<Map<String, dynamic>> times;
 
-  OfferTimeSingle({
-    this.type,
-    required this.times});
+  OfferTimeSingle({this.type, required this.times});
 
-  factory OfferTimeSingle.fromJson(Map<String, dynamic> json) => _$OfferTimeSingleFromJson(json);
+  factory OfferTimeSingle.fromJson(Map<String, dynamic> json) =>
+      _$OfferTimeSingleFromJson(json);
 
   Map<String, dynamic> toJson() => _$OfferTimeSingleToJson(this);
 }

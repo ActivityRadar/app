@@ -10,10 +10,10 @@ part 'offer_time_flexible.g.dart';
 class OfferTimeFlexible {
   final String? type;
 
-  OfferTimeFlexible({
-    this.type});
+  OfferTimeFlexible({this.type});
 
-  factory OfferTimeFlexible.fromJson(Map<String, dynamic> json) => _$OfferTimeFlexibleFromJson(json);
+  factory OfferTimeFlexible.fromJson(Map<String, dynamic> json) =>
+      _$OfferTimeFlexibleFromJson(json);
 
   Map<String, dynamic> toJson() => _$OfferTimeFlexibleToJson(this);
 }

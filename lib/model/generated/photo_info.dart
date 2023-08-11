@@ -14,12 +14,11 @@ class PhotoInfo {
   @JsonKey(name: "creation_date")
   final DateTime creationDate;
 
-  PhotoInfo({
-    required this.userId,
-    required this.url,
-    required this.creationDate});
+  PhotoInfo(
+      {required this.userId, required this.url, required this.creationDate});
 
-  factory PhotoInfo.fromJson(Map<String, dynamic> json) => _$PhotoInfoFromJson(json);
+  factory PhotoInfo.fromJson(Map<String, dynamic> json) =>
+      _$PhotoInfoFromJson(json);
 
   Map<String, dynamic> toJson() => _$PhotoInfoToJson(this);
 }

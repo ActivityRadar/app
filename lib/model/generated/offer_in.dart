@@ -15,14 +15,15 @@ class OfferIn {
   final String description;
   final OfferVisibility visibility;
 
-  OfferIn({
-    required this.location,
-    required this.activity,
-    required this.time,
-    required this.description,
-    required this.visibility});
+  OfferIn(
+      {required this.location,
+      required this.activity,
+      required this.time,
+      required this.description,
+      required this.visibility});
 
-  factory OfferIn.fromJson(Map<String, dynamic> json) => _$OfferInFromJson(json);
+  factory OfferIn.fromJson(Map<String, dynamic> json) =>
+      _$OfferInFromJson(json);
 
   Map<String, dynamic> toJson() => _$OfferInToJson(this);
 }

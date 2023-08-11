@@ -10,10 +10,10 @@ part 'photo_url.g.dart';
 class PhotoUrl {
   final String url;
 
-  PhotoUrl({
-    required this.url});
+  PhotoUrl({required this.url});
 
-  factory PhotoUrl.fromJson(Map<String, dynamic> json) => _$PhotoUrlFromJson(json);
+  factory PhotoUrl.fromJson(Map<String, dynamic> json) =>
+      _$PhotoUrlFromJson(json);
 
   Map<String, dynamic> toJson() => _$PhotoUrlToJson(this);
 }

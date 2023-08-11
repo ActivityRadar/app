@@ -15,13 +15,14 @@ class UserApiOut {
   final String id;
   final PhotoInfo? avatar;
 
-  UserApiOut({
-    required this.username,
-    required this.displayName,
-    required this.id,
-    this.avatar});
+  UserApiOut(
+      {required this.username,
+      required this.displayName,
+      required this.id,
+      this.avatar});
 
-  factory UserApiOut.fromJson(Map<String, dynamic> json) => _$UserApiOutFromJson(json);
+  factory UserApiOut.fromJson(Map<String, dynamic> json) =>
+      _$UserApiOutFromJson(json);
 
   Map<String, dynamic> toJson() => _$UserApiOutToJson(this);
 }

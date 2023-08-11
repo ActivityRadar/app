@@ -16,13 +16,14 @@ class UserRelation {
   final DateTime creationDate;
   final RelationStatus status;
 
-  UserRelation({
-    this.Id,
-    required this.users,
-    required this.creationDate,
-    required this.status});
+  UserRelation(
+      {this.Id,
+      required this.users,
+      required this.creationDate,
+      required this.status});
 
-  factory UserRelation.fromJson(Map<String, dynamic> json) => _$UserRelationFromJson(json);
+  factory UserRelation.fromJson(Map<String, dynamic> json) =>
+      _$UserRelationFromJson(json);
 
   Map<String, dynamic> toJson() => _$UserRelationToJson(this);
 }

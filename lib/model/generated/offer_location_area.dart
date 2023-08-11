@@ -12,11 +12,10 @@ class OfferLocationArea {
   final GeoJsonLocation coords;
   final double radius;
 
-  OfferLocationArea({
-    required this.coords,
-    required this.radius});
+  OfferLocationArea({required this.coords, required this.radius});
 
-  factory OfferLocationArea.fromJson(Map<String, dynamic> json) => _$OfferLocationAreaFromJson(json);
+  factory OfferLocationArea.fromJson(Map<String, dynamic> json) =>
+      _$OfferLocationAreaFromJson(json);
 
   Map<String, dynamic> toJson() => _$OfferLocationAreaToJson(this);
 }

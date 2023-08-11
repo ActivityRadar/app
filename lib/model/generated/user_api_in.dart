@@ -14,13 +14,14 @@ class UserApiIn {
   final String email;
   final String password;
 
-  UserApiIn({
-    required this.username,
-    required this.displayName,
-    required this.email,
-    required this.password});
+  UserApiIn(
+      {required this.username,
+      required this.displayName,
+      required this.email,
+      required this.password});
 
-  factory UserApiIn.fromJson(Map<String, dynamic> json) => _$UserApiInFromJson(json);
+  factory UserApiIn.fromJson(Map<String, dynamic> json) =>
+      _$UserApiInFromJson(json);
 
   Map<String, dynamic> toJson() => _$UserApiInToJson(this);
 }

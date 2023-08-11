@@ -13,11 +13,10 @@ class ReviewsPage {
   final int? nextOffset;
   final List<ReviewWithId> reviews;
 
-  ReviewsPage({
-    this.nextOffset,
-    required this.reviews});
+  ReviewsPage({this.nextOffset, required this.reviews});
 
-  factory ReviewsPage.fromJson(Map<String, dynamic> json) => _$ReviewsPageFromJson(json);
+  factory ReviewsPage.fromJson(Map<String, dynamic> json) =>
+      _$ReviewsPageFromJson(json);
 
   Map<String, dynamic> toJson() => _$ReviewsPageToJson(this);
 }

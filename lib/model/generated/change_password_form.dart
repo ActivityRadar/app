@@ -13,11 +13,10 @@ class ChangePasswordForm {
   @JsonKey(name: "old_password")
   final String oldPassword;
 
-  ChangePasswordForm({
-    required this.newPassword,
-    required this.oldPassword});
+  ChangePasswordForm({required this.newPassword, required this.oldPassword});
 
-  factory ChangePasswordForm.fromJson(Map<String, dynamic> json) => _$ChangePasswordFormFromJson(json);
+  factory ChangePasswordForm.fromJson(Map<String, dynamic> json) =>
+      _$ChangePasswordFormFromJson(json);
 
   Map<String, dynamic> toJson() => _$ChangePasswordFormToJson(this);
 }

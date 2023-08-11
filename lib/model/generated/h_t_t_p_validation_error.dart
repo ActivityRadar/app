@@ -11,10 +11,10 @@ part 'h_t_t_p_validation_error.g.dart';
 class HTTPValidationError {
   final List<ValidationError>? detail;
 
-  HTTPValidationError({
-    this.detail});
+  HTTPValidationError({this.detail});
 
-  factory HTTPValidationError.fromJson(Map<String, dynamic> json) => _$HTTPValidationErrorFromJson(json);
+  factory HTTPValidationError.fromJson(Map<String, dynamic> json) =>
+      _$HTTPValidationErrorFromJson(json);
 
   Map<String, dynamic> toJson() => _$HTTPValidationErrorToJson(this);
 }

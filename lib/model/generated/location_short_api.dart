@@ -17,14 +17,15 @@ class LocationShortApi {
   final int trustScore;
   final String id;
 
-  LocationShortApi({
-    required this.activityType,
-    required this.location,
-    this.name,
-    required this.trustScore,
-    required this.id});
+  LocationShortApi(
+      {required this.activityType,
+      required this.location,
+      this.name,
+      required this.trustScore,
+      required this.id});
 
-  factory LocationShortApi.fromJson(Map<String, dynamic> json) => _$LocationShortApiFromJson(json);
+  factory LocationShortApi.fromJson(Map<String, dynamic> json) =>
+      _$LocationShortApiFromJson(json);
 
   Map<String, dynamic> toJson() => _$LocationShortApiToJson(this);
 }

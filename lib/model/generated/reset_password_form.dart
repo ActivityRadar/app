@@ -11,10 +11,10 @@ class ResetPasswordForm {
   @JsonKey(name: "new_password")
   final String newPassword;
 
-  ResetPasswordForm({
-    required this.newPassword});
+  ResetPasswordForm({required this.newPassword});
 
-  factory ResetPasswordForm.fromJson(Map<String, dynamic> json) => _$ResetPasswordFormFromJson(json);
+  factory ResetPasswordForm.fromJson(Map<String, dynamic> json) =>
+      _$ResetPasswordFormFromJson(json);
 
   Map<String, dynamic> toJson() => _$ResetPasswordFormToJson(this);
 }

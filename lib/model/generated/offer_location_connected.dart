@@ -12,11 +12,10 @@ class OfferLocationConnected {
   final GeoJsonLocation? coords;
   final String id;
 
-  OfferLocationConnected({
-    this.coords,
-    required this.id});
+  OfferLocationConnected({this.coords, required this.id});
 
-  factory OfferLocationConnected.fromJson(Map<String, dynamic> json) => _$OfferLocationConnectedFromJson(json);
+  factory OfferLocationConnected.fromJson(Map<String, dynamic> json) =>
+      _$OfferLocationConnectedFromJson(json);
 
   Map<String, dynamic> toJson() => _$OfferLocationConnectedToJson(this);
 }

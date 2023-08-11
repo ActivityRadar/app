@@ -5,7 +5,10 @@
 import 'package:json_annotation/json_annotation.dart';
 
 enum OfferStatus {
-  @JsonValue('open') open,
-  @JsonValue('closed') closed,
-  @JsonValue('timeout') timeout,
+  @JsonValue('open')
+  open,
+  @JsonValue('closed')
+  closed,
+  @JsonValue('timeout')
+  timeout,
 }

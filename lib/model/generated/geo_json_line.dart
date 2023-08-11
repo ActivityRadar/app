@@ -11,11 +11,10 @@ class GeoJsonLine {
   final String? type;
   final List<List<double>> coordinates;
 
-  GeoJsonLine({
-    this.type,
-    required this.coordinates});
+  GeoJsonLine({this.type, required this.coordinates});
 
-  factory GeoJsonLine.fromJson(Map<String, dynamic> json) => _$GeoJsonLineFromJson(json);
+  factory GeoJsonLine.fromJson(Map<String, dynamic> json) =>
+      _$GeoJsonLineFromJson(json);
 
   Map<String, dynamic> toJson() => _$GeoJsonLineToJson(this);
 }

@@ -14,13 +14,11 @@ class LocationHistoryIn {
   final Map<String, dynamic>? after;
   final Map<String, dynamic>? tags;
 
-  LocationHistoryIn({
-    required this.locationId,
-    this.before,
-    this.after,
-    this.tags});
+  LocationHistoryIn(
+      {required this.locationId, this.before, this.after, this.tags});
 
-  factory LocationHistoryIn.fromJson(Map<String, dynamic> json) => _$LocationHistoryInFromJson(json);
+  factory LocationHistoryIn.fromJson(Map<String, dynamic> json) =>
+      _$LocationHistoryInFromJson(json);
 
   Map<String, dynamic> toJson() => _$LocationHistoryInToJson(this);
 }

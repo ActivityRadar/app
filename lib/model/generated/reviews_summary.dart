@@ -14,12 +14,11 @@ class ReviewsSummary {
   final int count;
   final List<ReviewWithId> recent;
 
-  ReviewsSummary({
-    required this.averageRating,
-    required this.count,
-    required this.recent});
+  ReviewsSummary(
+      {required this.averageRating, required this.count, required this.recent});
 
-  factory ReviewsSummary.fromJson(Map<String, dynamic> json) => _$ReviewsSummaryFromJson(json);
+  factory ReviewsSummary.fromJson(Map<String, dynamic> json) =>
+      _$ReviewsSummaryFromJson(json);
 
   Map<String, dynamic> toJson() => _$ReviewsSummaryToJson(this);
 }

@@ -12,12 +12,10 @@ class PlainMessage {
   final DateTime time;
   final String text;
 
-  PlainMessage({
-    required this.sender,
-    required this.time,
-    required this.text});
+  PlainMessage({required this.sender, required this.time, required this.text});
 
-  factory PlainMessage.fromJson(Map<String, dynamic> json) => _$PlainMessageFromJson(json);
+  factory PlainMessage.fromJson(Map<String, dynamic> json) =>
+      _$PlainMessageFromJson(json);
 
   Map<String, dynamic> toJson() => _$PlainMessageToJson(this);
 }

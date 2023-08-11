@@ -14,12 +14,10 @@ class Authentication {
   final String? passwordHash;
   final String? email;
 
-  Authentication({
-    required this.type,
-    this.passwordHash,
-    this.email});
+  Authentication({required this.type, this.passwordHash, this.email});
 
-  factory Authentication.fromJson(Map<String, dynamic> json) => _$AuthenticationFromJson(json);
+  factory Authentication.fromJson(Map<String, dynamic> json) =>
+      _$AuthenticationFromJson(json);
 
   Map<String, dynamic> toJson() => _$AuthenticationToJson(this);
 }

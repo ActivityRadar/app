@@ -12,12 +12,10 @@ class ValidationError {
   final String msg;
   final String type;
 
-  ValidationError({
-    required this.loc,
-    required this.msg,
-    required this.type});
+  ValidationError({required this.loc, required this.msg, required this.type});
 
-  factory ValidationError.fromJson(Map<String, dynamic> json) => _$ValidationErrorFromJson(json);
+  factory ValidationError.fromJson(Map<String, dynamic> json) =>
+      _$ValidationErrorFromJson(json);
 
   Map<String, dynamic> toJson() => _$ValidationErrorToJson(this);
 }

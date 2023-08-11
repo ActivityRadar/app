@@ -21,17 +21,18 @@ class ReviewWithId {
   final String userId;
   final String id;
 
-  ReviewWithId({
-    required this.locationId,
-    required this.title,
-    required this.text,
-    required this.overallRating,
-    required this.details,
-    required this.creationDate,
-    required this.userId,
-    required this.id});
+  ReviewWithId(
+      {required this.locationId,
+      required this.title,
+      required this.text,
+      required this.overallRating,
+      required this.details,
+      required this.creationDate,
+      required this.userId,
+      required this.id});
 
-  factory ReviewWithId.fromJson(Map<String, dynamic> json) => _$ReviewWithIdFromJson(json);
+  factory ReviewWithId.fromJson(Map<String, dynamic> json) =>
+      _$ReviewWithIdFromJson(json);
 
   Map<String, dynamic> toJson() => _$ReviewWithIdToJson(this);
 }

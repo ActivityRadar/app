@@ -16,14 +16,15 @@ class ReviewBase {
   final double overallRating;
   final Map<String, dynamic> details;
 
-  ReviewBase({
-    required this.locationId,
-    required this.title,
-    required this.text,
-    required this.overallRating,
-    required this.details});
+  ReviewBase(
+      {required this.locationId,
+      required this.title,
+      required this.text,
+      required this.overallRating,
+      required this.details});
 
-  factory ReviewBase.fromJson(Map<String, dynamic> json) => _$ReviewBaseFromJson(json);
+  factory ReviewBase.fromJson(Map<String, dynamic> json) =>
+      _$ReviewBaseFromJson(json);
 
   Map<String, dynamic> toJson() => _$ReviewBaseToJson(this);
 }

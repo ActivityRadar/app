@@ -5,7 +5,10 @@
 import 'package:json_annotation/json_annotation.dart';
 
 enum AuthType {
-  @JsonValue('password') password,
-  @JsonValue('apple') apple,
-  @JsonValue('google') google,
+  @JsonValue('password')
+  password,
+  @JsonValue('apple')
+  apple,
+  @JsonValue('google')
+  google,
 }
