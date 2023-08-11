@@ -1,12 +1,17 @@
+import 'dart:io';
+
+import 'package:app/app_state.dart';
 import 'package:app/constants/constants.dart';
 import 'package:app/widgets/custom_snackbar.dart';
 import 'package:app/widgets/custom_button.dart';
 import 'package:app/widgets/custom_textfield.dart';
 import 'package:app/model/generated.dart';
+import 'package:app/provider/backend.dart';
 import 'package:app/provider/generated/users_provider.dart';
 import 'package:app/widgets/photo_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({Key? key}) : super(key: key);
@@ -151,8 +156,22 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   child: const Text('Cancel'),
                 ),
                 ElevatedButton(
-                  onPressed: () {
-                    nextPage();
+                  onPressed: () async {
+                    bool success = await UsersProvider.verifyNewUser(
+                        data: VerifyUserInfo(
+                            id: newUserId!,
+                            verificationCode: verifyCodeController.text));
+                    if (success) {
+                      bool loginSuccess = await AuthService.login(
+                          usernameController.text, passwordController.text);
+                      if (loginSuccess) {
+                        await Provider.of<AppState>(context, listen: false)
+                            .updateUserInfo();
+                        nextPage();
+                      }
+                    } else {
+                      print("Verification failed!");
+                    }
                   },
                   child: const Text('Next'),
                 ),
