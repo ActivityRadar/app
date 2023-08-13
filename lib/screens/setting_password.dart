@@ -1,5 +1,6 @@
 import 'package:app/constants/constants.dart';
 import 'package:app/widgets/custom_snackbar.dart';
+import 'package:app/widgets/custom_textbutton.dart';
 import 'package:flutter/material.dart';
 
 class PasswordSwitch extends StatelessWidget {
@@ -15,42 +16,26 @@ class PasswordSwitch extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        leading: TextButton(
-          style: TextButton.styleFrom(
-            textStyle:
-                const TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
-          ),
-          onPressed: () {
-            Navigator.pop(context);
-            ScaffoldMessenger.of(context).showSnackBar(
-              messageSnackBar('Cancel'),
-            );
-          },
-          child: const Text(
-            'Cancel',
-            style: TextStyle(color: Colors.white),
-          ),
-        ),
-        actions: [
-          TextButton(
-            style: TextButton.styleFrom(
-              textStyle:
-                  const TextStyle(fontSize: 13, fontWeight: FontWeight.bold),
-            ),
+        leading: CustomTextButton(
             onPressed: () {
-              if (formPasswordKey.currentState!.validate()) {
-                Navigator.pop(context);
-              } else {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  messageSnackBar('Please fill input'),
-                );
-              }
+              Navigator.pop(context);
+              ScaffoldMessenger.of(context).showSnackBar(
+                messageSnackBar('Cancel'),
+              );
             },
-            child: const Text(
-              'Finish',
-              style: TextStyle(color: Colors.white),
-            ),
-          ),
+            text: 'Cancel'),
+        actions: [
+          CustomTextButtonWhite(
+              onPressed: () {
+                if (formPasswordKey.currentState!.validate()) {
+                  Navigator.pop(context);
+                } else {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    messageSnackBar('Please fill input'),
+                  );
+                }
+              },
+              text: 'Finish'),
         ],
       ),
       body: Form(

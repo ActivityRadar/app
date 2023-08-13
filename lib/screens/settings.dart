@@ -8,6 +8,8 @@ import 'package:app/screens/setting_password.dart';
 import 'package:app/screens/settings_email.dart';
 import 'package:app/screens/settings_name.dart';
 import 'package:app/screens/settings_privacy.dart';
+import 'package:app/widgets/custom_snackbar.dart';
+import 'package:app/widgets/custom_textbutton.dart';
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -31,11 +33,7 @@ class SettingScreen extends StatelessWidget {
           backgroundColor: DesignColors.kBackgroundColor,
           leading: state.isLoggedIn
               ? null
-              : TextButton(
-                  style: TextButton.styleFrom(
-                    textStyle: const TextStyle(
-                        fontSize: 13, fontWeight: FontWeight.bold),
-                  ),
+              : CustomTextButton(
                   onPressed: () {
                     Navigator.push(
                       context,
@@ -44,18 +42,11 @@ class SettingScreen extends StatelessWidget {
                       ),
                     );
                   },
-                  child: const Text('Login'),
-                ),
+                  text: "Login"),
           actions: <Widget>[
             if (state.isLoggedIn)
-              TextButton(
-                style: TextButton.styleFrom(
-                  textStyle: const TextStyle(
-                      fontSize: 13, fontWeight: FontWeight.bold),
-                ),
-                onPressed: () => handleLogout(context),
-                child: const Text('logout'),
-              ),
+              CustomTextButton(
+                  onPressed: () => handleLogout(context), text: 'logout')
           ],
           flexibleSpace: LayoutBuilder(
             builder: (BuildContext context, BoxConstraints constraints) {
@@ -89,21 +80,13 @@ class SettingScreen extends StatelessWidget {
                 const Text("App-Version: Beta",
                     style: TextStyle(color: Colors.black45)),
                 if (state.isLoggedIn) ...[
-                  TextButton(
-                    style: TextButton.styleFrom(
-                      textStyle: const TextStyle(
-                          fontSize: 13, fontWeight: FontWeight.bold),
-                    ),
+                  CustomTextButton(
+                    text: 'logout',
                     onPressed: () => handleLogout(context),
-                    child: const Text('logout'),
                   ),
-                  TextButton(
-                    style: TextButton.styleFrom(
-                      textStyle: const TextStyle(
-                          fontSize: 13, fontWeight: FontWeight.bold),
-                    ),
+                  CustomTextButton(
+                    text: 'Konto löschen',
                     onPressed: () {},
-                    child: const Text('Konto löschen'),
                   ),
                 ]
               ],
@@ -433,6 +416,6 @@ void handleLogout(BuildContext context) {
   Provider.of<AppState>(context, listen: false).logout();
   TokenManager.instance.deleteToken();
   ScaffoldMessenger.of(context).showSnackBar(
-    const SnackBar(content: Text('Logged out!')),
+    messageSnackBar('Logged out!'),
   );
 }

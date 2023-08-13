@@ -3,6 +3,7 @@ import 'package:app/constants/constants.dart';
 import 'package:app/provider/generated/users_provider.dart';
 import 'package:app/provider/photos.dart';
 import 'package:app/widgets/bottomsheet.dart';
+import 'package:app/widgets/custom_textbutton.dart';
 import 'package:app/widgets/photo_picker.dart';
 import 'package:app/widgets/custom_snackbar.dart';
 import 'package:flutter/material.dart';
@@ -25,68 +26,54 @@ class DisplayNameSwitch extends StatelessWidget {
 
     return Scaffold(
         appBar: AppBar(
-          leading: TextButton(
-            style: TextButton.styleFrom(
-              textStyle:
-                  const TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
-            ),
-            onPressed: () {
-              Navigator.pop(context);
-              ScaffoldMessenger.of(context).showSnackBar(
-                messageSnackBar('Cancel'),
-              );
-            },
-            child: const Text(
-              'Cancel',
-              style: TextStyle(color: Colors.white),
-            ),
-          ),
-          actions: [
-            TextButton(
-              style: TextButton.styleFrom(
-                textStyle:
-                    const TextStyle(fontSize: 13, fontWeight: FontWeight.bold),
-              ),
-              onPressed: () async {
-                final Map<String, dynamic> data = {};
-                var ok = true;
-                if (formUsernameKey.currentState!.validate()) {
-                  if (usernameController.text != state.currentUser!.username) {
-                    data["username"] = usernameController.text;
-                  }
-                } else {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    messageSnackBar("Enter a valid username!"),
-                  );
-                  ok = false;
-                  print("Invalid new username!");
-                }
-                if (formDisplaynameKey.currentState!.validate()) {
-                  if (displaynameController.text !=
-                      state.currentUser!.displayName) {
-                    data["display_name"] = displaynameController.text;
-                  }
-                } else {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(content: Text('Enter a valid displayName!')),
-                  );
-                  ok = false;
-                  print("Invalid new display name!");
-                }
-
-                if (ok) {
-                  if (data.isNotEmpty) {
-                    await UsersProvider.updateUser(data: data)
-                        .then((_) => state.updateUserInfo());
-                  }
-                  Navigator.pop(context);
-                }
+          leading: CustomTextButtonWhite(
+              onPressed: () {
+                Navigator.pop(context);
+                ScaffoldMessenger.of(context).showSnackBar(
+                  messageSnackBar('Cancel'),
+                );
               },
-              child: const Text(
-                'Finish',
-                style: TextStyle(color: Colors.white),
-              ),
-            ),
+              text: 'Cancel'),
+          actions: [
+            CustomTextButtonWhite(
+                onPressed: () async {
+                  final Map<String, dynamic> data = {};
+                  var ok = true;
+                  if (formUsernameKey.currentState!.validate()) {
+                    if (usernameController.text !=
+                        state.currentUser!.username) {
+                      data["username"] = usernameController.text;
+                    }
+                  } else {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      messageSnackBar("Enter a valid username!"),
+                    );
+                    ok = false;
+                    print("Invalid new username!");
+                  }
+                  if (formDisplaynameKey.currentState!.validate()) {
+                    if (displaynameController.text !=
+                        state.currentUser!.displayName) {
+                      data["display_name"] = displaynameController.text;
+                    }
+                  } else {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                          content: Text('Enter a valid displayName!')),
+                    );
+                    ok = false;
+                    print("Invalid new display name!");
+                  }
+
+                  if (ok) {
+                    if (data.isNotEmpty) {
+                      await UsersProvider.updateUser(data: data)
+                          .then((_) => state.updateUserInfo());
+                    }
+                    Navigator.pop(context);
+                  }
+                },
+                text: "Finish"),
           ],
         ),
         body: Column(
@@ -221,8 +208,7 @@ Widget avatarFutureBuilder({
 
   if (state.currentUser!.avatar == null) {
     return CircleAvatar(
-        backgroundImage: AssetImages.avatarEmpty,
-        radius: radius);
+        backgroundImage: AssetImages.avatarEmpty, radius: radius);
   }
 
   final image = PhotoManager.instance.getPhoto(state.currentUser!.avatar!.url);

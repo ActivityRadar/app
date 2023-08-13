@@ -2,6 +2,7 @@ import 'package:app/app_state.dart';
 import 'package:app/provider/backend.dart';
 import 'package:app/screens/forgot_password.dart';
 import 'package:app/widgets/custom_snackbar.dart';
+import 'package:app/widgets/custom_textbutton.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -68,21 +69,17 @@ class _LoginScreenState extends State<LoginScreen> {
                     Padding(
                       padding: const EdgeInsets.symmetric(
                           horizontal: 4, vertical: 1.0),
-                      child: TextButton(
-                        style: TextButton.styleFrom(
-                          textStyle: const TextStyle(fontSize: 10),
-                        ),
-                        onPressed: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) =>
-                                  const ForgetPasswordScreen(),
-                            ),
-                          );
-                        },
-                        child: const Text('Forget password'),
-                      ),
+                      child: CustomTextButton(
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) =>
+                                    const ForgetPasswordScreen(),
+                              ),
+                            );
+                          },
+                          text: 'Forget password'),
                     ),
                     Padding(
                       padding: const EdgeInsets.symmetric(

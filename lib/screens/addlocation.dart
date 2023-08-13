@@ -1,5 +1,6 @@
 import 'package:app/constants/constants.dart';
 import 'package:app/constants/design.dart';
+import 'package:app/widgets/custom_textbutton.dart';
 import 'package:app/widgets/photo_picker.dart';
 import 'package:flutter/material.dart';
 import '../widgets/filter_discipline.dart';
@@ -232,11 +233,7 @@ class _AddLocation extends State<AddLocation> {
                 ),
                 Padding(
                   padding: const EdgeInsets.all(9.0),
-                  child: TextButton(
-                    onPressed: () {},
-                    //TODO
-                    child: const Text("Absenden"),
-                  ),
+                  child: CustomTextButton(onPressed: () {}, text: 'Absenden'),
                 ),
               ]),
             ),

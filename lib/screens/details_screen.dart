@@ -1,5 +1,6 @@
 import 'package:app/constants/design.dart';
 import 'package:app/widgets/bottomsheet.dart';
+import 'package:app/widgets/custom_textbutton.dart';
 import 'package:app/widgets/login_reminder.dart';
 import 'package:flutter/material.dart';
 
@@ -53,20 +54,18 @@ class _DetailsScreenState extends State<DetailsScreen> {
                     children: <Widget>[
                       Padding(
                         padding: const EdgeInsets.only(left: 9.0, top: 9.0),
-                        child: TextButton(
-                          onPressed: () => Navigator.pop(context),
-                          child: const Text('Cancel'),
-                        ),
+                        child: CustomTextButton(
+                            onPressed: () => Navigator.pop(context),
+                            text: 'Cancel'),
                       ),
                       const Text(
                         "Review",
                         style: TextStyle(
                             fontSize: 15, fontWeight: FontWeight.bold),
                       ),
-                      TextButton(
-                        onPressed: () => Navigator.pop(context),
-                        child: const Text('Send'), //TODO backend
-                      ),
+                      CustomTextButton(
+                          onPressed: () => Navigator.pop(context),
+                          text: 'Send'),
                     ],
                   ),
                   Padding(
@@ -384,18 +383,13 @@ class _DetailsScreenState extends State<DetailsScreen> {
                       right: 9.0,
                     ),
                     child: Row(children: [
-                      TextButton(
-                        style: TextButton.styleFrom(
-                          textStyle: const TextStyle(
-                              fontSize: 15, color: Colors.black54),
-                        ),
-                        onPressed: () => conditionalShowLoginReminder(
-                            context: context,
-                            loggedInCallback: () async {
-                              _showReviewBottomSheet(context);
-                            }),
-                        child: const Text('review'),
-                      ),
+                      CustomTextButton(
+                          onPressed: () => conditionalShowLoginReminder(
+                              context: context,
+                              loggedInCallback: () async {
+                                _showReviewBottomSheet(context);
+                              }),
+                          text: "review"),
                       const Icon(Icons.edit_note),
                     ])),
               ],
@@ -708,18 +702,17 @@ void _showDialog(BuildContext context) {
             'Thank you for contributing to the safety and respect of our community. If you believe that this content violates our policies or is inappropriate, please click on Report.   Your message will be treated confidentially and verified by our moderation team. '),
         actions: <Widget>[
           Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-            TextButton(
-              child: const Text('Cancel'),
+            CustomTextButton(
+              text: 'Cancel',
               onPressed: () {
                 Navigator.of(context).pop(); // Dialog schließen
               },
             ),
-            TextButton(
-              child: const Text('Send'),
-              onPressed: () {
-                Navigator.of(context).pop(); // Dialog schließen
-              },
-            ),
+            CustomTextButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                text: 'Send'),
           ])
         ],
       );

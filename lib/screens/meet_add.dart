@@ -1,5 +1,6 @@
 import 'package:app/constants/constants.dart';
 import 'package:app/constants/design.dart';
+import 'package:app/widgets/custom_textbutton.dart';
 import 'package:app/widgets/photo_picker.dart';
 import 'package:app/widgets/timepicker.dart';
 import 'package:flutter/material.dart';
@@ -36,13 +37,11 @@ class _AddMeet extends State<AddMeet> {
               ),
               shadowColor: DesignColors.kBackgroundColor,
               actions: [
-                TextButton(
-                  onPressed: () {},
-                  child: Text(
-                    "Send",
-                    style: TextStyle(color: DesignColors.kBackgroundColor),
-                  ),
-                )
+                CustomTextButtonWhite(
+                    onPressed: () {
+                      Navigator.of(context).pop(); // Dialog schließen
+                    },
+                    text: 'Send'),
               ],
               pinned: true,
               stretch: true,
@@ -199,10 +198,7 @@ class _AddMeet extends State<AddMeet> {
               Navigator.pop(context);
             }),
         actions: <Widget>[
-          TextButton(
-            onPressed: () {},
-            child: Text("Send"),
-          ),
+          CustomTextButton(onPressed: () {}, text: 'Send'),
         ]);
   }
 }

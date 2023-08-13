@@ -1,5 +1,6 @@
 import 'package:app/constants/constants.dart';
 import 'package:app/widgets/custom_snackbar.dart';
+import 'package:app/widgets/custom_textbutton.dart';
 import 'package:app/widgets/photo_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -397,12 +398,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
                     Row(children: [
-                      TextButton(
-                        onPressed: () {
-                          Navigator.pop(context);
-                        },
-                        child: const Text('skip'),
-                      ),
+                      CustomTextButton(
+                          onPressed: () {
+                            Navigator.pop(context);
+                          },
+                          text: "skip"),
+                      //TODO   ElevatedButton(
                       ElevatedButton(
                         onPressed: () {
                           Navigator.pop(context);
