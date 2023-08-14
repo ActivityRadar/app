@@ -20,3 +20,8 @@ String getTitle(LocationDetailedApi info) {
     return info.activityType;
   }
 }
+
+LocationShortApi fromDetailed(LocationDetailedApi info) {
+  // assumes, the detailed model extends the short one
+  return LocationShortApi.fromJson(info.toJson());
+}

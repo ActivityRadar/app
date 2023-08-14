@@ -26,16 +26,32 @@ class MapScreen extends StatefulWidget {
   }
 }
 
+class FocusedLocationNotifier extends ChangeNotifier {
+  LocationShortApi? _info;
+  String _changedBy = "";
+
+  LocationShortApi? get info => _info;
+  String get changedBy => _changedBy;
+
+  void setFocused({LocationShortApi? info, String changedBy = ""}) {
+    _info = info;
+    _changedBy = changedBy;
+    notifyListeners();
+  }
+}
+
 class MapScreenState extends State<MapScreen> {
   ValueNotifier<String> activity = ValueNotifier("-");
   late MapSearchBar searchBar;
   late ActivityMarkerMap mapWidget;
   bool infoSliderVisible = false;
   ShortInfoSlider? infoSlider;
+  FocusedLocationNotifier focusedLocationInfo = FocusedLocationNotifier();
 
   void onMarkerClick(LocationShortApi info) {
     setState(() {
-      infoSlider = ShortInfoSlider(key: UniqueKey(), info: info);
+      infoSlider =
+          ShortInfoSlider(key: UniqueKey(), info: info, mapState: this);
     });
     if (infoSliderVisible) {
       // TODO: just change the boxes
@@ -65,9 +81,11 @@ class MapScreenState extends State<MapScreen> {
 }
 
 class ShortInfoSlider extends StatefulWidget {
-  const ShortInfoSlider({super.key, required this.info});
+  const ShortInfoSlider(
+      {super.key, required this.info, required this.mapState});
 
   final LocationShortApi info;
+  final MapScreenState mapState;
 
   @override
   State<ShortInfoSlider> createState() => _ShortInfoSliderState();
@@ -81,7 +99,10 @@ class _ShortInfoSliderState extends State<ShortInfoSlider> {
   @override
   void initState() {
     super.initState();
-    infos = LocationService().getAroundCenter(widget.info.location);
+    infos = LocationService().getAroundCenter(widget.info.location,
+        activity: widget.mapState.activity.value);
+
+    widget.mapState.focusedLocationInfo.addListener(() {});
   }
 
   @override
@@ -153,6 +174,11 @@ class _ShortInfoSliderState extends State<ShortInfoSlider> {
                     setState(() {
                       print("state set!");
                       _current = position;
+                      if (snapshot.hasData) {
+                        widget.mapState.focusedLocationInfo.setFocused(
+                            info: fromDetailed(snapshot.data![position]),
+                            changedBy: "slider");
+                      }
                     });
                   },
                 ));
@@ -205,19 +231,30 @@ class _ActivityMarkerMapState extends State<ActivityMarkerMap>
   }
 
   void onMarkerClick(LocationShortApi loc) {
-    setState(() {
-      final oldFocused = focusedLocationId;
-      focusedLocationId = loc.id;
-      if (oldFocused != null) {
-        final idx = markers.indexWhere((m) => m.location.id == oldFocused);
-        final unfocusedMarker = createMarker(markers[idx].location);
-        markers.removeAt(idx);
-        markers.add(unfocusedMarker);
-      }
+    // setState(() {
+    widget.mapState.focusedLocationInfo
+        .setFocused(info: loc, changedBy: "markerTap");
+    // });
+  }
 
+  void onFocusChanged(String? oldFocused, LocationShortApi? loc,
+      {bool move = false}) {
+    focusedLocationId = loc?.id;
+    if (oldFocused != null) {
+      final idx = markers.indexWhere((m) => m.location.id == oldFocused);
+      final unfocusedMarker = createMarker(markers[idx].location);
+      markers.removeAt(idx);
+      markers.add(unfocusedMarker);
+    }
+
+    if (loc != null) {
       markers.removeWhere((m) => m.location.id == loc.id);
       markers.add(createMarker(loc));
-    });
+
+      if (move) {
+        mapController.centerOnPoint(toLatLng(loc.location));
+      }
+    }
   }
 
   void onMarkerDoubleTap() {
@@ -258,6 +295,15 @@ class _ActivityMarkerMapState extends State<ActivityMarkerMap>
     widget.mapState.activity.addListener(() {
       print("set_activity triggered");
       performSearch();
+    });
+
+    widget.mapState.focusedLocationInfo.addListener(() {
+      final oldFocused = focusedLocationId;
+      final move = widget.mapState.focusedLocationInfo.changedBy != "markerTap";
+      setState(() {
+        onFocusChanged(oldFocused, widget.mapState.focusedLocationInfo.info,
+            move: move);
+      });
     });
 
     super.initState();
