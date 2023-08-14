@@ -1,6 +1,7 @@
 import 'package:app/constants/constants.dart';
 import 'package:app/constants/design.dart';
 import 'package:app/widgets/custom_button.dart';
+import 'package:app/widgets/custom_textfield.dart';
 import 'package:app/widgets/photo_picker.dart';
 import 'package:flutter/material.dart';
 import '../widgets/filter_discipline.dart';
@@ -66,14 +67,10 @@ class _AddLocation extends State<AddLocation> {
                 ),
                 Padding(
                   padding: const EdgeInsets.all(9.0),
-                  child: TextField(
-                      controller: nameController,
-                      onChanged: (v) => nameController.text = v,
-                      decoration: const InputDecoration(
-                        filled: true,
-                        fillColor: Color.fromARGB(209, 155, 203, 241),
-                        labelText: 'Name',
-                      )),
+                  child: CustomTextField(
+                    streetController: nameController,
+                    label: "Name",
+                  ),
                 ),
                 Padding(
                   padding: const EdgeInsets.only(left: 9.0, top: 15.0),
@@ -91,14 +88,10 @@ class _AddLocation extends State<AddLocation> {
                       flex: 3,
                       child: Padding(
                         padding: const EdgeInsets.all(9.0),
-                        child: TextField(
-                            controller: streetController,
-                            onChanged: (v) => streetController.text = v,
-                            decoration: const InputDecoration(
-                              filled: true,
-                              fillColor: Color.fromARGB(209, 155, 203, 241),
-                              labelText: 'Street',
-                            )),
+                        child: CustomTextField(
+                          streetController: streetController,
+                          label: "Street",
+                        ),
                       ),
                     ),
                     const SizedBox(
@@ -108,14 +101,10 @@ class _AddLocation extends State<AddLocation> {
                       flex: 1,
                       child: Padding(
                         padding: const EdgeInsets.all(9.0),
-                        child: TextField(
-                            controller: streetController,
-                            onChanged: (v) => streetController.text = v,
-                            decoration: const InputDecoration(
-                              filled: true,
-                              fillColor: Color.fromARGB(209, 155, 203, 241),
-                              labelText: 'house number ',
-                            )),
+                        child: CustomTextField(
+                          streetController: streetController,
+                          label: "house number ",
+                        ),
                       ),
                     )
                   ],
@@ -126,14 +115,10 @@ class _AddLocation extends State<AddLocation> {
                       flex: 3,
                       child: Padding(
                         padding: const EdgeInsets.all(9.0),
-                        child: TextField(
-                            controller: streetController,
-                            onChanged: (v) => streetController.text = v,
-                            decoration: const InputDecoration(
-                              filled: true,
-                              fillColor: Color.fromARGB(209, 155, 203, 241),
-                              labelText: 'City',
-                            )),
+                        child: CustomTextField(
+                          streetController: streetController,
+                          label: "City",
+                        ),
                       ),
                     ),
                     const SizedBox(
@@ -143,14 +128,10 @@ class _AddLocation extends State<AddLocation> {
                       flex: 2,
                       child: Padding(
                         padding: const EdgeInsets.all(9.0),
-                        child: TextField(
-                            controller: streetController,
-                            onChanged: (v) => streetController.text = v,
-                            decoration: const InputDecoration(
-                              filled: true,
-                              fillColor: Color.fromARGB(209, 155, 203, 241),
-                              labelText: 'zip code ',
-                            )),
+                        child: CustomTextField(
+                          streetController: streetController,
+                          label: "zip code",
+                        ),
                       ),
                     )
                   ],
@@ -178,16 +159,9 @@ class _AddLocation extends State<AddLocation> {
                 ),
                 Padding(
                   padding: const EdgeInsets.all(9.0),
-                  child: TextField(
-                    controller: nameController,
-                    onChanged: (v) => nameController.text = v,
-                    decoration: const InputDecoration(
-                      filled: true,
-                      fillColor: Color.fromARGB(209, 155, 203, 241),
-                      labelText: 'description',
-                    ),
-                    maxLines: 3,
-                    minLines: 2,
+                  child: DescriptionTextField(
+                    streetController: nameController,
+                    label: "description",
                   ),
                 ),
                 Padding(

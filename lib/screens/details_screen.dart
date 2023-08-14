@@ -1,5 +1,6 @@
 import 'package:app/constants/design.dart';
 import 'package:app/widgets/bottomsheet.dart';
+import 'package:app/widgets/custom_alertdialog.dart';
 import 'package:app/widgets/custom_button.dart';
 import 'package:app/widgets/login_reminder.dart';
 import 'package:flutter/material.dart';
@@ -696,26 +697,18 @@ void _showDialog(BuildContext context) {
   showDialog(
     context: context,
     builder: (BuildContext context) {
-      return AlertDialog(
-        title: const Text('Report as inappropriate'),
-        content: const Text(
-            'Thank you for contributing to the safety and respect of our community. If you believe that this content violates our policies or is inappropriate, please click on Report.   Your message will be treated confidentially and verified by our moderation team. '),
-        actions: <Widget>[
-          Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-            CustomTextButton(
-              text: 'Cancel',
-              onPressed: () {
-                Navigator.of(context).pop(); // Dialog schließen
-              },
-            ),
-            CustomTextButton(
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
-                text: 'Send'),
-          ])
-        ],
-      );
+      return CustomAlertDialog(
+          title: 'Report as inappropriate',
+          content: Text(
+              'Thank you for contributing to the safety and respect of our community. If you believe that this content violates our policies or is inappropriate, please click on Report.   Your message will be treated confidentially and verified by our moderation team. '),
+          firstbuttonText: "Cancel",
+          firstonPress: () {
+            Navigator.of(context).pop();
+          }, // Dialog schließen
+          secondbuttonText: 'Send',
+          secondonPress: () {
+            Navigator.of(context).pop();
+          });
     },
   );
 }

@@ -8,6 +8,7 @@ import 'package:app/screens/setting_password.dart';
 import 'package:app/screens/settings_email.dart';
 import 'package:app/screens/settings_name.dart';
 import 'package:app/screens/settings_privacy.dart';
+import 'package:app/widgets/custom_icon.dart';
 import 'package:app/widgets/custom_snackbar.dart';
 import 'package:app/widgets/custom_button.dart';
 
@@ -121,14 +122,7 @@ class SettingScreen extends StatelessWidget {
                   ),
                 );
               },
-              child: const CircleAvatar(
-                  radius: 8,
-                  child: Center(
-                    child: Icon(
-                      Icons.edit,
-                      size: 8,
-                    ),
-                  )),
+              child: EditIcon(),
             ),
           ),
         ]),

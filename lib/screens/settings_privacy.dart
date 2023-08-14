@@ -20,13 +20,15 @@ class _PrivacySettingPageState extends State<PrivacySettingPage> {
       body: CustomScrollView(
         slivers: <Widget>[
           SliverAppBar(
-              title: const Text("Privacy"),
-              centerTitle: true,
-              leading: IconButton(
-                  onPressed: () {
-                    Navigator.pop(context);
-                  },
-                  icon: const Icon(Icons.navigate_before))),
+            title: const Text("Privacy"),
+            centerTitle: true,
+            leading: IconButton(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              icon: const Icon(Icons.navigate_before),
+            ),
+          ),
           SliverList(
               delegate: SliverChildListDelegate([
             Column(
@@ -51,11 +53,9 @@ class _PrivacySettingPageState extends State<PrivacySettingPage> {
                         ListTile(
                           title: const Text('öffentliches Profil'),
                           trailing: Switch(
-                            // This bool value toggles the switch.
                             value: isExpanded,
                             activeColor: Colors.red,
                             onChanged: (bool value) {
-                              // This is called when the user toggles the switch.
                               setState(() {
                                 isExpanded = value;
                               });
@@ -115,11 +115,9 @@ class _ExpandableTileState extends State<ExpandableTile> {
                 topRight: Radius.circular(AppStyle.cornerRadius))),
         title: const Text('Sichtbarkeit auf dem Map'),
         trailing: Switch(
-          // This bool value toggles the switch.
           value: isExpanded,
           activeColor: Colors.red,
           onChanged: (bool value) {
-            // This is called when the user toggles the switch.
             setState(() {
               isExpanded = value;
             });
@@ -131,11 +129,9 @@ class _ExpandableTileState extends State<ExpandableTile> {
         ListTile(
           title: const Text('Nur Freunde'),
           trailing: Switch(
-            // This bool value toggles the switch.
             value: isfriends,
             activeColor: Colors.red,
             onChanged: (bool value) {
-              // This is called when the user toggles the switch.
               setState(() {
                 isfriends = value;
               });
@@ -146,11 +142,9 @@ class _ExpandableTileState extends State<ExpandableTile> {
         ListTile(
           title: const Text('Radius'),
           trailing: Switch(
-            // This bool value toggles the switch.
             value: isRadius,
             activeColor: Colors.red,
             onChanged: (bool value) {
-              // This is called when the user toggles the switch.
               setState(() {
                 isRadius = value;
               });

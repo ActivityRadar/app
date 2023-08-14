@@ -16,3 +16,21 @@ class NaviIcon extends StatelessWidget {
     return Icon(icon, color: currentTab ? DesignColors.naviColor : Colors.grey);
   }
 }
+
+class EditIcon extends StatelessWidget {
+  const EditIcon({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return const CircleAvatar(
+        radius: 8,
+        child: Center(
+          child: Icon(
+            Icons.edit,
+            size: 8,
+          ),
+        ));
+  }
+}

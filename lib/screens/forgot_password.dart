@@ -1,4 +1,5 @@
 import 'package:app/widgets/custom_button.dart';
+import 'package:app/widgets/custom_snackbar.dart';
 import 'package:flutter/material.dart';
 
 class ForgetPasswordScreen extends StatefulWidget {
@@ -72,8 +73,7 @@ class _ForgetPasswordScreen extends State<ForgetPasswordScreen> {
                               print(emailController.text);
                             } else {
                               ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(
-                                    content: Text('Please fill input')),
+                                messageSnackBar('Please fill input'),
                               );
                             }
                           },

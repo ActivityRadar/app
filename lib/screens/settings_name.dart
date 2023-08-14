@@ -58,8 +58,7 @@ class DisplayNameSwitch extends StatelessWidget {
                     }
                   } else {
                     ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(
-                          content: Text('Enter a valid displayName!')),
+                      messageSnackBar('Enter a valid displayName!'),
                     );
                     ok = false;
                     print("Invalid new display name!");
