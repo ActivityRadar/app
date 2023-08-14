@@ -2,6 +2,7 @@
 import 'package:app/constants/design.dart';
 import 'package:app/constants/constants.dart';
 import 'package:app/screens/location_picker.dart';
+import 'package:app/widgets/custom_listtile.dart';
 import 'package:app/widgets/custom_text.dart';
 import 'package:app/widgets/custom_button.dart';
 import 'package:app/widgets/filter_discipline.dart';
@@ -26,10 +27,10 @@ Future<dynamic> bottomSheetAdd(BuildContext context) {
       builder: (context) => Column(
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
-              ListTile(
-                leading: const Icon(Icons.push_pin),
-                title: const Text("Add Location"),
-                onTap: () {
+              CustomListTile(
+                icon: Icon(Icons.push_pin),
+                titleText: "Add Location",
+                onPressed: () {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
@@ -38,10 +39,10 @@ Future<dynamic> bottomSheetAdd(BuildContext context) {
                   );
                 },
               ),
-              ListTile(
-                leading: const Icon(Icons.event),
-                title: const Text("Add Event"),
-                onTap: () {
+              CustomListTile(
+                icon: Icon(Icons.event),
+                titleText: "Add Event",
+                onPressed: () {
                   writeReview(context);
                 },
               ),

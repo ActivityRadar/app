@@ -1,6 +1,8 @@
 import 'package:app/constants/constants.dart';
 import 'package:app/constants/design.dart';
 import 'package:app/widgets/custom_button.dart';
+import 'package:app/widgets/custom_card.dart';
+import 'package:app/widgets/custom_listtile.dart';
 import 'package:app/widgets/custom_textfield.dart';
 import 'package:app/widgets/photo_picker.dart';
 import 'package:app/widgets/timepicker.dart';
@@ -64,14 +66,7 @@ class _AddMeet extends State<AddMeet> {
                           color: const Color.fromARGB(182, 0, 0, 0),
                           fontSize: width * 0.04),
                     ),
-                    Card(
-                      shape: RoundedRectangleBorder(
-                        side: const BorderSide(
-                          color: Color.fromARGB(51, 241, 241, 241),
-                        ),
-                        borderRadius:
-                            BorderRadius.circular(AppStyle.cornerRadius),
-                      ),
+                    CustomCard(
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
@@ -125,14 +120,7 @@ class _AddMeet extends State<AddMeet> {
                             fontSize: width * 0.05),
                       ),
                     ),
-                    Card(
-                      shape: RoundedRectangleBorder(
-                        side: const BorderSide(
-                          color: Color.fromARGB(51, 241, 241, 241),
-                        ),
-                        borderRadius:
-                            BorderRadius.circular(AppStyle.cornerRadius),
-                      ),
+                    CustomCard(
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
@@ -150,20 +138,13 @@ class _AddMeet extends State<AddMeet> {
                             fontSize: width * 0.04),
                       ),
                     ),
-                    Card(
-                      shape: RoundedRectangleBorder(
-                        side: const BorderSide(
-                          color: Color.fromARGB(51, 241, 241, 241),
-                        ),
-                        borderRadius:
-                            BorderRadius.circular(AppStyle.cornerRadius),
-                      ),
+                    CustomCard(
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
-                          ListTile(
-                            title: Text("Pick Location"),
-                            onTap: () {},
+                          CustomListTile(
+                            onPressed: () {},
+                            titleText: "Pick Location",
                           ),
                           DateTimePicker(),
                         ],

@@ -2,6 +2,7 @@ import 'package:app/constants/design.dart';
 import 'package:app/widgets/bottomsheet.dart';
 import 'package:app/widgets/custom_alertdialog.dart';
 import 'package:app/widgets/custom_button.dart';
+import 'package:app/widgets/custom_card.dart';
 import 'package:app/widgets/login_reminder.dart';
 import 'package:flutter/material.dart';
 
@@ -547,7 +548,7 @@ class ReviewBox extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 3.0),
       child: Container(
-          child: Card(
+          child: CustomCard(
               child: Column(
         children: [
           // Name, Profilimage,

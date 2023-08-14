@@ -4,6 +4,7 @@ import 'package:app/provider/generated/users_provider.dart';
 import 'package:app/provider/photos.dart';
 import 'package:app/widgets/bottomsheet.dart';
 import 'package:app/widgets/custom_button.dart';
+import 'package:app/widgets/custom_listtile.dart';
 import 'package:app/widgets/photo_picker.dart';
 import 'package:app/widgets/custom_snackbar.dart';
 import 'package:flutter/material.dart';
@@ -246,21 +247,21 @@ Future<void> bottomSheetAvatarAction(BuildContext context) async {
           return Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              ListTile(
-                leading: const Icon(Icons.delete),
-                title: const Text("Delete current photo"),
-                onTap: () {
+              CustomListTile(
+                onPressed: () {
                   UsersProvider.deleteProfilePhoto()
                       .then((_) => updateAndReturn());
                   // TODO: do something to show the user that the photo is gone
                 },
+                icon: Icon(Icons.delete),
+                titleText: "Delete current photo",
               ),
-              ListTile(
-                leading: const Icon(Icons.upload),
-                title: const Text("Set new photo"),
-                onTap: () {
+              CustomListTile(
+                onPressed: () {
                   avatarPicker(context, userId).then((_) => updateAndReturn());
                 },
+                icon: Icon(Icons.upload),
+                titleText: "Set new photo",
               )
             ],
           );

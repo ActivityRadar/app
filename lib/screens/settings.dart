@@ -8,7 +8,9 @@ import 'package:app/screens/setting_password.dart';
 import 'package:app/screens/settings_email.dart';
 import 'package:app/screens/settings_name.dart';
 import 'package:app/screens/settings_privacy.dart';
+import 'package:app/widgets/custom_card.dart';
 import 'package:app/widgets/custom_icon.dart';
+import 'package:app/widgets/custom_listtile.dart';
 import 'package:app/widgets/custom_snackbar.dart';
 import 'package:app/widgets/custom_button.dart';
 
@@ -138,23 +140,22 @@ class SettingScreen extends StatelessWidget {
           "Konto",
         ),
       ),
-      Card(
-        shape: RoundedRectangleBorder(
-          side: const BorderSide(
-            color: Color.fromARGB(51, 241, 241, 241),
-          ),
-          borderRadius: BorderRadius.circular(AppStyle.cornerRadius),
-        ),
+      CustomCard(
         child: Column(
           children: [
-            ListTile(
-              shape: const RoundedRectangleBorder(
-                  borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(AppStyle.cornerRadius),
-                      topRight: Radius.circular(AppStyle.cornerRadius))),
-              tileColor: Colors.white,
-              title: const Text('Username and Displayname'),
-              onTap: () {
+            CustomListTile(
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const DisplayNameSwitch(),
+                    ),
+                  );
+                },
+                titleText: "Username and Displayname"),
+            const Divider(height: 0),
+            TwoListTile(
+              onPressed: () {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
@@ -162,43 +163,12 @@ class SettingScreen extends StatelessWidget {
                   ),
                 );
               },
+              firstText: "Displayname",
+              secoundText: userInfo.displayName,
             ),
             const Divider(height: 0),
-            ListTile(
-              tileColor: Colors.white,
-              title: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: <Widget>[
-                  const Text('Displayname'),
-                  Text(
-                    userInfo.displayName,
-                    style: const TextStyle(color: Colors.black26),
-                  ),
-                ],
-              ),
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const DisplayNameSwitch(),
-                  ),
-                );
-              },
-            ),
-            const Divider(height: 0),
-            ListTile(
-              tileColor: Colors.white,
-              title: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: <Widget>[
-                  Text('E-Mail'),
-                  Text(
-                    userInfo.authentication.email ?? "none@none.com",
-                    style: TextStyle(color: Colors.black26),
-                  ),
-                ],
-              ),
-              onTap: () {
+            TwoListTile(
+              onPressed: () {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
@@ -206,47 +176,31 @@ class SettingScreen extends StatelessWidget {
                   ),
                 );
               },
+              firstText: "E-Mail",
+              secoundText: userInfo.authentication.email ?? "none@none.com",
             ),
             const Divider(height: 0),
-            ListTile(
-              tileColor: Colors.white,
-              title: const Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: <Widget>[
-                  Text('Password'),
-                ],
-              ),
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const PasswordSwitch(),
-                  ),
-                );
-              },
-            ),
+            CustomListTile(
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const PasswordSwitch(),
+                    ),
+                  );
+                },
+                titleText: "Password"),
             const Divider(height: 0),
-            ListTile(
-              shape: const RoundedRectangleBorder(
-                  borderRadius: BorderRadius.only(
-                      bottomLeft: Radius.circular(AppStyle.cornerRadius),
-                      bottomRight: Radius.circular(AppStyle.cornerRadius))),
-              tileColor: Colors.white,
-              title: const Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: <Widget>[
-                  Text('Privacy'),
-                ],
-              ),
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const PrivacySettingPage(),
-                  ),
-                );
-              },
-            ),
+            CustomListTile(
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const PrivacySettingPage(),
+                    ),
+                  );
+                },
+                titleText: "Privacy"),
           ],
         ),
       ),
@@ -261,63 +215,17 @@ class SettingScreen extends StatelessWidget {
           "App",
         ),
       ),
-      Card(
-        shape: RoundedRectangleBorder(
-          side: const BorderSide(
-            color: Color.fromARGB(51, 241, 241, 241),
-          ),
-          borderRadius: BorderRadius.circular(AppStyle.cornerRadius),
-        ),
+      CustomCard(
         child: Column(children: [
-          ListTile(
-            shape: const RoundedRectangleBorder(
-                borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(AppStyle.cornerRadius),
-                    topRight: Radius.circular(AppStyle.cornerRadius))),
-            tileColor: Colors.white,
-            title: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: <Widget>[
-                const Text('Language'),
-                // Abstand zwischen Avatar und Text
-
-                TextButton(
-                  style: TextButton.styleFrom(
-                    textStyle: const TextStyle(color: Colors.black12),
-                  ),
-                  onPressed: () {},
-                  child: const Text(
-                    'English',
-                    style: TextStyle(color: Colors.black12),
-                  ),
-                ),
-              ],
-            ),
+          TwoListTile(
+            onPressed: () {},
+            firstText: 'Language',
+            secoundText: 'English',
           ),
           const Divider(height: 0),
-          const ListTile(
-            tileColor: Colors.white,
-            title: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: <Widget>[
-                Text('Map'),
-              ],
-            ),
-          ),
+          CustomListTile(onPressed: () {}, titleText: "Map"),
           const Divider(height: 0),
-          const ListTile(
-            shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.only(
-                    bottomLeft: Radius.circular(AppStyle.cornerRadius),
-                    bottomRight: Radius.circular(AppStyle.cornerRadius))),
-            tileColor: Colors.white,
-            title: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: <Widget>[
-                Text('Farbe'),
-              ],
-            ),
-          ),
+          CustomListTile(onPressed: () {}, titleText: "Farbe"),
         ]),
       )
     ];
@@ -331,49 +239,14 @@ class SettingScreen extends StatelessWidget {
           "Rechtliche",
         ),
       ),
-      Card(
-        shape: RoundedRectangleBorder(
-          side: const BorderSide(
-            color: Color.fromARGB(51, 241, 241, 241),
-          ),
-          borderRadius: BorderRadius.circular(AppStyle.cornerRadius),
-        ),
-        child: const Column(
+      CustomCard(
+        child: Column(
           children: [
-            ListTile(
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.only(
-                      topRight: Radius.circular(AppStyle.cornerRadius),
-                      topLeft: Radius.circular(AppStyle.cornerRadius))),
-              tileColor: Colors.white,
-              title: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: <Widget>[
-                  Text('data protection'),
-                ],
-              ),
-            ),
+            CustomListTile(onPressed: () {}, titleText: "data protection"),
             Divider(height: 0),
-            ListTile(
-              tileColor: Colors.white,
-              title: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: <Widget>[
-                  Text('AGB'),
-                ],
-              ),
-            ),
+            CustomListTile(onPressed: () {}, titleText: "AGB"),
             Divider(height: 0),
-            ListTile(
-              tileColor: Colors.white,
-              title: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: <Widget>[
-                  Text('Impressum'),
-                ],
-              ),
-            ),
-            Divider(height: 0),
+            CustomListTile(onPressed: () {}, titleText: "Impressum"),
           ],
         ),
       )
