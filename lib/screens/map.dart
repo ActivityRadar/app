@@ -26,14 +26,18 @@ class MapScreen extends StatefulWidget {
   }
 }
 
+enum FocusChangeReason { markerTap, slider, unfocus }
+
 class FocusedLocationNotifier extends ChangeNotifier {
   LocationShortApi? _info;
-  String _changedBy = "";
+  FocusChangeReason _changedBy = FocusChangeReason.unfocus;
 
   LocationShortApi? get info => _info;
-  String get changedBy => _changedBy;
+  FocusChangeReason get changedBy => _changedBy;
 
-  void setFocused({LocationShortApi? info, String changedBy = ""}) {
+  void setFocused(
+      {LocationShortApi? info,
+      FocusChangeReason changedBy = FocusChangeReason.unfocus}) {
     _info = info;
     _changedBy = changedBy;
     notifyListeners();
@@ -185,7 +189,7 @@ class _ShortInfoSliderState extends State<ShortInfoSlider> {
                     if (reason != CarouselPageChangedReason.controller) {
                       widget.locationNotifier.setFocused(
                           info: fromDetailed(widget.infos[position]),
-                          changedBy: "slider");
+                          changedBy: FocusChangeReason.slider);
                     }
                   });
                 },
@@ -238,7 +242,7 @@ class _ActivityMarkerMapState extends State<ActivityMarkerMap>
   void onMarkerClick(LocationShortApi loc) {
     // setState(() {
     widget.mapState.focusedLocationInfo
-        .setFocused(info: loc, changedBy: "markerTap");
+        .setFocused(info: loc, changedBy: FocusChangeReason.markerTap);
     // });
   }
 
@@ -304,7 +308,8 @@ class _ActivityMarkerMapState extends State<ActivityMarkerMap>
 
     widget.mapState.focusedLocationInfo.addListener(() {
       final oldFocused = focusedLocationId;
-      final move = widget.mapState.focusedLocationInfo.changedBy != "markerTap";
+      final move = widget.mapState.focusedLocationInfo.changedBy !=
+          FocusChangeReason.markerTap;
       setState(() {
         onFocusChanged(oldFocused, widget.mapState.focusedLocationInfo.info,
             move: move);
