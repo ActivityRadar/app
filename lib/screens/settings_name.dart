@@ -3,7 +3,7 @@ import 'package:app/constants/constants.dart';
 import 'package:app/provider/generated/users_provider.dart';
 import 'package:app/provider/photos.dart';
 import 'package:app/widgets/bottomsheet.dart';
-import 'package:app/widgets/custom_textbutton.dart';
+import 'package:app/widgets/custom_button.dart';
 import 'package:app/widgets/photo_picker.dart';
 import 'package:app/widgets/custom_snackbar.dart';
 import 'package:flutter/material.dart';

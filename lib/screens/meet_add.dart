@@ -1,6 +1,6 @@
 import 'package:app/constants/constants.dart';
 import 'package:app/constants/design.dart';
-import 'package:app/widgets/custom_textbutton.dart';
+import 'package:app/widgets/custom_button.dart';
 import 'package:app/widgets/photo_picker.dart';
 import 'package:app/widgets/timepicker.dart';
 import 'package:flutter/material.dart';

@@ -9,7 +9,7 @@ import 'package:app/screens/settings_email.dart';
 import 'package:app/screens/settings_name.dart';
 import 'package:app/screens/settings_privacy.dart';
 import 'package:app/widgets/custom_snackbar.dart';
-import 'package:app/widgets/custom_textbutton.dart';
+import 'package:app/widgets/custom_button.dart';
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';

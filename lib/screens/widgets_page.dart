@@ -1,6 +1,7 @@
 import 'package:app/constants/constants.dart';
 import 'package:app/screens/meet_add.dart';
 import 'package:app/screens/meet_page.dart';
+import 'package:app/widgets/custom_button.dart';
 import 'package:app/widgets/meet_card.dart';
 import 'package:app/widgets/meet_map.dart';
 import 'package:app/widgets/profilecard.dart';
@@ -41,7 +42,7 @@ class ProfileBar extends StatelessWidget {
               height: 200, // Höhe der Karte
               child: MeetCard(),
             ),
-            ElevatedButton(
+            CustomElevatedButton(
               onPressed: () {
                 Navigator.push(
                   context,
@@ -50,7 +51,7 @@ class ProfileBar extends StatelessWidget {
                   ),
                 );
               },
-              child: Text('Add Meet'),
+              text: "Add Meet",
             ),
           ],
         ),

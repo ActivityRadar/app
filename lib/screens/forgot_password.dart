@@ -1,3 +1,4 @@
+import 'package:app/widgets/custom_button.dart';
 import 'package:flutter/material.dart';
 
 class ForgetPasswordScreen extends StatefulWidget {
@@ -64,7 +65,7 @@ class _ForgetPasswordScreen extends State<ForgetPasswordScreen> {
                       padding: const EdgeInsets.symmetric(
                           horizontal: 8, vertical: 16.0),
                       child: Center(
-                        child: ElevatedButton(
+                        child: CustomElevatedButton(
                           onPressed: () async {
                             if (_formKey.currentState!.validate()) {
                               // Navigate the user to the Home page
@@ -76,7 +77,7 @@ class _ForgetPasswordScreen extends State<ForgetPasswordScreen> {
                               );
                             }
                           },
-                          child: const Text('Submit'),
+                          text: "Submit",
                         ),
                       ),
                     ),

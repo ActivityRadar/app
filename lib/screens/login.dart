@@ -2,7 +2,7 @@ import 'package:app/app_state.dart';
 import 'package:app/provider/backend.dart';
 import 'package:app/screens/forgot_password.dart';
 import 'package:app/widgets/custom_snackbar.dart';
-import 'package:app/widgets/custom_textbutton.dart';
+import 'package:app/widgets/custom_button.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -85,12 +85,12 @@ class _LoginScreenState extends State<LoginScreen> {
                       padding: const EdgeInsets.symmetric(
                           horizontal: 8, vertical: 16.0),
                       child: Center(
-                        child: ElevatedButton(
+                        child: CustomElevatedButton(
                           onPressed: () {
                             handleLogin(context, usernameController.text,
                                 passwordController.text, _formKey);
                           },
-                          child: const Text('Submit'),
+                          text: "Submit",
                         ),
                       ),
                     ),

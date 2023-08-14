@@ -1,5 +1,6 @@
 import 'package:app/screens/login.dart';
 import 'package:app/screens/register.dart';
+import 'package:app/widgets/custom_button.dart';
 import 'package:flutter/material.dart';
 
 class AuthScreen extends StatefulWidget {
@@ -18,7 +19,7 @@ class _AuthScreenState extends State<AuthScreen> {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             ButtonBar(mainAxisSize: MainAxisSize.min, children: <Widget>[
-              ElevatedButton(
+              CustomElevatedButton(
                 onPressed: () {
                   Navigator.push(
                     context,
@@ -27,9 +28,9 @@ class _AuthScreenState extends State<AuthScreen> {
                     ),
                   );
                 },
-                child: const Text('Login'),
+                text: "Login",
               ),
-              ElevatedButton(
+              CustomElevatedButton(
                 onPressed: () {
                   Navigator.push(
                     context,
@@ -38,7 +39,7 @@ class _AuthScreenState extends State<AuthScreen> {
                     ),
                   );
                 },
-                child: const Text('Registieren'),
+                text: "Registieren",
               ),
             ]),
           ]),

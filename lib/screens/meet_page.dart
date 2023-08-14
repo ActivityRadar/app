@@ -1,7 +1,7 @@
 import 'package:app/constants/constants.dart';
 import 'package:app/constants/design.dart';
 import 'package:app/widgets/custom_text.dart';
-import 'package:app/widgets/custom_textbutton.dart';
+import 'package:app/widgets/custom_button.dart';
 import 'package:app/widgets/meet_map.dart';
 import 'package:flutter/material.dart';
 

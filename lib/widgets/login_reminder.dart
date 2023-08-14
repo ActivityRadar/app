@@ -1,6 +1,6 @@
 import 'package:app/app_state.dart';
 import 'package:app/screens/login.dart';
-import 'package:app/widgets/custom_textbutton.dart';
+import 'package:app/widgets/custom_button.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
