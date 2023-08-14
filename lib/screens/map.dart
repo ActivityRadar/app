@@ -81,7 +81,7 @@ class MapScreenState extends State<MapScreen> {
       }
 
       if (infoSlider != null) {
-        final idx = sliderInfos!.indexWhere((_info) => _info.id == info.id);
+        final idx = sliderInfos!.indexWhere((sInfo) => sInfo.id == info.id);
         if (idx == -1) {
           buildSlider(info);
         } else {
@@ -100,9 +100,19 @@ class MapScreenState extends State<MapScreen> {
     var height = size.height;
     var width = size.width;
 
-    return Stack(
-      children: [mapWidget, searchBar, if (infoSlider != null) infoSlider!],
-    );
+    return WillPopScope(
+        onWillPop: () async {
+          if (focusedLocationInfo.info == null) return true;
+          focusedLocationInfo.setFocused(
+              info: null, changedBy: FocusChangeReason.unfocus);
+          setState(() {
+            infoSlider = null;
+          });
+          return false;
+        },
+        child: Stack(
+          children: [mapWidget, searchBar, if (infoSlider != null) infoSlider!],
+        ));
   }
 }
 
