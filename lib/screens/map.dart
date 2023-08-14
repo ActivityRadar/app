@@ -44,19 +44,34 @@ class MapScreenState extends State<MapScreen> {
   ValueNotifier<String> activity = ValueNotifier("-");
   late MapSearchBar searchBar;
   late ActivityMarkerMap mapWidget;
-  bool infoSliderVisible = false;
-  ShortInfoSlider? infoSlider;
   FocusedLocationNotifier focusedLocationInfo = FocusedLocationNotifier();
+  List<LocationDetailedApi>? sliderInfos;
+  ShortInfoSlider? infoSlider;
+  ValueNotifier<int> focusedInfosIndex = ValueNotifier(0);
+
+  void buildSlider(LocationShortApi info) async {
+    sliderInfos = await LocationService()
+        .getAroundCenter(info.location, activity: activity.value);
+    setState(() {
+      print("buildSlider");
+      infoSlider = ShortInfoSlider(
+          key: UniqueKey(),
+          infos: sliderInfos!,
+          indexNotifier: focusedInfosIndex,
+          locationNotifier: focusedLocationInfo);
+    });
+  }
 
   void onMarkerClick(LocationShortApi info) {
-    setState(() {
-      infoSlider =
-          ShortInfoSlider(key: UniqueKey(), info: info, mapState: this);
-    });
-    if (infoSliderVisible) {
-      // TODO: just change the boxes
+    if (infoSlider != null) {
+      final idx = sliderInfos!.indexWhere((_info) => _info.id == info.id);
+      if (idx == -1) {
+        buildSlider(info);
+      } else {
+        focusedInfosIndex.value = idx;
+      }
     } else {
-      // TODO: let the slider pop up
+      buildSlider(info);
     }
   }
 
@@ -82,10 +97,14 @@ class MapScreenState extends State<MapScreen> {
 
 class ShortInfoSlider extends StatefulWidget {
   const ShortInfoSlider(
-      {super.key, required this.info, required this.mapState});
+      {super.key,
+      required this.infos,
+      required this.indexNotifier,
+      required this.locationNotifier});
 
-  final LocationShortApi info;
-  final MapScreenState mapState;
+  final List<LocationDetailedApi> infos;
+  final ValueNotifier<int> indexNotifier;
+  final FocusedLocationNotifier locationNotifier;
 
   @override
   State<ShortInfoSlider> createState() => _ShortInfoSliderState();
@@ -94,15 +113,32 @@ class ShortInfoSlider extends StatefulWidget {
 class _ShortInfoSliderState extends State<ShortInfoSlider> {
   int _current = 0;
   final CarouselController _controller = CarouselController();
-  late Future<List<LocationDetailedApi>> infos;
+  late List<Widget> _boxes;
 
   @override
   void initState() {
     super.initState();
-    infos = LocationService().getAroundCenter(widget.info.location,
-        activity: widget.mapState.activity.value);
 
-    widget.mapState.focusedLocationInfo.addListener(() {});
+    _boxes = widget.infos
+        .map((info) => ShortInfoBox(
+              info: info,
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => DetailsScreen(locationInfo: info),
+                  ),
+                );
+              },
+            ))
+        .toList();
+
+    widget.indexNotifier.addListener(() {
+      // make animations between pages, that are further away, longer
+      final duration = 300 + 70 * (widget.indexNotifier.value - _current).abs();
+      _controller.animateToPage(widget.indexNotifier.value,
+          duration: Duration(milliseconds: duration), curve: Curves.easeInOut);
+    });
   }
 
   @override
@@ -116,75 +152,44 @@ class _ShortInfoSliderState extends State<ShortInfoSlider> {
     return Align(
       alignment: Alignment.bottomCenter,
       child: Container(
-        margin: const EdgeInsets.only(bottom: 100),
-        height: verticalSpace,
-        child: FutureBuilder(
-          future: infos,
-          builder: (BuildContext context,
-              AsyncSnapshot<List<LocationDetailedApi>> snapshot) {
-            late List<Widget> boxes;
-            if (snapshot.hasData) {
-              boxes = snapshot.data!
-                  .map((info) => ShortInfoBox(
-                        info: info,
-                        onPressed: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) =>
-                                  DetailsScreen(locationInfo: info),
-                            ),
-                          );
-                        },
+          margin: const EdgeInsets.only(bottom: 100),
+          height: verticalSpace,
+          child: CarouselSlider(
+              // key: UniqueKey(),
+              items: _boxes
+                  .map((b) => SizedBox(
+                        height: verticalSpace,
+                        width: horizontalSpace * 0.9,
+                        child: Padding(
+                            padding:
+                                const EdgeInsets.symmetric(horizontal: 8.0),
+                            child: b),
                       ))
-                  .toList();
-            } else {
-              if (snapshot.hasError) print(snapshot.error);
-              boxes = [
-                for (int i = 0; i < 5; i++)
-                  ShortInfoBox(
-                    info: null,
-                    onPressed: () {},
-                  )
-              ];
-            }
-            return CarouselSlider(
-                items: boxes
-                    .map((b) => SizedBox(
-                          height: verticalSpace,
-                          width: horizontalSpace * 0.9,
-                          child: Padding(
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 8.0),
-                              child: b),
-                        ))
-                    .toList(),
-                carouselController: _controller,
-                options: CarouselOptions(
-                  // ratio between width and height
-                  aspectRatio:
-                      horizontalSpace / verticalSpace * 1 / viewportFraction,
-                  // how much space does the focused box take
-                  viewportFraction: viewportFraction,
-                  scrollDirection: Axis.horizontal,
-                  enableInfiniteScroll: false,
-                  // enlargeCenterPage: true,
-                  // enlargeFactor: 0.3,
-                  onPageChanged: (position, reason) {
-                    setState(() {
-                      print("state set!");
-                      _current = position;
-                      if (snapshot.hasData) {
-                        widget.mapState.focusedLocationInfo.setFocused(
-                            info: fromDetailed(snapshot.data![position]),
-                            changedBy: "slider");
-                      }
-                    });
-                  },
-                ));
-          },
-        ),
-      ),
+                  .toList(),
+              carouselController: _controller,
+              options: CarouselOptions(
+                initialPage: _current,
+                // ratio between width and height
+                aspectRatio:
+                    horizontalSpace / verticalSpace * 1 / viewportFraction,
+                // how much space does the focused box take
+                viewportFraction: viewportFraction,
+                scrollDirection: Axis.horizontal,
+                enableInfiniteScroll: false,
+                // enlargeCenterPage: true,
+                // enlargeFactor: 0.3,
+                onPageChanged: (position, reason) {
+                  print(reason);
+                  setState(() {
+                    _current = position;
+                    if (reason != CarouselPageChangedReason.controller) {
+                      widget.locationNotifier.setFocused(
+                          info: fromDetailed(widget.infos[position]),
+                          changedBy: "slider");
+                    }
+                  });
+                },
+              ))),
     );
   }
 }
