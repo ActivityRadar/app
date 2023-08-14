@@ -66,24 +66,31 @@ class MapScreenState extends State<MapScreen> {
     });
   }
 
-  void onMarkerClick(LocationShortApi info) {
-    if (infoSlider != null) {
-      final idx = sliderInfos!.indexWhere((_info) => _info.id == info.id);
-      if (idx == -1) {
-        buildSlider(info);
-      } else {
-        focusedInfosIndex.value = idx;
-      }
-    } else {
-      buildSlider(info);
-    }
-  }
-
   @override
   void initState() {
     super.initState();
     searchBar = MapSearchBar(mapState: this);
-    mapWidget = ActivityMarkerMap(mapState: this);
+    mapWidget = ActivityMarkerMap(
+        focusedLocation: focusedLocationInfo, activity: activity);
+
+    focusedLocationInfo.addListener(() {
+      final info = focusedLocationInfo.info;
+
+      if (info == null) {
+        return;
+      }
+
+      if (infoSlider != null) {
+        final idx = sliderInfos!.indexWhere((_info) => _info.id == info.id);
+        if (idx == -1) {
+          buildSlider(info);
+        } else {
+          focusedInfosIndex.value = idx;
+        }
+      } else {
+        buildSlider(info);
+      }
+    });
   }
 
   @override
@@ -201,10 +208,12 @@ class _ShortInfoSliderState extends State<ShortInfoSlider> {
 class ActivityMarkerMap extends StatefulWidget {
   const ActivityMarkerMap({
     super.key,
-    required this.mapState,
+    required this.focusedLocation,
+    required this.activity,
   });
 
-  final MapScreenState mapState;
+  final FocusedLocationNotifier focusedLocation;
+  final ValueNotifier<String> activity;
 
   @override
   State<ActivityMarkerMap> createState() {
@@ -240,10 +249,8 @@ class _ActivityMarkerMapState extends State<ActivityMarkerMap>
   }
 
   void onMarkerClick(LocationShortApi loc) {
-    // setState(() {
-    widget.mapState.focusedLocationInfo
+    widget.focusedLocation
         .setFocused(info: loc, changedBy: FocusChangeReason.markerTap);
-    // });
   }
 
   void onFocusChanged(String? oldFocused, LocationShortApi? loc,
@@ -271,23 +278,21 @@ class _ActivityMarkerMapState extends State<ActivityMarkerMap>
   }
 
   LocationMarker createMarker(LocationShortApi loc) {
-    return LocationMarker.fromLocation(loc, onPressed: (loc) {
-      widget.mapState.onMarkerClick(loc);
-      onMarkerClick(loc);
-    },
+    return LocationMarker.fromLocation(loc,
+        onPressed: onMarkerClick,
         onDoubleTap: onMarkerDoubleTap,
         focused: (focusedLocationId != null && loc.id == focusedLocationId));
   }
 
   Future<void> performSearch() async {
     print(
-        '${bounds.south}, ${bounds.west}, ${bounds.east}, ${widget.mapState.activity.value}');
+        '${bounds.south}, ${bounds.west}, ${bounds.east}, ${widget.activity.value}');
     print("fetch locations started");
 
     List<LocationShortApi> locations = await LocationService().getInBoundingBox(
         toLongLat(bounds.southWest),
         toLongLat(bounds.northEast),
-        widget.mapState.activity.value);
+        widget.activity.value);
     print(locations.length);
 
     List<LocationMarker> markers_ =
@@ -301,18 +306,17 @@ class _ActivityMarkerMapState extends State<ActivityMarkerMap>
 
   @override
   void initState() {
-    widget.mapState.activity.addListener(() {
+    widget.activity.addListener(() {
       print("set_activity triggered");
       performSearch();
     });
 
-    widget.mapState.focusedLocationInfo.addListener(() {
+    widget.focusedLocation.addListener(() {
       final oldFocused = focusedLocationId;
-      final move = widget.mapState.focusedLocationInfo.changedBy !=
-          FocusChangeReason.markerTap;
+      final move =
+          widget.focusedLocation.changedBy != FocusChangeReason.markerTap;
       setState(() {
-        onFocusChanged(oldFocused, widget.mapState.focusedLocationInfo.info,
-            move: move);
+        onFocusChanged(oldFocused, widget.focusedLocation.info, move: move);
       });
     });
 
