@@ -348,7 +348,12 @@ class _ActivityMarkerMapState extends State<ActivityMarkerMap>
     widget.currentPosition.addListener(() {
       final pos = widget.currentPosition.value;
       if (pos != null) {
-        final circle = CircleMarker(radius: 6, point: pos, color: Colors.blue);
+        final circle = CircleMarker(
+            radius: 8,
+            point: pos,
+            color: Colors.blue,
+            borderStrokeWidth: 5.0,
+            borderColor: Colors.black45);
         currentPositionLayer = CircleLayer(
           circles: [circle],
         );
