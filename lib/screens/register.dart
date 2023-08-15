@@ -2,6 +2,7 @@ import 'package:app/constants/constants.dart';
 import 'package:app/widgets/custom_snackbar.dart';
 import 'package:app/widgets/custom_button.dart';
 import 'package:app/widgets/custom_textfield.dart';
+import 'package:app/model/generated.dart';
 import 'package:app/provider/generated/users_provider.dart';
 import 'package:app/widgets/photo_picker.dart';
 import 'package:flutter/material.dart';
@@ -26,6 +27,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
   TextEditingController passwordController = TextEditingController();
   TextEditingController passwordRepeatController = TextEditingController();
   TextEditingController verifyCodeController = TextEditingController();
+  bool isLoading = false;
+
+  String? newUserId;
 
   @override
   void initState() {
@@ -213,10 +217,30 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 child: const Text('Previous'),
               ),
               ElevatedButton(
-                onPressed: () {
-                  nextPage();
-                },
-                child: const Text('Next'),
+                onPressed: isLoading
+                    ? null
+                    : () async {
+                        // TODO: show loading circle
+                        setState(() {
+                          isLoading = true;
+                        });
+
+                        final response = await UsersProvider.createUser(
+                            data: UserApiIn(
+                                username: usernameController.text,
+                                displayName: usernameController.text,
+                                email: emailController.text,
+                                password: passwordController.text));
+                        newUserId = response.id;
+
+                        setState(() {
+                          isLoading = false;
+                        });
+                        nextPage();
+                      },
+                child: isLoading
+                    ? const CircularProgressIndicator()
+                    : const Text('Next'),
               ),
             ],
           ),
