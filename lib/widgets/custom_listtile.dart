@@ -27,13 +27,13 @@ class TwoListTile extends StatelessWidget {
   const TwoListTile({
     super.key,
     required this.onPressed,
-    required this.firstText,
-    required this.secoundText,
+    required this.keyText,
+    required this.valueText,
   });
 
   final VoidCallback onPressed;
-  final String firstText;
-  final String secoundText;
+  final String keyText;
+  final String valueText;
 
   @override
   Widget build(BuildContext context) {
@@ -41,14 +41,14 @@ class TwoListTile extends StatelessWidget {
       title: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[
-          Text(firstText),
+          Text(keyText),
           TextButton(
             style: TextButton.styleFrom(
               textStyle: const TextStyle(color: Colors.black12),
             ),
             onPressed: onPressed,
             child: Text(
-              secoundText,
+              valueText,
               style: TextStyle(color: Colors.black12),
             ),
           ),

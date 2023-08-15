@@ -163,8 +163,8 @@ class SettingScreen extends StatelessWidget {
                   ),
                 );
               },
-              firstText: "Displayname",
-              secoundText: userInfo.displayName,
+              keyText: "Displayname",
+              valueText: userInfo.displayName,
             ),
             const Divider(height: 0),
             TwoListTile(
@@ -176,8 +176,8 @@ class SettingScreen extends StatelessWidget {
                   ),
                 );
               },
-              firstText: "E-Mail",
-              secoundText: userInfo.authentication.email ?? "none@none.com",
+              keyText: "E-Mail",
+              valueText: userInfo.authentication.email ?? "none@none.com",
             ),
             const Divider(height: 0),
             CustomListTile(
@@ -219,8 +219,8 @@ class SettingScreen extends StatelessWidget {
         child: Column(children: [
           TwoListTile(
             onPressed: () {},
-            firstText: 'Language',
-            secoundText: 'English',
+            keyText: 'Language',
+            valueText: 'English',
           ),
           const Divider(height: 0),
           CustomListTile(onPressed: () {}, titleText: "Map"),
