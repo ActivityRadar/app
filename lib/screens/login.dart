@@ -99,14 +99,14 @@ void handleLogin(BuildContext context, String username, String password,
       if (success) {
         Provider.of<AppState>(context, listen: false).updateUserInfo();
 
-        showMessengeSnackBar(context, 'Login successful!');
+        showMessageSnackBar(context, 'Login successful!');
 
         Navigator.of(context).pop();
       } else {
-        showMessengeSnackBar(context, 'Login failed!');
+        showMessageSnackBar(context, 'Login failed!');
       }
     });
   } else {
-    showMessengeSnackBar(context, 'Please fill input!');
+    showMessageSnackBar(context, 'Please fill input!');
   }
 }

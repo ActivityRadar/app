@@ -18,7 +18,7 @@ class EmailSwitch extends StatelessWidget {
         leading: CustomTextButtonWhite(
             onPressed: () {
               Navigator.pop(context);
-              showMessengeSnackBar(context, 'Cancel');
+              showMessageSnackBar(context, 'Cancel');
             },
             text: 'Cancel'),
         actions: [
@@ -27,7 +27,7 @@ class EmailSwitch extends StatelessWidget {
                 if (formEmailKey.currentState!.validate()) {
                   Navigator.pop(context);
                 } else {
-                  showMessengeSnackBar(context, 'Please fill input');
+                  showMessageSnackBar(context, 'Please fill input');
                 }
               },
               text: 'Finish'),
