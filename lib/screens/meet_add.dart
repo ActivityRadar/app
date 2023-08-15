@@ -71,9 +71,12 @@ class _AddMeet extends State<AddMeet> {
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
                           Padding(
-                            padding:
-                                const EdgeInsets.only(left: 9.0, top: 15.0),
-                            child: TextFormField(
+                              padding:
+                                  const EdgeInsets.only(left: 9.0, top: 15.0),
+                              child: CustomTextField(
+                                  streetController: nameController,
+                                  label: 'Titel')
+                              /*TextFormField(
                               controller: nameController,
                               onChanged: (v) => nameController.text = v,
                               decoration: const InputDecoration(
@@ -85,8 +88,8 @@ class _AddMeet extends State<AddMeet> {
                                 enabledBorder: AppInputBorders.enabled,
                                 focusedBorder: AppInputBorders.focused,
                               ),
-                            ),
-                          ),
+                            ),*/
+                              ),
                           Padding(
                             padding:
                                 const EdgeInsets.only(left: 9.0, top: 15.0),

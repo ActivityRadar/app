@@ -3,6 +3,7 @@ import 'package:app/widgets/bottomsheet.dart';
 import 'package:app/widgets/custom_alertdialog.dart';
 import 'package:app/widgets/custom_button.dart';
 import 'package:app/widgets/custom_card.dart';
+import 'package:app/widgets/custom_textfield.dart';
 import 'package:app/widgets/login_reminder.dart';
 import 'package:flutter/material.dart';
 
@@ -95,55 +96,13 @@ class _DetailsScreenState extends State<DetailsScreen> {
                   Padding(
                     padding: const EdgeInsets.only(left: 9.0, top: 15.0),
                     child: Column(children: [
-                      TextFormField(
+                      UnderLineTextFormField(
                         controller: usernameController,
-                        textAlign: TextAlign.start,
-                        decoration: const InputDecoration(
-                          hintText: 'Titel',
-                          border: UnderlineInputBorder(
-                            borderSide: BorderSide.none,
-                          ),
-                          focusedErrorBorder: UnderlineInputBorder(
-                            borderSide: BorderSide(color: Colors.red),
-                          ),
-                          errorBorder: UnderlineInputBorder(
-                            borderSide: BorderSide(color: Colors.red),
-                          ),
-                          enabledBorder: UnderlineInputBorder(
-                            borderSide: BorderSide(
-                              color: Colors.blue,
-                            ),
-                          ),
-                          focusedBorder: UnderlineInputBorder(
-                            borderSide: BorderSide(
-                              color: Colors.blue,
-                              width: 2.0,
-                            ),
-                          ),
-                        ),
+                        hinText: "Title",
                       ),
-                      TextFormField(
-                        maxLines: 5,
-                        controller: desController,
-                        textAlign: TextAlign.start,
-                        decoration: const InputDecoration(
-                          hintText: 'Description',
-                          border: UnderlineInputBorder(
-                            borderSide: BorderSide.none,
-                          ),
-                          focusedErrorBorder: UnderlineInputBorder(
-                            borderSide: BorderSide(color: Colors.red),
-                          ),
-                          errorBorder: UnderlineInputBorder(
-                            borderSide: BorderSide(color: Colors.red),
-                          ),
-                          enabledBorder: UnderlineInputBorder(
-                            borderSide: BorderSide.none,
-                          ),
-                          focusedBorder: UnderlineInputBorder(
-                            borderSide: BorderSide.none,
-                          ),
-                        ),
+                      DescriptionTextFormField(
+                        desController: desController,
+                        hinText: 'Description',
                       ),
                     ]),
                   ),

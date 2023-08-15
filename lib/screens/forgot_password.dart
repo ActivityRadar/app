@@ -1,5 +1,6 @@
 import 'package:app/widgets/custom_button.dart';
 import 'package:app/widgets/custom_snackbar.dart';
+import 'package:app/widgets/custom_textfield.dart';
 import 'package:flutter/material.dart';
 
 class ForgetPasswordScreen extends StatefulWidget {
@@ -28,39 +29,33 @@ class _ForgetPasswordScreen extends State<ForgetPasswordScreen> {
                     Text("Forget your Password"),
                     // User/Email Input
                     Padding(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 8, vertical: 16),
-                      child: TextFormField(
-                        controller: emailController,
-                        decoration: const InputDecoration(
-                            border: OutlineInputBorder(),
-                            labelText: "Username/Email"),
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return 'Please enter your username/Email';
-                          }
-                          return null;
-                        },
-                      ),
-                    ),
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 8, vertical: 16),
+                        child: CustomTextFormField(
+                          controller: emailController,
+                          labelText: "Username/Email",
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return 'Please enter your username/Email';
+                            }
+                            return null;
+                          },
+                        )),
                     // Second Email Input
 
                     Padding(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 8, vertical: 16),
-                      child: TextFormField(
-                        controller: emailControllersecond,
-                        decoration: const InputDecoration(
-                            border: OutlineInputBorder(),
-                            labelText: "Username/Email"),
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return 'Please enter your username/Email';
-                          }
-                          return null;
-                        },
-                      ),
-                    ),
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 8, vertical: 16),
+                        child: CustomTextFormField(
+                          controller: emailControllersecond,
+                          labelText: "Username/Email",
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return 'Please enter your username/Email';
+                            }
+                            return null;
+                          },
+                        )),
                     // Second Email Button
                     Padding(
                       padding: const EdgeInsets.symmetric(

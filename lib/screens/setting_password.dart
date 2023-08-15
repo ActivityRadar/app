@@ -1,6 +1,7 @@
 import 'package:app/constants/constants.dart';
 import 'package:app/widgets/custom_snackbar.dart';
 import 'package:app/widgets/custom_button.dart';
+import 'package:app/widgets/custom_textfield.dart';
 import 'package:flutter/material.dart';
 
 class PasswordSwitch extends StatelessWidget {
@@ -47,40 +48,22 @@ class PasswordSwitch extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
               Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
-                child: TextFormField(
-                  obscureText: true,
-                  controller: oldPasswordController,
-                  decoration: const InputDecoration(
-                      border: UnderlineInputBorder(
-                        borderSide: BorderSide.none,
-                      ),
-                      focusedErrorBorder: UnderlineInputBorder(
-                        borderSide: BorderSide(color: Colors.red),
-                      ),
-                      errorBorder: UnderlineInputBorder(
-                        borderSide: BorderSide(color: Colors.red),
-                      ),
-                      enabledBorder: UnderlineInputBorder(
-                        borderSide: BorderSide(color: Colors.blue),
-                      ),
-                      focusedBorder: UnderlineInputBorder(
-                        borderSide: BorderSide(color: Colors.blue),
-                      ),
-                      labelText: "old Password"),
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Please enter your old Password';
-                    }
-                    if (!RegExps.username.hasMatch(value)) {
-                      return "Password is wrong";
-                    }
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
+                  child: PasswordTextFormField(
+                    controller: oldPasswordController,
+                    labelText: "old Password",
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Please enter your old Password';
+                      }
+                      if (!RegExps.username.hasMatch(value)) {
+                        return "Password is wrong";
+                      }
 
-                    return null;
-                  },
-                ),
-              ),
+                      return null;
+                    },
+                  )),
               const Padding(
                   padding: EdgeInsets.only(left: 8),
                   child: Text(
@@ -88,74 +71,37 @@ class PasswordSwitch extends StatelessWidget {
                     style: TextStyle(color: Colors.black12),
                   )),
               Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
-                child: TextFormField(
-                  obscureText: true,
-                  controller: newPasswordController,
-                  decoration: const InputDecoration(
-                      border: UnderlineInputBorder(
-                        borderSide: BorderSide.none,
-                      ),
-                      focusedErrorBorder: UnderlineInputBorder(
-                        borderSide: BorderSide(color: Colors.red),
-                      ),
-                      errorBorder: UnderlineInputBorder(
-                        borderSide: BorderSide(color: Colors.red),
-                      ),
-                      enabledBorder: UnderlineInputBorder(
-                        borderSide: BorderSide(color: Colors.blue),
-                      ),
-                      focusedBorder: UnderlineInputBorder(
-                        borderSide: BorderSide(color: Colors.blue),
-                      ),
-                      labelText: "new Password"),
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Please enter your new Password';
-                    }
-                    if (!RegExps.username.hasMatch(value)) {
-                      return "Password is wrong";
-                    }
-
-                    return null;
-                  },
-                ),
-              ),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
+                  child: PasswordTextFormField(
+                    controller: newPasswordController,
+                    labelText: 'new Password',
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Please enter your new Password';
+                      }
+                      if (!RegExps.username.hasMatch(value)) {
+                        return "Password is wrong";
+                      }
+                      return null;
+                    },
+                  )),
               Padding(
                 padding:
                     const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
-                child: TextFormField(
-                  obscureText: true,
-                  controller: newPasswordRepeatController,
-                  decoration: const InputDecoration(
-                      border: UnderlineInputBorder(
-                        borderSide: BorderSide.none,
-                      ),
-                      focusedErrorBorder: UnderlineInputBorder(
-                        borderSide: BorderSide(color: Colors.red),
-                      ),
-                      errorBorder: UnderlineInputBorder(
-                        borderSide: BorderSide(color: Colors.red),
-                      ),
-                      enabledBorder: UnderlineInputBorder(
-                        borderSide: BorderSide(color: Colors.blue),
-                      ),
-                      focusedBorder: UnderlineInputBorder(
-                        borderSide: BorderSide(color: Colors.blue),
-                      ),
-                      labelText: "new Password"),
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Please enter your new Password';
-                    }
-                    if (!RegExps.username.hasMatch(value)) {
-                      return "Password is wrong";
-                    }
+                child: PasswordTextFormField(
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Please enter your new Password';
+                      }
+                      if (!RegExps.username.hasMatch(value)) {
+                        return "Password is wrong";
+                      }
 
-                    return null;
-                  },
-                ),
+                      return null;
+                    },
+                    labelText: "new Password",
+                    controller: newPasswordRepeatController),
               ),
               const Padding(
                   padding: EdgeInsets.only(left: 8),

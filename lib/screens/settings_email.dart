@@ -1,6 +1,7 @@
 import 'package:app/constants/constants.dart';
 import 'package:app/widgets/custom_snackbar.dart';
 import 'package:app/widgets/custom_button.dart';
+import 'package:app/widgets/custom_textfield.dart';
 import 'package:flutter/material.dart';
 
 class EmailSwitch extends StatelessWidget {
@@ -47,26 +48,9 @@ class EmailSwitch extends StatelessWidget {
               Padding(
                 padding:
                     const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
-                child: TextFormField(
+                child: CustomTextFormField(
                   controller: emailController,
-                  keyboardType: TextInputType.emailAddress,
-                  decoration: const InputDecoration(
-                      border: UnderlineInputBorder(
-                        borderSide: BorderSide.none,
-                      ),
-                      focusedErrorBorder: UnderlineInputBorder(
-                        borderSide: BorderSide(color: Colors.red),
-                      ),
-                      errorBorder: UnderlineInputBorder(
-                        borderSide: BorderSide(color: Colors.red),
-                      ),
-                      enabledBorder: UnderlineInputBorder(
-                        borderSide: BorderSide(color: Colors.blue),
-                      ),
-                      focusedBorder: UnderlineInputBorder(
-                        borderSide: BorderSide(color: Colors.blue),
-                      ),
-                      labelText: "email"),
+                  labelText: "email",
                   validator: (value) {
                     if (value != null || value!.isEmpty) {
                       if (!RegExps.email.hasMatch(value)) {

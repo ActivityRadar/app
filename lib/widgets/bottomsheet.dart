@@ -5,6 +5,7 @@ import 'package:app/screens/location_picker.dart';
 import 'package:app/widgets/custom_listtile.dart';
 import 'package:app/widgets/custom_text.dart';
 import 'package:app/widgets/custom_button.dart';
+import 'package:app/widgets/custom_textfield.dart';
 import 'package:app/widgets/filter_discipline.dart';
 import 'package:flutter/material.dart';
 
@@ -136,51 +137,10 @@ Future<dynamic> writeReview(BuildContext context) {
                     ),
                   ),
                 ),
-                TextFormField(
-                  controller: usernameController,
-                  textAlign: TextAlign.start,
-                  decoration: const InputDecoration(
-                    hintText: 'Titel',
-                    border: UnderlineInputBorder(
-                      borderSide: BorderSide.none,
-                    ),
-                    focusedErrorBorder: UnderlineInputBorder(
-                      borderSide: BorderSide(color: Colors.red),
-                    ),
-                    errorBorder: UnderlineInputBorder(
-                      borderSide: BorderSide(color: Colors.red),
-                    ),
-                    enabledBorder: UnderlineInputBorder(
-                      borderSide: BorderSide(color: Colors.blue),
-                    ),
-                    focusedBorder: UnderlineInputBorder(
-                      borderSide: BorderSide(color: Colors.blue),
-                    ),
-                  ),
-                ),
-                TextFormField(
-                  maxLines: 5,
-                  controller: desController,
-                  textAlign: TextAlign.start,
-                  decoration: const InputDecoration(
-                    hintText: 'Beschreibung',
-                    border: UnderlineInputBorder(
-                      borderSide: BorderSide.none,
-                    ),
-                    focusedErrorBorder: UnderlineInputBorder(
-                      borderSide: BorderSide(color: Colors.red),
-                    ),
-                    errorBorder: UnderlineInputBorder(
-                      borderSide: BorderSide(color: Colors.red),
-                    ),
-                    enabledBorder: UnderlineInputBorder(
-                      borderSide: BorderSide.none,
-                    ),
-                    focusedBorder: UnderlineInputBorder(
-                      borderSide: BorderSide.none,
-                    ),
-                  ),
-                ),
+                UnderLineTextFormField(
+                    controller: usernameController, hinText: 'Titel'),
+                DescriptionTextFormField(
+                    desController: desController, hinText: 'Beschreibung'),
               ],
             ));
       });

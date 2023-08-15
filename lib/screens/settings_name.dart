@@ -5,6 +5,7 @@ import 'package:app/provider/photos.dart';
 import 'package:app/widgets/bottomsheet.dart';
 import 'package:app/widgets/custom_button.dart';
 import 'package:app/widgets/custom_listtile.dart';
+import 'package:app/widgets/custom_textfield.dart';
 import 'package:app/widgets/photo_picker.dart';
 import 'package:app/widgets/custom_snackbar.dart';
 import 'package:flutter/material.dart';
@@ -98,42 +99,22 @@ class DisplayNameSwitch extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
                     Padding(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 8, vertical: 16),
-                      child: TextFormField(
-                        controller: usernameController,
-                        keyboardType: TextInputType.visiblePassword,
-                        decoration: const InputDecoration(
-                          border: UnderlineInputBorder(
-                            borderSide: BorderSide.none,
-                          ),
-                          focusedErrorBorder: UnderlineInputBorder(
-                            borderSide: BorderSide(color: Colors.red),
-                          ),
-                          errorBorder: UnderlineInputBorder(
-                            borderSide: BorderSide(color: Colors.red),
-                          ),
-                          enabledBorder: UnderlineInputBorder(
-                            borderSide: BorderSide(color: Colors.blue),
-                          ),
-                          focusedBorder: UnderlineInputBorder(
-                            borderSide: BorderSide(color: Colors.blue),
-                          ),
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 8, vertical: 16),
+                        child: CustomTextFormField(
+                          controller: usernameController,
                           labelText: "Nutzername",
-                          prefixIcon: Icon(Icons.alternate_email),
-                        ),
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return 'Please enter your Username';
-                          }
-                          if (!RegExps.username.hasMatch(value)) {
-                            return "Username is wrong";
-                          }
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return 'Please enter your Username';
+                            }
+                            if (!RegExps.username.hasMatch(value)) {
+                              return "Username is wrong";
+                            }
 
-                          return null;
-                        },
-                      ),
-                    ),
+                            return null;
+                          },
+                        )),
                     const Padding(
                         padding: EdgeInsets.only(left: 8),
                         child: Text(
@@ -153,37 +134,19 @@ class DisplayNameSwitch extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
                     Padding(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 8, vertical: 16),
-                      child: TextFormField(
-                        controller: displaynameController,
-                        decoration: const InputDecoration(
-                          border: UnderlineInputBorder(
-                            borderSide: BorderSide.none,
-                          ),
-                          focusedErrorBorder: UnderlineInputBorder(
-                            borderSide: BorderSide(color: Colors.red),
-                          ),
-                          errorBorder: UnderlineInputBorder(
-                            borderSide: BorderSide(color: Colors.red),
-                          ),
-                          enabledBorder: UnderlineInputBorder(
-                            borderSide: BorderSide(color: Colors.blue),
-                          ),
-                          focusedBorder: UnderlineInputBorder(
-                            borderSide: BorderSide(color: Colors.blue),
-                          ),
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 8, vertical: 16),
+                        child: CustomTextFormField(
+                          controller: displaynameController,
                           labelText: "Anzeigename",
-                        ),
-                        validator: (value) {
-                          if (!RegExps.displayname.hasMatch(value!)) {
-                            return "Displayname is wrong";
-                          }
+                          validator: (value) {
+                            if (!RegExps.displayname.hasMatch(value!)) {
+                              return "Displayname is wrong";
+                            }
 
-                          return null;
-                        },
-                      ),
-                    ),
+                            return null;
+                          },
+                        )),
                     const Padding(
                       padding: EdgeInsets.only(left: 8),
                       child: Text(
