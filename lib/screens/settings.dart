@@ -10,7 +10,7 @@ import 'package:app/screens/settings_name.dart';
 import 'package:app/screens/settings_privacy.dart';
 import 'package:app/widgets/custom_card.dart';
 import 'package:app/widgets/custom_icon.dart';
-import 'package:app/widgets/custom_listtile.dart';
+import 'package:app/widgets/custom_list_tile.dart';
 import 'package:app/widgets/custom_snackbar.dart';
 import 'package:app/widgets/custom_button.dart';
 

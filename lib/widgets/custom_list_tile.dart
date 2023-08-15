@@ -4,22 +4,20 @@ class CustomListTile extends StatelessWidget {
   const CustomListTile({
     super.key,
     required this.onPressed,
-    this.titleText,
-    this.splitTitle,
+    required this.titleText,
     this.icon,
   });
 
-  final String? titleText;
+  final String titleText;
   final VoidCallback onPressed;
   final Icon? icon;
-  final Widget? splitTitle;
 
   @override
   Widget build(BuildContext context) {
-    if (icon != null || titleText != null) {
-      return ListTile(leading: icon, title: Text(titleText!), onTap: onPressed);
+    if (icon != null) {
+      return ListTile(leading: icon, title: Text(titleText), onTap: onPressed);
     }
-    return ListTile(title: splitTitle, onTap: onPressed);
+    return ListTile(title: Text(titleText), onTap: onPressed);
   }
 }
 

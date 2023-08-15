@@ -48,7 +48,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     Padding(
                         padding: const EdgeInsets.symmetric(
                             horizontal: 8, vertical: 4),
-                        child: CustomTextFormField(
+                        child: PasswordTextFormField(
                           controller: passwordController,
                           labelText: "Password",
                           validator: (value) {

@@ -2,7 +2,7 @@ import 'package:app/constants/constants.dart';
 import 'package:app/constants/design.dart';
 import 'package:app/widgets/custom_button.dart';
 import 'package:app/widgets/custom_card.dart';
-import 'package:app/widgets/custom_listtile.dart';
+import 'package:app/widgets/custom_list_tile.dart';
 import 'package:app/widgets/custom_textfield.dart';
 import 'package:app/widgets/photo_picker.dart';
 import 'package:app/widgets/timepicker.dart';

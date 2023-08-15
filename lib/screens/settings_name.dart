@@ -4,7 +4,7 @@ import 'package:app/provider/generated/users_provider.dart';
 import 'package:app/provider/photos.dart';
 import 'package:app/widgets/bottomsheet.dart';
 import 'package:app/widgets/custom_button.dart';
-import 'package:app/widgets/custom_listtile.dart';
+import 'package:app/widgets/custom_list_tile.dart';
 import 'package:app/widgets/custom_textfield.dart';
 import 'package:app/widgets/photo_picker.dart';
 import 'package:app/widgets/custom_snackbar.dart';

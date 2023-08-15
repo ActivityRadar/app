@@ -91,6 +91,7 @@ class PasswordTextFormField extends StatelessWidget {
     return TextFormField(
       obscureText: true,
       controller: controller,
+      keyboardType: TextInputType.visiblePassword,
       decoration: InputDecoration(
           border: UnderlineInputBorder(
             borderSide: BorderSide.none,
