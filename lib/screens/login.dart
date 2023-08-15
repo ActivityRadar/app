@@ -98,19 +98,15 @@ void handleLogin(BuildContext context, String username, String password,
     AuthService.login(username, password).then((success) {
       if (success) {
         Provider.of<AppState>(context, listen: false).updateUserInfo();
-        ScaffoldMessenger.of(context).showSnackBar(
-          messageSnackBar('Login successful!'),
-        );
+
+        showMessengeSnackBar(context, 'Login successful!');
+
         Navigator.of(context).pop();
       } else {
-        ScaffoldMessenger.of(context).showSnackBar(
-          messageSnackBar('Login failed!'),
-        );
+        showMessengeSnackBar(context, 'Login failed!');
       }
     });
   } else {
-    ScaffoldMessenger.of(context).showSnackBar(
-      messageSnackBar('Please fill input!'),
-    );
+    showMessengeSnackBar(context, 'Please fill input!');
   }
 }

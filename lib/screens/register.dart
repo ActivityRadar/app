@@ -94,9 +94,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           if (_formEmailKey.currentState!.validate()) {
                             nextPage();
                           } else {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              messageSnackBar('Please fill input'),
-                            );
+                            showMessengeSnackBar(context, 'Please fill input');
                           }
                         },
                         child: const Text('Submit'),
@@ -181,9 +179,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           if (_formPasswordKey.currentState!.validate()) {
                             nextPage();
                           } else {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              messageSnackBar('Please fill input'),
-                            );
+                            showMessengeSnackBar(context, 'Please fill input');
                           }
                         },
                         child: const Text('Next'),
@@ -248,9 +244,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                               if (_formUsernameKey.currentState!.validate()) {
                                 nextPage();
                               } else {
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  messageSnackBar('Please fill input'),
-                                );
+                                showMessengeSnackBar(
+                                    context, 'Please fill input');
                               }
                             },
                             child: const Text('Next'),

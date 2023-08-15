@@ -67,9 +67,8 @@ class _ForgetPasswordScreen extends State<ForgetPasswordScreen> {
                               // Navigate the user to the Home page
                               print(emailController.text);
                             } else {
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                messageSnackBar('Please fill input'),
-                              );
+                              showMessengeSnackBar(
+                                  context, 'Please fill input');
                             }
                           },
                           text: "Submit",
