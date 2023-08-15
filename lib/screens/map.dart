@@ -26,29 +26,71 @@ class MapScreen extends StatefulWidget {
   }
 }
 
+enum FocusChangeReason { markerTap, slider, unfocus }
+
+class FocusedLocationNotifier extends ChangeNotifier {
+  LocationShortApi? _info;
+  FocusChangeReason _changedBy = FocusChangeReason.unfocus;
+
+  LocationShortApi? get info => _info;
+  FocusChangeReason get changedBy => _changedBy;
+
+  void setFocused(
+      {LocationShortApi? info,
+      FocusChangeReason changedBy = FocusChangeReason.unfocus}) {
+    _info = info;
+    _changedBy = changedBy;
+    notifyListeners();
+  }
+}
+
 class MapScreenState extends State<MapScreen> {
   ValueNotifier<String> activity = ValueNotifier("-");
   late MapSearchBar searchBar;
   late ActivityMarkerMap mapWidget;
-  bool infoSliderVisible = false;
+  FocusedLocationNotifier focusedLocationInfo = FocusedLocationNotifier();
+  List<LocationDetailedApi>? sliderInfos;
   ShortInfoSlider? infoSlider;
+  ValueNotifier<int> focusedInfosIndex = ValueNotifier(0);
 
-  void onMarkerClick(LocationShortApi info) {
+  void buildSlider(LocationShortApi info) async {
+    sliderInfos = await LocationService()
+        .getAroundCenter(info.location, activity: activity.value);
     setState(() {
-      infoSlider = ShortInfoSlider(key: UniqueKey(), info: info);
+      print("buildSlider");
+      infoSlider = ShortInfoSlider(
+          key: UniqueKey(),
+          infos: sliderInfos!,
+          indexNotifier: focusedInfosIndex,
+          locationNotifier: focusedLocationInfo);
     });
-    if (infoSliderVisible) {
-      // TODO: just change the boxes
-    } else {
-      // TODO: let the slider pop up
-    }
   }
 
   @override
   void initState() {
     super.initState();
     searchBar = MapSearchBar(mapState: this);
-    mapWidget = ActivityMarkerMap(mapState: this);
+    mapWidget = ActivityMarkerMap(
+        focusedLocation: focusedLocationInfo, activity: activity);
+
+    focusedLocationInfo.addListener(() {
+      final info = focusedLocationInfo.info;
+
+      if (info == null) {
+        return;
+      }
+
+      if (infoSlider != null) {
+        final idx = sliderInfos!.indexWhere((sInfo) => sInfo.id == info.id);
+        if (idx == -1) {
+          buildSlider(info);
+        } else {
+          focusedInfosIndex.value = idx;
+        }
+      } else {
+        buildSlider(info);
+      }
+    });
   }
 
   @override
@@ -58,16 +100,32 @@ class MapScreenState extends State<MapScreen> {
     var height = size.height;
     var width = size.width;
 
-    return Stack(
-      children: [mapWidget, searchBar, if (infoSlider != null) infoSlider!],
-    );
+    return WillPopScope(
+        onWillPop: () async {
+          if (focusedLocationInfo.info == null) return true;
+          focusedLocationInfo.setFocused(
+              info: null, changedBy: FocusChangeReason.unfocus);
+          setState(() {
+            infoSlider = null;
+          });
+          return false;
+        },
+        child: Stack(
+          children: [mapWidget, searchBar, if (infoSlider != null) infoSlider!],
+        ));
   }
 }
 
 class ShortInfoSlider extends StatefulWidget {
-  const ShortInfoSlider({super.key, required this.info});
+  const ShortInfoSlider(
+      {super.key,
+      required this.infos,
+      required this.indexNotifier,
+      required this.locationNotifier});
 
-  final LocationShortApi info;
+  final List<LocationDetailedApi> infos;
+  final ValueNotifier<int> indexNotifier;
+  final FocusedLocationNotifier locationNotifier;
 
   @override
   State<ShortInfoSlider> createState() => _ShortInfoSliderState();
@@ -76,12 +134,32 @@ class ShortInfoSlider extends StatefulWidget {
 class _ShortInfoSliderState extends State<ShortInfoSlider> {
   int _current = 0;
   final CarouselController _controller = CarouselController();
-  late Future<List<LocationDetailedApi>> infos;
+  late List<Widget> _boxes;
 
   @override
   void initState() {
     super.initState();
-    infos = LocationService().getAroundCenter(widget.info.location);
+
+    _boxes = widget.infos
+        .map((info) => ShortInfoBox(
+              info: info,
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => DetailsScreen(locationInfo: info),
+                  ),
+                );
+              },
+            ))
+        .toList();
+
+    widget.indexNotifier.addListener(() {
+      // make animations between pages, that are further away, longer
+      final duration = 300 + 70 * (widget.indexNotifier.value - _current).abs();
+      _controller.animateToPage(widget.indexNotifier.value,
+          duration: Duration(milliseconds: duration), curve: Curves.easeInOut);
+    });
   }
 
   @override
@@ -95,70 +173,44 @@ class _ShortInfoSliderState extends State<ShortInfoSlider> {
     return Align(
       alignment: Alignment.bottomCenter,
       child: Container(
-        margin: const EdgeInsets.only(bottom: 100),
-        height: verticalSpace,
-        child: FutureBuilder(
-          future: infos,
-          builder: (BuildContext context,
-              AsyncSnapshot<List<LocationDetailedApi>> snapshot) {
-            late List<Widget> boxes;
-            if (snapshot.hasData) {
-              boxes = snapshot.data!
-                  .map((info) => ShortInfoBox(
-                        info: info,
-                        onPressed: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) =>
-                                  DetailsScreen(locationInfo: info),
-                            ),
-                          );
-                        },
+          margin: const EdgeInsets.only(bottom: 100),
+          height: verticalSpace,
+          child: CarouselSlider(
+              // key: UniqueKey(),
+              items: _boxes
+                  .map((b) => SizedBox(
+                        height: verticalSpace,
+                        width: horizontalSpace * 0.9,
+                        child: Padding(
+                            padding:
+                                const EdgeInsets.symmetric(horizontal: 8.0),
+                            child: b),
                       ))
-                  .toList();
-            } else {
-              if (snapshot.hasError) print(snapshot.error);
-              boxes = [
-                for (int i = 0; i < 5; i++)
-                  ShortInfoBox(
-                    info: null,
-                    onPressed: () {},
-                  )
-              ];
-            }
-            return CarouselSlider(
-                items: boxes
-                    .map((b) => SizedBox(
-                          height: verticalSpace,
-                          width: horizontalSpace * 0.9,
-                          child: Padding(
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 8.0),
-                              child: b),
-                        ))
-                    .toList(),
-                carouselController: _controller,
-                options: CarouselOptions(
-                  // ratio between width and height
-                  aspectRatio:
-                      horizontalSpace / verticalSpace * 1 / viewportFraction,
-                  // how much space does the focused box take
-                  viewportFraction: viewportFraction,
-                  scrollDirection: Axis.horizontal,
-                  enableInfiniteScroll: false,
-                  // enlargeCenterPage: true,
-                  // enlargeFactor: 0.3,
-                  onPageChanged: (position, reason) {
-                    setState(() {
-                      print("state set!");
-                      _current = position;
-                    });
-                  },
-                ));
-          },
-        ),
-      ),
+                  .toList(),
+              carouselController: _controller,
+              options: CarouselOptions(
+                initialPage: _current,
+                // ratio between width and height
+                aspectRatio:
+                    horizontalSpace / verticalSpace * 1 / viewportFraction,
+                // how much space does the focused box take
+                viewportFraction: viewportFraction,
+                scrollDirection: Axis.horizontal,
+                enableInfiniteScroll: false,
+                // enlargeCenterPage: true,
+                // enlargeFactor: 0.3,
+                onPageChanged: (position, reason) {
+                  print(reason);
+                  setState(() {
+                    _current = position;
+                    if (reason != CarouselPageChangedReason.controller) {
+                      widget.locationNotifier.setFocused(
+                          info: fromDetailed(widget.infos[position]),
+                          changedBy: FocusChangeReason.slider);
+                    }
+                  });
+                },
+              ))),
     );
   }
 }
@@ -166,10 +218,12 @@ class _ShortInfoSliderState extends State<ShortInfoSlider> {
 class ActivityMarkerMap extends StatefulWidget {
   const ActivityMarkerMap({
     super.key,
-    required this.mapState,
+    required this.focusedLocation,
+    required this.activity,
   });
 
-  final MapScreenState mapState;
+  final FocusedLocationNotifier focusedLocation;
+  final ValueNotifier<String> activity;
 
   @override
   State<ActivityMarkerMap> createState() {
@@ -205,19 +259,28 @@ class _ActivityMarkerMapState extends State<ActivityMarkerMap>
   }
 
   void onMarkerClick(LocationShortApi loc) {
-    setState(() {
-      final oldFocused = focusedLocationId;
-      focusedLocationId = loc.id;
-      if (oldFocused != null) {
-        final idx = markers.indexWhere((m) => m.location.id == oldFocused);
-        final unfocusedMarker = createMarker(markers[idx].location);
-        markers.removeAt(idx);
-        markers.add(unfocusedMarker);
-      }
+    widget.focusedLocation
+        .setFocused(info: loc, changedBy: FocusChangeReason.markerTap);
+  }
 
+  void onFocusChanged(String? oldFocused, LocationShortApi? loc,
+      {bool move = false}) {
+    focusedLocationId = loc?.id;
+    if (oldFocused != null) {
+      final idx = markers.indexWhere((m) => m.location.id == oldFocused);
+      final unfocusedMarker = createMarker(markers[idx].location);
+      markers.removeAt(idx);
+      markers.add(unfocusedMarker);
+    }
+
+    if (loc != null) {
       markers.removeWhere((m) => m.location.id == loc.id);
       markers.add(createMarker(loc));
-    });
+
+      if (move) {
+        mapController.centerOnPoint(toLatLng(loc.location));
+      }
+    }
   }
 
   void onMarkerDoubleTap() {
@@ -225,23 +288,21 @@ class _ActivityMarkerMapState extends State<ActivityMarkerMap>
   }
 
   LocationMarker createMarker(LocationShortApi loc) {
-    return LocationMarker.fromLocation(loc, onPressed: (loc) {
-      widget.mapState.onMarkerClick(loc);
-      onMarkerClick(loc);
-    },
+    return LocationMarker.fromLocation(loc,
+        onPressed: onMarkerClick,
         onDoubleTap: onMarkerDoubleTap,
         focused: (focusedLocationId != null && loc.id == focusedLocationId));
   }
 
   Future<void> performSearch() async {
     print(
-        '${bounds.south}, ${bounds.west}, ${bounds.east}, ${widget.mapState.activity.value}');
+        '${bounds.south}, ${bounds.west}, ${bounds.east}, ${widget.activity.value}');
     print("fetch locations started");
 
     List<LocationShortApi> locations = await LocationService().getInBoundingBox(
         toLongLat(bounds.southWest),
         toLongLat(bounds.northEast),
-        widget.mapState.activity.value);
+        widget.activity.value);
     print(locations.length);
 
     List<LocationMarker> markers_ =
@@ -255,9 +316,18 @@ class _ActivityMarkerMapState extends State<ActivityMarkerMap>
 
   @override
   void initState() {
-    widget.mapState.activity.addListener(() {
+    widget.activity.addListener(() {
       print("set_activity triggered");
       performSearch();
+    });
+
+    widget.focusedLocation.addListener(() {
+      final oldFocused = focusedLocationId;
+      final move =
+          widget.focusedLocation.changedBy != FocusChangeReason.markerTap;
+      setState(() {
+        onFocusChanged(oldFocused, widget.focusedLocation.info, move: move);
+      });
     });
 
     super.initState();
