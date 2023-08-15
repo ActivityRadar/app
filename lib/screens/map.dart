@@ -6,6 +6,7 @@ import 'package:app/model/generated.dart';
 import 'package:app/provider/backend.dart';
 import 'package:app/provider/generated/locations_provider.dart';
 import 'package:app/screens/details_screen.dart';
+import 'package:app/widgets/custom_text.dart';
 import 'package:app/widgets/short_info_box.dart';
 import 'package:app/widgets/bar_search.dart';
 import 'package:carousel_slider/carousel_slider.dart';
@@ -383,12 +384,10 @@ class _ActivityMarkerMapState extends State<ActivityMarkerMap>
               decoration: const BoxDecoration(
                   shape: BoxShape.circle, color: Colors.blue),
               child: Center(
-                child: Text(
-                  // TODO: one marker might actually indicate multiple instances
-                  // like 2 table_tennis tables. So this will have to be adjusted.
-                  ms.length.toString(),
-                  style: const TextStyle(color: Colors.white),
-                ),
+                child: MapText(
+                  text: ms.length.toString(),
+                ), // TODO: one marker might actually indicate multiple instances
+                // like 2 table_tennis tables. So this will have to be adjusted.
               ),
             );
           },

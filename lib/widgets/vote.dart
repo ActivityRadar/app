@@ -52,33 +52,13 @@ class RatingScore extends StatelessWidget {
   Widget build(BuildContext context) {
     String scoreString = score == null ? "-" : score.toString();
     return Row(children: [
-      CustomText(text: scoreString),
+      SmallText(text: scoreString),
       const Icon(
         Icons.star,
         color: Colors.amber,
         size: 15.0,
       )
     ]);
-  }
-}
-
-class CustomText extends StatelessWidget {
-  const CustomText({
-    super.key,
-    required this.text,
-  });
-
-  final String text;
-
-  @override
-  Widget build(BuildContext context) {
-    return Text(
-      text,
-      style: const TextStyle(
-        color: Colors.black54,
-        fontSize: 18.0,
-      ),
-    );
   }
 }
 

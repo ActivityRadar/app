@@ -1,6 +1,7 @@
 import 'package:app/constants/constants.dart';
 import 'package:app/constants/design.dart';
 import 'package:app/widgets/custom_alertdialog.dart';
+import 'package:app/widgets/custom_chip.dart';
 import 'package:app/widgets/custom_text.dart';
 import 'package:app/widgets/custom_button.dart';
 import 'package:app/widgets/meet_map.dart';
@@ -17,7 +18,7 @@ class MeetPage extends StatelessWidget {
     var height = size.height;
     double width = size.width;
     return Scaffold(
-      backgroundColor: Color.fromARGB(255, 245, 245, 245),
+      backgroundColor: const Color.fromARGB(255, 245, 245, 245),
       body: CustomScrollView(slivers: <Widget>[
         SliverAppBar(
             expandedHeight: expandedHeight,
@@ -31,7 +32,7 @@ class MeetPage extends StatelessWidget {
                           .cornerRadius), // Radius der abgerundeten Ecken
                     ),
                     child: Stack(children: [
-                      MeetMap(),
+                      const MeetMap(),
                       Positioned(
                           bottom:
                               0, // Positioniert den Container am unteren Rand
@@ -50,24 +51,16 @@ class MeetPage extends StatelessWidget {
                                     ),
                                   ),
                                   Padding(
-                                      padding: EdgeInsets.only(right: 12.0),
-                                      child: Chip(
-                                          label: Text(
-                                            "ab 14 Uhr",
-                                            style: TextStyle(
-                                                color: DesignColors
-                                                    .kBackgroundColor,
-                                                fontSize: 10),
-                                          ),
-                                          backgroundColor:
-                                              DesignColors.naviColor)),
+                                    padding: EdgeInsets.only(right: 12.0),
+                                    child: CustomChip(text: "ab 14 Uhr"),
+                                  )
                                 ],
                               ))),
                     ])),
               ),
             ),
-            actions: [MeetPopupMenuCard()],
-            iconTheme: IconThemeData(
+            actions: const [MeetPopupMenuCard()],
+            iconTheme: const IconThemeData(
               color: DesignColors.naviColor,
             )),
         SliverList(
@@ -89,12 +82,9 @@ class MeetPage extends StatelessWidget {
                             SizedBox(
                               width: 10,
                             ),
-                            Text(
-                              'Max Mustermann',
-                              style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 14,
-                                  color: Colors.black54),
+                            MediumText(
+                              text: 'Max Mustermann',
+                              width: width,
                             ),
                           ]),
                         ]),
@@ -105,12 +95,9 @@ class MeetPage extends StatelessWidget {
                             text: 'Anfrage senden'),
                       ]),
                   Center(
-                    child: Text(
-                      "Table Tennis",
-                      style: TextStyle(
-                          color: const Color.fromARGB(182, 0, 0, 0),
-                          fontWeight: FontWeight.bold,
-                          fontSize: width * 0.05),
+                    child: TitleText(
+                      text: "Table Tennis",
+                      width: width,
                     ),
                   ),
                   Padding(
@@ -127,7 +114,7 @@ class MeetPage extends StatelessWidget {
                     child: TitleText(text: "description", width: width),
                   ),
                   Padding(
-                      padding: EdgeInsets.all(9.0),
+                      padding: const EdgeInsets.all(9.0),
                       child: DescriptionText(
                           text:
                               "Moin, Moin, Moin, Moin, Moin, Moin, Moin, Moin, Moin, Moin, Moin, Moin, Moin, Moin, Moin, Moin, Moin, Moin, Moin, Moin, Moin, Moin, Moin, Moin, Moin, Moin, Moin, Moin, ",
@@ -137,26 +124,6 @@ class MeetPage extends StatelessWidget {
         )
       ]),
     );
-  }
-}
-
-class CustomChip extends StatelessWidget {
-  const CustomChip({
-    super.key,
-    required this.text,
-  });
-
-  final String text;
-
-  @override
-  Widget build(BuildContext context) {
-    return Chip(
-        label: Text(
-          text,
-          style: const TextStyle(
-              color: DesignColors.kBackgroundColor, fontSize: 10),
-        ),
-        backgroundColor: DesignColors.naviColor);
   }
 }
 
@@ -184,8 +151,7 @@ class _MeetPopupMenuCardState extends State<MeetPopupMenuCard> {
           <PopupMenuEntry<ReviewPopupMenuItem>>[
         PopupMenuItem<ReviewPopupMenuItem>(
           value: ReviewPopupMenuItem.report,
-          child: const Text('Report as inappropriate',
-              style: TextStyle(fontSize: 14)),
+          child: const SystemText(text: 'Report as inappropriate'),
           onTap: () => _showDialog(context),
         ),
       ],
@@ -199,8 +165,9 @@ void _showDialog(BuildContext context) {
     builder: (BuildContext context) {
       return CustomAlertDialog(
           title: 'Report as inappropriate',
-          content: Text(
-              'Thank you for contributing to the safety and respect of our community. If you believe that this content violates our policies or is inappropriate, please click on Report.   Your message will be treated confidentially and verified by our moderation team. '),
+          content: SystemText(
+              text:
+                  'Thank you for contributing to the safety and respect of our community. If you believe that this content violates our policies or is inappropriate, please click on Report.   Your message will be treated confidentially and verified by our moderation team. '),
           firstbuttonText: "Cancel",
           firstonPress: () {
             Navigator.of(context).pop();

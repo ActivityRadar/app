@@ -4,6 +4,7 @@ import 'package:app/widgets/bottomsheet.dart';
 import 'package:app/widgets/custom_alertdialog.dart';
 import 'package:app/widgets/custom_button.dart';
 import 'package:app/widgets/custom_card.dart';
+import 'package:app/widgets/custom_text.dart';
 import 'package:app/widgets/custom_textfield.dart';
 import 'package:app/widgets/login_reminder.dart';
 import 'package:flutter/material.dart';
@@ -44,9 +45,12 @@ class _DetailsScreenState extends State<DetailsScreen> {
 
   Future<void> _showReviewBottomSheet(BuildContext context) async {
     var rating = 0;
+
     bottomSheetBase(
         context: context,
         builder: (context) {
+          var size = MediaQuery.of(context).size;
+          double width = size.width;
           return SingleChildScrollView(
               padding: EdgeInsets.only(
                   bottom: MediaQuery.of(context).viewInsets.bottom),
@@ -62,10 +66,8 @@ class _DetailsScreenState extends State<DetailsScreen> {
                             onPressed: () => Navigator.pop(context),
                             text: 'Cancel'),
                       ),
-                      const Text(
-                        "Review",
-                        style: TextStyle(
-                            fontSize: 15, fontWeight: FontWeight.bold),
+                      const SmallText(
+                        text: "Review",
                       ),
                       CustomTextButton(
                           onPressed: () => Navigator.pop(context),
@@ -151,7 +153,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
             appBar = _appBar(width, controller, current, locInfo);
             body = _contentList(width, height, locInfo);
           } else if (snapshot.hasError) {
-            body = Text("Error: ${snapshot.error}");
+            body = SmallText(text: "Error: ${snapshot.error}");
           } else {
             body = SliverList(
                 delegate: SliverChildListDelegate(
@@ -200,9 +202,9 @@ class _DetailsScreenState extends State<DetailsScreen> {
       expandedHeight: 240.0,
       flexibleSpace: FlexibleSpaceBar(
         centerTitle: true,
-        title: Text(
-          'Loading...',
-          style: TextStyle(fontWeight: FontWeight.bold, fontSize: width * 0.06),
+        title: PageTitleText(
+          text: 'Loading...',
+          width: width,
         ),
         background: const Stack(
           fit: StackFit.expand,
@@ -238,9 +240,9 @@ class _DetailsScreenState extends State<DetailsScreen> {
       expandedHeight: 260.0,
       flexibleSpace: FlexibleSpaceBar(
         centerTitle: true,
-        title: Text(
-          info.name ?? info.activityType,
-          style: TextStyle(fontWeight: FontWeight.bold, fontSize: width * 0.06),
+        title: PageTitleText(
+          text: info.name ?? info.activityType,
+          width: width,
         ),
         background:
             PhotoSlider(photos: info.photos, onExtraPhotoPress: _addPhoto),
@@ -255,23 +257,20 @@ class _DetailsScreenState extends State<DetailsScreen> {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: <Widget>[
-            const Column(
+            Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
                 Padding(
-                  padding: EdgeInsets.only(left: 9.0, top: 5.0),
-                  child: Text(
-                    "10963 Berlin",
-                    style: TextStyle(
-                        color: Color.fromARGB(88, 91, 91, 91), fontSize: 15),
-                  ),
-                ),
+                    padding: EdgeInsets.only(left: 9.0, top: 5.0),
+                    child: MediumhintText(
+                      text: "10963 Berlin",
+                      width: width,
+                    )),
                 Padding(
                   padding: EdgeInsets.only(left: 9.0),
-                  child: Text(
-                    "Park",
-                    style: TextStyle(
-                        color: Color.fromARGB(88, 91, 91, 91), fontSize: 15),
+                  child: MediumhintText(
+                    text: "Park",
+                    width: width,
                   ),
                 )
               ],
@@ -281,34 +280,23 @@ class _DetailsScreenState extends State<DetailsScreen> {
           ],
         ),
         Padding(
-          padding: const EdgeInsets.only(left: 9.0, top: 30.0),
-          child: Text(
-            "description",
-            style: TextStyle(
-                color: const Color.fromARGB(182, 0, 0, 0),
-                fontWeight: FontWeight.bold,
-                fontSize: width * 0.05),
-          ),
-        ),
+            padding: const EdgeInsets.only(left: 9.0, top: 30.0),
+            child: TitleText(
+              text: "description",
+              width: width,
+            )),
         Padding(
-          padding: const EdgeInsets.only(left: 9.0, top: 10.0),
-          child: Text(
-            "FILLER", // info.tags["description"],
-            style: TextStyle(
-                color: const Color.fromARGB(182, 0, 0, 0),
-                fontSize: width * 0.04),
-          ),
-        ),
+            padding: const EdgeInsets.only(left: 9.0, top: 10.0),
+            child: MediumText(
+              text: "FILLER", // info.tags["description"]
+              width: width,
+            )),
         Padding(
-          padding: const EdgeInsets.only(left: 9.0, top: 15.0),
-          child: Text(
-            "activityType",
-            style: TextStyle(
-                color: const Color.fromARGB(182, 0, 0, 0),
-                fontWeight: FontWeight.bold,
-                fontSize: width * 0.05),
-          ),
-        ),
+            padding: const EdgeInsets.only(left: 9.0, top: 15.0),
+            child: TitleText(
+              text: "activityType",
+              width: width,
+            )),
         Container(
           margin: const EdgeInsets.symmetric(vertical: 10),
           height: height / 7,
@@ -334,12 +322,9 @@ class _DetailsScreenState extends State<DetailsScreen> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text(
-                  "Reviews",
-                  style: TextStyle(
-                      color: const Color.fromARGB(182, 0, 0, 0),
-                      fontWeight: FontWeight.bold,
-                      fontSize: width * 0.05),
+                TitleText(
+                  text: "Reviews",
+                  width: width,
                 ),
                 Padding(
                     padding: const EdgeInsets.only(
@@ -496,6 +481,9 @@ class ReviewBox extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var size = MediaQuery.of(context).size;
+
+    double width = size.width;
     UserApiOut? userInfo;
     Future<MemoryImage?> photo =
         UserInfoManager.instance.getUserInfo(review.userId).then((info) {
@@ -554,18 +542,17 @@ class ReviewBox extends StatelessWidget {
                               height: diameter,
                               fit: BoxFit.cover)),
                     ),
-                    Text("@$displayName"),
+                    UserText(displayName: displayName, width: width),
                     const Spacer(),
                     Column(children: [
                       Padding(
                         padding: const EdgeInsets.only(left: 12.0),
                         child: RatingScore(score: review.overallRating),
                       ),
-                      Text(
-                        "${DateTime.now().difference(review.creationDate).inDays} days ago",
-                        style: const TextStyle(
-                            color: Colors.black38, fontSize: 11),
-                      ),
+                      LittleText(
+                          text:
+                              "${DateTime.now().difference(review.creationDate).inDays} days ago",
+                          width: width)
                     ]),
                     const ReviewPopupMenuCard(),
                   ],
@@ -585,9 +572,11 @@ class ReviewBox extends StatelessWidget {
                   const EdgeInsets.symmetric(vertical: 4.0, horizontal: 10.0),
               child: Row(
                 children: [
-                  const Text(
-                      "X out of Y people found this helpful", // TODO: make dynamic
-                      style: TextStyle(color: Colors.grey)),
+                  MediumhintText(
+                    text:
+                        "X out of Y people found this helpful", // TODO: make dynamic
+                    width: width,
+                  ),
                   const Spacer(),
                   IconButton(
                       onPressed: () {}, // TODO: send thumbs up
@@ -614,7 +603,7 @@ class ExpandableText extends StatelessWidget {
   Widget build(BuildContext context) {
     return ReadMoreText(text,
         trimLines: 3,
-        style: const TextStyle(color: Colors.black),
+        style: const TextStyle(color: Colors.black87),
         colorClickableText: Colors.grey,
         trimMode: TrimMode.Line,
         trimCollapsedText: "More",
@@ -646,8 +635,9 @@ class _ReviewPopupMenuCardState extends State<ReviewPopupMenuCard> {
           <PopupMenuEntry<ReviewPopupMenuItem>>[
         PopupMenuItem<ReviewPopupMenuItem>(
           value: ReviewPopupMenuItem.report,
-          child: const Text('Report as inappropriate',
-              style: TextStyle(fontSize: 14)),
+          child: SystemText(
+            text: 'Report as inappropriate',
+          ),
           onTap: () => _showDialog(context),
         ),
       ],
@@ -661,8 +651,10 @@ void _showDialog(BuildContext context) {
     builder: (BuildContext context) {
       return CustomAlertDialog(
           title: 'Report as inappropriate',
-          content: Text(
-              'Thank you for contributing to the safety and respect of our community. If you believe that this content violates our policies or is inappropriate, please click on Report.   Your message will be treated confidentially and verified by our moderation team. '),
+          content: SystemText(
+            text:
+                'Thank you for contributing to the safety and respect of our community. If you believe that this content violates our policies or is inappropriate, please click on Report.   Your message will be treated confidentially and verified by our moderation team. ',
+          ),
           firstbuttonText: "Cancel",
           firstonPress: () {
             Navigator.of(context).pop();

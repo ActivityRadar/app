@@ -1,6 +1,7 @@
 import 'package:app/constants/constants.dart';
 import 'package:app/constants/design.dart';
 import 'package:app/widgets/custom_button.dart';
+import 'package:app/widgets/custom_text.dart';
 import 'package:app/widgets/custom_textfield.dart';
 import 'package:app/widgets/photo_picker.dart';
 import 'package:flutter/material.dart';
@@ -47,24 +48,14 @@ class _AddLocation extends State<AddLocation> {
               stretch: true,
               flexibleSpace: FlexibleSpaceBar(
                   centerTitle: true,
-                  title: Text(
-                    'Location proposal',
-                    style: TextStyle(
-                        fontWeight: FontWeight.bold, fontSize: width * 0.06),
-                  )),
+                  title:
+                      PageTitleText(width: width, text: 'Location proposal')),
             ),
             SliverList(
               delegate: SliverChildListDelegate([
                 Padding(
-                  padding: const EdgeInsets.only(left: 9.0, top: 15.0),
-                  child: Text(
-                    "Name",
-                    style: TextStyle(
-                        color: const Color.fromARGB(182, 0, 0, 0),
-                        fontWeight: FontWeight.bold,
-                        fontSize: width * 0.04),
-                  ),
-                ),
+                    padding: const EdgeInsets.only(left: 9.0, top: 15.0),
+                    child: MediumText(text: "Name", width: width)),
                 Padding(
                   padding: const EdgeInsets.all(9.0),
                   child: CustomTextField(
@@ -73,15 +64,8 @@ class _AddLocation extends State<AddLocation> {
                   ),
                 ),
                 Padding(
-                  padding: const EdgeInsets.only(left: 9.0, top: 15.0),
-                  child: Text(
-                    "Adresse",
-                    style: TextStyle(
-                        color: const Color.fromARGB(182, 0, 0, 0),
-                        fontWeight: FontWeight.bold,
-                        fontSize: width * 0.04),
-                  ),
-                ),
+                    padding: const EdgeInsets.only(left: 9.0, top: 15.0),
+                    child: MediumText(text: "Adresse", width: width)),
                 Row(
                   children: <Widget>[
                     Expanded(
@@ -137,26 +121,12 @@ class _AddLocation extends State<AddLocation> {
                   ],
                 ),
                 Padding(
-                  padding: const EdgeInsets.only(left: 9.0, top: 15.0),
-                  child: Text(
-                    "activityType",
-                    style: TextStyle(
-                        color: const Color.fromARGB(182, 0, 0, 0),
-                        fontWeight: FontWeight.bold,
-                        fontSize: width * 0.05),
-                  ),
-                ),
+                    padding: const EdgeInsets.only(left: 9.0, top: 15.0),
+                    child: TitleText(text: 'activityType', width: width)),
                 FilterDiscipline(),
                 Padding(
-                  padding: const EdgeInsets.only(left: 9.0, top: 15.0),
-                  child: Text(
-                    "description",
-                    style: TextStyle(
-                        color: const Color.fromARGB(182, 0, 0, 0),
-                        fontWeight: FontWeight.bold,
-                        fontSize: width * 0.04),
-                  ),
-                ),
+                    padding: const EdgeInsets.only(left: 9.0, top: 15.0),
+                    child: TitleText(text: 'description', width: width)),
                 Padding(
                   padding: const EdgeInsets.all(9.0),
                   child: DescriptionTextField(
@@ -172,19 +142,17 @@ class _AddLocation extends State<AddLocation> {
                         mode: "location",
                         locationId: 'asdas'),
                     //TODO
-                    child: const Text("Bilder hochladen"),
+                    child: SmallText(
+                      text: "Bilder hochladen",
+                    ),
                   ),
                 ),
                 Padding(
-                  padding: const EdgeInsets.only(left: 9.0, top: 15.0),
-                  child: Text(
-                    "review",
-                    style: TextStyle(
-                        color: const Color.fromARGB(182, 0, 0, 0),
-                        fontWeight: FontWeight.bold,
-                        fontSize: width * 0.04),
-                  ),
-                ),
+                    padding: const EdgeInsets.only(left: 9.0, top: 15.0),
+                    child: MediumText(
+                      text: "review",
+                      width: width,
+                    )),
                 Padding(
                   padding: const EdgeInsets.all(9.0),
                   child: Row(
@@ -217,7 +185,7 @@ class _AddLocation extends State<AddLocation> {
 
   AppBar buildAppBar(BuildContext context) {
     return AppBar(
-        title: const Text('AddLocation'),
+        title: const SmallText(text: 'AddLocation'),
         backgroundColor: Color.fromARGB(255, 217, 4, 4),
         elevation: 0,
         leading: IconButton(

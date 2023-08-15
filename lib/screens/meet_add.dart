@@ -3,6 +3,7 @@ import 'package:app/constants/design.dart';
 import 'package:app/widgets/custom_button.dart';
 import 'package:app/widgets/custom_card.dart';
 import 'package:app/widgets/custom_list_tile.dart';
+import 'package:app/widgets/custom_text.dart';
 import 'package:app/widgets/custom_textfield.dart';
 import 'package:app/widgets/photo_picker.dart';
 import 'package:app/widgets/timepicker.dart';
@@ -50,21 +51,18 @@ class _AddMeet extends State<AddMeet> {
               stretch: true,
               flexibleSpace: FlexibleSpaceBar(
                   centerTitle: true,
-                  title: Text(
-                    'Meet search',
-                    style: TextStyle(
-                        fontWeight: FontWeight.bold, fontSize: width * 0.06),
+                  title: PageTitleText(
+                    text: 'Meet search',
+                    width: width,
                   )),
             ),
             SliverList(
               delegate: SliverChildListDelegate([
                 Column(
                   children: [
-                    Text(
-                      "Allgemein",
-                      style: TextStyle(
-                          color: const Color.fromARGB(182, 0, 0, 0),
-                          fontSize: width * 0.04),
+                    MediumText(
+                      text: "Allgemein",
+                      width: width,
                     ),
                     CustomCard(
                       child: Column(
@@ -99,7 +97,7 @@ class _AddMeet extends State<AddMeet> {
                             ),
                           ),
                           ListTile(
-                            title: const Text('Nur Freunde'),
+                            title: const SmallText(text: 'Nur Freunde'),
                             trailing: Switch(
                               value: isPublic,
                               activeColor: Colors.red,
@@ -115,12 +113,9 @@ class _AddMeet extends State<AddMeet> {
                     ),
                     Padding(
                       padding: const EdgeInsets.only(left: 9.0, top: 15.0),
-                      child: Text(
-                        "activityType",
-                        style: TextStyle(
-                            color: const Color.fromARGB(182, 0, 0, 0),
-                            fontWeight: FontWeight.bold,
-                            fontSize: width * 0.05),
+                      child: MediumText(
+                        text: "activityType",
+                        width: width,
                       ),
                     ),
                     CustomCard(
@@ -133,12 +128,9 @@ class _AddMeet extends State<AddMeet> {
                     ),
                     Padding(
                       padding: const EdgeInsets.only(left: 9.0, top: 15.0),
-                      child: Text(
-                        "Wo und Wann",
-                        style: TextStyle(
-                            color: const Color.fromARGB(182, 0, 0, 0),
-                            fontWeight: FontWeight.bold,
-                            fontSize: width * 0.04),
+                      child: MediumText(
+                        text: "Wo und Wann",
+                        width: width,
                       ),
                     ),
                     CustomCard(
@@ -163,7 +155,7 @@ class _AddMeet extends State<AddMeet> {
 
   AppBar buildAppBar(BuildContext context) {
     return AppBar(
-        title: const Text('Meet search'),
+        title: const CustomText(text: 'Meet search'),
         elevation: 0,
         leading: IconButton(
             icon: const Icon(Icons.keyboard_backspace),

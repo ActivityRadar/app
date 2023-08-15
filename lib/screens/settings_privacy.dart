@@ -1,6 +1,7 @@
 import 'package:app/constants/constants.dart';
 import 'package:app/constants/design.dart';
 import 'package:app/widgets/custom_card.dart';
+import 'package:app/widgets/custom_text.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
@@ -17,11 +18,14 @@ class _PrivacySettingPageState extends State<PrivacySettingPage> {
   bool isExpanded = false;
   @override
   Widget build(BuildContext context) {
+    var size = MediaQuery.of(context).size;
+    var height = size.height;
+    double width = size.width;
     return Scaffold(
       body: CustomScrollView(
         slivers: <Widget>[
           SliverAppBar(
-            title: const Text("Privacy"),
+            title: CustomText(text: "Privacy"),
             centerTitle: true,
             leading: IconButton(
               onPressed: () {
@@ -35,17 +39,18 @@ class _PrivacySettingPageState extends State<PrivacySettingPage> {
             Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
-                  const Padding(
+                  Padding(
                     padding: EdgeInsets.only(top: 8, left: 15, bottom: 4),
-                    child: Text(
-                      "Profil",
+                    child: LittleText(
+                      text: "Profil",
+                      width: width,
                     ),
                   ),
                   CustomCard(
                     child: Column(
                       children: [
                         ListTile(
-                          title: const Text('öffentliches Profil'),
+                          title: const CustomText(text: 'öffentliches Profil'),
                           trailing: Switch(
                             value: isExpanded,
                             activeColor: Colors.red,
@@ -59,10 +64,11 @@ class _PrivacySettingPageState extends State<PrivacySettingPage> {
                       ],
                     ),
                   ),
-                  const Padding(
+                  Padding(
                     padding: EdgeInsets.only(top: 8, left: 15, bottom: 4),
-                    child: Text(
-                      "Angebot",
+                    child: LittleText(
+                      text: "Angebot",
+                      width: width,
                     ),
                   ),
                   CustomCard(
@@ -96,7 +102,7 @@ class _ExpandableTileState extends State<ExpandableTile> {
   Widget build(BuildContext context) {
     return Column(children: [
       ListTile(
-        title: const Text('Sichtbarkeit auf dem Map'),
+        title: const CustomText(text: 'Sichtbarkeit auf dem Map'),
         trailing: Switch(
           value: isExpanded,
           activeColor: Colors.red,
@@ -110,7 +116,7 @@ class _ExpandableTileState extends State<ExpandableTile> {
       if (isExpanded) ...[
         const Divider(height: 0),
         ListTile(
-          title: const Text('Nur Freunde'),
+          title: const CustomText(text: 'Nur Freunde'),
           trailing: Switch(
             value: isfriends,
             activeColor: Colors.red,
@@ -123,7 +129,7 @@ class _ExpandableTileState extends State<ExpandableTile> {
         ),
         const Divider(height: 0),
         ListTile(
-          title: const Text('Radius'),
+          title: const CustomText(text: 'Radius'),
           trailing: Switch(
             value: isRadius,
             activeColor: Colors.red,
@@ -149,7 +155,7 @@ class _ExpandableTileState extends State<ExpandableTile> {
                   });
                 },
               ),
-              Text(_currentSliderValue.toString())
+              CustomText(text: _currentSliderValue.toString())
             ],
           )),
           SizedBox(

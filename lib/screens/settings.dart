@@ -14,6 +14,7 @@ import 'package:app/widgets/custom_icon.dart';
 import 'package:app/widgets/custom_list_tile.dart';
 import 'package:app/widgets/custom_snackbar.dart';
 import 'package:app/widgets/custom_button.dart';
+import 'package:app/widgets/custom_text.dart';
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -25,7 +26,9 @@ class SettingScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     const double collapsedHeight = 90;
     const double expandedHeight = 160;
+    var size = MediaQuery.of(context).size;
 
+    double width = size.width;
     final state = Provider.of<AppState>(context);
 
     return Scaffold(
@@ -69,8 +72,9 @@ class SettingScreen extends StatelessWidget {
                 titlePadding: const EdgeInsets.all(16.0),
                 title: state.isLoggedIn
                     ? _appBarAvatar(context)
-                    : const Text("Not signed in!",
-                        style: TextStyle(color: Colors.black)),
+                    : CustomText(
+                        text: "Not signed in!",
+                      ),
                 centerTitle: true,
               );
             },
@@ -91,8 +95,10 @@ class SettingScreen extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                const Text("App-Version: Beta",
-                    style: TextStyle(color: Colors.black45)),
+                MediumhintText(
+                  text: "App-Version: Beta",
+                  width: width,
+                ),
                 if (state.isLoggedIn) ...[
                   CustomTextButton(
                     text: 'logout',
@@ -144,11 +150,15 @@ class SettingScreen extends StatelessWidget {
   }
 
   List<Widget> _accountSettings(BuildContext context, UserDetailed userInfo) {
+    var size = MediaQuery.of(context).size;
+
+    double width = size.width;
     return [
-      const Padding(
+      Padding(
         padding: EdgeInsets.only(top: 8, left: 15, bottom: 4),
-        child: Text(
-          "Konto",
+        child: LittleText(
+          text: "Konto",
+          width: width,
         ),
       ),
       CustomCard(
@@ -219,11 +229,15 @@ class SettingScreen extends StatelessWidget {
   }
 
   List<Widget> _appSettings(BuildContext context) {
+    var size = MediaQuery.of(context).size;
+
+    double width = size.width;
     return [
-      const Padding(
+      Padding(
         padding: EdgeInsets.only(top: 8, left: 15, bottom: 4),
-        child: Text(
-          "App",
+        child: LittleText(
+          text: "App",
+          width: width,
         ),
       ),
       CustomCard(
@@ -243,11 +257,15 @@ class SettingScreen extends StatelessWidget {
   }
 
   List<Widget> _legalSettings(BuildContext context) {
+    var size = MediaQuery.of(context).size;
+
+    double width = size.width;
     return [
-      const Padding(
+      Padding(
         padding: EdgeInsets.only(top: 8, left: 15, bottom: 4),
-        child: Text(
-          "Rechtliche",
+        child: LittleText(
+          text: "Rechtliche",
+          width: width,
         ),
       ),
       CustomCard(
