@@ -44,7 +44,7 @@ class EmailSwitch extends StatelessWidget {
               Padding(
                 padding:
                     const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
-                child: CustomTextFormField(
+                child: EmailTextFormField(
                   controller: emailController,
                   labelText: "email",
                   validator: (value) {

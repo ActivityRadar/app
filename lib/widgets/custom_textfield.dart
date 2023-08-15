@@ -231,3 +231,82 @@ class UnderLineTextFormField extends StatelessWidget {
     );
   }
 }
+
+class EmailTextFormField extends StatelessWidget {
+  const EmailTextFormField({
+    super.key,
+    required this.controller,
+    required this.labelText,
+    required this.validator,
+  });
+
+  final TextEditingController controller;
+  final String labelText;
+  final FormFieldValidator validator;
+
+  @override
+  Widget build(BuildContext context) {
+    return TextFormField(
+      controller: controller,
+      keyboardType: TextInputType.emailAddress,
+      decoration: InputDecoration(
+          border: UnderlineInputBorder(
+            borderSide: BorderSide.none,
+          ),
+          focusedErrorBorder: UnderlineInputBorder(
+            borderSide: BorderSide(color: Colors.red),
+          ),
+          errorBorder: UnderlineInputBorder(
+            borderSide: BorderSide(color: Colors.red),
+          ),
+          enabledBorder: UnderlineInputBorder(
+            borderSide: BorderSide(color: Colors.blue),
+          ),
+          focusedBorder: UnderlineInputBorder(
+            borderSide: BorderSide(color: Colors.blue),
+          ),
+          labelText: labelText),
+      validator: validator,
+    );
+  }
+}
+
+class UsernameTextFormField extends StatelessWidget {
+  const UsernameTextFormField({
+    super.key,
+    required this.controller,
+    required this.labelText,
+    required this.validator,
+  });
+
+  final TextEditingController controller;
+  final String labelText;
+  final FormFieldValidator validator;
+
+  @override
+  Widget build(BuildContext context) {
+    return TextFormField(
+      autocorrect: false,
+      controller: controller,
+      keyboardType: TextInputType.visiblePassword,
+      decoration: InputDecoration(
+          border: UnderlineInputBorder(
+            borderSide: BorderSide.none,
+          ),
+          focusedErrorBorder: UnderlineInputBorder(
+            borderSide: BorderSide(color: Colors.red),
+          ),
+          errorBorder: UnderlineInputBorder(
+            borderSide: BorderSide(color: Colors.red),
+          ),
+          enabledBorder: UnderlineInputBorder(
+            borderSide: BorderSide(color: Colors.blue),
+          ),
+          focusedBorder: UnderlineInputBorder(
+            borderSide: BorderSide(color: Colors.blue),
+          ),
+          labelText: labelText),
+      validator: validator,
+    );
+  }
+}

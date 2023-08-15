@@ -95,7 +95,7 @@ class DisplayNameSwitch extends StatelessWidget {
                     Padding(
                         padding: const EdgeInsets.symmetric(
                             horizontal: 8, vertical: 16),
-                        child: CustomTextFormField(
+                        child: UsernameTextFormField(
                           controller: usernameController,
                           labelText: "Nutzername",
                           validator: (value) {

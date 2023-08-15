@@ -87,7 +87,7 @@ Future<dynamic> bottomSheetFilter(BuildContext context) {
 
 Future<dynamic> writeReview(BuildContext context) {
   var rating = 0;
-  TextEditingController usernameController = TextEditingController();
+  TextEditingController titleController = TextEditingController();
   TextEditingController desController = TextEditingController();
   var size = MediaQuery.of(context).size;
   var height = size.height;
@@ -138,7 +138,7 @@ Future<dynamic> writeReview(BuildContext context) {
                   ),
                 ),
                 UnderLineTextFormField(
-                    controller: usernameController, hinText: 'Titel'),
+                    controller: titleController, hinText: 'Titel'),
                 DescriptionTextFormField(
                     desController: desController, hinText: 'Beschreibung'),
               ],

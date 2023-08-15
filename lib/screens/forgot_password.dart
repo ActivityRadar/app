@@ -13,7 +13,7 @@ class ForgetPasswordScreen extends StatefulWidget {
 class _ForgetPasswordScreen extends State<ForgetPasswordScreen> {
   final _formKey = GlobalKey<FormState>();
   TextEditingController emailController = TextEditingController();
-  TextEditingController emailControllersecond = TextEditingController();
+  TextEditingController emailRepeatController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -31,7 +31,7 @@ class _ForgetPasswordScreen extends State<ForgetPasswordScreen> {
                     Padding(
                         padding: const EdgeInsets.symmetric(
                             horizontal: 8, vertical: 16),
-                        child: CustomTextFormField(
+                        child: EmailTextFormField(
                           controller: emailController,
                           labelText: "Username/Email",
                           validator: (value) {
@@ -46,8 +46,8 @@ class _ForgetPasswordScreen extends State<ForgetPasswordScreen> {
                     Padding(
                         padding: const EdgeInsets.symmetric(
                             horizontal: 8, vertical: 16),
-                        child: CustomTextFormField(
-                          controller: emailControllersecond,
+                        child: EmailTextFormField(
+                          controller: emailRepeatController,
                           labelText: "Username/Email",
                           validator: (value) {
                             if (value == null || value.isEmpty) {

@@ -96,9 +96,10 @@ class _DetailsScreenState extends State<DetailsScreen> {
                   Padding(
                     padding: const EdgeInsets.only(left: 9.0, top: 15.0),
                     child: Column(children: [
-                      UnderLineTextFormField(
+                      UsernameTextFormField(
                         controller: usernameController,
-                        hinText: "Title",
+                        labelText: "Title",
+                        validator: (_) => null,
                       ),
                       DescriptionTextFormField(
                         desController: desController,
