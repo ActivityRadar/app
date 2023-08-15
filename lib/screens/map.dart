@@ -52,6 +52,7 @@ class MapScreenState extends State<MapScreen> {
   List<LocationDetailedApi>? sliderInfos;
   ShortInfoSlider? infoSlider;
   ValueNotifier<int> focusedInfosIndex = ValueNotifier(0);
+  ValueNotifier<LatLng?> currentPosition = ValueNotifier<LatLng?>(null);
 
   void buildSlider(LocationShortApi info) async {
     final coordinates = toLatLng(info.location);
@@ -75,7 +76,9 @@ class MapScreenState extends State<MapScreen> {
     super.initState();
     searchBar = MapSearchBar(mapState: this);
     mapWidget = ActivityMarkerMap(
-        focusedLocation: focusedLocationInfo, activity: activity);
+        focusedLocation: focusedLocationInfo,
+        activity: activity,
+        currentPosition: currentPosition);
 
     focusedLocationInfo.addListener(() {
       final info = focusedLocationInfo.info;
@@ -224,10 +227,12 @@ class ActivityMarkerMap extends StatefulWidget {
     super.key,
     required this.focusedLocation,
     required this.activity,
+    required this.currentPosition,
   });
 
   final FocusedLocationNotifier focusedLocation;
   final ValueNotifier<String> activity;
+  final ValueNotifier<LatLng?> currentPosition;
 
   @override
   State<ActivityMarkerMap> createState() {
@@ -242,6 +247,7 @@ class _ActivityMarkerMapState extends State<ActivityMarkerMap>
   late final AnimatedMapController mapController =
       AnimatedMapController(vsync: this);
   String? focusedLocationId;
+  CircleLayer? currentPositionLayer;
 
   void onMapEvent(MapEvent event, BuildContext context) {
     final s = Provider.of<AppState>(context, listen: false);
@@ -323,6 +329,8 @@ class _ActivityMarkerMapState extends State<ActivityMarkerMap>
 
   @override
   void initState() {
+    super.initState();
+
     widget.activity.addListener(() {
       print("set_activity triggered");
       performSearch();
@@ -337,7 +345,15 @@ class _ActivityMarkerMapState extends State<ActivityMarkerMap>
       });
     });
 
-    super.initState();
+    widget.currentPosition.addListener(() {
+      final pos = widget.currentPosition.value;
+      if (pos != null) {
+        final circle = CircleMarker(radius: 6, point: pos, color: Colors.blue);
+        currentPositionLayer = CircleLayer(
+          circles: [circle],
+        );
+      }
+    });
   }
 
   @override
@@ -389,7 +405,8 @@ class _ActivityMarkerMapState extends State<ActivityMarkerMap>
               ),
             );
           },
-        ))
+        )),
+        if (currentPositionLayer != null) currentPositionLayer!
       ],
     );
   }
