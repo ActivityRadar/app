@@ -2,6 +2,7 @@ import 'package:app/constants/constants.dart';
 import 'package:app/widgets/custom_snackbar.dart';
 import 'package:app/widgets/custom_button.dart';
 import 'package:app/widgets/custom_textfield.dart';
+import 'package:app/provider/generated/users_provider.dart';
 import 'package:app/widgets/photo_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -306,6 +307,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
   }
 
   Form emailForm(BuildContext context) {
+    bool? emailTaken;
     return Form(
       key: _formEmailKey,
       child: Padding(
@@ -326,6 +328,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   if (!RegExps.email.hasMatch(value)) {
                     return "Email is wrong";
                   }
+                  if (emailTaken!) {
+                    return "Email is already used by another account!";
+                  }
 
                   return null;
                 },
@@ -339,7 +344,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   const EdgeInsets.symmetric(horizontal: 8, vertical: 16.0),
               child: Center(
                 child: ElevatedButton(
-                  onPressed: () {
+                  onPressed: () async {
+                    // have to check outside of the validator because of async call
+                    emailTaken = await UsersProvider.checkEmailTaken(
+                        email: emailController.text);
                     if (_formEmailKey.currentState!.validate()) {
                       nextPage();
                     } else {
@@ -357,6 +365,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
   }
 
   Form userNameForm(BuildContext context) {
+    bool? usernameTaken;
     return Form(
       key: _formUsernameKey,
       child: Padding(
@@ -376,6 +385,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   }
                   if (!RegExps.username.hasMatch(value)) {
                     return "Username is wrong";
+                  }
+                  if (usernameTaken!) {
+                    return "Username is already taken!";
                   }
 
                   return null;
@@ -399,7 +411,14 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       child: const Text('Previous'),
                     ),
                     ElevatedButton(
-                      onPressed: () {
+                      onPressed: () async {
+                        // have to check outside of the validator because of async call
+                        usernameTaken = await UsersProvider.findUsersByName(
+                                search: usernameController.text)
+                            .then((userList) {
+                          return userList.any((user) =>
+                              user.username == usernameController.text);
+                        });
                         if (_formUsernameKey.currentState!.validate()) {
                           nextPage();
                         } else {
