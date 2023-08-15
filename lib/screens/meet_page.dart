@@ -1,4 +1,8 @@
 import 'package:app/constants/constants.dart';
+import 'package:app/constants/design.dart';
+import 'package:app/widgets/custom_alertdialog.dart';
+import 'package:app/widgets/custom_text.dart';
+import 'package:app/widgets/custom_button.dart';
 import 'package:app/widgets/meet_map.dart';
 import 'package:flutter/material.dart';
 
@@ -41,16 +45,9 @@ class MeetPage extends StatelessWidget {
                                 children: [
                                   Padding(
                                     padding: EdgeInsets.only(left: 12.0),
-                                    child: Chip(
-                                        label: Text(
-                                          "Table Tennis",
-                                          style: TextStyle(
-                                              color:
-                                                  DesignColors.kBackgroundColor,
-                                              fontSize: 10),
-                                        ),
-                                        backgroundColor:
-                                            DesignColors.naviColor),
+                                    child: CustomChip(
+                                      text: "Table Tennis",
+                                    ),
                                   ),
                                   Padding(
                                       padding: EdgeInsets.only(right: 12.0),
@@ -101,13 +98,15 @@ class MeetPage extends StatelessWidget {
                             ),
                           ]),
                         ]),
-                        TextButton(
-                            onPressed: () {}, child: Text("Anfrage senden")),
+                        CustomTextButton(
+                            onPressed: () {
+                              Navigator.of(context).pop(); // Dialog schließen
+                            },
+                            text: 'Anfrage senden'),
                       ]),
-                  Padding(
-                    padding: const EdgeInsets.only(left: 9.0, top: 10.0),
+                  Center(
                     child: Text(
-                      "description",
+                      "Table Tennis",
                       style: TextStyle(
                           color: const Color.fromARGB(182, 0, 0, 0),
                           fontWeight: FontWeight.bold,
@@ -115,30 +114,49 @@ class MeetPage extends StatelessWidget {
                     ),
                   ),
                   Padding(
-                    padding: EdgeInsets.all(9.0),
-                    child: Text(
-                        'Moin Moin Moin Moin Moin Moin Moin Moin Moin Moin Moin Moin Moin Moin Moin Moin Moin Moin Moin Moin Moin Moin Moin Moin '),
-                  ),
+                      padding: const EdgeInsets.only(left: 9.0, top: 10.0),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          TitleText(text: "Time", width: width),
+                          TitleText(text: '11:00', width: width),
+                        ],
+                      )),
                   Padding(
                     padding: const EdgeInsets.only(left: 9.0, top: 10.0),
-                    child: Text(
-                      "description",
-                      style: TextStyle(
-                          color: const Color.fromARGB(182, 0, 0, 0),
-                          fontWeight: FontWeight.bold,
-                          fontSize: width * 0.05),
-                    ),
+                    child: TitleText(text: "description", width: width),
                   ),
                   Padding(
-                    padding: EdgeInsets.all(9.0),
-                    child: Text(
-                        'Moin Moin Moin Moin Moin Moin Moin Moin Moin Moin Moin Moin Moin Moin Moin Moin Moin Moin Moin Moin Moin Moin Moin Moin '),
-                  ),
+                      padding: EdgeInsets.all(9.0),
+                      child: DescriptionText(
+                          text:
+                              "Moin, Moin, Moin, Moin, Moin, Moin, Moin, Moin, Moin, Moin, Moin, Moin, Moin, Moin, Moin, Moin, Moin, Moin, Moin, Moin, Moin, Moin, Moin, Moin, Moin, Moin, Moin, Moin, ",
+                          width: width)),
                 ]),
           ]),
         )
       ]),
     );
+  }
+}
+
+class CustomChip extends StatelessWidget {
+  const CustomChip({
+    super.key,
+    required this.text,
+  });
+
+  final String text;
+
+  @override
+  Widget build(BuildContext context) {
+    return Chip(
+        label: Text(
+          text,
+          style: const TextStyle(
+              color: DesignColors.kBackgroundColor, fontSize: 10),
+        ),
+        backgroundColor: DesignColors.naviColor);
   }
 }
 
@@ -179,27 +197,18 @@ void _showDialog(BuildContext context) {
   showDialog(
     context: context,
     builder: (BuildContext context) {
-      return AlertDialog(
-        title: const Text('Report as inappropriate'),
-        content: const Text(
-            'Thank you for contributing to the safety and respect of our community. If you believe that this content violates our policies or is inappropriate, please click on Report.   Your message will be treated confidentially and verified by our moderation team. '),
-        actions: <Widget>[
-          Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-            TextButton(
-              child: const Text('Cancel'),
-              onPressed: () {
-                Navigator.of(context).pop(); // Dialog schließen
-              },
-            ),
-            TextButton(
-              child: const Text('Send'),
-              onPressed: () {
-                Navigator.of(context).pop(); // Dialog schließen
-              },
-            ),
-          ])
-        ],
-      );
+      return CustomAlertDialog(
+          title: 'Report as inappropriate',
+          content: Text(
+              'Thank you for contributing to the safety and respect of our community. If you believe that this content violates our policies or is inappropriate, please click on Report.   Your message will be treated confidentially and verified by our moderation team. '),
+          firstbuttonText: "Cancel",
+          firstonPress: () {
+            Navigator.of(context).pop();
+          }, // Dialog schließen
+          secondbuttonText: 'Send',
+          secondonPress: () {
+            Navigator.of(context).pop();
+          });
     },
   );
 }

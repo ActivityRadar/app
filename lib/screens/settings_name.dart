@@ -3,7 +3,11 @@ import 'package:app/constants/constants.dart';
 import 'package:app/provider/generated/users_provider.dart';
 import 'package:app/provider/photos.dart';
 import 'package:app/widgets/bottomsheet.dart';
+import 'package:app/widgets/custom_button.dart';
+import 'package:app/widgets/custom_list_tile.dart';
+import 'package:app/widgets/custom_textfield.dart';
 import 'package:app/widgets/photo_picker.dart';
+import 'package:app/widgets/custom_snackbar.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -24,67 +28,47 @@ class DisplayNameSwitch extends StatelessWidget {
 
     return Scaffold(
         appBar: AppBar(
-          leading: TextButton(
-            style: TextButton.styleFrom(
-              textStyle:
-                  const TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
-            ),
-            onPressed: () {
-              Navigator.pop(context);
-              ScaffoldMessenger.of(context)
-                  .showSnackBar(const SnackBar(content: Text('Cancel')));
-            },
-            child: const Text(
-              'Cancel',
-              style: TextStyle(color: Colors.white),
-            ),
-          ),
-          actions: [
-            TextButton(
-              style: TextButton.styleFrom(
-                textStyle:
-                    const TextStyle(fontSize: 13, fontWeight: FontWeight.bold),
-              ),
-              onPressed: () async {
-                final Map<String, dynamic> data = {};
-                var ok = true;
-                if (formUsernameKey.currentState!.validate()) {
-                  if (usernameController.text != state.currentUser!.username) {
-                    data["username"] = usernameController.text;
-                  }
-                } else {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(content: Text('Enter a valid username!')),
-                  );
-                  ok = false;
-                  print("Invalid new username!");
-                }
-                if (formDisplaynameKey.currentState!.validate()) {
-                  if (displaynameController.text !=
-                      state.currentUser!.displayName) {
-                    data["display_name"] = displaynameController.text;
-                  }
-                } else {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(content: Text('Enter a valid displayName!')),
-                  );
-                  ok = false;
-                  print("Invalid new display name!");
-                }
-
-                if (ok) {
-                  if (data.isNotEmpty) {
-                    await UsersProvider.updateUser(data: data)
-                        .then((_) => state.updateUserInfo());
-                  }
-                  Navigator.pop(context);
-                }
+          leading: CustomTextButtonWhite(
+              onPressed: () {
+                Navigator.pop(context);
+                showMessengeSnackBar(context, 'Cancel');
               },
-              child: const Text(
-                'Finish',
-                style: TextStyle(color: Colors.white),
-              ),
-            ),
+              text: 'Cancel'),
+          actions: [
+            CustomTextButtonWhite(
+                onPressed: () async {
+                  final Map<String, dynamic> data = {};
+                  var ok = true;
+                  if (formUsernameKey.currentState!.validate()) {
+                    if (usernameController.text !=
+                        state.currentUser!.username) {
+                      data["username"] = usernameController.text;
+                    }
+                  } else {
+                    showMessengeSnackBar(context, 'Enter a valid username!');
+                    ok = false;
+                    print("Invalid new username!");
+                  }
+                  if (formDisplaynameKey.currentState!.validate()) {
+                    if (displaynameController.text !=
+                        state.currentUser!.displayName) {
+                      data["display_name"] = displaynameController.text;
+                    }
+                  } else {
+                    showMessengeSnackBar(context, 'Enter a valid displayName!');
+                    ok = false;
+                    print("Invalid new display name!");
+                  }
+
+                  if (ok) {
+                    if (data.isNotEmpty) {
+                      await UsersProvider.updateUser(data: data)
+                          .then((_) => state.updateUserInfo());
+                    }
+                    Navigator.pop(context);
+                  }
+                },
+                text: "Finish"),
           ],
         ),
         body: Column(
@@ -109,42 +93,22 @@ class DisplayNameSwitch extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
                     Padding(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 8, vertical: 16),
-                      child: TextFormField(
-                        controller: usernameController,
-                        keyboardType: TextInputType.visiblePassword,
-                        decoration: const InputDecoration(
-                          border: UnderlineInputBorder(
-                            borderSide: BorderSide.none,
-                          ),
-                          focusedErrorBorder: UnderlineInputBorder(
-                            borderSide: BorderSide(color: Colors.red),
-                          ),
-                          errorBorder: UnderlineInputBorder(
-                            borderSide: BorderSide(color: Colors.red),
-                          ),
-                          enabledBorder: UnderlineInputBorder(
-                            borderSide: BorderSide(color: Colors.blue),
-                          ),
-                          focusedBorder: UnderlineInputBorder(
-                            borderSide: BorderSide(color: Colors.blue),
-                          ),
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 8, vertical: 16),
+                        child: UsernameTextFormField(
+                          controller: usernameController,
                           labelText: "Nutzername",
-                          prefixIcon: Icon(Icons.alternate_email),
-                        ),
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return 'Please enter your Username';
-                          }
-                          if (!RegExps.username.hasMatch(value)) {
-                            return "Username is wrong";
-                          }
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return 'Please enter your Username';
+                            }
+                            if (!RegExps.username.hasMatch(value)) {
+                              return "Username is wrong";
+                            }
 
-                          return null;
-                        },
-                      ),
-                    ),
+                            return null;
+                          },
+                        )),
                     const Padding(
                         padding: EdgeInsets.only(left: 8),
                         child: Text(
@@ -164,37 +128,19 @@ class DisplayNameSwitch extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
                     Padding(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 8, vertical: 16),
-                      child: TextFormField(
-                        controller: displaynameController,
-                        decoration: const InputDecoration(
-                          border: UnderlineInputBorder(
-                            borderSide: BorderSide.none,
-                          ),
-                          focusedErrorBorder: UnderlineInputBorder(
-                            borderSide: BorderSide(color: Colors.red),
-                          ),
-                          errorBorder: UnderlineInputBorder(
-                            borderSide: BorderSide(color: Colors.red),
-                          ),
-                          enabledBorder: UnderlineInputBorder(
-                            borderSide: BorderSide(color: Colors.blue),
-                          ),
-                          focusedBorder: UnderlineInputBorder(
-                            borderSide: BorderSide(color: Colors.blue),
-                          ),
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 8, vertical: 16),
+                        child: CustomTextFormField(
+                          controller: displaynameController,
                           labelText: "Anzeigename",
-                        ),
-                        validator: (value) {
-                          if (!RegExps.displayname.hasMatch(value!)) {
-                            return "Displayname is wrong";
-                          }
+                          validator: (value) {
+                            if (!RegExps.displayname.hasMatch(value!)) {
+                              return "Displayname is wrong";
+                            }
 
-                          return null;
-                        },
-                      ),
-                    ),
+                            return null;
+                          },
+                        )),
                     const Padding(
                       padding: EdgeInsets.only(left: 8),
                       child: Text(
@@ -219,8 +165,7 @@ Widget avatarFutureBuilder({
 
   if (state.currentUser!.avatar == null) {
     return CircleAvatar(
-        backgroundImage: AssetImages.avatarEmpty,
-        radius: radius);
+        backgroundImage: AssetImages.avatarEmpty, radius: radius);
   }
 
   final image = PhotoManager.instance.getPhoto(state.currentUser!.avatar!.url);
@@ -259,21 +204,21 @@ Future<void> bottomSheetAvatarAction(BuildContext context) async {
           return Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              ListTile(
-                leading: const Icon(Icons.delete),
-                title: const Text("Delete current photo"),
-                onTap: () {
+              CustomListTile(
+                onPressed: () {
                   UsersProvider.deleteProfilePhoto()
                       .then((_) => updateAndReturn());
                   // TODO: do something to show the user that the photo is gone
                 },
+                icon: Icon(Icons.delete),
+                titleText: "Delete current photo",
               ),
-              ListTile(
-                leading: const Icon(Icons.upload),
-                title: const Text("Set new photo"),
-                onTap: () {
+              CustomListTile(
+                onPressed: () {
                   avatarPicker(context, userId).then((_) => updateAndReturn());
                 },
+                icon: Icon(Icons.upload),
+                titleText: "Set new photo",
               )
             ],
           );

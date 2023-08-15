@@ -1,4 +1,6 @@
 import 'package:app/constants/constants.dart';
+import 'package:app/constants/design.dart';
+import 'package:app/widgets/custom_card.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
@@ -19,13 +21,15 @@ class _PrivacySettingPageState extends State<PrivacySettingPage> {
       body: CustomScrollView(
         slivers: <Widget>[
           SliverAppBar(
-              title: const Text("Privacy"),
-              centerTitle: true,
-              leading: IconButton(
-                  onPressed: () {
-                    Navigator.pop(context);
-                  },
-                  icon: const Icon(Icons.navigate_before))),
+            title: const Text("Privacy"),
+            centerTitle: true,
+            leading: IconButton(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              icon: const Icon(Icons.navigate_before),
+            ),
+          ),
           SliverList(
               delegate: SliverChildListDelegate([
             Column(
@@ -37,24 +41,15 @@ class _PrivacySettingPageState extends State<PrivacySettingPage> {
                       "Profil",
                     ),
                   ),
-                  Card(
-                    shape: RoundedRectangleBorder(
-                      side: const BorderSide(
-                        color: Color.fromARGB(51, 241, 241, 241),
-                      ),
-                      borderRadius:
-                          BorderRadius.circular(AppStyle.cornerRadius),
-                    ),
+                  CustomCard(
                     child: Column(
                       children: [
                         ListTile(
                           title: const Text('öffentliches Profil'),
                           trailing: Switch(
-                            // This bool value toggles the switch.
                             value: isExpanded,
                             activeColor: Colors.red,
                             onChanged: (bool value) {
-                              // This is called when the user toggles the switch.
                               setState(() {
                                 isExpanded = value;
                               });
@@ -70,14 +65,7 @@ class _PrivacySettingPageState extends State<PrivacySettingPage> {
                       "Angebot",
                     ),
                   ),
-                  Card(
-                    shape: RoundedRectangleBorder(
-                      side: const BorderSide(
-                        color: Color.fromARGB(51, 241, 241, 241),
-                      ),
-                      borderRadius:
-                          BorderRadius.circular(AppStyle.cornerRadius),
-                    ),
+                  CustomCard(
                     child: const Column(
                       children: [
                         ExpandableTile(),
@@ -108,17 +96,11 @@ class _ExpandableTileState extends State<ExpandableTile> {
   Widget build(BuildContext context) {
     return Column(children: [
       ListTile(
-        shape: const RoundedRectangleBorder(
-            borderRadius: BorderRadius.only(
-                topLeft: Radius.circular(AppStyle.cornerRadius),
-                topRight: Radius.circular(AppStyle.cornerRadius))),
         title: const Text('Sichtbarkeit auf dem Map'),
         trailing: Switch(
-          // This bool value toggles the switch.
           value: isExpanded,
           activeColor: Colors.red,
           onChanged: (bool value) {
-            // This is called when the user toggles the switch.
             setState(() {
               isExpanded = value;
             });
@@ -130,11 +112,9 @@ class _ExpandableTileState extends State<ExpandableTile> {
         ListTile(
           title: const Text('Nur Freunde'),
           trailing: Switch(
-            // This bool value toggles the switch.
             value: isfriends,
             activeColor: Colors.red,
             onChanged: (bool value) {
-              // This is called when the user toggles the switch.
               setState(() {
                 isfriends = value;
               });
@@ -145,11 +125,9 @@ class _ExpandableTileState extends State<ExpandableTile> {
         ListTile(
           title: const Text('Radius'),
           trailing: Switch(
-            // This bool value toggles the switch.
             value: isRadius,
             activeColor: Colors.red,
             onChanged: (bool value) {
-              // This is called when the user toggles the switch.
               setState(() {
                 isRadius = value;
               });
@@ -182,7 +160,6 @@ class _ExpandableTileState extends State<ExpandableTile> {
                 radius: _currentSliderValue,
               ))
         ]
-        // Weitere ListTile hier hinzufügen
       ],
     ]);
   }

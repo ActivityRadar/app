@@ -1,3 +1,4 @@
+import 'package:app/widgets/custom_list_tile.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
@@ -51,16 +52,14 @@ class _DateTimePickerState extends State<DateTimePicker> {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: <Widget>[
-        ListTile(
-          title: Text("Datum: $formattedDate"),
-          trailing: const Icon(Icons.calendar_today),
-          onTap: _selectDate,
-        ),
-        ListTile(
-          title: Text("Uhrzeit: $formattedTime"),
-          trailing: const Icon(Icons.access_time),
-          onTap: _selectTime,
-        ),
+        CustomListTile(
+            icon: Icon(Icons.calendar_today),
+            titleText: "Datum: $formattedDate",
+            onPressed: _selectDate),
+        CustomListTile(
+            icon: Icon(Icons.access_time),
+            titleText: "Uhrzeit: $formattedTime",
+            onPressed: _selectTime),
       ],
     );
   }

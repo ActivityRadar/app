@@ -1,7 +1,7 @@
 import 'package:app/constants/constants.dart';
 import 'package:app/screens/meet_page.dart';
 import 'package:app/widgets/meet_map.dart';
-
+import 'package:app/constants/design.dart';
 import 'package:flutter/material.dart';
 
 class MeetCard extends StatelessWidget {
@@ -11,6 +11,9 @@ class MeetCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var size = MediaQuery.of(context).size;
+    var height = size.height;
+    double width = size.width;
     return GestureDetector(
         onTap: () {
           Navigator.push(
@@ -28,7 +31,7 @@ class MeetCard extends StatelessWidget {
               children: [
                 Stack(children: [
                   SizedBox(
-                    height: 130,
+                    height: height / 6.5,
                     child: Container(
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(AppStyle
@@ -47,24 +50,15 @@ class MeetCard extends StatelessWidget {
                             children: [
                               Padding(
                                 padding: EdgeInsets.only(left: 12.0),
-                                child: Chip(
-                                    label: Text(
-                                      "Table Tennis",
-                                      style: TextStyle(
-                                          color: DesignColors.kBackgroundColor,
-                                          fontSize: 10),
-                                    ),
-                                    backgroundColor: DesignColors.naviColor),
+                                child: CustomChip(
+                                  text: 'Table Tennis',
+                                ),
                               ),
                               Padding(
                                   padding: EdgeInsets.only(right: 12.0),
                                   child: Chip(
-                                      label: Text(
-                                        "ab 14 Uhr",
-                                        style: TextStyle(
-                                            color:
-                                                DesignColors.kBackgroundColor,
-                                            fontSize: 10),
+                                      label: CustomChip(
+                                        text: 'ab 14 Uhr ',
                                       ),
                                       backgroundColor: DesignColors.naviColor)),
                             ],

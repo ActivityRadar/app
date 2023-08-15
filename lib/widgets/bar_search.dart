@@ -1,3 +1,4 @@
+import 'package:app/constants/design.dart';
 import 'package:app/screens/map.dart';
 import 'package:app/widgets/bottomsheet.dart';
 import 'package:flutter/material.dart';
@@ -28,7 +29,8 @@ class MapSearchBar extends StatelessWidget {
         children: [
           Card(
               shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(80),
+                borderRadius:
+                    BorderRadius.circular(AppStyle.cornerRadiusSearch),
               ),
               child: TextField(
                 controller: textController,
@@ -45,8 +47,7 @@ class MapSearchBar extends StatelessWidget {
                       setActivity(textController.text);
                     },
                   ),
-                  hintStyle:
-                      const TextStyle(fontSize: 15.0, color: Colors.black12),
+                  hintStyle: CustomTextStyle.hint,
                   hintText: "Search basketball, volleyball, table tennis ... ",
                 ),
                 textInputAction: TextInputAction.search,

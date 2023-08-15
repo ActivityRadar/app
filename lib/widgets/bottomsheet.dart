@@ -1,7 +1,11 @@
 // ignore_for_file: avoid_print
-
+import 'package:app/constants/design.dart';
 import 'package:app/constants/constants.dart';
 import 'package:app/screens/location_picker.dart';
+import 'package:app/widgets/custom_list_tile.dart';
+import 'package:app/widgets/custom_text.dart';
+import 'package:app/widgets/custom_button.dart';
+import 'package:app/widgets/custom_textfield.dart';
 import 'package:app/widgets/filter_discipline.dart';
 import 'package:flutter/material.dart';
 
@@ -12,7 +16,7 @@ Future<dynamic> bottomSheetBase(
       isScrollControlled: true,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(
-          top: Radius.circular(25.0),
+          top: Radius.circular(AppStyle.cornerRadiusBottomSheet),
         ),
       ),
       builder: builder);
@@ -24,10 +28,10 @@ Future<dynamic> bottomSheetAdd(BuildContext context) {
       builder: (context) => Column(
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
-              ListTile(
-                leading: const Icon(Icons.push_pin),
-                title: const Text("Add Location"),
-                onTap: () {
+              CustomListTile(
+                icon: Icon(Icons.push_pin),
+                titleText: "Add Location",
+                onPressed: () {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
@@ -36,10 +40,10 @@ Future<dynamic> bottomSheetAdd(BuildContext context) {
                   );
                 },
               ),
-              ListTile(
-                leading: const Icon(Icons.event),
-                title: const Text("Add Event"),
-                onTap: () {
+              CustomListTile(
+                icon: Icon(Icons.event),
+                titleText: "Add Event",
+                onPressed: () {
                   writeReview(context);
                 },
               ),
@@ -61,20 +65,18 @@ Future<dynamic> bottomSheetFilter(BuildContext context) {
                     children: <Widget>[
                       Padding(
                         padding: const EdgeInsets.only(left: 9.0, top: 9.0),
-                        child: TextButton(
+                        child: CustomTextButton(
+                          text: 'Reset',
                           onPressed: () {
                             print("Moin");
                           },
-                          child: const Text('Reset'),
                         ),
                       ),
                     ],
                   ),
-                  TextButton(
-                    onPressed: () {
-                      print("Moin");
-                    },
-                    child: const Text('filter'),
+                  CustomTextButton(
+                    text: 'filter',
+                    onPressed: () {},
                   ),
                 ],
               ),
@@ -85,8 +87,11 @@ Future<dynamic> bottomSheetFilter(BuildContext context) {
 
 Future<dynamic> writeReview(BuildContext context) {
   var rating = 0;
-  TextEditingController usernameController = TextEditingController();
+  TextEditingController titleController = TextEditingController();
   TextEditingController desController = TextEditingController();
+  var size = MediaQuery.of(context).size;
+  var height = size.height;
+  double width = size.width;
   return bottomSheetBase(
       context: context,
       builder: (context) {
@@ -101,19 +106,18 @@ Future<dynamic> writeReview(BuildContext context) {
                   children: <Widget>[
                     Padding(
                       padding: const EdgeInsets.only(left: 9.0, top: 9.0),
-                      child: TextButton(
+                      child: CustomTextButton(
+                        text: 'Cancel',
                         onPressed: () => Navigator.pop(context),
-                        child: const Text('Cancel'),
                       ),
                     ),
-                    const Text(
-                      "Review",
-                      style:
-                          TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
+                    MediumText(
+                      text: "Review",
+                      width: width,
                     ),
-                    TextButton(
+                    CustomTextButton(
+                      text: 'Send',
                       onPressed: () => Navigator.pop(context),
-                      child: const Text('Send'), //TODO backend
                     ),
                   ],
                 ),
@@ -133,51 +137,10 @@ Future<dynamic> writeReview(BuildContext context) {
                     ),
                   ),
                 ),
-                TextFormField(
-                  controller: usernameController,
-                  textAlign: TextAlign.start,
-                  decoration: const InputDecoration(
-                    hintText: 'Titel',
-                    border: UnderlineInputBorder(
-                      borderSide: BorderSide.none,
-                    ),
-                    focusedErrorBorder: UnderlineInputBorder(
-                      borderSide: BorderSide(color: Colors.red),
-                    ),
-                    errorBorder: UnderlineInputBorder(
-                      borderSide: BorderSide(color: Colors.red),
-                    ),
-                    enabledBorder: UnderlineInputBorder(
-                      borderSide: BorderSide(color: Colors.blue),
-                    ),
-                    focusedBorder: UnderlineInputBorder(
-                      borderSide: BorderSide(color: Colors.blue),
-                    ),
-                  ),
-                ),
-                TextFormField(
-                  maxLines: 5,
-                  controller: desController,
-                  textAlign: TextAlign.start,
-                  decoration: const InputDecoration(
-                    hintText: 'Beschreibung',
-                    border: UnderlineInputBorder(
-                      borderSide: BorderSide.none,
-                    ),
-                    focusedErrorBorder: UnderlineInputBorder(
-                      borderSide: BorderSide(color: Colors.red),
-                    ),
-                    errorBorder: UnderlineInputBorder(
-                      borderSide: BorderSide(color: Colors.red),
-                    ),
-                    enabledBorder: UnderlineInputBorder(
-                      borderSide: BorderSide.none,
-                    ),
-                    focusedBorder: UnderlineInputBorder(
-                      borderSide: BorderSide.none,
-                    ),
-                  ),
-                ),
+                UnderLineTextFormField(
+                    controller: titleController, hinText: 'Titel'),
+                DescriptionTextFormField(
+                    desController: desController, hinText: 'Beschreibung'),
               ],
             ));
       });

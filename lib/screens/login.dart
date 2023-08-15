@@ -1,6 +1,9 @@
 import 'package:app/app_state.dart';
 import 'package:app/provider/backend.dart';
 import 'package:app/screens/forgot_password.dart';
+import 'package:app/widgets/custom_snackbar.dart';
+import 'package:app/widgets/custom_button.dart';
+import 'package:app/widgets/custom_textfield.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -30,69 +33,56 @@ class _LoginScreenState extends State<LoginScreen> {
                   children: [
                     Text("Login"),
                     Padding(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 8, vertical: 16),
-                      child: TextFormField(
-                        autocorrect: false,
-                        keyboardType: TextInputType.visiblePassword,
-                        controller: usernameController,
-                        decoration: const InputDecoration(
-                            border: OutlineInputBorder(),
-                            labelText: "Username"),
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return 'Please enter your username';
-                          }
-                          return null;
-                        },
-                      ),
-                    ),
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 8, vertical: 16),
+                        child: CustomTextFormField(
+                          controller: usernameController,
+                          labelText: "Username",
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return 'Please enter your username';
+                            }
+                            return null;
+                          },
+                        )),
                     Padding(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 8, vertical: 4),
-                      child: TextFormField(
-                        controller: passwordController,
-                        obscureText: true,
-                        decoration: const InputDecoration(
-                            border: OutlineInputBorder(),
-                            labelText: "Password"),
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return 'Please enter your password';
-                          }
-                          return null;
-                        },
-                      ),
-                    ),
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 8, vertical: 4),
+                        child: PasswordTextFormField(
+                          controller: passwordController,
+                          labelText: "Password",
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return 'Please enter your password';
+                            }
+                            return null;
+                          },
+                        )),
                     Padding(
                       padding: const EdgeInsets.symmetric(
                           horizontal: 4, vertical: 1.0),
-                      child: TextButton(
-                        style: TextButton.styleFrom(
-                          textStyle: const TextStyle(fontSize: 10),
-                        ),
-                        onPressed: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) =>
-                                  const ForgetPasswordScreen(),
-                            ),
-                          );
-                        },
-                        child: const Text('Forget password'),
-                      ),
+                      child: CustomTextButton(
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) =>
+                                    const ForgetPasswordScreen(),
+                              ),
+                            );
+                          },
+                          text: 'Forget password'),
                     ),
                     Padding(
                       padding: const EdgeInsets.symmetric(
                           horizontal: 8, vertical: 16.0),
                       child: Center(
-                        child: ElevatedButton(
+                        child: CustomElevatedButton(
                           onPressed: () {
                             handleLogin(context, usernameController.text,
                                 passwordController.text, _formKey);
                           },
-                          child: const Text('Submit'),
+                          text: "Submit",
                         ),
                       ),
                     ),
@@ -108,19 +98,15 @@ void handleLogin(BuildContext context, String username, String password,
     AuthService.login(username, password).then((success) {
       if (success) {
         Provider.of<AppState>(context, listen: false).updateUserInfo();
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Login successful!')),
-        );
+
+        showMessengeSnackBar(context, 'Login successful!');
+
         Navigator.of(context).pop();
       } else {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Login failed!')),
-        );
+        showMessengeSnackBar(context, 'Login failed!');
       }
     });
   } else {
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text('Please fill input')),
-    );
+    showMessengeSnackBar(context, 'Please fill input!');
   }
 }

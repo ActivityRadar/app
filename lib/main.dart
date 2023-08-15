@@ -6,6 +6,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:app/l10n/l10n.dart';
 import 'package:provider/provider.dart';
+import 'package:app/constants/design.dart';
 
 void main() {
   runApp(ChangeNotifierProvider(

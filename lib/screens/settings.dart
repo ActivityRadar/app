@@ -1,12 +1,18 @@
 import 'package:app/app_state.dart';
 import 'package:app/constants/constants.dart';
 import 'package:app/model/generated.dart';
+import 'package:app/constants/design.dart';
 import 'package:app/provider/backend.dart';
 import 'package:app/screens/auth.dart';
 import 'package:app/screens/setting_password.dart';
 import 'package:app/screens/settings_email.dart';
 import 'package:app/screens/settings_name.dart';
 import 'package:app/screens/settings_privacy.dart';
+import 'package:app/widgets/custom_card.dart';
+import 'package:app/widgets/custom_icon.dart';
+import 'package:app/widgets/custom_list_tile.dart';
+import 'package:app/widgets/custom_snackbar.dart';
+import 'package:app/widgets/custom_button.dart';
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -30,11 +36,7 @@ class SettingScreen extends StatelessWidget {
           backgroundColor: DesignColors.kBackgroundColor,
           leading: state.isLoggedIn
               ? null
-              : TextButton(
-                  style: TextButton.styleFrom(
-                    textStyle: const TextStyle(
-                        fontSize: 13, fontWeight: FontWeight.bold),
-                  ),
+              : CustomTextButton(
                   onPressed: () {
                     Navigator.push(
                       context,
@@ -43,18 +45,11 @@ class SettingScreen extends StatelessWidget {
                       ),
                     );
                   },
-                  child: const Text('Login'),
-                ),
+                  text: "Login"),
           actions: <Widget>[
             if (state.isLoggedIn)
-              TextButton(
-                style: TextButton.styleFrom(
-                  textStyle: const TextStyle(
-                      fontSize: 13, fontWeight: FontWeight.bold),
-                ),
-                onPressed: () => handleLogout(context),
-                child: const Text('logout'),
-              ),
+              CustomTextButton(
+                  onPressed: () => handleLogout(context), text: 'logout')
           ],
           flexibleSpace: LayoutBuilder(
             builder: (BuildContext context, BoxConstraints constraints) {
@@ -88,21 +83,13 @@ class SettingScreen extends StatelessWidget {
                 const Text("App-Version: Beta",
                     style: TextStyle(color: Colors.black45)),
                 if (state.isLoggedIn) ...[
-                  TextButton(
-                    style: TextButton.styleFrom(
-                      textStyle: const TextStyle(
-                          fontSize: 13, fontWeight: FontWeight.bold),
-                    ),
+                  CustomTextButton(
+                    text: 'logout',
                     onPressed: () => handleLogout(context),
-                    child: const Text('logout'),
                   ),
-                  TextButton(
-                    style: TextButton.styleFrom(
-                      textStyle: const TextStyle(
-                          fontSize: 13, fontWeight: FontWeight.bold),
-                    ),
+                  CustomTextButton(
+                    text: 'Konto löschen',
                     onPressed: () {},
-                    child: const Text('Konto löschen'),
                   ),
                 ]
               ],
@@ -137,14 +124,7 @@ class SettingScreen extends StatelessWidget {
                   ),
                 );
               },
-              child: const CircleAvatar(
-                  radius: 8,
-                  child: Center(
-                    child: Icon(
-                      Icons.edit,
-                      size: 8,
-                    ),
-                  )),
+              child: EditIcon(),
             ),
           ),
         ]),
@@ -160,23 +140,22 @@ class SettingScreen extends StatelessWidget {
           "Konto",
         ),
       ),
-      Card(
-        shape: RoundedRectangleBorder(
-          side: const BorderSide(
-            color: Color.fromARGB(51, 241, 241, 241),
-          ),
-          borderRadius: BorderRadius.circular(AppStyle.cornerRadius),
-        ),
+      CustomCard(
         child: Column(
           children: [
-            ListTile(
-              shape: const RoundedRectangleBorder(
-                  borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(AppStyle.cornerRadius),
-                      topRight: Radius.circular(AppStyle.cornerRadius))),
-              tileColor: Colors.white,
-              title: const Text('Username and Displayname'),
-              onTap: () {
+            CustomListTile(
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const DisplayNameSwitch(),
+                    ),
+                  );
+                },
+                titleText: "Username and Displayname"),
+            const Divider(height: 0),
+            TwoListTile(
+              onPressed: () {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
@@ -184,43 +163,12 @@ class SettingScreen extends StatelessWidget {
                   ),
                 );
               },
+              keyText: "Displayname",
+              valueText: userInfo.displayName,
             ),
             const Divider(height: 0),
-            ListTile(
-              tileColor: Colors.white,
-              title: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: <Widget>[
-                  const Text('Displayname'),
-                  Text(
-                    userInfo.displayName,
-                    style: const TextStyle(color: Colors.black26),
-                  ),
-                ],
-              ),
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const DisplayNameSwitch(),
-                  ),
-                );
-              },
-            ),
-            const Divider(height: 0),
-            ListTile(
-              tileColor: Colors.white,
-              title: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: <Widget>[
-                  Text('E-Mail'),
-                  Text(
-                    userInfo.authentication.email ?? "none@none.com",
-                    style: TextStyle(color: Colors.black26),
-                  ),
-                ],
-              ),
-              onTap: () {
+            TwoListTile(
+              onPressed: () {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
@@ -228,47 +176,31 @@ class SettingScreen extends StatelessWidget {
                   ),
                 );
               },
+              keyText: "E-Mail",
+              valueText: userInfo.authentication.email ?? "none@none.com",
             ),
             const Divider(height: 0),
-            ListTile(
-              tileColor: Colors.white,
-              title: const Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: <Widget>[
-                  Text('Password'),
-                ],
-              ),
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const PasswordSwitch(),
-                  ),
-                );
-              },
-            ),
+            CustomListTile(
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const PasswordSwitch(),
+                    ),
+                  );
+                },
+                titleText: "Password"),
             const Divider(height: 0),
-            ListTile(
-              shape: const RoundedRectangleBorder(
-                  borderRadius: BorderRadius.only(
-                      bottomLeft: Radius.circular(AppStyle.cornerRadius),
-                      bottomRight: Radius.circular(AppStyle.cornerRadius))),
-              tileColor: Colors.white,
-              title: const Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: <Widget>[
-                  Text('Privacy'),
-                ],
-              ),
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const PrivacySettingPage(),
-                  ),
-                );
-              },
-            ),
+            CustomListTile(
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const PrivacySettingPage(),
+                    ),
+                  );
+                },
+                titleText: "Privacy"),
           ],
         ),
       ),
@@ -283,63 +215,17 @@ class SettingScreen extends StatelessWidget {
           "App",
         ),
       ),
-      Card(
-        shape: RoundedRectangleBorder(
-          side: const BorderSide(
-            color: Color.fromARGB(51, 241, 241, 241),
-          ),
-          borderRadius: BorderRadius.circular(AppStyle.cornerRadius),
-        ),
+      CustomCard(
         child: Column(children: [
-          ListTile(
-            shape: const RoundedRectangleBorder(
-                borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(AppStyle.cornerRadius),
-                    topRight: Radius.circular(AppStyle.cornerRadius))),
-            tileColor: Colors.white,
-            title: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: <Widget>[
-                const Text('Language'),
-                // Abstand zwischen Avatar und Text
-
-                TextButton(
-                  style: TextButton.styleFrom(
-                    textStyle: const TextStyle(color: Colors.black12),
-                  ),
-                  onPressed: () {},
-                  child: const Text(
-                    'English',
-                    style: TextStyle(color: Colors.black12),
-                  ),
-                ),
-              ],
-            ),
+          TwoListTile(
+            onPressed: () {},
+            keyText: 'Language',
+            valueText: 'English',
           ),
           const Divider(height: 0),
-          const ListTile(
-            tileColor: Colors.white,
-            title: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: <Widget>[
-                Text('Map'),
-              ],
-            ),
-          ),
+          CustomListTile(onPressed: () {}, titleText: "Map"),
           const Divider(height: 0),
-          const ListTile(
-            shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.only(
-                    bottomLeft: Radius.circular(AppStyle.cornerRadius),
-                    bottomRight: Radius.circular(AppStyle.cornerRadius))),
-            tileColor: Colors.white,
-            title: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: <Widget>[
-                Text('Farbe'),
-              ],
-            ),
-          ),
+          CustomListTile(onPressed: () {}, titleText: "Farbe"),
         ]),
       )
     ];
@@ -353,49 +239,14 @@ class SettingScreen extends StatelessWidget {
           "Rechtliche",
         ),
       ),
-      Card(
-        shape: RoundedRectangleBorder(
-          side: const BorderSide(
-            color: Color.fromARGB(51, 241, 241, 241),
-          ),
-          borderRadius: BorderRadius.circular(AppStyle.cornerRadius),
-        ),
-        child: const Column(
+      CustomCard(
+        child: Column(
           children: [
-            ListTile(
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.only(
-                      topRight: Radius.circular(AppStyle.cornerRadius),
-                      topLeft: Radius.circular(AppStyle.cornerRadius))),
-              tileColor: Colors.white,
-              title: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: <Widget>[
-                  Text('data protection'),
-                ],
-              ),
-            ),
+            CustomListTile(onPressed: () {}, titleText: "data protection"),
             Divider(height: 0),
-            ListTile(
-              tileColor: Colors.white,
-              title: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: <Widget>[
-                  Text('AGB'),
-                ],
-              ),
-            ),
+            CustomListTile(onPressed: () {}, titleText: "AGB"),
             Divider(height: 0),
-            ListTile(
-              tileColor: Colors.white,
-              title: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: <Widget>[
-                  Text('Impressum'),
-                ],
-              ),
-            ),
-            Divider(height: 0),
+            CustomListTile(onPressed: () {}, titleText: "Impressum"),
           ],
         ),
       )
@@ -431,7 +282,5 @@ class PhotoShower extends StatelessWidget {
 void handleLogout(BuildContext context) {
   Provider.of<AppState>(context, listen: false).logout();
   TokenManager.instance.deleteToken();
-  ScaffoldMessenger.of(context).showSnackBar(
-    const SnackBar(content: Text('Logged out!')),
-  );
+  showMessengeSnackBar(context, 'Logged out!');
 }

@@ -1,4 +1,6 @@
 import 'package:app/constants/constants.dart';
+import 'package:app/constants/design.dart';
+import 'package:app/widgets/custom_text.dart';
 import 'package:flutter/material.dart';
 import 'package:app/widgets/vote.dart';
 
@@ -32,6 +34,7 @@ class ActivityDetails extends StatelessWidget {
           child: const Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
+              //Todo Chip
               SizedBox(
                 width: 200,
                 height: 200,
@@ -81,13 +84,7 @@ class DetailContainer extends StatelessWidget {
         const SizedBox(height: 5.0),
         const vote_rate(),
         const SizedBox(height: 5.0),
-        const Text(
-          "KM entfernt",
-          style: TextStyle(
-              color: Colors.black54,
-              fontSize: 18.0,
-              fontWeight: FontWeight.bold),
-        )
+        const SmallText(text: "KM entfernt"),
       ],
     );
   }

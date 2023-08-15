@@ -1,4 +1,9 @@
 import 'package:app/constants/constants.dart';
+import 'package:app/constants/design.dart';
+import 'package:app/widgets/custom_button.dart';
+import 'package:app/widgets/custom_card.dart';
+import 'package:app/widgets/custom_list_tile.dart';
+import 'package:app/widgets/custom_textfield.dart';
 import 'package:app/widgets/photo_picker.dart';
 import 'package:app/widgets/timepicker.dart';
 import 'package:flutter/material.dart';
@@ -35,13 +40,11 @@ class _AddMeet extends State<AddMeet> {
               ),
               shadowColor: DesignColors.kBackgroundColor,
               actions: [
-                TextButton(
-                  onPressed: () {},
-                  child: Text(
-                    "Send",
-                    style: TextStyle(color: DesignColors.kBackgroundColor),
-                  ),
-                )
+                CustomTextButtonWhite(
+                    onPressed: () {
+                      Navigator.of(context).pop(); // Dialog schließen
+                    },
+                    text: 'Send'),
               ],
               pinned: true,
               stretch: true,
@@ -63,21 +66,17 @@ class _AddMeet extends State<AddMeet> {
                           color: const Color.fromARGB(182, 0, 0, 0),
                           fontSize: width * 0.04),
                     ),
-                    Card(
-                      shape: RoundedRectangleBorder(
-                        side: const BorderSide(
-                          color: Color.fromARGB(51, 241, 241, 241),
-                        ),
-                        borderRadius:
-                            BorderRadius.circular(AppStyle.cornerRadius),
-                      ),
+                    CustomCard(
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
                           Padding(
-                            padding:
-                                const EdgeInsets.only(left: 9.0, top: 15.0),
-                            child: TextFormField(
+                              padding:
+                                  const EdgeInsets.only(left: 9.0, top: 15.0),
+                              child: CustomTextField(
+                                  streetController: nameController,
+                                  label: 'Titel')
+                              /*TextFormField(
                               controller: nameController,
                               onChanged: (v) => nameController.text = v,
                               decoration: const InputDecoration(
@@ -89,25 +88,14 @@ class _AddMeet extends State<AddMeet> {
                                 enabledBorder: AppInputBorders.enabled,
                                 focusedBorder: AppInputBorders.focused,
                               ),
-                            ),
-                          ),
+                            ),*/
+                              ),
                           Padding(
                             padding:
                                 const EdgeInsets.only(left: 9.0, top: 15.0),
-                            child: TextField(
-                              controller: nameController,
-                              onChanged: (v) => nameController.text = v,
-                              decoration: const InputDecoration(
-                                border: AppInputBorders.border,
-                                focusedErrorBorder:
-                                    AppInputBorders.focusedError,
-                                errorBorder: AppInputBorders.error,
-                                enabledBorder: AppInputBorders.enabled,
-                                focusedBorder: AppInputBorders.focused,
-                                labelText: 'description',
-                              ),
-                              maxLines: 3,
-                              minLines: 2,
+                            child: DescriptionTextFieldwithoutBorder(
+                              nameController: nameController,
+                              label: 'description',
                             ),
                           ),
                           ListTile(
@@ -135,14 +123,7 @@ class _AddMeet extends State<AddMeet> {
                             fontSize: width * 0.05),
                       ),
                     ),
-                    Card(
-                      shape: RoundedRectangleBorder(
-                        side: const BorderSide(
-                          color: Color.fromARGB(51, 241, 241, 241),
-                        ),
-                        borderRadius:
-                            BorderRadius.circular(AppStyle.cornerRadius),
-                      ),
+                    CustomCard(
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
@@ -160,20 +141,13 @@ class _AddMeet extends State<AddMeet> {
                             fontSize: width * 0.04),
                       ),
                     ),
-                    Card(
-                      shape: RoundedRectangleBorder(
-                        side: const BorderSide(
-                          color: Color.fromARGB(51, 241, 241, 241),
-                        ),
-                        borderRadius:
-                            BorderRadius.circular(AppStyle.cornerRadius),
-                      ),
+                    CustomCard(
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
-                          ListTile(
-                            title: Text("Pick Location"),
-                            onTap: () {},
+                          CustomListTile(
+                            onPressed: () {},
+                            titleText: "Pick Location",
                           ),
                           DateTimePicker(),
                         ],
@@ -198,10 +172,7 @@ class _AddMeet extends State<AddMeet> {
               Navigator.pop(context);
             }),
         actions: <Widget>[
-          TextButton(
-            onPressed: () {},
-            child: Text("Send"),
-          ),
+          CustomTextButton(onPressed: () {}, text: 'Send'),
         ]);
   }
 }

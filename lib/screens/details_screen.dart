@@ -1,4 +1,9 @@
+import 'package:app/constants/design.dart';
 import 'package:app/widgets/bottomsheet.dart';
+import 'package:app/widgets/custom_alertdialog.dart';
+import 'package:app/widgets/custom_button.dart';
+import 'package:app/widgets/custom_card.dart';
+import 'package:app/widgets/custom_textfield.dart';
 import 'package:app/widgets/login_reminder.dart';
 import 'package:flutter/material.dart';
 
@@ -52,20 +57,18 @@ class _DetailsScreenState extends State<DetailsScreen> {
                     children: <Widget>[
                       Padding(
                         padding: const EdgeInsets.only(left: 9.0, top: 9.0),
-                        child: TextButton(
-                          onPressed: () => Navigator.pop(context),
-                          child: const Text('Cancel'),
-                        ),
+                        child: CustomTextButton(
+                            onPressed: () => Navigator.pop(context),
+                            text: 'Cancel'),
                       ),
                       const Text(
                         "Review",
                         style: TextStyle(
                             fontSize: 15, fontWeight: FontWeight.bold),
                       ),
-                      TextButton(
-                        onPressed: () => Navigator.pop(context),
-                        child: const Text('Send'), //TODO backend
-                      ),
+                      CustomTextButton(
+                          onPressed: () => Navigator.pop(context),
+                          text: 'Send'),
                     ],
                   ),
                   Padding(
@@ -93,55 +96,14 @@ class _DetailsScreenState extends State<DetailsScreen> {
                   Padding(
                     padding: const EdgeInsets.only(left: 9.0, top: 15.0),
                     child: Column(children: [
-                      TextFormField(
+                      UsernameTextFormField(
                         controller: usernameController,
-                        textAlign: TextAlign.start,
-                        decoration: const InputDecoration(
-                          hintText: 'Titel',
-                          border: UnderlineInputBorder(
-                            borderSide: BorderSide.none,
-                          ),
-                          focusedErrorBorder: UnderlineInputBorder(
-                            borderSide: BorderSide(color: Colors.red),
-                          ),
-                          errorBorder: UnderlineInputBorder(
-                            borderSide: BorderSide(color: Colors.red),
-                          ),
-                          enabledBorder: UnderlineInputBorder(
-                            borderSide: BorderSide(
-                              color: Colors.blue,
-                            ),
-                          ),
-                          focusedBorder: UnderlineInputBorder(
-                            borderSide: BorderSide(
-                              color: Colors.blue,
-                              width: 2.0,
-                            ),
-                          ),
-                        ),
+                        labelText: "Title",
+                        validator: (_) => null,
                       ),
-                      TextFormField(
-                        maxLines: 5,
-                        controller: desController,
-                        textAlign: TextAlign.start,
-                        decoration: const InputDecoration(
-                          hintText: 'Description',
-                          border: UnderlineInputBorder(
-                            borderSide: BorderSide.none,
-                          ),
-                          focusedErrorBorder: UnderlineInputBorder(
-                            borderSide: BorderSide(color: Colors.red),
-                          ),
-                          errorBorder: UnderlineInputBorder(
-                            borderSide: BorderSide(color: Colors.red),
-                          ),
-                          enabledBorder: UnderlineInputBorder(
-                            borderSide: BorderSide.none,
-                          ),
-                          focusedBorder: UnderlineInputBorder(
-                            borderSide: BorderSide.none,
-                          ),
-                        ),
+                      DescriptionTextFormField(
+                        desController: desController,
+                        hinText: 'Description',
                       ),
                     ]),
                   ),
@@ -383,18 +345,13 @@ class _DetailsScreenState extends State<DetailsScreen> {
                       right: 9.0,
                     ),
                     child: Row(children: [
-                      TextButton(
-                        style: TextButton.styleFrom(
-                          textStyle: const TextStyle(
-                              fontSize: 15, color: Colors.black54),
-                        ),
-                        onPressed: () => conditionalShowLoginReminder(
-                            context: context,
-                            loggedInCallback: () async {
-                              _showReviewBottomSheet(context);
-                            }),
-                        child: const Text('review'),
-                      ),
+                      CustomTextButton(
+                          onPressed: () => conditionalShowLoginReminder(
+                              context: context,
+                              loggedInCallback: () async {
+                                _showReviewBottomSheet(context);
+                              }),
+                          text: "review"),
                       const Icon(Icons.edit_note),
                     ])),
               ],
@@ -551,7 +508,7 @@ class ReviewBox extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 3.0),
       child: Container(
-          child: Card(
+          child: CustomCard(
               child: Column(
         children: [
           // Name, Profilimage,
@@ -701,27 +658,18 @@ void _showDialog(BuildContext context) {
   showDialog(
     context: context,
     builder: (BuildContext context) {
-      return AlertDialog(
-        title: const Text('Report as inappropriate'),
-        content: const Text(
-            'Thank you for contributing to the safety and respect of our community. If you believe that this content violates our policies or is inappropriate, please click on Report.   Your message will be treated confidentially and verified by our moderation team. '),
-        actions: <Widget>[
-          Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-            TextButton(
-              child: const Text('Cancel'),
-              onPressed: () {
-                Navigator.of(context).pop(); // Dialog schließen
-              },
-            ),
-            TextButton(
-              child: const Text('Send'),
-              onPressed: () {
-                Navigator.of(context).pop(); // Dialog schließen
-              },
-            ),
-          ])
-        ],
-      );
+      return CustomAlertDialog(
+          title: 'Report as inappropriate',
+          content: Text(
+              'Thank you for contributing to the safety and respect of our community. If you believe that this content violates our policies or is inappropriate, please click on Report.   Your message will be treated confidentially and verified by our moderation team. '),
+          firstbuttonText: "Cancel",
+          firstonPress: () {
+            Navigator.of(context).pop();
+          }, // Dialog schließen
+          secondbuttonText: 'Send',
+          secondonPress: () {
+            Navigator.of(context).pop();
+          });
     },
   );
 }

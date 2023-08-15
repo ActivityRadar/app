@@ -1,4 +1,7 @@
 import 'package:app/constants/constants.dart';
+import 'package:app/widgets/custom_snackbar.dart';
+import 'package:app/widgets/custom_button.dart';
+import 'package:app/widgets/custom_textfield.dart';
 import 'package:flutter/material.dart';
 
 class EmailSwitch extends StatelessWidget {
@@ -12,41 +15,22 @@ class EmailSwitch extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        leading: TextButton(
-          style: TextButton.styleFrom(
-            textStyle:
-                const TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
-          ),
-          onPressed: () {
-            Navigator.pop(context);
-            ScaffoldMessenger.of(context)
-                .showSnackBar(const SnackBar(content: Text('Cancel')));
-          },
-          child: const Text(
-            'Cancel',
-            style: TextStyle(color: Colors.white),
-          ),
-        ),
-        actions: [
-          TextButton(
-            style: TextButton.styleFrom(
-              textStyle:
-                  const TextStyle(fontSize: 13, fontWeight: FontWeight.bold),
-            ),
+        leading: CustomTextButtonWhite(
             onPressed: () {
-              if (formEmailKey.currentState!.validate()) {
-                Navigator.pop(context);
-              } else {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(content: Text('Please fill input')),
-                );
-              }
+              Navigator.pop(context);
+              showMessengeSnackBar(context, 'Cancel');
             },
-            child: const Text(
-              'Finish',
-              style: TextStyle(color: Colors.white),
-            ),
-          ),
+            text: 'Cancel'),
+        actions: [
+          CustomTextButtonWhite(
+              onPressed: () {
+                if (formEmailKey.currentState!.validate()) {
+                  Navigator.pop(context);
+                } else {
+                  showMessengeSnackBar(context, 'Please fill input');
+                }
+              },
+              text: 'Finish'),
         ],
       ),
       body: Form(
@@ -60,26 +44,9 @@ class EmailSwitch extends StatelessWidget {
               Padding(
                 padding:
                     const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
-                child: TextFormField(
+                child: EmailTextFormField(
                   controller: emailController,
-                  keyboardType: TextInputType.emailAddress,
-                  decoration: const InputDecoration(
-                      border: UnderlineInputBorder(
-                        borderSide: BorderSide.none,
-                      ),
-                      focusedErrorBorder: UnderlineInputBorder(
-                        borderSide: BorderSide(color: Colors.red),
-                      ),
-                      errorBorder: UnderlineInputBorder(
-                        borderSide: BorderSide(color: Colors.red),
-                      ),
-                      enabledBorder: UnderlineInputBorder(
-                        borderSide: BorderSide(color: Colors.blue),
-                      ),
-                      focusedBorder: UnderlineInputBorder(
-                        borderSide: BorderSide(color: Colors.blue),
-                      ),
-                      labelText: "email"),
+                  labelText: "email",
                   validator: (value) {
                     if (value != null || value!.isEmpty) {
                       if (!RegExps.email.hasMatch(value)) {
