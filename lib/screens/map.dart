@@ -385,6 +385,7 @@ class _ActivityMarkerMapState extends State<ActivityMarkerMap>
           urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
           subdomains: const ['a', 'b', 'c'],
         ),
+        if (currentPositionLayer != null) currentPositionLayer!,
         MarkerClusterLayerWidget(
             options: MarkerClusterLayerOptions(
           maxClusterRadius: bubbleScale(maxBubbleSize).ceil(),
@@ -411,7 +412,6 @@ class _ActivityMarkerMapState extends State<ActivityMarkerMap>
             );
           },
         )),
-        if (currentPositionLayer != null) currentPositionLayer!
       ],
     );
   }
