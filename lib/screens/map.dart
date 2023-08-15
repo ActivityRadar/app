@@ -4,6 +4,7 @@ import 'package:app/app_state.dart';
 import 'package:app/model/functions.dart';
 import 'package:app/model/generated.dart';
 import 'package:app/provider/backend.dart';
+import 'package:app/provider/generated/locations_provider.dart';
 import 'package:app/screens/details_screen.dart';
 import 'package:app/widgets/short_info_box.dart';
 import 'package:app/widgets/bar_search.dart';
@@ -54,8 +55,12 @@ class MapScreenState extends State<MapScreen> {
   ValueNotifier<int> focusedInfosIndex = ValueNotifier(0);
 
   void buildSlider(LocationShortApi info) async {
-    sliderInfos = await LocationService()
-        .getAroundCenter(info.location, activity: activity.value);
+    final coordinates = toLatLng(info.location);
+    sliderInfos = await LocationsProvider.getLocationsAround(
+        long: coordinates.longitude,
+        lat: coordinates.latitude,
+        activities: [activity.value]);
+
     setState(() {
       print("buildSlider");
       infoSlider = ShortInfoSlider(
@@ -299,10 +304,13 @@ class _ActivityMarkerMapState extends State<ActivityMarkerMap>
         '${bounds.south}, ${bounds.west}, ${bounds.east}, ${widget.activity.value}');
     print("fetch locations started");
 
-    List<LocationShortApi> locations = await LocationService().getInBoundingBox(
-        toLongLat(bounds.southWest),
-        toLongLat(bounds.northEast),
-        widget.activity.value);
+    List<LocationShortApi> locations =
+        await LocationsProvider.getLocationsByBbox(
+            north: bounds.north,
+            south: bounds.south,
+            west: bounds.west,
+            east: bounds.east,
+            activities: [widget.activity.value]);
     print(locations.length);
 
     List<LocationMarker> markers_ =
