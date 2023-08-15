@@ -6,18 +6,17 @@ import 'package:json_annotation/json_annotation.dart';
 
 part 'change_password_form.g.dart';
 
-@JsonSerializable(explicitToJson: true)
+@JsonSerializable(explicitToJson: true, includeIfNull: false)
 class ChangePasswordForm {
   @JsonKey(name: "new_password")
   final String newPassword;
   @JsonKey(name: "old_password")
   final String oldPassword;
 
-  ChangePasswordForm({
-    required this.newPassword,
-    required this.oldPassword});
+  ChangePasswordForm({required this.newPassword, required this.oldPassword});
 
-  factory ChangePasswordForm.fromJson(Map<String, dynamic> json) => _$ChangePasswordFormFromJson(json);
+  factory ChangePasswordForm.fromJson(Map<String, dynamic> json) =>
+      _$ChangePasswordFormFromJson(json);
 
   Map<String, dynamic> toJson() => _$ChangePasswordFormToJson(this);
 }

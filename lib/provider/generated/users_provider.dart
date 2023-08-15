@@ -11,25 +11,34 @@ class UsersProvider {
   /// Find Users By Name
   static Future<List<UserApiOut>> findUsersByName(
       {required String search}) async {
-    final Map<String, dynamic> __q = {"search": search};
-    final responseBody = await BackendService.instance
+    final Map<String, dynamic> __q = {"search": search.toString()};
+    final List responseBody = await BackendService.instance
         .sendRequest(HttpMethod.get, "/users/", queryParams: __q);
-    return responseBody.map((item) => UserApiOut.fromJson(item)).to_list();
+    return responseBody.map((item) => UserApiOut.fromJson(item)).toList();
   }
 
   /// Create User
-  static Future<void> createUser({required UserApiIn data}) async {
-    await BackendService.instance
+  static Future<CreateUserResponse> createUser(
+      {required UserApiIn data}) async {
+    final responseBody = await BackendService.instance
         .sendRequest(HttpMethod.post, "/users/", body: data.toJson());
+    return CreateUserResponse.fromJson(responseBody);
+  }
+
+  /// Verify New User
+  static Future<bool> verifyNewUser({required VerifyUserInfo data}) async {
+    final responseBody = await BackendService.instance
+        .sendRequest(HttpMethod.post, "/users/verify", body: data.toJson());
+    return responseBody;
   }
 
   /// Get User Infos
   static Future<List<UserApiOut>> getUserInfos(
       {required List<String> q}) async {
     final Map<String, dynamic> __q = {"q": q};
-    final responseBody = await BackendService.instance
+    final List responseBody = await BackendService.instance
         .sendRequest(HttpMethod.get, "/users/id", queryParams: __q);
-    return responseBody.map((item) => UserApiOut.fromJson(item)).to_list();
+    return responseBody.map((item) => UserApiOut.fromJson(item)).toList();
   }
 
   /// Request Reset Password
@@ -59,6 +68,14 @@ class UsersProvider {
         encodeToJson: false);
   }
 
+  /// Check Email Taken
+  static Future<bool> checkEmailTaken({required String email}) async {
+    final Map<String, dynamic> __q = {"email": email.toString()};
+    final responseBody = await BackendService.instance
+        .sendRequest(HttpMethod.get, "/users/check-email", queryParams: __q);
+    return responseBody;
+  }
+
   /// Report User
   static Future<void> reportUser({required int userId}) async {
     await BackendService.instance
@@ -85,16 +102,16 @@ class UsersProvider {
 
   /// Get All Friends
   static Future<List<UserApiOut>> getAllFriends() async {
-    final responseBody = await BackendService.instance
+    final List responseBody = await BackendService.instance
         .sendRequest(HttpMethod.get, "/users/friends/");
-    return responseBody.map((item) => UserApiOut.fromJson(item)).to_list();
+    return responseBody.map((item) => UserApiOut.fromJson(item)).toList();
   }
 
   /// Get Received Friend Requests
   static Future<List<UserRelation>> getReceivedFriendRequests() async {
-    final responseBody = await BackendService.instance
+    final List responseBody = await BackendService.instance
         .sendRequest(HttpMethod.get, "/users/friends/open");
-    return responseBody.map((item) => UserRelation.fromJson(item)).to_list();
+    return responseBody.map((item) => UserRelation.fromJson(item)).toList();
   }
 
   /// Get This User

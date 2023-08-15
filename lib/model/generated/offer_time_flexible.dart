@@ -6,14 +6,14 @@ import 'package:json_annotation/json_annotation.dart';
 
 part 'offer_time_flexible.g.dart';
 
-@JsonSerializable(explicitToJson: true)
+@JsonSerializable(explicitToJson: true, includeIfNull: false)
 class OfferTimeFlexible {
   final String? type;
 
-  OfferTimeFlexible({
-    this.type});
+  OfferTimeFlexible({this.type});
 
-  factory OfferTimeFlexible.fromJson(Map<String, dynamic> json) => _$OfferTimeFlexibleFromJson(json);
+  factory OfferTimeFlexible.fromJson(Map<String, dynamic> json) =>
+      _$OfferTimeFlexibleFromJson(json);
 
   Map<String, dynamic> toJson() => _$OfferTimeFlexibleToJson(this);
 }

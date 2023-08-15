@@ -5,5 +5,6 @@
 import 'package:json_annotation/json_annotation.dart';
 
 enum OfferVisibility {
-  @JsonValue('public') public,
+  @JsonValue('public')
+  public,
 }

@@ -16,8 +16,16 @@ GeoJsonFeatureCollection _$GeoJsonFeatureCollectionFromJson(
     );
 
 Map<String, dynamic> _$GeoJsonFeatureCollectionToJson(
-        GeoJsonFeatureCollection instance) =>
-    <String, dynamic>{
-      'type': instance.type,
-      'geometries': instance.geometries,
-    };
+    GeoJsonFeatureCollection instance) {
+  final val = <String, dynamic>{};
+
+  void writeNotNull(String key, dynamic value) {
+    if (value != null) {
+      val[key] = value;
+    }
+  }
+
+  writeNotNull('type', instance.type);
+  val['geometries'] = instance.geometries;
+  return val;
+}

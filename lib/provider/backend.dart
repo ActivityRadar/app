@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:app/model/generated.dart';
+import 'package:app/provider/generated/auth_provider.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
 
@@ -109,19 +110,11 @@ class BackendService {
 
 class AuthService {
   static Future<bool> login(String username, String password) async {
-    Map<String, String> body = {"username": username, "password": password};
-
     try {
-      Map<String, dynamic> responseBody = await BackendService.instance
-          .sendRequest(HttpMethod.post, "/auth/token",
-              body: body,
-              encodeToJson: false,
-              additionalHeaders: {
-            "Content-Type": "application/x-www-form-urlencoded",
-          });
+      final authResponse = await AuthProvider.login(
+          data: LoginBody(username: username, password: password));
 
-      String token = responseBody["access_token"];
-      await TokenManager.instance.setToken(token);
+      await TokenManager.instance.setToken(authResponse.accessToken);
       return true;
     } catch (e) {
       print("Login failed!");
@@ -152,6 +145,7 @@ class UserService {
   static String prefix = "/users";
 
   /// Returns the id of the newly created user.
+  // TODO: deprecated
   static Future<String> create(UserApiIn userIn) async {
     var body = userIn.toJson();
     Map<String, dynamic> responseBody = await BackendService.instance
@@ -160,14 +154,7 @@ class UserService {
     return responseBody["id"];
   }
 
-  static void deleteUser() {}
-
-  static void changeUsername() {}
-
-  static void changeDisplayName() {}
-
-  static void findUser() {}
-
+  // TODO: deprecated
   static Future<UserApiOut> getUserInfo(String id) async {
     final q = {"q": id};
     final responseBody = await BackendService.instance
@@ -176,6 +163,7 @@ class UserService {
     return UserApiOut.fromJson(responseBody[0]);
   }
 
+  // TODO: deprecated
   static Future<List<UserApiOut>> getInfoBulk(List<String> ids) async {
     final q = {"q": ids};
     final responseBody = await BackendService.instance
@@ -184,6 +172,7 @@ class UserService {
     return responseBody.map((info) => UserApiOut.fromJson(info)).toList();
   }
 
+  // TODO: deprecated
   static Future<UserDetailed> getCurrentUserInfo() async {
     final responseBody =
         await BackendService.instance.sendRequest(HttpMethod.get, "$prefix/me");
@@ -192,19 +181,10 @@ class UserService {
   }
 }
 
-class RelationService {
-  void addFriend() {}
-
-  void unfriend() {}
-
-  void getFriends() {}
-
-  void getOpenRequests() {}
-}
-
 class LocationService {
   static String prefix = "/locations";
 
+  // TODO: deprecated
   void createLocation(LocationNew location) async {
     await BackendService.instance
         .sendRequest(HttpMethod.post, "$prefix/", body: location.toJson());
@@ -212,6 +192,7 @@ class LocationService {
 
   void deleteLocation() {}
 
+  // TODO: deprecated
   Future<LocationDetailedApi> getDetails(String locationId) async {
     return LocationDetailedApi.fromJson(
         await BackendService.instance.sendRequest(
@@ -220,6 +201,7 @@ class LocationService {
     ));
   }
 
+  // TODO: deprecated
   Future<List<LocationShortApi>> getInBoundingBox(GeoJsonLocation southWest,
       GeoJsonLocation northEast, String activity) async {
     Map<String, dynamic> queryParams = {
@@ -236,6 +218,7 @@ class LocationService {
     return res.map((loc) => LocationShortApi.fromJson(loc)).toList();
   }
 
+  // TODO: deprecated
   Future<List<LocationDetailedApi>> getAroundCenter(GeoJsonLocation center,
       {String? activity}) async {
     final List<dynamic> res = await BackendService.instance

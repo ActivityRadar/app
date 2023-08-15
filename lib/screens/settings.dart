@@ -3,7 +3,8 @@ import 'package:app/constants/constants.dart';
 import 'package:app/model/generated.dart';
 import 'package:app/constants/design.dart';
 import 'package:app/provider/backend.dart';
-import 'package:app/screens/auth.dart';
+import 'package:app/screens/login.dart';
+import 'package:app/screens/register.dart';
 import 'package:app/screens/setting_password.dart';
 import 'package:app/screens/settings_email.dart';
 import 'package:app/screens/settings_name.dart';
@@ -41,7 +42,7 @@ class SettingScreen extends StatelessWidget {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => const AuthScreen(),
+                        builder: (context) => const LoginScreen(),
                       ),
                     );
                   },
@@ -50,6 +51,16 @@ class SettingScreen extends StatelessWidget {
             if (state.isLoggedIn)
               CustomTextButton(
                   onPressed: () => handleLogout(context), text: 'logout')
+            else
+              CustomTextButton(
+                onPressed: () => Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const RegisterScreen(),
+                  ),
+                ),
+                text: 'Register',
+              ),
           ],
           flexibleSpace: LayoutBuilder(
             builder: (BuildContext context, BoxConstraints constraints) {
@@ -282,5 +293,5 @@ class PhotoShower extends StatelessWidget {
 void handleLogout(BuildContext context) {
   Provider.of<AppState>(context, listen: false).logout();
   TokenManager.instance.deleteToken();
-  showMessengeSnackBar(context, 'Logged out!');
+  showMessageSnackBar(context, 'Logged out!');
 }

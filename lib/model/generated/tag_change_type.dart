@@ -5,7 +5,10 @@
 import 'package:json_annotation/json_annotation.dart';
 
 enum TagChangeType {
-  @JsonValue('add') add,
-  @JsonValue('delete') delete,
-  @JsonValue('change') change,
+  @JsonValue('add')
+  add,
+  @JsonValue('delete')
+  delete,
+  @JsonValue('change')
+  change,
 }

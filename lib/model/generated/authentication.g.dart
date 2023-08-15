@@ -13,12 +13,21 @@ Authentication _$AuthenticationFromJson(Map<String, dynamic> json) =>
       email: json['email'] as String?,
     );
 
-Map<String, dynamic> _$AuthenticationToJson(Authentication instance) =>
-    <String, dynamic>{
-      'type': _$AuthTypeEnumMap[instance.type]!,
-      'password_hash': instance.passwordHash,
-      'email': instance.email,
-    };
+Map<String, dynamic> _$AuthenticationToJson(Authentication instance) {
+  final val = <String, dynamic>{
+    'type': _$AuthTypeEnumMap[instance.type]!,
+  };
+
+  void writeNotNull(String key, dynamic value) {
+    if (value != null) {
+      val[key] = value;
+    }
+  }
+
+  writeNotNull('password_hash', instance.passwordHash);
+  writeNotNull('email', instance.email);
+  return val;
+}
 
 const _$AuthTypeEnumMap = {
   AuthType.password: 'password',

@@ -31,7 +31,7 @@ class DisplayNameSwitch extends StatelessWidget {
           leading: CustomTextButtonWhite(
               onPressed: () {
                 Navigator.pop(context);
-                showMessengeSnackBar(context, 'Cancel');
+                showMessageSnackBar(context, 'Cancel');
               },
               text: 'Cancel'),
           actions: [
@@ -45,7 +45,7 @@ class DisplayNameSwitch extends StatelessWidget {
                       data["username"] = usernameController.text;
                     }
                   } else {
-                    showMessengeSnackBar(context, 'Enter a valid username!');
+                    showMessageSnackBar(context, 'Enter a valid username!');
                     ok = false;
                     print("Invalid new username!");
                   }
@@ -55,7 +55,7 @@ class DisplayNameSwitch extends StatelessWidget {
                       data["display_name"] = displaynameController.text;
                     }
                   } else {
-                    showMessengeSnackBar(context, 'Enter a valid displayName!');
+                    showMessageSnackBar(context, 'Enter a valid displayName!');
                     ok = false;
                     print("Invalid new display name!");
                   }

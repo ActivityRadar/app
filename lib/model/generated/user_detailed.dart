@@ -9,7 +9,7 @@ import 'package:app/model/generated/geo_json_location.dart';
 import 'package:app/model/generated/authentication.dart';
 part 'user_detailed.g.dart';
 
-@JsonSerializable(explicitToJson: true)
+@JsonSerializable(explicitToJson: true, includeIfNull: false)
 class UserDetailed {
   final String username;
   @JsonKey(name: "display_name")
@@ -26,23 +26,24 @@ class UserDetailed {
   final Authentication authentication;
   @JsonKey(name: "archived_until")
   final DateTime? archivedUntil;
-  final Map<String, dynamic>? admin;
+  final bool? admin;
   final String id;
 
-  UserDetailed({
-    required this.username,
-    required this.displayName,
-    required this.trustScore,
-    this.avatar,
-    this.ipAddress,
-    required this.creationDate,
-    this.lastLocation,
-    required this.authentication,
-    this.archivedUntil,
-    this.admin,
-    required this.id});
+  UserDetailed(
+      {required this.username,
+      required this.displayName,
+      required this.trustScore,
+      this.avatar,
+      this.ipAddress,
+      required this.creationDate,
+      this.lastLocation,
+      required this.authentication,
+      this.archivedUntil,
+      this.admin,
+      required this.id});
 
-  factory UserDetailed.fromJson(Map<String, dynamic> json) => _$UserDetailedFromJson(json);
+  factory UserDetailed.fromJson(Map<String, dynamic> json) =>
+      _$UserDetailedFromJson(json);
 
   Map<String, dynamic> toJson() => _$UserDetailedToJson(this);
 }

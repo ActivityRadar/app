@@ -9,7 +9,7 @@ import 'package:app/model/generated/photo_info.dart';
 import 'package:app/model/generated/reviews_summary.dart';
 part 'location_detailed_api.g.dart';
 
-@JsonSerializable(explicitToJson: true)
+@JsonSerializable(explicitToJson: true, includeIfNull: false)
 class LocationDetailedApi {
   @JsonKey(name: "activity_type")
   final String activityType;
@@ -23,18 +23,19 @@ class LocationDetailedApi {
   final ReviewsSummary reviews;
   final String id;
 
-  LocationDetailedApi({
-    required this.activityType,
-    required this.location,
-    this.name,
-    required this.trustScore,
-    required this.tags,
-    this.geometry,
-    required this.photos,
-    required this.reviews,
-    required this.id});
+  LocationDetailedApi(
+      {required this.activityType,
+      required this.location,
+      this.name,
+      required this.trustScore,
+      required this.tags,
+      this.geometry,
+      required this.photos,
+      required this.reviews,
+      required this.id});
 
-  factory LocationDetailedApi.fromJson(Map<String, dynamic> json) => _$LocationDetailedApiFromJson(json);
+  factory LocationDetailedApi.fromJson(Map<String, dynamic> json) =>
+      _$LocationDetailedApiFromJson(json);
 
   Map<String, dynamic> toJson() => _$LocationDetailedApiToJson(this);
 }

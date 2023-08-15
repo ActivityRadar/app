@@ -1,4 +1,5 @@
 import 'package:app/constants/design.dart';
+import 'package:app/provider/generated/locations_provider.dart';
 import 'package:app/widgets/bottomsheet.dart';
 import 'package:app/widgets/custom_alertdialog.dart';
 import 'package:app/widgets/custom_button.dart';
@@ -120,7 +121,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
       // no need to wait if we already have the data
       _data = Future<LocationDetailedApi>.value(widget.locationInfo);
     } else {
-      _data = LocationService().getDetails(widget.locationId!);
+      _data = LocationsProvider.getLocation(locationId: widget.locationId!);
     }
   }
 

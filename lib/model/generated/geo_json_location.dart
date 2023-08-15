@@ -6,16 +6,15 @@ import 'package:json_annotation/json_annotation.dart';
 
 part 'geo_json_location.g.dart';
 
-@JsonSerializable(explicitToJson: true)
+@JsonSerializable(explicitToJson: true, includeIfNull: false)
 class GeoJsonLocation {
   final String? type;
   final List<double> coordinates;
 
-  GeoJsonLocation({
-    this.type,
-    required this.coordinates});
+  GeoJsonLocation({this.type, required this.coordinates});
 
-  factory GeoJsonLocation.fromJson(Map<String, dynamic> json) => _$GeoJsonLocationFromJson(json);
+  factory GeoJsonLocation.fromJson(Map<String, dynamic> json) =>
+      _$GeoJsonLocationFromJson(json);
 
   Map<String, dynamic> toJson() => _$GeoJsonLocationToJson(this);
 }

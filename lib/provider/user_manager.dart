@@ -1,8 +1,8 @@
 import 'package:app/model/generated.dart';
-import 'package:app/provider/backend.dart';
+import 'package:app/provider/generated/users_provider.dart';
 
 class UserInfoManager {
-  static Map<String, UserApiOut> _storage = {};
+  static final Map<String, UserApiOut> _storage = {};
 
   static final UserInfoManager _instance = UserInfoManager._internal();
   static UserInfoManager get instance => _instance;
@@ -10,8 +10,10 @@ class UserInfoManager {
 
   Future<UserApiOut> getUserInfo(String id, {bool force = false}) async {
     if (!_storage.containsKey(id) || force) {
-      final u = await UserService.getUserInfo(id);
-      _storage[id] = u;
+      final u = await UsersProvider.getUserInfos(q: [id]);
+      _storage[id] = u.first;
+    } else {
+      print("User not found!");
     }
 
     return _storage[id]!;
@@ -26,7 +28,7 @@ class UserInfoManager {
     }
 
     if (notStored.isNotEmpty) {
-      List<UserApiOut> us = await UserService.getInfoBulk(notStored);
+      List<UserApiOut> us = await UsersProvider.getUserInfos(q: notStored);
       for (var u in us) {
         _storage[u.id] = u;
       }

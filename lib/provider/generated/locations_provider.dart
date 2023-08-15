@@ -10,17 +10,15 @@ class LocationsProvider {
       required double north,
       List<String>? activities}) async {
     final Map<String, dynamic> __q = {
-      "west": west,
-      "south": south,
-      "east": east,
-      "north": north,
+      "west": west.toString(),
+      "south": south.toString(),
+      "east": east.toString(),
+      "north": north.toString(),
       if (activities != null) "activities": activities
     };
-    final responseBody = await BackendService.instance
+    final List responseBody = await BackendService.instance
         .sendRequest(HttpMethod.get, "/locations/bbox", queryParams: __q);
-    return responseBody
-        .map((item) => LocationShortApi.fromJson(item))
-        .to_list();
+    return responseBody.map((item) => LocationShortApi.fromJson(item)).toList();
   }
 
   /// Get Locations Around
@@ -31,17 +29,17 @@ class LocationsProvider {
       List<String>? activities,
       int? limit}) async {
     final Map<String, dynamic> __q = {
-      "long": long,
-      "lat": lat,
-      if (radius != null) "radius": radius,
+      "long": long.toString(),
+      "lat": lat.toString(),
+      if (radius != null) "radius": radius.toString(),
       if (activities != null) "activities": activities,
-      if (limit != null) "limit": limit
+      if (limit != null) "limit": limit.toString()
     };
-    final responseBody = await BackendService.instance
+    final List responseBody = await BackendService.instance
         .sendRequest(HttpMethod.get, "/locations/around", queryParams: __q);
     return responseBody
         .map((item) => LocationDetailedApi.fromJson(item))
-        .to_list();
+        .toList();
   }
 
   /// Get Location
@@ -72,15 +70,19 @@ class LocationsProvider {
   }
 
   /// Create New Location
-  static Future<void> createNewLocation({required LocationNew data}) async {
-    await BackendService.instance
+  static Future<CreateLocationResponse> createNewLocation(
+      {required LocationNew data}) async {
+    final responseBody = await BackendService.instance
         .sendRequest(HttpMethod.post, "/locations/", body: data.toJson());
+    return CreateLocationResponse.fromJson(responseBody);
   }
 
   /// Get Location History
   static Future<void> getLocationHistory(
       {required String locationId, int? offset}) async {
-    final Map<String, dynamic> __q = {if (offset != null) "offset": offset};
+    final Map<String, dynamic> __q = {
+      if (offset != null) "offset": offset.toString()
+    };
     await BackendService.instance.sendRequest(
         HttpMethod.get, "/locations/$locationId/update-history",
         queryParams: __q);
@@ -89,7 +91,7 @@ class LocationsProvider {
   /// Report Location Update
   static Future<void> reportLocationUpdate(
       {required String updateId, required String reason}) async {
-    final Map<String, dynamic> __q = {"reason": reason};
+    final Map<String, dynamic> __q = {"reason": reason.toString()};
     await BackendService.instance.sendRequest(
         HttpMethod.post, "/locations/report-update/$updateId",
         queryParams: __q);
@@ -99,8 +101,8 @@ class LocationsProvider {
   static Future<ReviewsPage> getReviews(
       {required String locationId, int? offset, int? n}) async {
     final Map<String, dynamic> __q = {
-      if (offset != null) "offset": offset,
-      if (n != null) "n": n
+      if (offset != null) "offset": offset.toString(),
+      if (n != null) "n": n.toString()
     };
     final responseBody = await BackendService.instance.sendRequest(
         HttpMethod.get, "/locations/$locationId/reviews/",
@@ -138,7 +140,7 @@ class LocationsProvider {
       {required String locationId,
       required String reviewId,
       required String reason}) async {
-    final Map<String, dynamic> __q = {"reason": reason};
+    final Map<String, dynamic> __q = {"reason": reason.toString()};
     await BackendService.instance.sendRequest(
         HttpMethod.put, "/locations/$locationId/reviews/$reviewId/report",
         queryParams: __q);
@@ -146,8 +148,10 @@ class LocationsProvider {
 
   /// Set Confirmation
   static Future<void> setConfirmation(
-      {required String locationId, Map<String, dynamic>? confirm}) async {
-    final Map<String, dynamic> __q = {if (confirm != null) "confirm": confirm};
+      {required String locationId, bool? confirm}) async {
+    final Map<String, dynamic> __q = {
+      if (confirm != null) "confirm": confirm.toString()
+    };
     await BackendService.instance.sendRequest(
         HttpMethod.put, "/locations/$locationId/reviews/confirmation",
         queryParams: __q);

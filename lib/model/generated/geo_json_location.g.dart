@@ -14,8 +14,16 @@ GeoJsonLocation _$GeoJsonLocationFromJson(Map<String, dynamic> json) =>
           .toList(),
     );
 
-Map<String, dynamic> _$GeoJsonLocationToJson(GeoJsonLocation instance) =>
-    <String, dynamic>{
-      'type': instance.type,
-      'coordinates': instance.coordinates,
-    };
+Map<String, dynamic> _$GeoJsonLocationToJson(GeoJsonLocation instance) {
+  final val = <String, dynamic>{};
+
+  void writeNotNull(String key, dynamic value) {
+    if (value != null) {
+      val[key] = value;
+    }
+  }
+
+  writeNotNull('type', instance.type);
+  val['coordinates'] = instance.coordinates;
+  return val;
+}

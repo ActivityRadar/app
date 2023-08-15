@@ -7,19 +7,17 @@ import 'package:json_annotation/json_annotation.dart';
 import 'package:app/model/generated/auth_type.dart';
 part 'authentication.g.dart';
 
-@JsonSerializable(explicitToJson: true)
+@JsonSerializable(explicitToJson: true, includeIfNull: false)
 class Authentication {
   final AuthType type;
   @JsonKey(name: "password_hash")
   final String? passwordHash;
   final String? email;
 
-  Authentication({
-    required this.type,
-    this.passwordHash,
-    this.email});
+  Authentication({required this.type, this.passwordHash, this.email});
 
-  factory Authentication.fromJson(Map<String, dynamic> json) => _$AuthenticationFromJson(json);
+  factory Authentication.fromJson(Map<String, dynamic> json) =>
+      _$AuthenticationFromJson(json);
 
   Map<String, dynamic> toJson() => _$AuthenticationToJson(this);
 }

@@ -6,7 +6,7 @@ import 'package:json_annotation/json_annotation.dart';
 
 part 'offer_reaction_message.g.dart';
 
-@JsonSerializable(explicitToJson: true)
+@JsonSerializable(explicitToJson: true, includeIfNull: false)
 class OfferReactionMessage {
   final String sender;
   final DateTime time;
@@ -14,13 +14,14 @@ class OfferReactionMessage {
   @JsonKey(name: "offer_id")
   final String offerId;
 
-  OfferReactionMessage({
-    required this.sender,
-    required this.time,
-    required this.text,
-    required this.offerId});
+  OfferReactionMessage(
+      {required this.sender,
+      required this.time,
+      required this.text,
+      required this.offerId});
 
-  factory OfferReactionMessage.fromJson(Map<String, dynamic> json) => _$OfferReactionMessageFromJson(json);
+  factory OfferReactionMessage.fromJson(Map<String, dynamic> json) =>
+      _$OfferReactionMessageFromJson(json);
 
   Map<String, dynamic> toJson() => _$OfferReactionMessageToJson(this);
 }

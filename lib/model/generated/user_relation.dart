@@ -7,7 +7,7 @@ import 'package:json_annotation/json_annotation.dart';
 import 'package:app/model/generated/relation_status.dart';
 part 'user_relation.g.dart';
 
-@JsonSerializable(explicitToJson: true)
+@JsonSerializable(explicitToJson: true, includeIfNull: false)
 class UserRelation {
   @JsonKey(name: "_id")
   final String? Id;
@@ -16,13 +16,14 @@ class UserRelation {
   final DateTime creationDate;
   final RelationStatus status;
 
-  UserRelation({
-    this.Id,
-    required this.users,
-    required this.creationDate,
-    required this.status});
+  UserRelation(
+      {this.Id,
+      required this.users,
+      required this.creationDate,
+      required this.status});
 
-  factory UserRelation.fromJson(Map<String, dynamic> json) => _$UserRelationFromJson(json);
+  factory UserRelation.fromJson(Map<String, dynamic> json) =>
+      _$UserRelationFromJson(json);
 
   Map<String, dynamic> toJson() => _$UserRelationToJson(this);
 }

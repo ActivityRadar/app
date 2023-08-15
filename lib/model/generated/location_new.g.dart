@@ -16,12 +16,21 @@ LocationNew _$LocationNewFromJson(Map<String, dynamic> json) => LocationNew(
       geometry: json['geometry'] as Map<String, dynamic>?,
     );
 
-Map<String, dynamic> _$LocationNewToJson(LocationNew instance) =>
-    <String, dynamic>{
-      'activity_type': instance.activityType,
-      'location': instance.location.toJson(),
-      'name': instance.name,
-      'trust_score': instance.trustScore,
-      'tags': instance.tags,
-      'geometry': instance.geometry,
-    };
+Map<String, dynamic> _$LocationNewToJson(LocationNew instance) {
+  final val = <String, dynamic>{
+    'activity_type': instance.activityType,
+    'location': instance.location.toJson(),
+  };
+
+  void writeNotNull(String key, dynamic value) {
+    if (value != null) {
+      val[key] = value;
+    }
+  }
+
+  writeNotNull('name', instance.name);
+  val['trust_score'] = instance.trustScore;
+  writeNotNull('tags', instance.tags);
+  writeNotNull('geometry', instance.geometry);
+  return val;
+}

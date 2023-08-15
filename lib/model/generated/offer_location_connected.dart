@@ -7,16 +7,15 @@ import 'package:json_annotation/json_annotation.dart';
 import 'package:app/model/generated/geo_json_location.dart';
 part 'offer_location_connected.g.dart';
 
-@JsonSerializable(explicitToJson: true)
+@JsonSerializable(explicitToJson: true, includeIfNull: false)
 class OfferLocationConnected {
   final GeoJsonLocation? coords;
   final String id;
 
-  OfferLocationConnected({
-    this.coords,
-    required this.id});
+  OfferLocationConnected({this.coords, required this.id});
 
-  factory OfferLocationConnected.fromJson(Map<String, dynamic> json) => _$OfferLocationConnectedFromJson(json);
+  factory OfferLocationConnected.fromJson(Map<String, dynamic> json) =>
+      _$OfferLocationConnectedFromJson(json);
 
   Map<String, dynamic> toJson() => _$OfferLocationConnectedToJson(this);
 }

@@ -5,8 +5,12 @@
 import 'package:json_annotation/json_annotation.dart';
 
 enum RelationStatus {
-  @JsonValue('accepted') accepted,
-  @JsonValue('pending') pending,
-  @JsonValue('declined') declined,
-  @JsonValue('chatting') chatting,
+  @JsonValue('accepted')
+  accepted,
+  @JsonValue('pending')
+  pending,
+  @JsonValue('declined')
+  declined,
+  @JsonValue('chatting')
+  chatting,
 }

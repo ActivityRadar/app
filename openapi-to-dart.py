@@ -57,18 +57,25 @@ def to_dart_type(property):
         return "String", []
     elif p_type == "number":
         return "double", []
+    elif p_type == "boolean":
+        return "bool", []
     else:
         return "Map<String, dynamic>", []
 
 
-def is_basic_dart_type(t):
-    if t in ["String", "int", "bool"]:
+def is_standart_dart_type(t):
+    if is_basic_dart_type(t):
         return True
 
     if t.startswith("Map"):
         return True
 
     if t.startswith("List"):
+        return True
+
+
+def is_basic_dart_type(t):
+    if t in ["String", "int", "bool", "double"]:
         return True
 
     return False
@@ -120,9 +127,7 @@ def generate_dart_classes_new(components):
                 + f"  final {dart_type}{null_suffix} {property_name_camel_case};"
             )
 
-        class_template = (
-            f"@JsonSerializable(explicitToJson: true)\nclass {class_name} {{\n"
-        )
+        class_template = f"@JsonSerializable(explicitToJson: true, includeIfNull: false)\nclass {class_name} {{\n"
         class_template += "\n".join(class_properties)
         class_template += "\n\n"
 
@@ -247,7 +252,7 @@ for path, content in paths.items():
 
                 r = body.get("required", False)
                 input_args.append((body_schema, "data", r, "body"))
-                if is_basic_dart_type(to_dart_type(body_schema)[0]):
+                if is_standart_dart_type(to_dart_type(body_schema)[0]):
                     return "body: data", add_headers, enc_json
                 else:
                     return "body: data.toJson()", add_headers, enc_json
@@ -282,7 +287,12 @@ for path, content in paths.items():
                 q_camel = to_camel_case(q_snake)
                 if not q[2]:  # required?
                     prefix = f"if ({q_camel} != null) "
-                lines.append(f'{prefix}"{q_snake}": {q_camel}')
+
+                # if the arg is bool, int, double or String, it will be converted to String
+                conversion = (
+                    ".toString()" if is_basic_dart_type(to_dart_type(q[0])[0]) else ""
+                )
+                lines.append(f'{prefix}"{q_snake}": {q_camel}{conversion}')
             lines = ",\n".join(lines)
             q_string = (
                 f"""final Map<String, dynamic> __q = {{\n{indent(lines, 2)}\n}};\n"""
@@ -318,14 +328,16 @@ for path, content in paths.items():
             pass
 
         return_statement = ""
+        response_body_type = ""
         if return_type != "void":
             if return_type.startswith("List"):
                 t = return_type.removeprefix("List<")[:-1]
                 return_statement = (
-                    f"return responseBody.map((item) => {t}.fromJson(item)).to_list();"
+                    f"return responseBody.map((item) => {t}.fromJson(item)).toList();"
                 )
+                response_body_type = "List "
             else:
-                if is_basic_dart_type(return_type):
+                if is_standart_dart_type(return_type):
                     return_statement = "return responseBody;"
                 else:
                     return_statement = f"return {return_type}.fromJson(responseBody);"
@@ -335,7 +347,7 @@ for path, content in paths.items():
         send_request_args_string = ",\n".join(send_request_args)
         send_request_prefix = ""
         if return_type != "void":
-            send_request_prefix = f"final responseBody = "
+            send_request_prefix = f"final {response_body_type}responseBody = "
 
         function_body = (
             f"{q_string}"

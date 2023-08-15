@@ -6,14 +6,14 @@ import 'package:json_annotation/json_annotation.dart';
 
 part 'photo_url.g.dart';
 
-@JsonSerializable(explicitToJson: true)
+@JsonSerializable(explicitToJson: true, includeIfNull: false)
 class PhotoUrl {
   final String url;
 
-  PhotoUrl({
-    required this.url});
+  PhotoUrl({required this.url});
 
-  factory PhotoUrl.fromJson(Map<String, dynamic> json) => _$PhotoUrlFromJson(json);
+  factory PhotoUrl.fromJson(Map<String, dynamic> json) =>
+      _$PhotoUrlFromJson(json);
 
   Map<String, dynamic> toJson() => _$PhotoUrlToJson(this);
 }

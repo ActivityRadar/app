@@ -6,18 +6,16 @@ import 'package:json_annotation/json_annotation.dart';
 
 part 'validation_error.g.dart';
 
-@JsonSerializable(explicitToJson: true)
+@JsonSerializable(explicitToJson: true, includeIfNull: false)
 class ValidationError {
   final List<Map<String, dynamic>> loc;
   final String msg;
   final String type;
 
-  ValidationError({
-    required this.loc,
-    required this.msg,
-    required this.type});
+  ValidationError({required this.loc, required this.msg, required this.type});
 
-  factory ValidationError.fromJson(Map<String, dynamic> json) => _$ValidationErrorFromJson(json);
+  factory ValidationError.fromJson(Map<String, dynamic> json) =>
+      _$ValidationErrorFromJson(json);
 
   Map<String, dynamic> toJson() => _$ValidationErrorToJson(this);
 }

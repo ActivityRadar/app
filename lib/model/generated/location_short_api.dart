@@ -7,7 +7,7 @@ import 'package:json_annotation/json_annotation.dart';
 import 'package:app/model/generated/geo_json_location.dart';
 part 'location_short_api.g.dart';
 
-@JsonSerializable(explicitToJson: true)
+@JsonSerializable(explicitToJson: true, includeIfNull: false)
 class LocationShortApi {
   @JsonKey(name: "activity_type")
   final String activityType;
@@ -17,14 +17,15 @@ class LocationShortApi {
   final int trustScore;
   final String id;
 
-  LocationShortApi({
-    required this.activityType,
-    required this.location,
-    this.name,
-    required this.trustScore,
-    required this.id});
+  LocationShortApi(
+      {required this.activityType,
+      required this.location,
+      this.name,
+      required this.trustScore,
+      required this.id});
 
-  factory LocationShortApi.fromJson(Map<String, dynamic> json) => _$LocationShortApiFromJson(json);
+  factory LocationShortApi.fromJson(Map<String, dynamic> json) =>
+      _$LocationShortApiFromJson(json);
 
   Map<String, dynamic> toJson() => _$LocationShortApiToJson(this);
 }

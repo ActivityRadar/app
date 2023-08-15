@@ -6,7 +6,7 @@ import 'package:json_annotation/json_annotation.dart';
 
 part 'review_with_id.g.dart';
 
-@JsonSerializable(explicitToJson: true)
+@JsonSerializable(explicitToJson: true, includeIfNull: false)
 class ReviewWithId {
   @JsonKey(name: "location_id")
   final String locationId;
@@ -21,17 +21,18 @@ class ReviewWithId {
   final String userId;
   final String id;
 
-  ReviewWithId({
-    required this.locationId,
-    required this.title,
-    required this.text,
-    required this.overallRating,
-    required this.details,
-    required this.creationDate,
-    required this.userId,
-    required this.id});
+  ReviewWithId(
+      {required this.locationId,
+      required this.title,
+      required this.text,
+      required this.overallRating,
+      required this.details,
+      required this.creationDate,
+      required this.userId,
+      required this.id});
 
-  factory ReviewWithId.fromJson(Map<String, dynamic> json) => _$ReviewWithIdFromJson(json);
+  factory ReviewWithId.fromJson(Map<String, dynamic> json) =>
+      _$ReviewWithIdFromJson(json);
 
   Map<String, dynamic> toJson() => _$ReviewWithIdToJson(this);
 }

@@ -16,11 +16,20 @@ LocationShortApi _$LocationShortApiFromJson(Map<String, dynamic> json) =>
       id: json['id'] as String,
     );
 
-Map<String, dynamic> _$LocationShortApiToJson(LocationShortApi instance) =>
-    <String, dynamic>{
-      'activity_type': instance.activityType,
-      'location': instance.location.toJson(),
-      'name': instance.name,
-      'trust_score': instance.trustScore,
-      'id': instance.id,
-    };
+Map<String, dynamic> _$LocationShortApiToJson(LocationShortApi instance) {
+  final val = <String, dynamic>{
+    'activity_type': instance.activityType,
+    'location': instance.location.toJson(),
+  };
+
+  void writeNotNull(String key, dynamic value) {
+    if (value != null) {
+      val[key] = value;
+    }
+  }
+
+  writeNotNull('name', instance.name);
+  val['trust_score'] = instance.trustScore;
+  val['id'] = instance.id;
+  return val;
+}

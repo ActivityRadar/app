@@ -6,18 +6,16 @@ import 'package:json_annotation/json_annotation.dart';
 
 part 'plain_message.g.dart';
 
-@JsonSerializable(explicitToJson: true)
+@JsonSerializable(explicitToJson: true, includeIfNull: false)
 class PlainMessage {
   final String sender;
   final DateTime time;
   final String text;
 
-  PlainMessage({
-    required this.sender,
-    required this.time,
-    required this.text});
+  PlainMessage({required this.sender, required this.time, required this.text});
 
-  factory PlainMessage.fromJson(Map<String, dynamic> json) => _$PlainMessageFromJson(json);
+  factory PlainMessage.fromJson(Map<String, dynamic> json) =>
+      _$PlainMessageFromJson(json);
 
   Map<String, dynamic> toJson() => _$PlainMessageToJson(this);
 }

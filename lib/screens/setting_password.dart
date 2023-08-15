@@ -20,7 +20,7 @@ class PasswordSwitch extends StatelessWidget {
         leading: CustomTextButton(
             onPressed: () {
               Navigator.pop(context);
-              showMessengeSnackBar(context, 'Cancel');
+              showMessageSnackBar(context, 'Cancel');
             },
             text: 'Cancel'),
         actions: [
@@ -29,7 +29,7 @@ class PasswordSwitch extends StatelessWidget {
                 if (formPasswordKey.currentState!.validate()) {
                   Navigator.pop(context);
                 } else {
-                  showMessengeSnackBar(context, 'Please fill input');
+                  showMessageSnackBar(context, 'Please fill input');
                 }
               },
               text: 'Finish'),

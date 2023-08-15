@@ -133,6 +133,11 @@ class PhotoManager {
       _storage[url] = downsized;
       return true;
     } catch (e) {
+      // compression is not implemented for the platform
+      if (e.runtimeType == UnimplementedError) {
+        await PhotoService.uploadPhoto(image: img, path: url);
+        return true;
+      }
       return false;
     }
   }

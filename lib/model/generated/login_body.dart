@@ -6,7 +6,7 @@ import 'package:json_annotation/json_annotation.dart';
 
 part 'login_body.g.dart';
 
-@JsonSerializable(explicitToJson: true)
+@JsonSerializable(explicitToJson: true, includeIfNull: false)
 class LoginBody {
   @JsonKey(name: "grant_type")
   final String? grantType;
@@ -18,15 +18,16 @@ class LoginBody {
   @JsonKey(name: "client_secret")
   final String? clientSecret;
 
-  LoginBody({
-    this.grantType,
-    required this.username,
-    required this.password,
-    this.scope,
-    this.clientId,
-    this.clientSecret});
+  LoginBody(
+      {this.grantType,
+      required this.username,
+      required this.password,
+      this.scope,
+      this.clientId,
+      this.clientSecret});
 
-  factory LoginBody.fromJson(Map<String, dynamic> json) => _$LoginBodyFromJson(json);
+  factory LoginBody.fromJson(Map<String, dynamic> json) =>
+      _$LoginBodyFromJson(json);
 
   Map<String, dynamic> toJson() => _$LoginBodyToJson(this);
 }
