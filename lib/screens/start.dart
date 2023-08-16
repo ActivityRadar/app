@@ -1,5 +1,4 @@
-import 'package:app/constants/constants.dart';
-import 'package:app/constants/design.dart';
+import 'package:app/widgets/custom_text.dart';
 import 'package:flutter/material.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -11,39 +10,10 @@ class HomeScreen extends StatelessWidget {
       child: Column(
         children: <Widget>[
           Row(
-            children: <Widget>[
-              TitleWithCustomUnderline(
-                text: "Hola",
-              ),
-            ],
+            children: <Widget>[CustomText(text: "Hallo")],
           )
         ],
       ),
-    );
-  }
-}
-
-class TitleWithCustomUnderline extends StatelessWidget {
-  const TitleWithCustomUnderline({
-    super.key,
-    required this.text,
-  });
-
-  final String text;
-
-  @override
-  Widget build(BuildContext context) {
-    return SizedBox(
-      height: 24,
-      child: Stack(children: <Widget>[
-        Padding(
-          padding: const EdgeInsets.only(left: AppStyle.kDefaultPadding / 4),
-          child: Text(
-            text,
-            style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-          ),
-        )
-      ]),
     );
   }
 }

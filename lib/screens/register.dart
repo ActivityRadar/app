@@ -1,9 +1,8 @@
-import 'dart:io';
-
 import 'package:app/app_state.dart';
 import 'package:app/constants/constants.dart';
 import 'package:app/widgets/custom_snackbar.dart';
 import 'package:app/widgets/custom_button.dart';
+import 'package:app/widgets/custom_text.dart';
 import 'package:app/widgets/custom_textfield.dart';
 import 'package:app/model/generated.dart';
 import 'package:app/provider/backend.dart';
@@ -101,7 +100,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 foregroundColor: const Color.fromARGB(
                     255, 255, 255, 255), // <-- Splash color
               ), //TODO userID,
-              child: const Text("Profile picture"),
+              child: const CustomText(text: "Profile picture"),
             ),
           ),
           const SizedBox(
@@ -121,7 +120,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   onPressed: () {
                     Navigator.pop(context);
                   },
-                  child: const Text('Next'),
+                  child: const CustomText(
+                    text: "Next",
+                  ),
                 )
               ]),
             ],
@@ -161,7 +162,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   onPressed: () {
                     previousPage();
                   },
-                  child: const Text('Cancel'),
+                  child: const CustomText(
+                    text: "Cancel",
+                  ),
                 ),
                 ElevatedButton(
                   onPressed: () async {
@@ -181,7 +184,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       print("Verification failed!");
                     }
                   },
-                  child: const Text('Next'),
+                  child: const CustomText(
+                    text: "Next",
+                  ),
                 ),
               ],
             ),
@@ -241,7 +246,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 onPressed: () {
                   previousPage();
                 },
-                child: const Text('Previous'),
+                child: const CustomText(
+                  text: "Previous",
+                ),
               ),
               ElevatedButton(
                 onPressed: isLoading
@@ -267,7 +274,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       },
                 child: isLoading
                     ? const CircularProgressIndicator()
-                    : const Text('Next'),
+                    : const CustomText(
+                        text: "Next",
+                      ),
               ),
             ],
           ),
@@ -334,11 +343,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 ElevatedButton(
-                  onPressed: () {
-                    previousPage();
-                  },
-                  child: const Text('Previous'),
-                ),
+                    onPressed: () {
+                      previousPage();
+                    },
+                    child: const CustomText(
+                      text: "Previous",
+                    )),
                 ElevatedButton(
                   onPressed: () {
                     if (_formPasswordKey.currentState!.validate()) {
@@ -347,7 +357,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       showMessageSnackBar(context, 'Please fill input');
                     }
                   },
-                  child: const Text('Next'),
+                  child: const CustomText(
+                    text: "Next",
+                  ),
                 ),
               ],
             ),
@@ -405,7 +417,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       showMessageSnackBar(context, 'Please fill input');
                     }
                   },
-                  child: const Text('Submit'),
+                  child: const CustomText(
+                    text: "Submit",
+                  ),
                 ),
               ),
             ),
@@ -456,11 +470,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     ElevatedButton(
-                      onPressed: () {
-                        previousPage();
-                      },
-                      child: const Text('Previous'),
-                    ),
+                        onPressed: () {
+                          previousPage();
+                        },
+                        child: const CustomText(
+                          text: "Previous",
+                        )),
                     ElevatedButton(
                       onPressed: () async {
                         // have to check outside of the validator because of async call
@@ -476,7 +491,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           showMessageSnackBar(context, 'Please fill input');
                         }
                       },
-                      child: const Text('Next'),
+                      child: const CustomText(
+                        text: "Next",
+                      ),
                     )
                   ],
                 ),

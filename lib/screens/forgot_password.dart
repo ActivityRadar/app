@@ -1,5 +1,6 @@
 import 'package:app/widgets/custom_button.dart';
 import 'package:app/widgets/custom_snackbar.dart';
+import 'package:app/widgets/custom_text.dart';
 import 'package:app/widgets/custom_textfield.dart';
 import 'package:flutter/material.dart';
 
@@ -26,7 +27,7 @@ class _ForgetPasswordScreen extends State<ForgetPasswordScreen> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    Text("Forget your Password"),
+                    SystemText(text: "Forget your Password"),
                     // User/Email Input
                     Padding(
                         padding: const EdgeInsets.symmetric(

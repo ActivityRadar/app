@@ -5,6 +5,7 @@ import 'package:app/provider/photos.dart';
 import 'package:app/widgets/bottomsheet.dart';
 import 'package:app/widgets/custom_button.dart';
 import 'package:app/widgets/custom_list_tile.dart';
+import 'package:app/widgets/custom_text.dart';
 import 'package:app/widgets/custom_textfield.dart';
 import 'package:app/widgets/photo_picker.dart';
 import 'package:app/widgets/custom_snackbar.dart';
@@ -111,9 +112,9 @@ class DisplayNameSwitch extends StatelessWidget {
                         )),
                     const Padding(
                         padding: EdgeInsets.only(left: 8),
-                        child: Text(
-                          "Moin Moin Moin Moin Moin Moin Moin Moin Moin Moin Moin Moin Moin Moin Moin Moin Moin Moin Moin Moin Moin Moin Moin Moin",
-                          style: TextStyle(color: Colors.black12),
+                        child: InfoText(
+                          text:
+                              "Moin Moin Moin Moin Moin Moin Moin Moin Moin Moin Moin Moin Moin Moin Moin Moin Moin Moin Moin Moin Moin Moin Moin Moin",
                         ))
                   ],
                 ),
@@ -143,9 +144,9 @@ class DisplayNameSwitch extends StatelessWidget {
                         )),
                     const Padding(
                       padding: EdgeInsets.only(left: 8),
-                      child: Text(
-                        "Moin Moin Moin Moin Moin Moin Moin Moin Moin Moin Moin Moin Moin Moin Moin Moin Moin Moin Moin Moin Moin Moin Moin Moin",
-                        style: TextStyle(color: Colors.black12),
+                      child: InfoText(
+                        text:
+                            "Moin Moin Moin Moin Moin Moin Moin Moin Moin Moin Moin Moin Moin Moin Moin Moin Moin Moin Moin Moin Moin Moin Moin Moin",
                       ),
                     ),
                   ],

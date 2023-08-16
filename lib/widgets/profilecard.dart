@@ -1,4 +1,5 @@
 import 'package:app/constants/constants.dart';
+import 'package:app/widgets/custom_text.dart';
 import 'package:flutter/material.dart';
 
 class ProfileCard extends StatelessWidget {
@@ -11,6 +12,9 @@ class ProfileCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var size = MediaQuery.of(context).size;
+    var height = size.height;
+    double width = size.width;
     return Padding(
       padding: EdgeInsets.symmetric(vertical: height / 25, horizontal: 16.0),
       child: SizedBox(
@@ -33,12 +37,9 @@ class ProfileCard extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const Text(
-                        'Max Mustermann',
-                        style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 14,
-                            color: Colors.black54),
+                      LittleText(
+                        text: 'Max Mustermann',
+                        width: width,
                       ),
                       Container(
                         decoration: BoxDecoration(
@@ -75,19 +76,19 @@ class ProfileCard extends StatelessWidget {
                           ],
                         ),
                       ),
-                      const Padding(
+                      Padding(
                           padding: EdgeInsets.only(top: 2),
                           child: Row(children: [
-                            Text(
-                              'Level: 5',
-                              style: TextStyle(fontSize: 10),
+                            LittleText(
+                              text: 'Level: 5',
+                              width: width * 0.8,
                             ),
                             Spacer(),
                             Padding(
                               padding: EdgeInsets.only(left: 2),
-                              child: Text(
-                                'Level: 6',
-                                style: TextStyle(fontSize: 10),
+                              child: LittleText(
+                                text: 'Level: 6',
+                                width: width * 0.8,
                               ),
                             ),
                           ])),

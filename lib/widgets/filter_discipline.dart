@@ -1,4 +1,5 @@
 import 'package:app/constants/constants.dart';
+import 'package:app/widgets/custom_text.dart';
 import 'package:flutter/material.dart';
 import 'package:app/constants/design.dart';
 
@@ -22,7 +23,7 @@ class _FilterDisciplineState extends State<FilterDiscipline> {
           spacing: 5.0,
           children: Sport.values.map((Sport exercise) {
             return FilterChip(
-              label: Text(exercise.name),
+              label: CustomText(text: exercise.name),
               selected: filters.contains(exercise),
               selectedColor: DesignColors.naviColor,
               onSelected: (bool selected) {
@@ -38,9 +39,8 @@ class _FilterDisciplineState extends State<FilterDiscipline> {
           }).toList(),
         ),
         const SizedBox(height: 10.0),
-        Text(
-          'Looking for: ${filters}',
-          style: textTheme.labelLarge,
+        CustomText(
+          text: 'Looking for: $filters',
         ),
       ],
     );

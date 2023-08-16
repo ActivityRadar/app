@@ -9,10 +9,10 @@ class AppState extends ChangeNotifier {
 
   UserDetailed? get currentUser => _currentUser;
 
-  Locale _locale = Locale("de");
+  final Locale _locale = const Locale("de");
 
   LatLngBounds _mapPosition =
-      LatLngBounds(LatLng(52.67, 12.04), LatLng(53.3, 12.74));
+      LatLngBounds(const LatLng(52.67, 12.04), const LatLng(53.3, 12.74));
 
   LatLngBounds get mapPosition => _mapPosition;
   set mapPosition(LatLngBounds b) {
@@ -21,7 +21,7 @@ class AppState extends ChangeNotifier {
   }
 
   double zoom = 13;
-  LatLng center = LatLng(52.9, 12.5);
+  LatLng center = const LatLng(52.9, 12.5);
 
   Future<void> updateUserInfo() async {
     _currentUser = await UsersProvider.getThisUser();

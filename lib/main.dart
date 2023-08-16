@@ -1,5 +1,4 @@
 import 'package:app/app_state.dart';
-import 'package:app/constants/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:app/home.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -22,14 +21,14 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         scaffoldBackgroundColor: DesignColors.kBackgroundColor,
       ),
-      localizationsDelegates: [
+      localizationsDelegates: const [
         AppLocalizations.delegate, // Add this line
         GlobalMaterialLocalizations.delegate,
         GlobalWidgetsLocalizations.delegate,
         GlobalCupertinoLocalizations.delegate,
       ],
       supportedLocales: L10n.all,
-      home: Home(),
+      home: const Home(),
     );
   }
 }

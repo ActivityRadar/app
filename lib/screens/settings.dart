@@ -1,5 +1,4 @@
 import 'package:app/app_state.dart';
-import 'package:app/constants/constants.dart';
 import 'package:app/model/generated.dart';
 import 'package:app/constants/design.dart';
 import 'package:app/provider/backend.dart';
@@ -14,6 +13,7 @@ import 'package:app/widgets/custom_icon.dart';
 import 'package:app/widgets/custom_list_tile.dart';
 import 'package:app/widgets/custom_snackbar.dart';
 import 'package:app/widgets/custom_button.dart';
+import 'package:app/widgets/custom_text.dart';
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -25,7 +25,9 @@ class SettingScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     const double collapsedHeight = 90;
     const double expandedHeight = 160;
+    var size = MediaQuery.of(context).size;
 
+    double width = size.width;
     final state = Provider.of<AppState>(context);
 
     return Scaffold(
@@ -69,8 +71,9 @@ class SettingScreen extends StatelessWidget {
                 titlePadding: const EdgeInsets.all(16.0),
                 title: state.isLoggedIn
                     ? _appBarAvatar(context)
-                    : const Text("Not signed in!",
-                        style: TextStyle(color: Colors.black)),
+                    : const CustomText(
+                        text: "Not signed in!",
+                      ),
                 centerTitle: true,
               );
             },
@@ -91,8 +94,10 @@ class SettingScreen extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                const Text("App-Version: Beta",
-                    style: TextStyle(color: Colors.black45)),
+                MediumHintText(
+                  text: "App-Version: Beta",
+                  width: width,
+                ),
                 if (state.isLoggedIn) ...[
                   CustomTextButton(
                     text: 'logout',
@@ -135,7 +140,7 @@ class SettingScreen extends StatelessWidget {
                   ),
                 );
               },
-              child: EditIcon(),
+              child: const EditIcon(),
             ),
           ),
         ]),
@@ -144,11 +149,15 @@ class SettingScreen extends StatelessWidget {
   }
 
   List<Widget> _accountSettings(BuildContext context, UserDetailed userInfo) {
+    var size = MediaQuery.of(context).size;
+
+    double width = size.width;
     return [
-      const Padding(
-        padding: EdgeInsets.only(top: 8, left: 15, bottom: 4),
-        child: Text(
-          "Konto",
+      Padding(
+        padding: const EdgeInsets.only(top: 8, left: 15, bottom: 4),
+        child: LittleText(
+          text: "Konto",
+          width: width,
         ),
       ),
       CustomCard(
@@ -219,11 +228,15 @@ class SettingScreen extends StatelessWidget {
   }
 
   List<Widget> _appSettings(BuildContext context) {
+    var size = MediaQuery.of(context).size;
+
+    double width = size.width;
     return [
-      const Padding(
-        padding: EdgeInsets.only(top: 8, left: 15, bottom: 4),
-        child: Text(
-          "App",
+      Padding(
+        padding: const EdgeInsets.only(top: 8, left: 15, bottom: 4),
+        child: LittleText(
+          text: "App",
+          width: width,
         ),
       ),
       CustomCard(
@@ -243,20 +256,24 @@ class SettingScreen extends StatelessWidget {
   }
 
   List<Widget> _legalSettings(BuildContext context) {
+    var size = MediaQuery.of(context).size;
+
+    double width = size.width;
     return [
-      const Padding(
-        padding: EdgeInsets.only(top: 8, left: 15, bottom: 4),
-        child: Text(
-          "Rechtliche",
+      Padding(
+        padding: const EdgeInsets.only(top: 8, left: 15, bottom: 4),
+        child: LittleText(
+          text: "Rechtliche",
+          width: width,
         ),
       ),
       CustomCard(
         child: Column(
           children: [
             CustomListTile(onPressed: () {}, titleText: "data protection"),
-            Divider(height: 0),
+            const Divider(height: 0),
             CustomListTile(onPressed: () {}, titleText: "AGB"),
-            Divider(height: 0),
+            const Divider(height: 0),
             CustomListTile(onPressed: () {}, titleText: "Impressum"),
           ],
         ),

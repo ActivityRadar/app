@@ -1,6 +1,5 @@
 // ignore_for_file: avoid_print
 import 'package:app/constants/design.dart';
-import 'package:app/constants/constants.dart';
 import 'package:app/screens/location_picker.dart';
 import 'package:app/widgets/custom_list_tile.dart';
 import 'package:app/widgets/custom_text.dart';
@@ -29,7 +28,7 @@ Future<dynamic> bottomSheetAdd(BuildContext context) {
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
               CustomListTile(
-                icon: Icon(Icons.push_pin),
+                icon: const Icon(Icons.push_pin),
                 titleText: "Add Location",
                 onPressed: () {
                   Navigator.push(
@@ -41,7 +40,7 @@ Future<dynamic> bottomSheetAdd(BuildContext context) {
                 },
               ),
               CustomListTile(
-                icon: Icon(Icons.event),
+                icon: const Icon(Icons.event),
                 titleText: "Add Event",
                 onPressed: () {
                   writeReview(context);

@@ -1,4 +1,3 @@
-import 'package:app/constants/constants.dart';
 import 'package:app/constants/design.dart';
 import 'package:flutter/material.dart';
 
@@ -37,7 +36,7 @@ class MediumText extends StatelessWidget {
     return Text(
       text,
       style: TextStyle(
-          color: const Color.fromARGB(182, 0, 0, 0),
+          color: Colors.black54,
           fontWeight: FontWeight.bold,
           fontSize: width * 0.04),
     );
@@ -59,7 +58,7 @@ class TitleText extends StatelessWidget {
     return Text(
       text,
       style: TextStyle(
-          color: const Color.fromARGB(182, 0, 0, 0),
+          color: Colors.black54,
           fontWeight: FontWeight.bold,
           fontSize: width * 0.05),
     );
@@ -80,7 +79,10 @@ class DescriptionText extends StatelessWidget {
   Widget build(BuildContext context) {
     return Text(
       text,
-      style: TextStyle(fontSize: 0.033 * width, color: Colors.black87),
+      style: TextStyle(
+        fontSize: 0.033 * width,
+        color: Colors.black87,
+      ),
     );
   }
 }
@@ -106,6 +108,141 @@ class _NaviTextState extends State<NaviText> {
       widget.text,
       style: TextStyle(
           color: widget.currentTab ? DesignColors.naviColor : Colors.grey),
+    );
+  }
+}
+
+class PageTitleText extends StatelessWidget {
+  const PageTitleText({
+    super.key,
+    required this.width,
+    required this.text,
+  });
+
+  final double width;
+  final String text;
+  @override
+  Widget build(BuildContext context) {
+    return Text(
+      text,
+      style: TextStyle(fontWeight: FontWeight.bold, fontSize: width * 0.06),
+    );
+  }
+}
+
+class MediumHintText extends StatelessWidget {
+  const MediumHintText({
+    super.key,
+    required this.text,
+    required this.width,
+  });
+
+  final String text;
+  final double width;
+
+  @override
+  Widget build(BuildContext context) {
+    return Text(
+      text,
+      style: TextStyle(color: Colors.black38, fontSize: width * 0.035),
+    );
+  }
+}
+
+class UserText extends StatelessWidget {
+  const UserText({
+    super.key,
+    required this.displayName,
+    required this.width,
+  });
+
+  final String displayName;
+  final double width;
+
+  @override
+  Widget build(BuildContext context) {
+    return Text(
+      "@$displayName",
+      style: TextStyle(fontSize: width * 0.033, color: Colors.black45),
+    );
+  }
+}
+
+class LittleText extends StatelessWidget {
+  const LittleText({
+    super.key,
+    required this.text,
+    required this.width,
+  });
+
+  final String text;
+  final double width;
+
+  @override
+  Widget build(BuildContext context) {
+    return Text(
+      text,
+      style: TextStyle(color: Colors.black38, fontSize: width * 0.030),
+    );
+  }
+}
+
+class SystemText extends StatelessWidget {
+  const SystemText({
+    super.key,
+    required this.text,
+  });
+
+  final String text;
+  @override
+  Widget build(BuildContext context) {
+    return Text(text,
+        style: const TextStyle(fontSize: 14, color: Colors.black54));
+  }
+}
+
+class MapText extends StatelessWidget {
+  const MapText({
+    super.key,
+    required this.text,
+  });
+
+  final String text;
+
+  @override
+  Widget build(BuildContext context) {
+    return Text(
+      text,
+      style: const TextStyle(color: Colors.white),
+    );
+  }
+}
+
+class CustomText extends StatelessWidget {
+  const CustomText({
+    super.key,
+    required this.text,
+  });
+
+  final String text;
+  @override
+  Widget build(BuildContext context) {
+    return Text(text);
+  }
+}
+
+class InfoText extends StatelessWidget {
+  const InfoText({
+    super.key,
+    required this.text,
+  });
+
+  final String text;
+  @override
+  Widget build(BuildContext context) {
+    return Text(
+      text,
+      style: const TextStyle(color: Colors.black12),
     );
   }
 }

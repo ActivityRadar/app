@@ -36,7 +36,7 @@ class MapSearchBar extends StatelessWidget {
                 controller: textController,
                 decoration: InputDecoration(
                   prefixIcon: IconButton(
-                    icon: Icon(Icons.filter_alt),
+                    icon: const Icon(Icons.filter_alt),
                     onPressed: () {
                       bottomSheetFilter(context);
                     },

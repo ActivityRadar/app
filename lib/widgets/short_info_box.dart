@@ -2,6 +2,7 @@ import 'package:app/constants/constants.dart';
 import 'package:app/model/functions.dart';
 import 'package:app/model/generated.dart';
 import 'package:app/provider/photos.dart';
+import 'package:app/widgets/custom_text.dart';
 import 'package:flutter/material.dart';
 import 'package:app/widgets/vote.dart';
 import 'package:app/constants/design.dart';
@@ -88,6 +89,9 @@ class InfoContainer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var size = MediaQuery.of(context).size;
+
+    double width = size.width;
     var count, avg, title;
     if (info != null) {
       count = info!.reviews.count;
@@ -100,30 +104,44 @@ class InfoContainer extends StatelessWidget {
     }
 
     return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
-        const Spacer(),
-        Padding(
-          padding: const EdgeInsets.only(left: 8.0),
-          child: Text(
-            title,
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Padding(
+                padding: const EdgeInsets.only(left: 8.0),
+                child: MediumText(text: title, width: width)
+                /*
+            Text(
+            ,
             textAlign: TextAlign.center,
             style: const TextStyle(
                 color: DesignColors.naviColor,
                 // fontSize: 24.0,
                 fontWeight: FontWeight.bold),
-          ),
+          ),*/
+                ),
+            IconButton(
+                onPressed: () {},
+                icon: Icon(
+                  Icons.star,
+                  color: DesignColors.naviColor,
+                ))
+          ],
         ),
         const Spacer(),
         RatingSummary(count: count, average: avg),
         const Spacer(),
-        const Text(
+        LittleText(text: "KM entfernt", width: width),
+        /*
+        Text(
           "KM entfernt",
           style: TextStyle(
               color: Colors.black54,
               // fontSize: 18.0,
               fontWeight: FontWeight.bold),
         ),
+        */
         const Spacer(),
       ],
     );

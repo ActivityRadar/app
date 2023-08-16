@@ -8,7 +8,6 @@ import 'package:app/widgets/custom_icon.dart';
 import 'package:app/widgets/custom_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:app/constants/constants.dart';
 import 'package:app/constants/design.dart';
 
 class Home extends StatefulWidget {
@@ -22,7 +21,7 @@ class _HomeState extends State<Home> {
   int currentTab = 0;
   final List<Widget> screens = [
     const HomeScreen(),
-    SettingScreen(),
+    const SettingScreen(),
     const MapScreen(),
     const CommunityScreen()
   ];
@@ -129,7 +128,7 @@ class _HomeState extends State<Home> {
                     minWidth: x,
                     onPressed: () {
                       setState(() {
-                        currentScreen = SettingScreen();
+                        currentScreen = const SettingScreen();
                         currentTab = 4;
                       });
                     },

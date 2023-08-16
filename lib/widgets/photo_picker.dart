@@ -3,6 +3,7 @@ import 'package:app/provider/generated/locations_provider.dart';
 import 'package:app/provider/generated/users_provider.dart';
 import 'package:app/provider/photos.dart';
 import 'package:app/widgets/bottomsheet.dart';
+import 'package:app/widgets/custom_text.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
@@ -47,7 +48,7 @@ class ImageSourceButton extends StatelessWidget {
           onTap: () => onPressed(),
           child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
-              children: [icon, Text(title)]),
+              children: [icon, CustomText(text: title)]),
         ));
   }
 }

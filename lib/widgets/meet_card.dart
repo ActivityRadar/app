@@ -1,5 +1,7 @@
 import 'package:app/constants/constants.dart';
 import 'package:app/screens/meet_page.dart';
+import 'package:app/widgets/custom_chip.dart';
+import 'package:app/widgets/custom_text.dart';
 import 'package:app/widgets/meet_map.dart';
 import 'package:app/constants/design.dart';
 import 'package:flutter/material.dart';
@@ -55,16 +57,15 @@ class MeetCard extends StatelessWidget {
                                 ),
                               ),
                               Padding(
-                                  padding: EdgeInsets.only(right: 12.0),
-                                  child: Chip(
-                                      label: CustomChip(
-                                        text: 'ab 14 Uhr ',
-                                      ),
-                                      backgroundColor: DesignColors.naviColor)),
+                                padding: EdgeInsets.only(right: 12.0),
+                                child: CustomChip(
+                                  text: 'ab 14 Uhr ',
+                                ),
+                              )
                             ],
                           ))),
                 ]),
-                const Row(
+                Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Column(children: [
@@ -77,12 +78,9 @@ class MeetCard extends StatelessWidget {
                           SizedBox(
                             width: 10,
                           ),
-                          Text(
-                            'Max Mustermann',
-                            style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 14,
-                                color: Colors.black54),
+                          MediumText(
+                            text: 'Max Mustermann',
+                            width: width,
                           ),
                         ]),
                       ]),
@@ -91,10 +89,9 @@ class MeetCard extends StatelessWidget {
                           children: [
                             Padding(
                               padding: EdgeInsets.all(12.0),
-                              child: Text(
-                                "12h ago",
-                                style: TextStyle(
-                                    color: Colors.black38, fontSize: 11),
+                              child: LittleText(
+                                text: "12h ago",
+                                width: width,
                               ),
                             )
                           ]),

@@ -3,6 +3,7 @@ import 'package:app/provider/backend.dart';
 import 'package:app/screens/forgot_password.dart';
 import 'package:app/widgets/custom_snackbar.dart';
 import 'package:app/widgets/custom_button.dart';
+import 'package:app/widgets/custom_text.dart';
 import 'package:app/widgets/custom_textfield.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -22,6 +23,9 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
+    var size = MediaQuery.of(context).size;
+    var height = size.height;
+    var width = size.width;
     return Scaffold(
       body: Form(
           key: _formKey,
@@ -31,11 +35,14 @@ class _LoginScreenState extends State<LoginScreen> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    Text("Login"),
+                    PageTitleText(
+                      text: "Login",
+                      width: width,
+                    ),
                     Padding(
                         padding: const EdgeInsets.symmetric(
                             horizontal: 8, vertical: 16),
-                        child: CustomTextFormField(
+                        child: UsernameTextFormField(
                           controller: usernameController,
                           labelText: "Username",
                           validator: (value) {
