@@ -1,15 +1,12 @@
-import 'package:app/constants/constants.dart';
 import 'package:app/constants/design.dart';
 import 'package:app/widgets/custom_button.dart';
 import 'package:app/widgets/custom_card.dart';
 import 'package:app/widgets/custom_list_tile.dart';
 import 'package:app/widgets/custom_text.dart';
 import 'package:app/widgets/custom_textfield.dart';
-import 'package:app/widgets/photo_picker.dart';
 import 'package:app/widgets/timepicker.dart';
 import 'package:flutter/material.dart';
 import '../widgets/filter_discipline.dart';
-import 'package:intl/intl.dart';
 
 class AddMeet extends StatefulWidget {
   const AddMeet({super.key});
@@ -22,7 +19,7 @@ class _AddMeet extends State<AddMeet> {
   TextEditingController streetController = TextEditingController();
   TextEditingController locationController = TextEditingController();
   TextEditingController descriptionController = TextEditingController();
-  var _rating = 0;
+  final _rating = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -118,7 +115,7 @@ class _AddMeet extends State<AddMeet> {
                         width: width,
                       ),
                     ),
-                    CustomCard(
+                    const CustomCard(
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
@@ -141,7 +138,7 @@ class _AddMeet extends State<AddMeet> {
                             onPressed: () {},
                             titleText: "Pick Location",
                           ),
-                          DateTimePicker(),
+                          const DateTimePicker(),
                         ],
                       ),
                     ),

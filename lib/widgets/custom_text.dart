@@ -1,4 +1,3 @@
-import 'package:app/constants/constants.dart';
 import 'package:app/constants/design.dart';
 import 'package:flutter/material.dart';
 
@@ -197,7 +196,8 @@ class SystemText extends StatelessWidget {
   final String text;
   @override
   Widget build(BuildContext context) {
-    return Text(text, style: TextStyle(fontSize: 14, color: Colors.black54));
+    return Text(text,
+        style: const TextStyle(fontSize: 14, color: Colors.black54));
   }
 }
 
@@ -242,7 +242,7 @@ class infoText extends StatelessWidget {
   Widget build(BuildContext context) {
     return Text(
       text,
-      style: TextStyle(color: Colors.black12),
+      style: const TextStyle(color: Colors.black12),
     );
   }
 }

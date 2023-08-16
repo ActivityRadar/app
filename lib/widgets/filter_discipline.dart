@@ -40,7 +40,7 @@ class _FilterDisciplineState extends State<FilterDiscipline> {
         ),
         const SizedBox(height: 10.0),
         CustomText(
-          text: 'Looking for: ${filters}',
+          text: 'Looking for: $filters',
         ),
       ],
     );

@@ -1,4 +1,3 @@
-import 'package:app/constants/constants.dart';
 import 'package:app/constants/design.dart';
 import 'package:app/widgets/custom_button.dart';
 import 'package:app/widgets/custom_text.dart';
@@ -123,7 +122,7 @@ class _AddLocation extends State<AddLocation> {
                 Padding(
                     padding: const EdgeInsets.only(left: 9.0, top: 15.0),
                     child: TitleText(text: 'activityType', width: width)),
-                FilterDiscipline(),
+                const FilterDiscipline(),
                 Padding(
                     padding: const EdgeInsets.only(left: 9.0, top: 15.0),
                     child: TitleText(text: 'description', width: width)),
@@ -142,7 +141,7 @@ class _AddLocation extends State<AddLocation> {
                         mode: "location",
                         locationId: 'asdas'),
                     //TODO
-                    child: SmallText(
+                    child: const SmallText(
                       text: "Bilder hochladen",
                     ),
                   ),
@@ -160,8 +159,8 @@ class _AddLocation extends State<AddLocation> {
                       5,
                       (index) => IconButton(
                         icon: index < _rating
-                            ? Icon(Icons.star, size: 32)
-                            : Icon(Icons.star_border, size: 32),
+                            ? const Icon(Icons.star, size: 32)
+                            : const Icon(Icons.star_border, size: 32),
                         color: DesignColors.naviColor,
                         onPressed: () {
                           setState(() {
@@ -186,7 +185,7 @@ class _AddLocation extends State<AddLocation> {
   AppBar buildAppBar(BuildContext context) {
     return AppBar(
         title: const SmallText(text: 'AddLocation'),
-        backgroundColor: Color.fromARGB(255, 217, 4, 4),
+        backgroundColor: const Color.fromARGB(255, 217, 4, 4),
         elevation: 0,
         leading: IconButton(
             icon: const Icon(Icons.keyboard_backspace),

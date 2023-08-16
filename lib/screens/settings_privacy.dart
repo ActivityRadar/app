@@ -1,5 +1,3 @@
-import 'package:app/constants/constants.dart';
-import 'package:app/constants/design.dart';
 import 'package:app/widgets/custom_card.dart';
 import 'package:app/widgets/custom_text.dart';
 
@@ -25,7 +23,7 @@ class _PrivacySettingPageState extends State<PrivacySettingPage> {
       body: CustomScrollView(
         slivers: <Widget>[
           SliverAppBar(
-            title: CustomText(text: "Privacy"),
+            title: const CustomText(text: "Privacy"),
             centerTitle: true,
             leading: IconButton(
               onPressed: () {
@@ -40,7 +38,7 @@ class _PrivacySettingPageState extends State<PrivacySettingPage> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
                   Padding(
-                    padding: EdgeInsets.only(top: 8, left: 15, bottom: 4),
+                    padding: const EdgeInsets.only(top: 8, left: 15, bottom: 4),
                     child: LittleText(
                       text: "Profil",
                       width: width,
@@ -65,14 +63,14 @@ class _PrivacySettingPageState extends State<PrivacySettingPage> {
                     ),
                   ),
                   Padding(
-                    padding: EdgeInsets.only(top: 8, left: 15, bottom: 4),
+                    padding: const EdgeInsets.only(top: 8, left: 15, bottom: 4),
                     child: LittleText(
                       text: "Angebot",
                       width: width,
                     ),
                   ),
-                  CustomCard(
-                    child: const Column(
+                  const CustomCard(
+                    child: Column(
                       children: [
                         ExpandableTile(),
                       ],
@@ -190,12 +188,13 @@ class RadiusSelectionMap extends StatefulWidget {
 }
 
 class _RadiusSelectionMapState extends State<RadiusSelectionMap> {
-  LatLngBounds bounds = LatLngBounds(LatLng(52.37, 12.74), LatLng(50, 13.04));
+  LatLngBounds bounds =
+      LatLngBounds(const LatLng(52.37, 12.74), const LatLng(50, 13.04));
   final MapController mapController = MapController();
 
   @override
   Widget build(BuildContext context) {
-    final LatLng center = LatLng(52.520008, 13.404954); //Todo center
+    const LatLng center = LatLng(52.520008, 13.404954); //Todo center
     final circleMarkers = <CircleMarker>[
       CircleMarker(
         point: center,

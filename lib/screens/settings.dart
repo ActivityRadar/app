@@ -1,5 +1,4 @@
 import 'package:app/app_state.dart';
-import 'package:app/constants/constants.dart';
 import 'package:app/model/generated.dart';
 import 'package:app/constants/design.dart';
 import 'package:app/provider/backend.dart';
@@ -72,7 +71,7 @@ class SettingScreen extends StatelessWidget {
                 titlePadding: const EdgeInsets.all(16.0),
                 title: state.isLoggedIn
                     ? _appBarAvatar(context)
-                    : CustomText(
+                    : const CustomText(
                         text: "Not signed in!",
                       ),
                 centerTitle: true,
@@ -141,7 +140,7 @@ class SettingScreen extends StatelessWidget {
                   ),
                 );
               },
-              child: EditIcon(),
+              child: const EditIcon(),
             ),
           ),
         ]),
@@ -155,7 +154,7 @@ class SettingScreen extends StatelessWidget {
     double width = size.width;
     return [
       Padding(
-        padding: EdgeInsets.only(top: 8, left: 15, bottom: 4),
+        padding: const EdgeInsets.only(top: 8, left: 15, bottom: 4),
         child: LittleText(
           text: "Konto",
           width: width,
@@ -234,7 +233,7 @@ class SettingScreen extends StatelessWidget {
     double width = size.width;
     return [
       Padding(
-        padding: EdgeInsets.only(top: 8, left: 15, bottom: 4),
+        padding: const EdgeInsets.only(top: 8, left: 15, bottom: 4),
         child: LittleText(
           text: "App",
           width: width,
@@ -262,7 +261,7 @@ class SettingScreen extends StatelessWidget {
     double width = size.width;
     return [
       Padding(
-        padding: EdgeInsets.only(top: 8, left: 15, bottom: 4),
+        padding: const EdgeInsets.only(top: 8, left: 15, bottom: 4),
         child: LittleText(
           text: "Rechtliche",
           width: width,
@@ -272,9 +271,9 @@ class SettingScreen extends StatelessWidget {
         child: Column(
           children: [
             CustomListTile(onPressed: () {}, titleText: "data protection"),
-            Divider(height: 0),
+            const Divider(height: 0),
             CustomListTile(onPressed: () {}, titleText: "AGB"),
-            Divider(height: 0),
+            const Divider(height: 0),
             CustomListTile(onPressed: () {}, titleText: "Impressum"),
           ],
         ),

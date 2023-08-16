@@ -73,13 +73,13 @@ class MeetPage extends StatelessWidget {
                       children: [
                         Column(children: [
                           Row(children: [
-                            Padding(
+                            const Padding(
                                 padding: EdgeInsets.only(left: 10, top: 60)),
-                            CircleAvatar(
+                            const CircleAvatar(
                               backgroundImage: AssetImages.avatarEmpty,
                               radius: 20,
                             ),
-                            SizedBox(
+                            const SizedBox(
                               width: 10,
                             ),
                             MediumText(
@@ -165,7 +165,7 @@ void _showDialog(BuildContext context) {
     builder: (BuildContext context) {
       return CustomAlertDialog(
           title: 'Report as inappropriate',
-          content: SystemText(
+          content: const SystemText(
               text:
                   'Thank you for contributing to the safety and respect of our community. If you believe that this content violates our policies or is inappropriate, please click on Report.   Your message will be treated confidentially and verified by our moderation team. '),
           firstbuttonText: "Cancel",

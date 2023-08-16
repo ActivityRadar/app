@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:app/app_state.dart';
 import 'package:app/constants/constants.dart';
 import 'package:app/widgets/custom_snackbar.dart';
@@ -122,7 +120,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   onPressed: () {
                     Navigator.pop(context);
                   },
-                  child: CustomText(
+                  child: const CustomText(
                     text: "Next",
                   ),
                 )
@@ -164,7 +162,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   onPressed: () {
                     previousPage();
                   },
-                  child: CustomText(
+                  child: const CustomText(
                     text: "Cancel",
                   ),
                 ),
@@ -186,7 +184,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       print("Verification failed!");
                     }
                   },
-                  child: CustomText(
+                  child: const CustomText(
                     text: "Next",
                   ),
                 ),
@@ -248,7 +246,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 onPressed: () {
                   previousPage();
                 },
-                child: CustomText(
+                child: const CustomText(
                   text: "Previous",
                 ),
               ),
@@ -276,7 +274,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       },
                 child: isLoading
                     ? const CircularProgressIndicator()
-                    : CustomText(
+                    : const CustomText(
                         text: "Next",
                       ),
               ),
@@ -359,7 +357,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       showMessageSnackBar(context, 'Please fill input');
                     }
                   },
-                  child: CustomText(
+                  child: const CustomText(
                     text: "Next",
                   ),
                 ),
@@ -419,7 +417,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       showMessageSnackBar(context, 'Please fill input');
                     }
                   },
-                  child: CustomText(
+                  child: const CustomText(
                     text: "Submit",
                   ),
                 ),
@@ -475,7 +473,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         onPressed: () {
                           previousPage();
                         },
-                        child: CustomText(
+                        child: const CustomText(
                           text: "Previous",
                         )),
                     ElevatedButton(
@@ -493,7 +491,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           showMessageSnackBar(context, 'Please fill input');
                         }
                       },
-                      child: CustomText(
+                      child: const CustomText(
                         text: "Next",
                       ),
                     )

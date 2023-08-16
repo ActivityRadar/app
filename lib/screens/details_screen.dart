@@ -14,7 +14,6 @@ import 'package:readmore/readmore.dart';
 
 import 'package:app/constants/constants.dart';
 import 'package:app/model/generated.dart';
-import 'package:app/provider/backend.dart';
 import 'package:app/provider/photos.dart';
 import 'package:app/provider/user_manager.dart';
 import 'package:app/widgets/activityType_short.dart';
@@ -261,13 +260,13 @@ class _DetailsScreenState extends State<DetailsScreen> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
                 Padding(
-                    padding: EdgeInsets.only(left: 9.0, top: 5.0),
+                    padding: const EdgeInsets.only(left: 9.0, top: 5.0),
                     child: MediumhintText(
                       text: "10963 Berlin",
                       width: width,
                     )),
                 Padding(
-                  padding: EdgeInsets.only(left: 9.0),
+                  padding: const EdgeInsets.only(left: 9.0),
                   child: MediumhintText(
                     text: "Park",
                     width: width,
@@ -635,7 +634,7 @@ class _ReviewPopupMenuCardState extends State<ReviewPopupMenuCard> {
           <PopupMenuEntry<ReviewPopupMenuItem>>[
         PopupMenuItem<ReviewPopupMenuItem>(
           value: ReviewPopupMenuItem.report,
-          child: SystemText(
+          child: const SystemText(
             text: 'Report as inappropriate',
           ),
           onTap: () => _showDialog(context),
@@ -651,7 +650,7 @@ void _showDialog(BuildContext context) {
     builder: (BuildContext context) {
       return CustomAlertDialog(
           title: 'Report as inappropriate',
-          content: SystemText(
+          content: const SystemText(
             text:
                 'Thank you for contributing to the safety and respect of our community. If you believe that this content violates our policies or is inappropriate, please click on Report.   Your message will be treated confidentially and verified by our moderation team. ',
           ),
