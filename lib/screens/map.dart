@@ -1,22 +1,19 @@
-import 'dart:async';
 import 'dart:math';
 
 import 'package:app/app_state.dart';
 import 'package:app/model/functions.dart';
 import 'package:app/model/generated.dart';
 import 'package:app/provider/generated/locations_provider.dart';
-import 'package:app/screens/details_screen.dart';
-import 'package:app/widgets/custom_text.dart';
-import 'package:app/widgets/short_info_box.dart';
+import 'package:app/widgets/short_info_slider.dart';
 import 'package:app/widgets/bar_search.dart';
-import 'package:carousel_slider/carousel_slider.dart';
+import 'package:app/widgets/gps.dart';
+import 'package:app/widgets/custom_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
-import 'package:flutter_map_marker_cluster/flutter_map_marker_cluster.dart';
 import 'package:flutter_map/plugin_api.dart';
-import 'package:provider/provider.dart';
 import 'package:flutter_map_animations/flutter_map_animations.dart';
-import 'package:location/location.dart';
+import 'package:flutter_map_marker_cluster/flutter_map_marker_cluster.dart';
+import 'package:provider/provider.dart';
 
 // ignore_for_file: avoid_print
 class MapScreen extends StatefulWidget {
@@ -43,129 +40,6 @@ class FocusedLocationNotifier extends ChangeNotifier {
     _info = info;
     _changedBy = changedBy;
     notifyListeners();
-  }
-}
-
-class GpsLocationNotifier extends ChangeNotifier {
-  LocationData? _location;
-  DateTime _lastUpdate = DateTime(1900);
-
-  late Timer _timer;
-  final _outDatedInfoDuration = const Duration(seconds: 10);
-  bool _moveToLocation = false;
-  bool enabled = false;
-
-  GpsLocationNotifier() {
-    _timer = Timer.periodic(const Duration(seconds: 1), (timer) async {
-      enabled = await Location().serviceEnabled();
-      notifyListeners();
-    });
-  }
-
-  @override
-  void dispose() {
-    _timer.cancel();
-    super.dispose();
-  }
-
-  void setLocation({required LocationData location, bool move = false}) {
-    _location = location;
-    _lastUpdate = DateTime.now();
-    _moveToLocation = move;
-    enabled = true;
-    notifyListeners();
-  }
-
-  LatLng? get coordinates {
-    if (_location == null || _location!.latitude == null) {
-      return null;
-    }
-
-    return LatLng(_location!.latitude!, _location!.longitude!);
-  }
-
-  bool get recent {
-    return DateTime.now().difference(_lastUpdate) < _outDatedInfoDuration &&
-        enabled;
-  }
-
-  bool get shouldMove {
-    return _moveToLocation;
-  }
-
-  set shouldMove(bool move) {
-    _moveToLocation = move;
-  }
-}
-
-class GpsButton extends StatefulWidget {
-  const GpsButton({super.key, required this.gpsNotifier});
-
-  final GpsLocationNotifier gpsNotifier;
-
-  @override
-  State<GpsButton> createState() => _GpsButtonState();
-}
-
-class _GpsButtonState extends State<GpsButton> {
-  bool active = false;
-  StreamSubscription<LocationData>? locationSubscription;
-
-  void onServiceStatusChange() {
-    // only deactivate the button state when service is disabled
-    // dont activate the button if service is enabled
-    if (!widget.gpsNotifier.enabled) {
-      locationSubscription?.cancel();
-      setState(() {
-        active = false;
-      });
-    }
-  }
-
-  @override
-  void initState() {
-    widget.gpsNotifier.addListener(onServiceStatusChange);
-
-    super.initState();
-  }
-
-  @override
-  void dispose() {
-    widget.gpsNotifier.removeListener(onServiceStatusChange);
-    locationSubscription?.cancel();
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return IconButton(
-        onPressed: () async {
-          final pos = await Location().getLocation();
-          print(pos);
-          if (pos.latitude != null) {
-            widget.gpsNotifier.setLocation(location: pos, move: true);
-          }
-
-          // initiate location listener
-          if (!active) {
-            print("listener started");
-            locationSubscription = Location()
-                .onLocationChanged
-                .listen((LocationData currentLocation) {
-              print("listened to position change");
-              if (currentLocation.latitude != null) {
-                widget.gpsNotifier
-                    .setLocation(location: currentLocation, move: false);
-              }
-            });
-          }
-
-          setState(() {
-            active = true;
-          });
-        },
-        icon: Icon(active ? Icons.gps_fixed : Icons.gps_off),
-        color: active ? Colors.blue : Colors.black);
   }
 }
 
@@ -273,106 +147,6 @@ class MapScreenState extends State<MapScreen> {
                       child: infoSlider!))
           ],
         ));
-  }
-}
-
-class ShortInfoSlider extends StatefulWidget {
-  const ShortInfoSlider(
-      {super.key,
-      required this.infos,
-      required this.indexNotifier,
-      required this.locationNotifier});
-
-  final List<LocationDetailedApi> infos;
-  final ValueNotifier<int> indexNotifier;
-  final FocusedLocationNotifier locationNotifier;
-
-  @override
-  State<ShortInfoSlider> createState() => _ShortInfoSliderState();
-}
-
-class _ShortInfoSliderState extends State<ShortInfoSlider> {
-  int _current = 0;
-  final CarouselController _controller = CarouselController();
-  late List<Widget> _boxes;
-
-  void onIndexChange() {
-    // make animations between pages, that are further away, longer
-    final duration = 300 + 70 * (widget.indexNotifier.value - _current).abs();
-    _controller.animateToPage(widget.indexNotifier.value,
-        duration: Duration(milliseconds: duration), curve: Curves.easeInOut);
-  }
-
-  @override
-  void initState() {
-    super.initState();
-
-    _boxes = widget.infos
-        .map((info) => ShortInfoBox(
-              info: info,
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => DetailsScreen(locationInfo: info),
-                  ),
-                );
-              },
-            ))
-        .toList();
-
-    widget.indexNotifier.addListener(onIndexChange);
-  }
-
-  @override
-  void dispose() {
-    widget.indexNotifier.removeListener(onIndexChange);
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    var size = MediaQuery.of(context).size;
-    var height = size.height;
-    final verticalSpace = height / 6;
-    final horizontalSpace = size.width;
-    const viewportFraction = 0.8;
-
-    return CarouselSlider(
-      // key: UniqueKey(),
-      items: _boxes
-          .map((b) => SizedBox(
-                height: verticalSpace,
-                width: horizontalSpace * 0.9,
-                child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                    child: b),
-              ))
-          .toList(),
-      carouselController: _controller,
-      options: CarouselOptions(
-        initialPage: _current,
-        // ratio between width and height
-        aspectRatio: horizontalSpace / verticalSpace * 1 / viewportFraction,
-        // how much space does the focused box take
-        viewportFraction: viewportFraction,
-        scrollDirection: Axis.horizontal,
-        enableInfiniteScroll: false,
-        // enlargeCenterPage: true,
-        // enlargeFactor: 0.3,
-        onPageChanged: (position, reason) {
-          print(reason);
-          setState(() {
-            _current = position;
-            if (reason != CarouselPageChangedReason.controller) {
-              widget.locationNotifier.setFocused(
-                  info: fromDetailed(widget.infos[position]),
-                  changedBy: FocusChangeReason.slider);
-            }
-          });
-        },
-      ),
-    );
   }
 }
 
