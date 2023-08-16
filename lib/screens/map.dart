@@ -51,7 +51,8 @@ class GpsLocationNotifier extends ChangeNotifier {
   DateTime _lastUpdate = DateTime(1900);
 
   late Timer _timer;
-  final _outDatedInfoDuration = const Duration(seconds: 5);
+  final _outDatedInfoDuration = const Duration(seconds: 10);
+  bool _moveToLocation = false;
 
   GpsLocationNotifier() {
     _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
@@ -65,9 +66,10 @@ class GpsLocationNotifier extends ChangeNotifier {
     super.dispose();
   }
 
-  void setLocation({required LocationData location}) {
+  void setLocation({required LocationData location, bool move = false}) {
     _location = location;
     _lastUpdate = DateTime.now();
+    _moveToLocation = move;
     notifyListeners();
   }
 
@@ -82,6 +84,45 @@ class GpsLocationNotifier extends ChangeNotifier {
   bool get recent {
     return DateTime.now().difference(_lastUpdate) < _outDatedInfoDuration;
   }
+
+  bool get shouldMove {
+    return _moveToLocation;
+  }
+
+  set shouldMove(bool move) {
+    _moveToLocation = move;
+  }
+}
+
+class GpsButton extends StatefulWidget {
+  const GpsButton({super.key, required this.gpsNotifier});
+
+  final GpsLocationNotifier gpsNotifier;
+
+  @override
+  State<GpsButton> createState() => _GpsButtonState();
+}
+
+class _GpsButtonState extends State<GpsButton> {
+  bool active = false;
+
+  @override
+  Widget build(BuildContext context) {
+    return IconButton(
+        onPressed: () async {
+          final pos = await Location().getLocation();
+          print(pos);
+          if (pos.latitude != null) {
+            widget.gpsNotifier.setLocation(location: pos, move: true);
+          }
+
+          setState(() {
+            active = true;
+          });
+        },
+        icon: Icon(active ? Icons.gps_fixed : Icons.gps_off),
+        color: active ? Colors.blue : Colors.black);
+  }
 }
 
 class MapScreenState extends State<MapScreen> {
@@ -93,7 +134,7 @@ class MapScreenState extends State<MapScreen> {
   ShortInfoSlider? infoSlider;
   ValueNotifier<int> focusedInfosIndex = ValueNotifier(0);
   GpsLocationNotifier currentPosition = GpsLocationNotifier();
-  late IconButton gpsButton;
+  late GpsButton gpsButton;
 
   void buildSlider(LocationShortApi info) async {
     final coordinates = toLatLng(info.location);
@@ -115,6 +156,7 @@ class MapScreenState extends State<MapScreen> {
   @override
   void initState() {
     super.initState();
+    gpsButton = GpsButton(gpsNotifier: currentPosition);
     searchBar = MapSearchBar(mapState: this);
     mapWidget = ActivityMarkerMap(
         focusedLocation: focusedLocationInfo,
@@ -140,15 +182,6 @@ class MapScreenState extends State<MapScreen> {
       }
     });
 
-    gpsButton = IconButton(
-        onPressed: () async {
-          final pos = await Location().getLocation();
-          print(pos);
-          if (pos.latitude != null) {
-            currentPosition.setLocation(location: pos);
-          }
-        },
-        icon: Icon(Icons.gps_off));
   }
 
   @override
@@ -388,6 +421,31 @@ class _ActivityMarkerMapState extends State<ActivityMarkerMap>
     });
   }
 
+  void onGpsUpdate() {
+    final pos = widget.currentPosition.coordinates;
+    final List<CircleMarker> circles = [];
+    if (pos != null) {
+      final color = widget.currentPosition.recent ? Colors.blue : Colors.grey;
+      circles.add(CircleMarker(
+          radius: 8,
+          point: pos,
+          color: color,
+          borderStrokeWidth: 5.0,
+          borderColor: Colors.black45));
+
+      if (widget.currentPosition.shouldMove) {
+        mapController.animateTo(dest: pos, zoom: 14);
+        widget.currentPosition.shouldMove = false;
+      }
+    }
+
+    setState(() {
+      currentPositionLayer = CircleLayer(
+        circles: circles,
+      );
+    });
+  }
+
   @override
   void initState() {
     super.initState();
@@ -396,6 +454,7 @@ class _ActivityMarkerMapState extends State<ActivityMarkerMap>
       print("set_activity triggered");
       performSearch();
     });
+    widget.currentPosition.addListener(onGpsUpdate);
 
     widget.focusedLocation.addListener(() {
       final oldFocused = focusedLocationId;
@@ -405,25 +464,10 @@ class _ActivityMarkerMapState extends State<ActivityMarkerMap>
         onFocusChanged(oldFocused, widget.focusedLocation.info, move: move);
       });
     });
+  @override
+  void dispose() {
+    widget.currentPosition.removeListener(onGpsUpdate);
 
-    widget.currentPosition.addListener(() {
-      final pos = widget.currentPosition.coordinates;
-      final List<CircleMarker> circles = [];
-      if (pos != null) {
-        final color = widget.currentPosition.recent ? Colors.blue : Colors.grey;
-        circles.add(CircleMarker(
-            radius: 8,
-            point: pos,
-            color: color,
-            borderStrokeWidth: 5.0,
-            borderColor: Colors.black45));
-      }
-      setState(() {
-        currentPositionLayer = CircleLayer(
-          circles: circles,
-        );
-      });
-    });
   }
 
   @override
