@@ -25,47 +25,30 @@ class MapSearchBar extends StatelessWidget {
     var height = size.height;
     var width = size.width;
 
-    return Padding(
-      padding: EdgeInsets.symmetric(vertical: height / 25, horizontal: 16.0),
-      child: Column(
-        children: [
-          Card(
-              shape: RoundedRectangleBorder(
-                borderRadius:
-                    BorderRadius.circular(AppStyle.cornerRadiusSearch),
-              ),
-              child: TextField(
-                controller: textController,
-                decoration: InputDecoration(
-                  prefixIcon: IconButton(
-                    icon: const Icon(Icons.filter_alt),
-                    onPressed: () {
-                      bottomSheetFilter(context);
-                    },
-                  ),
-                  suffixIcon: IconButton(
-                    icon: const Icon(Icons.search),
-                    onPressed: () {
-                      setActivity(textController.text);
-                    },
-                  ),
-                  hintStyle: CustomTextStyle.hint,
-                  hintText: "Search basketball, volleyball, table tennis ... ",
-                ),
-                textInputAction: TextInputAction.search,
-                onSubmitted: setActivity,
-              )),
-          IconButton(
-              onPressed: () async {
-                final pos = await Location().getLocation();
-                print(pos);
-                if (pos.latitude != null) {
-                  mapState.currentPosition.value =
-                      LatLng(pos.latitude!, pos.longitude!);
-                }
-              },
-              icon: Icon(Icons.gps_off))
-        ],
+    return Card(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(AppStyle.cornerRadiusSearch),
+      ),
+      child: TextField(
+        controller: textController,
+        decoration: InputDecoration(
+          prefixIcon: IconButton(
+            icon: Icon(Icons.filter_alt),
+            onPressed: () {
+              bottomSheetFilter(context);
+            },
+          ),
+          suffixIcon: IconButton(
+            icon: const Icon(Icons.search),
+            onPressed: () {
+              setActivity(textController.text);
+            },
+          ),
+          hintStyle: CustomTextStyle.hint,
+          hintText: "Search basketball, volleyball, table tennis ... ",
+        ),
+        textInputAction: TextInputAction.search,
+        onSubmitted: setActivity,
       ),
     );
   }

@@ -118,7 +118,23 @@ class MapScreenState extends State<MapScreen> {
           return false;
         },
         child: Stack(
-          children: [mapWidget, searchBar, if (infoSlider != null) infoSlider!],
+          children: [
+            mapWidget,
+            Padding(
+                padding: EdgeInsets.symmetric(
+                    vertical: height / 25, horizontal: 16.0),
+                child: Column(
+                  children: [
+                    searchBar,
+                  ],
+                )),
+            if (infoSlider != null)
+              Align(
+                  alignment: Alignment.bottomCenter,
+                  child: Container(
+                      margin: const EdgeInsets.only(bottom: 100),
+                      child: infoSlider!))
+          ],
         ));
   }
 }
@@ -177,47 +193,40 @@ class _ShortInfoSliderState extends State<ShortInfoSlider> {
     final horizontalSpace = size.width;
     const viewportFraction = 0.8;
 
-    return Align(
-      alignment: Alignment.bottomCenter,
-      child: Container(
-          margin: const EdgeInsets.only(bottom: 100),
-          height: verticalSpace,
-          child: CarouselSlider(
-              // key: UniqueKey(),
-              items: _boxes
-                  .map((b) => SizedBox(
-                        height: verticalSpace,
-                        width: horizontalSpace * 0.9,
-                        child: Padding(
-                            padding:
-                                const EdgeInsets.symmetric(horizontal: 8.0),
-                            child: b),
-                      ))
-                  .toList(),
-              carouselController: _controller,
-              options: CarouselOptions(
-                initialPage: _current,
-                // ratio between width and height
-                aspectRatio:
-                    horizontalSpace / verticalSpace * 1 / viewportFraction,
-                // how much space does the focused box take
-                viewportFraction: viewportFraction,
-                scrollDirection: Axis.horizontal,
-                enableInfiniteScroll: false,
-                // enlargeCenterPage: true,
-                // enlargeFactor: 0.3,
-                onPageChanged: (position, reason) {
-                  print(reason);
-                  setState(() {
-                    _current = position;
-                    if (reason != CarouselPageChangedReason.controller) {
-                      widget.locationNotifier.setFocused(
-                          info: fromDetailed(widget.infos[position]),
-                          changedBy: FocusChangeReason.slider);
-                    }
-                  });
-                },
-              ))),
+    return CarouselSlider(
+      // key: UniqueKey(),
+      items: _boxes
+          .map((b) => SizedBox(
+                height: verticalSpace,
+                width: horizontalSpace * 0.9,
+                child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                    child: b),
+              ))
+          .toList(),
+      carouselController: _controller,
+      options: CarouselOptions(
+        initialPage: _current,
+        // ratio between width and height
+        aspectRatio: horizontalSpace / verticalSpace * 1 / viewportFraction,
+        // how much space does the focused box take
+        viewportFraction: viewportFraction,
+        scrollDirection: Axis.horizontal,
+        enableInfiniteScroll: false,
+        // enlargeCenterPage: true,
+        // enlargeFactor: 0.3,
+        onPageChanged: (position, reason) {
+          print(reason);
+          setState(() {
+            _current = position;
+            if (reason != CarouselPageChangedReason.controller) {
+              widget.locationNotifier.setFocused(
+                  info: fromDetailed(widget.infos[position]),
+                  changedBy: FocusChangeReason.slider);
+            }
+          });
+        },
+      ),
     );
   }
 }
