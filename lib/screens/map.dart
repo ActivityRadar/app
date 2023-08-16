@@ -109,6 +109,32 @@ class GpsButton extends StatefulWidget {
 
 class _GpsButtonState extends State<GpsButton> {
   bool active = false;
+  StreamSubscription<LocationData>? locationSubscription;
+
+  void onServiceStatusChange() {
+    // only deactivate the button state when service is disabled
+    // dont activate the button if service is enabled
+    if (!widget.gpsNotifier.enabled) {
+      locationSubscription?.cancel();
+      setState(() {
+        active = false;
+      });
+    }
+  }
+
+  @override
+  void initState() {
+    widget.gpsNotifier.addListener(onServiceStatusChange);
+
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    widget.gpsNotifier.removeListener(onServiceStatusChange);
+    locationSubscription?.cancel();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -118,6 +144,20 @@ class _GpsButtonState extends State<GpsButton> {
           print(pos);
           if (pos.latitude != null) {
             widget.gpsNotifier.setLocation(location: pos, move: true);
+          }
+
+          // initiate location listener
+          if (!active) {
+            print("listener started");
+            locationSubscription = Location()
+                .onLocationChanged
+                .listen((LocationData currentLocation) {
+              print("listened to position change");
+              if (currentLocation.latitude != null) {
+                widget.gpsNotifier
+                    .setLocation(location: currentLocation, move: false);
+              }
+            });
           }
 
           setState(() {
