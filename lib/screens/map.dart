@@ -53,9 +53,11 @@ class GpsLocationNotifier extends ChangeNotifier {
   late Timer _timer;
   final _outDatedInfoDuration = const Duration(seconds: 10);
   bool _moveToLocation = false;
+  bool enabled = false;
 
   GpsLocationNotifier() {
-    _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
+    _timer = Timer.periodic(const Duration(seconds: 1), (timer) async {
+      enabled = await Location().serviceEnabled();
       notifyListeners();
     });
   }
@@ -70,6 +72,7 @@ class GpsLocationNotifier extends ChangeNotifier {
     _location = location;
     _lastUpdate = DateTime.now();
     _moveToLocation = move;
+    enabled = true;
     notifyListeners();
   }
 
@@ -82,7 +85,8 @@ class GpsLocationNotifier extends ChangeNotifier {
   }
 
   bool get recent {
-    return DateTime.now().difference(_lastUpdate) < _outDatedInfoDuration;
+    return DateTime.now().difference(_lastUpdate) < _outDatedInfoDuration &&
+        enabled;
   }
 
   bool get shouldMove {
