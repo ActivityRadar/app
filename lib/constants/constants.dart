@@ -41,14 +41,16 @@ class RegExps {
 
 class AssetImages {
   static const locationLoading =
-      AssetImage("assets/locationPhotoLoadingPlaceholder.jpg");
+      AssetImage("assets/images/locationPhotoLoadingPlaceholder.jpg");
   static const locationEmpty =
-      AssetImage("assets/locationPhotoPlaceholder.jpg");
+      AssetImage("assets/images/locationPhotoPlaceholder.jpg");
   static const locationError =
-      AssetImage("assets/locationPhotoPlaceholder.jpg");
+      AssetImage("assets/images/locationPhotoPlaceholder.jpg");
 
   static const avatarLoading =
-      AssetImage("assets/locationPhotoLoadingPlaceholder.jpg");
-  static const avatarEmpty = AssetImage("assets/locationPhotoPlaceholder.jpg");
-  static const avatarError = AssetImage("assets/locationPhotoPlaceholder.jpg");
+      AssetImage("assets/images/locationPhotoLoadingPlaceholder.jpg");
+  static const avatarEmpty =
+      AssetImage("assets/images/locationPhotoPlaceholder.jpg");
+  static const avatarError =
+      AssetImage("assets/images/locationPhotoPlaceholder.jpg");
 }
