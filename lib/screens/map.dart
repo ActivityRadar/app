@@ -153,6 +153,25 @@ class MapScreenState extends State<MapScreen> {
     });
   }
 
+  void onFocusChanged() {
+    final info = focusedLocationInfo.info;
+
+    if (info == null) {
+      return;
+    }
+
+    if (infoSlider != null) {
+      final idx = sliderInfos!.indexWhere((sInfo) => sInfo.id == info.id);
+      if (idx == -1) {
+        buildSlider(info);
+      } else {
+        focusedInfosIndex.value = idx;
+      }
+    } else {
+      buildSlider(info);
+    }
+  }
+
   @override
   void initState() {
     super.initState();
@@ -163,25 +182,14 @@ class MapScreenState extends State<MapScreen> {
         activity: activity,
         currentPosition: currentPosition);
 
-    focusedLocationInfo.addListener(() {
-      final info = focusedLocationInfo.info;
+    focusedLocationInfo.addListener(onFocusChanged);
+  }
 
-      if (info == null) {
-        return;
-      }
+  @override
+  void dispose() {
+    focusedLocationInfo.removeListener(onFocusChanged);
 
-      if (infoSlider != null) {
-        final idx = sliderInfos!.indexWhere((sInfo) => sInfo.id == info.id);
-        if (idx == -1) {
-          buildSlider(info);
-        } else {
-          focusedInfosIndex.value = idx;
-        }
-      } else {
-        buildSlider(info);
-      }
-    });
-
+    super.dispose();
   }
 
   @override
@@ -244,6 +252,13 @@ class _ShortInfoSliderState extends State<ShortInfoSlider> {
   final CarouselController _controller = CarouselController();
   late List<Widget> _boxes;
 
+  void onIndexChange() {
+    // make animations between pages, that are further away, longer
+    final duration = 300 + 70 * (widget.indexNotifier.value - _current).abs();
+    _controller.animateToPage(widget.indexNotifier.value,
+        duration: Duration(milliseconds: duration), curve: Curves.easeInOut);
+  }
+
   @override
   void initState() {
     super.initState();
@@ -262,12 +277,13 @@ class _ShortInfoSliderState extends State<ShortInfoSlider> {
             ))
         .toList();
 
-    widget.indexNotifier.addListener(() {
-      // make animations between pages, that are further away, longer
-      final duration = 300 + 70 * (widget.indexNotifier.value - _current).abs();
-      _controller.animateToPage(widget.indexNotifier.value,
-          duration: Duration(milliseconds: duration), curve: Curves.easeInOut);
-    });
+    widget.indexNotifier.addListener(onIndexChange);
+  }
+
+  @override
+  void dispose() {
+    widget.indexNotifier.removeListener(onIndexChange);
+    super.dispose();
   }
 
   @override
@@ -446,28 +462,31 @@ class _ActivityMarkerMapState extends State<ActivityMarkerMap>
     });
   }
 
+  void focusChangeCallback() {
+    final oldFocused = focusedLocationId;
+    final move =
+        widget.focusedLocation.changedBy != FocusChangeReason.markerTap;
+    setState(() {
+      onFocusChanged(oldFocused, widget.focusedLocation.info, move: move);
+    });
+  }
+
   @override
   void initState() {
     super.initState();
 
-    widget.activity.addListener(() {
-      print("set_activity triggered");
-      performSearch();
-    });
+    widget.activity.addListener(performSearch);
+    widget.focusedLocation.addListener(focusChangeCallback);
     widget.currentPosition.addListener(onGpsUpdate);
+  }
 
-    widget.focusedLocation.addListener(() {
-      final oldFocused = focusedLocationId;
-      final move =
-          widget.focusedLocation.changedBy != FocusChangeReason.markerTap;
-      setState(() {
-        onFocusChanged(oldFocused, widget.focusedLocation.info, move: move);
-      });
-    });
   @override
   void dispose() {
+    widget.activity.removeListener(performSearch);
+    widget.focusedLocation.removeListener(focusChangeCallback);
     widget.currentPosition.removeListener(onGpsUpdate);
 
+    super.dispose();
   }
 
   @override
