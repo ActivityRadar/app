@@ -4,15 +4,16 @@ import 'package:app/constants/design.dart';
 import 'package:app/provider/backend.dart';
 import 'package:app/screens/login.dart';
 import 'package:app/screens/register.dart';
-import 'package:app/screens/setting_password.dart';
-import 'package:app/screens/settings_email.dart';
-import 'package:app/screens/settings_name.dart';
-import 'package:app/screens/settings_privacy.dart';
-import 'package:app/widgets/custom_card.dart';
-import 'package:app/widgets/custom_icon.dart';
-import 'package:app/widgets/custom_list_tile.dart';
-import 'package:app/widgets/custom_snackbar.dart';
-import 'package:app/widgets/custom_button.dart';
+
+import 'package:app/screens/settings/password.dart';
+import 'package:app/screens/settings/email.dart';
+import 'package:app/screens/settings/name.dart';
+import 'package:app/screens/settings/privacy.dart';
+import 'package:app/widgets/custom/card.dart';
+import 'package:app/widgets/custom/icon.dart';
+import 'package:app/widgets/custom/list_tile.dart';
+import 'package:app/widgets/custom/snackbar.dart';
+import 'package:app/widgets/custom/button.dart';
 import 'package:app/widgets/custom_text.dart';
 
 import 'package:flutter/material.dart';

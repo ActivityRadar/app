@@ -1,7 +1,7 @@
 import 'package:app/constants/design.dart';
-import 'package:app/widgets/custom_button.dart';
 import 'package:app/widgets/custom_text.dart';
-import 'package:app/widgets/custom_textfield.dart';
+import 'package:app/widgets/custom/button.dart';
+import 'package:app/widgets/custom/textfield.dart';
 import 'package:app/widgets/photo_picker.dart';
 import 'package:flutter/material.dart';
 import '../widgets/filter_discipline.dart';

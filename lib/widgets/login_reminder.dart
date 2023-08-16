@@ -1,6 +1,7 @@
 import 'package:app/app_state.dart';
 import 'package:app/screens/login.dart';
-import 'package:app/widgets/custom_alertdialog.dart';
+import 'package:app/widgets/custom/alertdialog.dart';
+
 import 'package:app/widgets/custom_text.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';

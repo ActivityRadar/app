@@ -1,9 +1,11 @@
 import 'package:app/constants/constants.dart';
 import 'package:app/constants/design.dart';
-import 'package:app/widgets/custom_alertdialog.dart';
-import 'package:app/widgets/custom_chip.dart';
+import 'package:app/widgets/custom/chip.dart';
+
+import 'package:app/widgets/custom/alertdialog.dart';
+
 import 'package:app/widgets/custom_text.dart';
-import 'package:app/widgets/custom_button.dart';
+import 'package:app/widgets/custom/button.dart';
 import 'package:app/widgets/meet_map.dart';
 import 'package:flutter/material.dart';
 

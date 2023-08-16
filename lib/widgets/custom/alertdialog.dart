@@ -1,4 +1,4 @@
-import 'package:app/widgets/custom_button.dart';
+import 'package:app/widgets/custom/button.dart';
 import 'package:flutter/material.dart';
 
 class CustomAlertDialog extends StatelessWidget {
