@@ -2,8 +2,6 @@ import 'package:app/constants/design.dart';
 import 'package:app/screens/map.dart';
 import 'package:app/widgets/bottomsheet.dart';
 import 'package:flutter/material.dart';
-import 'package:latlong2/latlong.dart';
-import 'package:location/location.dart';
 
 class MapSearchBar extends StatelessWidget {
   MapSearchBar({

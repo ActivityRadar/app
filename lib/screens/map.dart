@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:math';
 
 import 'package:app/app_state.dart';
@@ -15,6 +16,7 @@ import 'package:flutter_map_marker_cluster/flutter_map_marker_cluster.dart';
 import 'package:flutter_map/plugin_api.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_map_animations/flutter_map_animations.dart';
+import 'package:location/location.dart';
 
 // ignore_for_file: avoid_print
 class MapScreen extends StatefulWidget {
@@ -44,6 +46,44 @@ class FocusedLocationNotifier extends ChangeNotifier {
   }
 }
 
+class GpsLocationNotifier extends ChangeNotifier {
+  LocationData? _location;
+  DateTime _lastUpdate = DateTime(1900);
+
+  late Timer _timer;
+  final _outDatedInfoDuration = const Duration(seconds: 5);
+
+  GpsLocationNotifier() {
+    _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
+      notifyListeners();
+    });
+  }
+
+  @override
+  void dispose() {
+    _timer.cancel();
+    super.dispose();
+  }
+
+  void setLocation({required LocationData location}) {
+    _location = location;
+    _lastUpdate = DateTime.now();
+    notifyListeners();
+  }
+
+  LatLng? get coordinates {
+    if (_location == null || _location!.latitude == null) {
+      return null;
+    }
+
+    return LatLng(_location!.latitude!, _location!.longitude!);
+  }
+
+  bool get recent {
+    return DateTime.now().difference(_lastUpdate) < _outDatedInfoDuration;
+  }
+}
+
 class MapScreenState extends State<MapScreen> {
   ValueNotifier<String> activity = ValueNotifier("-");
   late MapSearchBar searchBar;
@@ -52,7 +92,8 @@ class MapScreenState extends State<MapScreen> {
   List<LocationDetailedApi>? sliderInfos;
   ShortInfoSlider? infoSlider;
   ValueNotifier<int> focusedInfosIndex = ValueNotifier(0);
-  ValueNotifier<LatLng?> currentPosition = ValueNotifier<LatLng?>(null);
+  GpsLocationNotifier currentPosition = GpsLocationNotifier();
+  late IconButton gpsButton;
 
   void buildSlider(LocationShortApi info) async {
     final coordinates = toLatLng(info.location);
@@ -98,6 +139,16 @@ class MapScreenState extends State<MapScreen> {
         buildSlider(info);
       }
     });
+
+    gpsButton = IconButton(
+        onPressed: () async {
+          final pos = await Location().getLocation();
+          print(pos);
+          if (pos.latitude != null) {
+            currentPosition.setLocation(location: pos);
+          }
+        },
+        icon: Icon(Icons.gps_off));
   }
 
   @override
@@ -126,6 +177,7 @@ class MapScreenState extends State<MapScreen> {
                 child: Column(
                   children: [
                     searchBar,
+                    Align(alignment: Alignment.centerRight, child: gpsButton)
                   ],
                 )),
             if (infoSlider != null)
@@ -241,7 +293,7 @@ class ActivityMarkerMap extends StatefulWidget {
 
   final FocusedLocationNotifier focusedLocation;
   final ValueNotifier<String> activity;
-  final ValueNotifier<LatLng?> currentPosition;
+  final GpsLocationNotifier currentPosition;
 
   @override
   State<ActivityMarkerMap> createState() {
@@ -355,18 +407,22 @@ class _ActivityMarkerMapState extends State<ActivityMarkerMap>
     });
 
     widget.currentPosition.addListener(() {
-      final pos = widget.currentPosition.value;
+      final pos = widget.currentPosition.coordinates;
+      final List<CircleMarker> circles = [];
       if (pos != null) {
-        final circle = CircleMarker(
+        final color = widget.currentPosition.recent ? Colors.blue : Colors.grey;
+        circles.add(CircleMarker(
             radius: 8,
             point: pos,
-            color: Colors.blue,
+            color: color,
             borderStrokeWidth: 5.0,
-            borderColor: Colors.black45);
-        currentPositionLayer = CircleLayer(
-          circles: [circle],
-        );
+            borderColor: Colors.black45));
       }
+      setState(() {
+        currentPositionLayer = CircleLayer(
+          circles: circles,
+        );
+      });
     });
   }
 
