@@ -112,7 +112,7 @@ class DisplayNameSwitch extends StatelessWidget {
                         )),
                     const Padding(
                         padding: EdgeInsets.only(left: 8),
-                        child: infoText(
+                        child: InfoText(
                           text:
                               "Moin Moin Moin Moin Moin Moin Moin Moin Moin Moin Moin Moin Moin Moin Moin Moin Moin Moin Moin Moin Moin Moin Moin Moin",
                         ))
@@ -144,7 +144,7 @@ class DisplayNameSwitch extends StatelessWidget {
                         )),
                     const Padding(
                       padding: EdgeInsets.only(left: 8),
-                      child: infoText(
+                      child: InfoText(
                         text:
                             "Moin Moin Moin Moin Moin Moin Moin Moin Moin Moin Moin Moin Moin Moin Moin Moin Moin Moin Moin Moin Moin Moin Moin Moin",
                       ),

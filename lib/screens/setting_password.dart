@@ -63,7 +63,7 @@ class PasswordSwitch extends StatelessWidget {
                   )),
               const Padding(
                   padding: EdgeInsets.only(left: 8),
-                  child: infoText(
+                  child: InfoText(
                     text: "Moin Moin Moin Moin Moin Moin Moin Moin ",
                   )),
               Padding(
@@ -101,7 +101,7 @@ class PasswordSwitch extends StatelessWidget {
               ),
               const Padding(
                   padding: EdgeInsets.only(left: 8),
-                  child: infoText(
+                  child: InfoText(
                     text:
                         "Moin Moin Moin Moin Moin Moin Moin Moin Moin Moin Moin Moin Moin Moin Moin Moin Moin Moin Moin Moin Moin Moin Moin Moin",
                   )),

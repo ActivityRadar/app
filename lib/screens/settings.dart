@@ -94,7 +94,7 @@ class SettingScreen extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                MediumhintText(
+                MediumHintText(
                   text: "App-Version: Beta",
                   width: width,
                 ),

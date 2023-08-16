@@ -261,13 +261,13 @@ class _DetailsScreenState extends State<DetailsScreen> {
               children: <Widget>[
                 Padding(
                     padding: const EdgeInsets.only(left: 9.0, top: 5.0),
-                    child: MediumhintText(
+                    child: MediumHintText(
                       text: "10963 Berlin",
                       width: width,
                     )),
                 Padding(
                   padding: const EdgeInsets.only(left: 9.0),
-                  child: MediumhintText(
+                  child: MediumHintText(
                     text: "Park",
                     width: width,
                   ),
@@ -571,7 +571,7 @@ class ReviewBox extends StatelessWidget {
                   const EdgeInsets.symmetric(vertical: 4.0, horizontal: 10.0),
               child: Row(
                 children: [
-                  MediumhintText(
+                  MediumHintText(
                     text:
                         "X out of Y people found this helpful", // TODO: make dynamic
                     width: width,

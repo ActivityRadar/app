@@ -130,8 +130,8 @@ class PageTitleText extends StatelessWidget {
   }
 }
 
-class MediumhintText extends StatelessWidget {
-  const MediumhintText({
+class MediumHintText extends StatelessWidget {
+  const MediumHintText({
     super.key,
     required this.text,
     required this.width,
@@ -231,8 +231,8 @@ class CustomText extends StatelessWidget {
   }
 }
 
-class infoText extends StatelessWidget {
-  const infoText({
+class InfoText extends StatelessWidget {
+  const InfoText({
     super.key,
     required this.text,
   });
