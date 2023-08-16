@@ -1,4 +1,4 @@
-import 'package:app/widgets/custom_chip.dart';
+import 'package:app/widgets/custom/chip.dart';
 import 'package:flutter/material.dart';
 
 class ActivityDetails extends StatelessWidget {

@@ -1,10 +1,10 @@
 // ignore_for_file: avoid_print
 import 'package:app/constants/design.dart';
 import 'package:app/screens/location_picker.dart';
-import 'package:app/widgets/custom_list_tile.dart';
+import 'package:app/widgets/custom/list_tile.dart';
 import 'package:app/widgets/custom_text.dart';
-import 'package:app/widgets/custom_button.dart';
-import 'package:app/widgets/custom_textfield.dart';
+import 'package:app/widgets/custom/button.dart';
+import 'package:app/widgets/custom/textfield.dart';
 import 'package:app/widgets/filter_discipline.dart';
 import 'package:flutter/material.dart';
 

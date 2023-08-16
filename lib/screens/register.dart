@@ -1,9 +1,9 @@
 import 'package:app/app_state.dart';
 import 'package:app/constants/constants.dart';
-import 'package:app/widgets/custom_snackbar.dart';
-import 'package:app/widgets/custom_button.dart';
 import 'package:app/widgets/custom_text.dart';
-import 'package:app/widgets/custom_textfield.dart';
+import 'package:app/widgets/custom/snackbar.dart';
+import 'package:app/widgets/custom/button.dart';
+import 'package:app/widgets/custom/textfield.dart';
 import 'package:app/model/generated.dart';
 import 'package:app/provider/backend.dart';
 import 'package:app/provider/generated/users_provider.dart';
