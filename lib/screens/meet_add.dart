@@ -16,14 +16,10 @@ class MeetAddScreen extends StatefulWidget {
   State<MeetAddScreen> createState() => _MeetAddScreenState();
 }
 
-<<<<<<< Updated upstream
-class _AddMeet extends State<AddMeet> {
-=======
 class _MeetAddScreenState extends State<MeetAddScreen> {
   PageController pageController = PageController();
 
   final _formTitleKey = GlobalKey<FormState>();
->>>>>>> Stashed changes
   TextEditingController nameController = TextEditingController();
   TextEditingController streetController = TextEditingController();
   TextEditingController locationController = TextEditingController();
