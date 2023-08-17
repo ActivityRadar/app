@@ -5,7 +5,6 @@ import 'package:app/widgets/bottomsheet.dart';
 import 'package:app/widgets/custom/alertdialog.dart';
 import 'package:app/widgets/custom/button.dart';
 import 'package:app/widgets/custom/card.dart';
-import 'package:app/widgets/custom/textfield.dart';
 import 'package:app/widgets/custom_text.dart';
 import 'package:app/widgets/login_reminder.dart';
 import 'package:flutter/material.dart';
@@ -20,7 +19,6 @@ import 'package:app/provider/user_manager.dart';
 import 'package:app/widgets/activityType_short.dart';
 import 'package:app/widgets/photo_picker.dart';
 import 'package:app/widgets/vote.dart';
-import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 
 class DetailsScreen extends StatefulWidget {
   const DetailsScreen({
@@ -39,106 +37,6 @@ class DetailsScreen extends StatefulWidget {
 class _DetailsScreenState extends State<DetailsScreen> {
   Future<LocationDetailedApi>? _data;
   late String locationId;
-
-  Future<void> _showReviewBottomSheet(BuildContext context,
-      {ReviewWithId? oldReview}) async {
-    TextEditingController titleController =
-        TextEditingController(text: oldReview?.title);
-    TextEditingController textController =
-        TextEditingController(text: oldReview?.text);
-    double rating = oldReview?.overallRating ?? 1.0;
-    final update = oldReview != null;
-
-    bottomSheetBase(
-        context: context,
-        builder: (context) {
-          return SingleChildScrollView(
-              padding: EdgeInsets.only(
-                  bottom: MediaQuery.of(context).viewInsets.bottom),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: <Widget>[
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: <Widget>[
-                      Padding(
-                        padding: const EdgeInsets.only(left: 9.0, top: 9.0),
-                        child: CustomTextButton(
-                            onPressed: () => Navigator.pop(context),
-                            text: 'Cancel'),
-                      ),
-                      const SmallText(
-                        text: "Review",
-                      ),
-                      CustomTextButton(
-                          onPressed: () async {
-                            try {
-                              final newReview = ReviewBase(
-                                  locationId: locationId,
-                                  title: titleController.text,
-                                  text: textController.text,
-                                  overallRating: rating,
-                                  details: {});
-                              if (update) {
-                                LocationsProvider.updateReview(
-                                    locationId: locationId,
-                                    reviewId: oldReview.id,
-                                    data: newReview);
-                              } else {
-                                await LocationsProvider.createReview(
-                                    locationId: locationId, data: newReview);
-                              }
-                            } catch (e) {
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(content: Text(e.toString())),
-                              );
-                            }
-                            Navigator.pop(context);
-                          },
-                          text: 'Send'),
-                    ],
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(9.0),
-                    child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          RatingBar.builder(
-                            minRating: 1,
-                            direction: Axis.horizontal,
-                            allowHalfRating: false,
-                            itemCount: 5,
-                            initialRating: rating,
-                            itemPadding:
-                                const EdgeInsets.symmetric(horizontal: 4.0),
-                            itemBuilder: (context, _) => const Icon(
-                              Icons.star,
-                              color: DesignColors.naviColor,
-                            ),
-                            onRatingUpdate: (r) {
-                              rating = r;
-                            },
-                          ),
-                        ]),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(left: 9.0, top: 15.0),
-                    child: Column(children: [
-                      UsernameTextFormField(
-                        controller: titleController,
-                        labelText: "Title",
-                        validator: (_) => null,
-                      ),
-                      DescriptionTextFormField(
-                        desController: textController,
-                        hinText: 'Description',
-                      ),
-                    ]),
-                  ),
-                ],
-              ));
-        });
-  }
 
   @override
   void initState() {
@@ -368,9 +266,10 @@ class _DetailsScreenState extends State<DetailsScreen> {
                                   oldReview = r;
                                 }).catchError((error) {
                                   print(error);
-                                }).whenComplete(() => _showReviewBottomSheet(
-                                        context,
-                                        oldReview: oldReview));
+                                }).whenComplete(() => reviewBottomSheet(
+                                        context: context,
+                                        oldReview: oldReview,
+                                        locationId: locationId));
                               }),
                           text: "review"),
                       const Icon(Icons.edit_note),
