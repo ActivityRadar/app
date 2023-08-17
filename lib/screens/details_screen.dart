@@ -40,17 +40,18 @@ class _DetailsScreenState extends State<DetailsScreen> {
   Future<LocationDetailedApi>? _data;
   late String locationId;
 
-  TextEditingController usernameController = TextEditingController();
-  TextEditingController desController = TextEditingController();
-
-  Future<void> _showReviewBottomSheet(BuildContext context) async {
-    var rating = 0;
+  Future<void> _showReviewBottomSheet(BuildContext context,
+      {ReviewWithId? oldReview}) async {
+    TextEditingController titleController =
+        TextEditingController(text: oldReview?.title);
+    TextEditingController textController =
+        TextEditingController(text: oldReview?.text);
+    double rating = oldReview?.overallRating ?? 1.0;
+    final update = oldReview != null;
 
     bottomSheetBase(
         context: context,
         builder: (context) {
-          var size = MediaQuery.of(context).size;
-          double width = size.width;
           return SingleChildScrollView(
               padding: EdgeInsets.only(
                   bottom: MediaQuery.of(context).viewInsets.bottom),
@@ -70,7 +71,30 @@ class _DetailsScreenState extends State<DetailsScreen> {
                         text: "Review",
                       ),
                       CustomTextButton(
-                          onPressed: () => Navigator.pop(context),
+                          onPressed: () async {
+                            try {
+                              final newReview = ReviewBase(
+                                  locationId: locationId,
+                                  title: titleController.text,
+                                  text: textController.text,
+                                  overallRating: rating,
+                                  details: {});
+                              if (update) {
+                                LocationsProvider.updateReview(
+                                    locationId: locationId,
+                                    reviewId: oldReview.id,
+                                    data: newReview);
+                              } else {
+                                await LocationsProvider.createReview(
+                                    locationId: locationId, data: newReview);
+                              }
+                            } catch (e) {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(content: Text(e.toString())),
+                              );
+                            }
+                            Navigator.pop(context);
+                          },
                           text: 'Send'),
                     ],
                   ),
@@ -80,18 +104,19 @@ class _DetailsScreenState extends State<DetailsScreen> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           RatingBar.builder(
-                            minRating: 0,
+                            minRating: 1,
                             direction: Axis.horizontal,
                             allowHalfRating: false,
                             itemCount: 5,
+                            initialRating: rating,
                             itemPadding:
                                 const EdgeInsets.symmetric(horizontal: 4.0),
                             itemBuilder: (context, _) => const Icon(
                               Icons.star,
                               color: DesignColors.naviColor,
                             ),
-                            onRatingUpdate: (rating) {
-                              print(rating);
+                            onRatingUpdate: (r) {
+                              rating = r;
                             },
                           ),
                         ]),
@@ -100,12 +125,12 @@ class _DetailsScreenState extends State<DetailsScreen> {
                     padding: const EdgeInsets.only(left: 9.0, top: 15.0),
                     child: Column(children: [
                       UsernameTextFormField(
-                        controller: usernameController,
+                        controller: titleController,
                         labelText: "Title",
                         validator: (_) => null,
                       ),
                       DescriptionTextFormField(
-                        desController: desController,
+                        desController: textController,
                         hinText: 'Description',
                       ),
                     ]),
@@ -335,7 +360,17 @@ class _DetailsScreenState extends State<DetailsScreen> {
                           onPressed: () => conditionalShowLoginReminder(
                               context: context,
                               loggedInCallback: () async {
-                                _showReviewBottomSheet(context);
+                                ReviewWithId? oldReview;
+                                LocationsProvider
+                                        .getCurrentUserReviewForLocation(
+                                            locationId: locationId)
+                                    .then((r) {
+                                  oldReview = r;
+                                }).catchError((error) {
+                                  print(error);
+                                }).whenComplete(() => _showReviewBottomSheet(
+                                        context,
+                                        oldReview: oldReview));
                               }),
                           text: "review"),
                       const Icon(Icons.edit_note),
