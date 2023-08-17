@@ -26,6 +26,7 @@ class _FilterDisciplineState extends State<FilterDiscipline> {
               label: CustomText(text: exercise.name),
               selected: filters.contains(exercise),
               selectedColor: DesignColors.naviColor,
+              showCheckmark: false,
               onSelected: (bool selected) {
                 setState(() {
                   if (selected) {
