@@ -118,6 +118,14 @@ class LocationsProvider {
         body: data.toJson());
   }
 
+  /// Get Current User Review For Location
+  static Future<ReviewWithId> getCurrentUserReviewForLocation(
+      {required String locationId}) async {
+    final responseBody = await BackendService.instance
+        .sendRequest(HttpMethod.get, "/locations/$locationId/reviews/me");
+    return ReviewWithId.fromJson(responseBody);
+  }
+
   /// Update Review
   static Future<void> updateReview(
       {required String locationId,
