@@ -206,9 +206,13 @@ class _ActivityMarkerMapState extends State<ActivityMarkerMap>
     focusedLocationId = loc?.id;
     if (oldFocused != null) {
       final idx = markers.indexWhere((m) => m.location.id == oldFocused);
-      final unfocusedMarker = createMarker(markers[idx].location);
-      markers.removeAt(idx);
-      markers.add(unfocusedMarker);
+
+      // only redraw if old focused marker is in view (and thus in the array)
+      if (idx != -1) {
+        final unfocusedMarker = createMarker(markers[idx].location);
+        markers.removeAt(idx);
+        markers.add(unfocusedMarker);
+      }
     }
 
     if (loc != null) {
