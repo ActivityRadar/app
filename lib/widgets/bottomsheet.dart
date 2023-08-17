@@ -1,5 +1,7 @@
 // ignore_for_file: avoid_print
 import 'package:app/constants/design.dart';
+import 'package:app/model/generated.dart';
+import 'package:app/provider/generated/locations_provider.dart';
 import 'package:app/screens/location_picker.dart';
 import 'package:app/widgets/custom/list_tile.dart';
 import 'package:app/widgets/custom_text.dart';
@@ -7,6 +9,7 @@ import 'package:app/widgets/custom/button.dart';
 import 'package:app/widgets/custom/textfield.dart';
 import 'package:app/widgets/filter_discipline.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 
 Future<dynamic> bottomSheetBase(
     {required BuildContext context, required dynamic builder}) {
@@ -42,9 +45,7 @@ Future<dynamic> bottomSheetAdd(BuildContext context) {
               CustomListTile(
                 icon: const Icon(Icons.event),
                 titleText: "Add Event",
-                onPressed: () {
-                  writeReview(context);
-                },
+                onPressed: () {},
               ),
             ],
           ));
@@ -84,14 +85,18 @@ Future<dynamic> bottomSheetFilter(BuildContext context) {
           ));
 }
 
-Future<dynamic> writeReview(BuildContext context) {
-  var rating = 0;
-  TextEditingController titleController = TextEditingController();
-  TextEditingController desController = TextEditingController();
-  var size = MediaQuery.of(context).size;
-  var height = size.height;
-  double width = size.width;
-  return bottomSheetBase(
+Future<void> reviewBottomSheet(
+    {required BuildContext context,
+    ReviewWithId? oldReview,
+    required String locationId}) async {
+  TextEditingController titleController =
+      TextEditingController(text: oldReview?.title);
+  TextEditingController textController =
+      TextEditingController(text: oldReview?.text);
+  double rating = oldReview?.overallRating ?? 1.0;
+  final update = oldReview != null;
+
+  bottomSheetBase(
       context: context,
       builder: (context) {
         return SingleChildScrollView(
@@ -106,40 +111,76 @@ Future<dynamic> writeReview(BuildContext context) {
                     Padding(
                       padding: const EdgeInsets.only(left: 9.0, top: 9.0),
                       child: CustomTextButton(
-                        text: 'Cancel',
-                        onPressed: () => Navigator.pop(context),
-                      ),
+                          onPressed: () => Navigator.pop(context),
+                          text: 'Cancel'),
                     ),
-                    MediumText(
+                    const SmallText(
                       text: "Review",
-                      width: width,
                     ),
                     CustomTextButton(
-                      text: 'Send',
-                      onPressed: () => Navigator.pop(context),
-                    ),
+                        onPressed: () async {
+                          try {
+                            final newReview = ReviewBase(
+                                locationId: locationId,
+                                title: titleController.text,
+                                text: textController.text,
+                                overallRating: rating,
+                                details: {});
+                            if (update) {
+                              LocationsProvider.updateReview(
+                                  locationId: locationId,
+                                  reviewId: oldReview.id,
+                                  data: newReview);
+                            } else {
+                              await LocationsProvider.createReview(
+                                  locationId: locationId, data: newReview);
+                            }
+                          } catch (e) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(content: Text(e.toString())),
+                            );
+                          }
+                          Navigator.pop(context);
+                        },
+                        text: 'Send'),
                   ],
                 ),
                 Padding(
                   padding: const EdgeInsets.all(9.0),
                   child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: List.generate(
-                      5,
-                      (index) => IconButton(
-                        icon: index < rating
-                            ? const Icon(Icons.star, size: 32)
-                            : const Icon(Icons.star_border, size: 32),
-                        color: DesignColors.naviColor,
-                        onPressed: () {},
-                      ),
-                    ),
-                  ),
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        RatingBar.builder(
+                          minRating: 1,
+                          direction: Axis.horizontal,
+                          allowHalfRating: false,
+                          itemCount: 5,
+                          initialRating: rating,
+                          itemPadding:
+                              const EdgeInsets.symmetric(horizontal: 4.0),
+                          itemBuilder: (context, _) => const Icon(
+                            Icons.star,
+                            color: DesignColors.naviColor,
+                          ),
+                          onRatingUpdate: (r) {
+                            rating = r;
+                          },
+                        ),
+                      ]),
                 ),
-                UnderLineTextFormField(
-                    controller: titleController, hinText: 'Titel'),
-                DescriptionTextFormField(
-                    desController: desController, hinText: 'Beschreibung'),
+                Padding(
+                  padding: const EdgeInsets.only(left: 9.0, top: 15.0),
+                  child: Column(children: [
+                    DescriptionTextFormField(
+                        textController: titleController,
+                        hint: "Title",
+                        maxLines: 1),
+                    DescriptionTextFormField(
+                        textController: textController,
+                        hint: 'Description',
+                        maxLines: 5),
+                  ]),
+                ),
               ],
             ));
       });

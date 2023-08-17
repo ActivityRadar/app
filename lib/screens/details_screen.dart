@@ -5,7 +5,6 @@ import 'package:app/widgets/bottomsheet.dart';
 import 'package:app/widgets/custom/alertdialog.dart';
 import 'package:app/widgets/custom/button.dart';
 import 'package:app/widgets/custom/card.dart';
-import 'package:app/widgets/custom/textfield.dart';
 import 'package:app/widgets/custom_text.dart';
 import 'package:app/widgets/login_reminder.dart';
 import 'package:flutter/material.dart';
@@ -20,7 +19,6 @@ import 'package:app/provider/user_manager.dart';
 import 'package:app/widgets/activityType_short.dart';
 import 'package:app/widgets/photo_picker.dart';
 import 'package:app/widgets/vote.dart';
-import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 
 class DetailsScreen extends StatefulWidget {
   const DetailsScreen({
@@ -39,81 +37,6 @@ class DetailsScreen extends StatefulWidget {
 class _DetailsScreenState extends State<DetailsScreen> {
   Future<LocationDetailedApi>? _data;
   late String locationId;
-
-  TextEditingController usernameController = TextEditingController();
-  TextEditingController desController = TextEditingController();
-
-  Future<void> _showReviewBottomSheet(BuildContext context) async {
-    var rating = 0;
-
-    bottomSheetBase(
-        context: context,
-        builder: (context) {
-          var size = MediaQuery.of(context).size;
-          double width = size.width;
-          return SingleChildScrollView(
-              padding: EdgeInsets.only(
-                  bottom: MediaQuery.of(context).viewInsets.bottom),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: <Widget>[
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: <Widget>[
-                      Padding(
-                        padding: const EdgeInsets.only(left: 9.0, top: 9.0),
-                        child: CustomTextButton(
-                            onPressed: () => Navigator.pop(context),
-                            text: 'Cancel'),
-                      ),
-                      const SmallText(
-                        text: "Review",
-                      ),
-                      CustomTextButton(
-                          onPressed: () => Navigator.pop(context),
-                          text: 'Send'),
-                    ],
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(9.0),
-                    child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          RatingBar.builder(
-                            minRating: 0,
-                            direction: Axis.horizontal,
-                            allowHalfRating: false,
-                            itemCount: 5,
-                            itemPadding:
-                                const EdgeInsets.symmetric(horizontal: 4.0),
-                            itemBuilder: (context, _) => const Icon(
-                              Icons.star,
-                              color: DesignColors.naviColor,
-                            ),
-                            onRatingUpdate: (rating) {
-                              print(rating);
-                            },
-                          ),
-                        ]),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(left: 9.0, top: 15.0),
-                    child: Column(children: [
-                      UsernameTextFormField(
-                        controller: usernameController,
-                        labelText: "Title",
-                        validator: (_) => null,
-                      ),
-                      DescriptionTextFormField(
-                        desController: desController,
-                        hinText: 'Description',
-                      ),
-                    ]),
-                  ),
-                ],
-              ));
-        });
-  }
 
   @override
   void initState() {
@@ -335,7 +258,18 @@ class _DetailsScreenState extends State<DetailsScreen> {
                           onPressed: () => conditionalShowLoginReminder(
                               context: context,
                               loggedInCallback: () async {
-                                _showReviewBottomSheet(context);
+                                ReviewWithId? oldReview;
+                                LocationsProvider
+                                        .getCurrentUserReviewForLocation(
+                                            locationId: locationId)
+                                    .then((r) {
+                                  oldReview = r;
+                                }).catchError((error) {
+                                  print(error);
+                                }).whenComplete(() => reviewBottomSheet(
+                                        context: context,
+                                        oldReview: oldReview,
+                                        locationId: locationId));
                               }),
                           text: "review"),
                       const Icon(Icons.edit_note),
