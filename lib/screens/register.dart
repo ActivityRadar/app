@@ -82,7 +82,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: <Widget>[
           Center(
-            child: ElevatedButton(
+            child: CustomElevatedButton(
               onPressed: () async {
                 await bottomSheetPhotoSourcePicker(
                         context: context,
@@ -93,14 +93,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       .updateUserInfo();
                 }).then((_) => Navigator.of(context).pop());
               },
-              style: ElevatedButton.styleFrom(
-                shape: const CircleBorder(),
-                padding: const EdgeInsets.all(100),
-                backgroundColor: Colors.blue, // <-- Button color
-                foregroundColor: const Color.fromARGB(
-                    255, 255, 255, 255), // <-- Splash color
-              ), //TODO userID,
-              child: const CustomText(text: "Profile picture"),
+              text: "Profile picture",
             ),
           ),
           const SizedBox(
@@ -116,13 +109,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   },
                   text: 'skip',
                 ),
-                ElevatedButton(
+                CustomElevatedButton(
                   onPressed: () {
                     Navigator.pop(context);
                   },
-                  child: const CustomText(
-                    text: "Next",
-                  ),
+                  text: "Next",
                 )
               ]),
             ],
@@ -158,15 +149,13 @@ class _RegisterScreenState extends State<RegisterScreen> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                ElevatedButton(
+                CustomElevatedButton(
                   onPressed: () {
                     previousPage();
                   },
-                  child: const CustomText(
-                    text: "Cancel",
-                  ),
+                  text: "Cancel",
                 ),
-                ElevatedButton(
+                CustomElevatedButton(
                   onPressed: () async {
                     bool success = await UsersProvider.verifyNewUser(
                         data: VerifyUserInfo(
@@ -184,9 +173,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       print("Verification failed!");
                     }
                   },
-                  child: const CustomText(
-                    text: "Next",
-                  ),
+                  text: "Next",
                 ),
               ],
             ),
@@ -242,13 +229,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              ElevatedButton(
+              CustomElevatedButton(
                 onPressed: () {
                   previousPage();
                 },
-                child: const CustomText(
-                  text: "Previous",
-                ),
+                text: "Previous",
               ),
               ElevatedButton(
                 onPressed: isLoading
@@ -342,14 +327,13 @@ class _RegisterScreenState extends State<RegisterScreen> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                ElevatedButton(
-                    onPressed: () {
-                      previousPage();
-                    },
-                    child: const CustomText(
-                      text: "Previous",
-                    )),
-                ElevatedButton(
+                CustomElevatedButton(
+                  onPressed: () {
+                    previousPage();
+                  },
+                  text: "Previous",
+                ),
+                CustomElevatedButton(
                   onPressed: () {
                     if (_formPasswordKey.currentState!.validate()) {
                       nextPage();
@@ -357,9 +341,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       showMessageSnackBar(context, 'Please fill input');
                     }
                   },
-                  child: const CustomText(
-                    text: "Next",
-                  ),
+                  text: "Next",
                 ),
               ],
             ),
@@ -406,7 +388,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
               padding:
                   const EdgeInsets.symmetric(horizontal: 8, vertical: 16.0),
               child: Center(
-                child: ElevatedButton(
+                child: CustomElevatedButton(
                   onPressed: () async {
                     // have to check outside of the validator because of async call
                     emailTaken = await UsersProvider.checkEmailTaken(
@@ -417,9 +399,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       showMessageSnackBar(context, 'Please fill input');
                     }
                   },
-                  child: const CustomText(
-                    text: "Submit",
-                  ),
+                  text: "Submit",
                 ),
               ),
             ),
@@ -469,14 +449,13 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    ElevatedButton(
-                        onPressed: () {
-                          previousPage();
-                        },
-                        child: const CustomText(
-                          text: "Previous",
-                        )),
-                    ElevatedButton(
+                    CustomElevatedButton(
+                      onPressed: () {
+                        previousPage();
+                      },
+                      text: "Previous",
+                    ),
+                    CustomElevatedButton(
                       onPressed: () async {
                         // have to check outside of the validator because of async call
                         usernameTaken = await UsersProvider.findUsersByName(
@@ -491,9 +470,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           showMessageSnackBar(context, 'Please fill input');
                         }
                       },
-                      child: const CustomText(
-                        text: "Next",
-                      ),
+                      text: "Next",
                     )
                   ],
                 ),
