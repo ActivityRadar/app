@@ -1,3 +1,4 @@
+import 'package:app/app_state.dart';
 import 'package:app/screens/community.dart';
 import 'package:app/screens/start.dart';
 import 'package:app/screens/map.dart';
@@ -9,6 +10,7 @@ import 'package:app/widgets/custom_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:app/constants/design.dart';
+import 'package:provider/provider.dart';
 
 class Home extends StatefulWidget {
   const Home({super.key});
@@ -17,7 +19,7 @@ class Home extends StatefulWidget {
   _HomeState createState() => _HomeState();
 }
 
-class _HomeState extends State<Home> {
+class _HomeState extends State<Home> with WidgetsBindingObserver {
   int currentTab = 0;
   final List<Widget> screens = [
     const HomeScreen(),
@@ -25,9 +27,30 @@ class _HomeState extends State<Home> {
     const MapScreen(),
     const CommunityScreen()
   ];
-
   final PageStorageBucket bucket = PageStorageBucket();
   Widget currentScreen = const HomeScreen();
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addObserver(this);
+
+    Provider.of<AppState>(context, listen: false).loadFromStorage();
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.paused ||
+        state == AppLifecycleState.detached) {
+      Provider.of<AppState>(context, listen: false).saveToStorage();
+    }
+  }
 
   @override
   Widget build(BuildContext context) {

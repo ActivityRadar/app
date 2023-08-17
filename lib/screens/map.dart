@@ -4,17 +4,16 @@ import 'package:app/app_state.dart';
 import 'package:app/model/functions.dart';
 import 'package:app/model/generated.dart';
 import 'package:app/provider/generated/locations_provider.dart';
-import 'package:app/screens/details_screen.dart';
-import 'package:app/widgets/custom_text.dart';
-import 'package:app/widgets/short_info_box.dart';
+import 'package:app/widgets/short_info_slider.dart';
 import 'package:app/widgets/bar_search.dart';
-import 'package:carousel_slider/carousel_slider.dart';
+import 'package:app/widgets/gps.dart';
+import 'package:app/widgets/custom_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
-import 'package:flutter_map_marker_cluster/flutter_map_marker_cluster.dart';
 import 'package:flutter_map/plugin_api.dart';
-import 'package:provider/provider.dart';
 import 'package:flutter_map_animations/flutter_map_animations.dart';
+import 'package:flutter_map_marker_cluster/flutter_map_marker_cluster.dart';
+import 'package:provider/provider.dart';
 
 // ignore_for_file: avoid_print
 class MapScreen extends StatefulWidget {
@@ -52,6 +51,8 @@ class MapScreenState extends State<MapScreen> {
   List<LocationDetailedApi>? sliderInfos;
   ShortInfoSlider? infoSlider;
   ValueNotifier<int> focusedInfosIndex = ValueNotifier(0);
+  GpsLocationNotifier currentPosition = GpsLocationNotifier();
+  late GpsButton gpsButton;
 
   void buildSlider(LocationShortApi info) async {
     final coordinates = toLatLng(info.location);
@@ -70,31 +71,43 @@ class MapScreenState extends State<MapScreen> {
     });
   }
 
+  void onFocusChanged() {
+    final info = focusedLocationInfo.info;
+
+    if (info == null) {
+      return;
+    }
+
+    if (infoSlider != null) {
+      final idx = sliderInfos!.indexWhere((sInfo) => sInfo.id == info.id);
+      if (idx == -1) {
+        buildSlider(info);
+      } else {
+        focusedInfosIndex.value = idx;
+      }
+    } else {
+      buildSlider(info);
+    }
+  }
+
   @override
   void initState() {
     super.initState();
+    gpsButton = GpsButton(gpsNotifier: currentPosition);
     searchBar = MapSearchBar(mapState: this);
     mapWidget = ActivityMarkerMap(
-        focusedLocation: focusedLocationInfo, activity: activity);
+        focusedLocation: focusedLocationInfo,
+        activity: activity,
+        currentPosition: currentPosition);
 
-    focusedLocationInfo.addListener(() {
-      final info = focusedLocationInfo.info;
+    focusedLocationInfo.addListener(onFocusChanged);
+  }
 
-      if (info == null) {
-        return;
-      }
+  @override
+  void dispose() {
+    focusedLocationInfo.removeListener(onFocusChanged);
 
-      if (infoSlider != null) {
-        final idx = sliderInfos!.indexWhere((sInfo) => sInfo.id == info.id);
-        if (idx == -1) {
-          buildSlider(info);
-        } else {
-          focusedInfosIndex.value = idx;
-        }
-      } else {
-        buildSlider(info);
-      }
-    });
+    super.dispose();
   }
 
   @override
@@ -115,107 +128,25 @@ class MapScreenState extends State<MapScreen> {
           return false;
         },
         child: Stack(
-          children: [mapWidget, searchBar, if (infoSlider != null) infoSlider!],
+          children: [
+            mapWidget,
+            Padding(
+                padding: EdgeInsets.symmetric(
+                    vertical: height / 25, horizontal: 16.0),
+                child: Column(
+                  children: [
+                    searchBar,
+                    Align(alignment: Alignment.centerRight, child: gpsButton)
+                  ],
+                )),
+            if (infoSlider != null)
+              Align(
+                  alignment: Alignment.bottomCenter,
+                  child: Container(
+                      margin: const EdgeInsets.only(bottom: 100),
+                      child: infoSlider!))
+          ],
         ));
-  }
-}
-
-class ShortInfoSlider extends StatefulWidget {
-  const ShortInfoSlider(
-      {super.key,
-      required this.infos,
-      required this.indexNotifier,
-      required this.locationNotifier});
-
-  final List<LocationDetailedApi> infos;
-  final ValueNotifier<int> indexNotifier;
-  final FocusedLocationNotifier locationNotifier;
-
-  @override
-  State<ShortInfoSlider> createState() => _ShortInfoSliderState();
-}
-
-class _ShortInfoSliderState extends State<ShortInfoSlider> {
-  int _current = 0;
-  final CarouselController _controller = CarouselController();
-  late List<Widget> _boxes;
-
-  @override
-  void initState() {
-    super.initState();
-
-    _boxes = widget.infos
-        .map((info) => ShortInfoBox(
-              info: info,
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => DetailsScreen(locationInfo: info),
-                  ),
-                );
-              },
-            ))
-        .toList();
-
-    widget.indexNotifier.addListener(() {
-      // make animations between pages, that are further away, longer
-      final duration = 300 + 70 * (widget.indexNotifier.value - _current).abs();
-      _controller.animateToPage(widget.indexNotifier.value,
-          duration: Duration(milliseconds: duration), curve: Curves.easeInOut);
-    });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    var size = MediaQuery.of(context).size;
-    var height = size.height;
-    final verticalSpace = height / 6;
-    final horizontalSpace = size.width;
-    const viewportFraction = 0.8;
-
-    return Align(
-      alignment: Alignment.bottomCenter,
-      child: Container(
-          margin: const EdgeInsets.only(bottom: 100),
-          height: verticalSpace,
-          child: CarouselSlider(
-              // key: UniqueKey(),
-              items: _boxes
-                  .map((b) => SizedBox(
-                        height: verticalSpace,
-                        width: horizontalSpace * 0.9,
-                        child: Padding(
-                            padding:
-                                const EdgeInsets.symmetric(horizontal: 8.0),
-                            child: b),
-                      ))
-                  .toList(),
-              carouselController: _controller,
-              options: CarouselOptions(
-                initialPage: _current,
-                // ratio between width and height
-                aspectRatio:
-                    horizontalSpace / verticalSpace * 1 / viewportFraction,
-                // how much space does the focused box take
-                viewportFraction: viewportFraction,
-                scrollDirection: Axis.horizontal,
-                enableInfiniteScroll: false,
-                // enlargeCenterPage: true,
-                // enlargeFactor: 0.3,
-                onPageChanged: (position, reason) {
-                  print(reason);
-                  setState(() {
-                    _current = position;
-                    if (reason != CarouselPageChangedReason.controller) {
-                      widget.locationNotifier.setFocused(
-                          info: fromDetailed(widget.infos[position]),
-                          changedBy: FocusChangeReason.slider);
-                    }
-                  });
-                },
-              ))),
-    );
   }
 }
 
@@ -224,10 +155,12 @@ class ActivityMarkerMap extends StatefulWidget {
     super.key,
     required this.focusedLocation,
     required this.activity,
+    required this.currentPosition,
   });
 
   final FocusedLocationNotifier focusedLocation;
   final ValueNotifier<String> activity;
+  final GpsLocationNotifier currentPosition;
 
   @override
   State<ActivityMarkerMap> createState() {
@@ -242,6 +175,7 @@ class _ActivityMarkerMapState extends State<ActivityMarkerMap>
   late final AnimatedMapController mapController =
       AnimatedMapController(vsync: this);
   String? focusedLocationId;
+  CircleLayer? currentPositionLayer;
 
   void onMapEvent(MapEvent event, BuildContext context) {
     final s = Provider.of<AppState>(context, listen: false);
@@ -321,23 +255,56 @@ class _ActivityMarkerMapState extends State<ActivityMarkerMap>
     });
   }
 
+  void onGpsUpdate() {
+    final pos = widget.currentPosition.coordinates;
+    final List<CircleMarker> circles = [];
+    if (pos != null) {
+      final color = widget.currentPosition.recent ? Colors.blue : Colors.grey;
+      circles.add(CircleMarker(
+          radius: 8,
+          point: pos,
+          color: color,
+          borderStrokeWidth: 5.0,
+          borderColor: Colors.black45));
+
+      if (widget.currentPosition.shouldMove) {
+        mapController.animateTo(dest: pos, zoom: 14);
+        widget.currentPosition.shouldMove = false;
+      }
+    }
+
+    setState(() {
+      currentPositionLayer = CircleLayer(
+        circles: circles,
+      );
+    });
+  }
+
+  void focusChangeCallback() {
+    final oldFocused = focusedLocationId;
+    final move =
+        widget.focusedLocation.changedBy != FocusChangeReason.markerTap;
+    setState(() {
+      onFocusChanged(oldFocused, widget.focusedLocation.info, move: move);
+    });
+  }
+
   @override
   void initState() {
-    widget.activity.addListener(() {
-      print("set_activity triggered");
-      performSearch();
-    });
-
-    widget.focusedLocation.addListener(() {
-      final oldFocused = focusedLocationId;
-      final move =
-          widget.focusedLocation.changedBy != FocusChangeReason.markerTap;
-      setState(() {
-        onFocusChanged(oldFocused, widget.focusedLocation.info, move: move);
-      });
-    });
-
     super.initState();
+
+    widget.activity.addListener(performSearch);
+    widget.focusedLocation.addListener(focusChangeCallback);
+    widget.currentPosition.addListener(onGpsUpdate);
+  }
+
+  @override
+  void dispose() {
+    widget.activity.removeListener(performSearch);
+    widget.focusedLocation.removeListener(focusChangeCallback);
+    widget.currentPosition.removeListener(onGpsUpdate);
+
+    super.dispose();
   }
 
   @override
@@ -364,6 +331,7 @@ class _ActivityMarkerMapState extends State<ActivityMarkerMap>
           urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
           subdomains: const ['a', 'b', 'c'],
         ),
+        if (currentPositionLayer != null) currentPositionLayer!,
         MarkerClusterLayerWidget(
             options: MarkerClusterLayerOptions(
           maxClusterRadius: bubbleScale(maxBubbleSize).ceil(),
@@ -389,7 +357,7 @@ class _ActivityMarkerMapState extends State<ActivityMarkerMap>
               ),
             );
           },
-        ))
+        )),
       ],
     );
   }
