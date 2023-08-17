@@ -176,9 +176,9 @@ Future<void> reviewBottomSheet(
                         hint: "Title",
                         maxLines: 1),
                     DescriptionTextFormField(
-                      textController: textController,
-                      hint: 'Description',
-                    ),
+                        textController: textController,
+                        hint: 'Description',
+                        maxLines: 5),
                   ]),
                 ),
               ],

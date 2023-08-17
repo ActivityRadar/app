@@ -154,23 +154,25 @@ class CustomTextFormField extends StatelessWidget {
 }
 
 class DescriptionTextFormField extends StatelessWidget {
-  const DescriptionTextFormField({
-    super.key,
-    required this.desController,
-    required this.hinText,
-  });
+  const DescriptionTextFormField(
+      {super.key,
+      required this.textController,
+      required this.hint,
+      this.maxLines});
 
-  final TextEditingController desController;
-  final String hinText;
+  final TextEditingController textController;
+  final String hint;
+  final int?
+      maxLines; // limits the number of shown lines, not the actual number of lines
 
   @override
   Widget build(BuildContext context) {
     return TextFormField(
-      maxLines: 5,
-      controller: desController,
+      maxLines: maxLines,
+      controller: textController,
       textAlign: TextAlign.start,
       decoration: InputDecoration(
-        hintText: hinText,
+        hintText: hint,
         border: UnderlineInputBorder(
           borderSide: BorderSide.none,
         ),
