@@ -44,11 +44,11 @@ class ProfileBar extends StatelessWidget {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => const AddMeet(),
+                    builder: (context) => const MeetAddScreen(),
                   ),
                 );
               },
-              text: "Add Meet",
+              text: "Add Meet2",
             ),
           ],
         ),
