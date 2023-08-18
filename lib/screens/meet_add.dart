@@ -144,7 +144,7 @@ class _MeetAddScreenState extends State<MeetAddScreen> {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          TitleText(text: "Wann willst du Spielen ?", width: width),
+          TitleText(text: "Wann willst du spielen?", width: width),
           const SizedBox(
             height: 20,
           ),
@@ -189,7 +189,7 @@ class _MeetAddScreenState extends State<MeetAddScreen> {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          TitleText(text: "Wo willst du Spielen ?", width: width),
+          TitleText(text: "Wo willst du spielen?", width: width),
           const SizedBox(
             height: 20,
           ),
@@ -230,7 +230,7 @@ class _MeetAddScreenState extends State<MeetAddScreen> {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          TitleText(text: "Wie viele Mitspiele brauchst du ?", width: width),
+          TitleText(text: "Wie viele Mitspielende brauchst du?", width: width),
           const SizedBox(
             height: 20,
           ),
@@ -284,7 +284,7 @@ class _MeetAddScreenState extends State<MeetAddScreen> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            TitleText(text: "Wo willst du Spielen ?", width: width),
+            TitleText(text: "Füge eine kurze Beschreibung hinzu", width: width),
             const SizedBox(
               height: 20,
             ),
@@ -314,7 +314,7 @@ class _MeetAddScreenState extends State<MeetAddScreen> {
                     padding: const EdgeInsets.only(left: 9.0, top: 15.0),
                     child: DescriptionTextFieldwithoutBorder(
                       nameController: descriptionController,
-                      label: 'description',
+                      label: 'Description',
                     ),
                   ),
                 ],
@@ -358,7 +358,8 @@ class _MeetAddScreenState extends State<MeetAddScreen> {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          TitleText(text: "Für wem soll das Sichtbar sein ?", width: width),
+          TitleText(
+              text: "Für wen soll das Angebot sichtbar sein?", width: width),
           const SizedBox(
             height: 20,
           ),
