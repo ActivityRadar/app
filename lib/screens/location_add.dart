@@ -7,7 +7,6 @@ import 'package:app/widgets/custom/snackbar.dart';
 import 'package:app/widgets/custom/button.dart';
 import 'package:app/widgets/custom/textfield.dart';
 import 'package:app/widgets/photo_picker.dart';
-import 'package:app/widgets/timepicker.dart';
 import 'package:flutter/material.dart';
 
 class LocationAddScreen extends StatefulWidget {
@@ -46,14 +45,14 @@ class _LocationAddScreenState extends State<LocationAddScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-          elevation: 0.0,
-          backgroundColor: DesignColors.kBackgroundColor,
-          leading: CustomTextButton(
-            onPressed: () {
-              Navigator.pop(context);
-            },
-            text: "Cancel",
-          )),
+        elevation: 0.0,
+        backgroundColor: DesignColors.kBackgroundColor,
+        leading: ButtonCancel(
+          onPressed: () {
+            Navigator.pop(context);
+          },
+        ),
+      ),
       body: PageView(
         physics: const NeverScrollableScrollPhysics(),
         controller: pageController,

@@ -1,4 +1,3 @@
-import 'package:app/screens/addlocation.dart';
 import 'package:app/widgets/custom/button.dart';
 
 import 'package:flutter/material.dart';
@@ -106,14 +105,7 @@ class _LocationMarkerMapState extends State<LocationMarkerMap> {
             child: Align(
           alignment: Alignment.bottomCenter,
           child: CustomElevatedButton(
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => const AddLocation(),
-                ),
-              );
-            },
+            onPressed: () {},
             text: "Bottom Button!",
           ),
         ))

@@ -45,8 +45,10 @@ class _MeetAddScreenState extends State<MeetAddScreen> {
       appBar: AppBar(
           elevation: 0.0,
           backgroundColor: DesignColors.kBackgroundColor,
-          leading: ButtonBack(
-            onPressed: () {},
+          leading: ButtonCancel(
+            onPressed: () {
+              Navigator.pop(context);
+            },
           )),
       body: PageView(
         physics: const NeverScrollableScrollPhysics(),
