@@ -33,6 +33,7 @@ class _MeetAddScreenState extends State<MeetAddScreen> {
   ValueNotifier<RangeValues> participantNumberRange =
       ValueNotifier<RangeValues>(const RangeValues(1, 2));
   Set<Sport> chosenActivities = <Sport>{};
+  bool canContinue = false;
 
   void previousPage() {
     pageController.previousPage(
@@ -73,7 +74,23 @@ class _MeetAddScreenState extends State<MeetAddScreen> {
         alignment: Alignment.bottomRight,
         child: Padding(
           padding: const EdgeInsets.only(bottom: 60.0),
-          child: CustomElevatedButton(onPressed: nextPage, text: "Next"),
+          child: CustomElevatedButton(
+              onPressed: () {
+                if (!canContinue) {
+                  showDialog(
+                      context: context,
+                      builder: (context) {
+                        return const AlertDialog(
+                            title: Text("Can't continue"),
+                            content: Text(
+                                "You cant continue as you need to enter input on this page!"));
+                      });
+
+                  return;
+                }
+                nextPage();
+              },
+              text: "Next"),
         ));
 
     return Scaffold(
@@ -127,6 +144,7 @@ class _MeetAddScreenState extends State<MeetAddScreen> {
                       } else {
                         chosenActivities.remove(exercise);
                       }
+                      canContinue = chosenActivities.isNotEmpty;
                     });
                   },
                 );
@@ -308,7 +326,7 @@ class _MeetAddScreenState extends State<MeetAddScreen> {
           children: [
             Row(mainAxisAlignment: MainAxisAlignment.center, children: [
               MediumText(text: "$key: ", width: width),
-              SizedBox(width: 8),
+              const SizedBox(width: 8),
               Expanded(
                 child: Text(value, softWrap: true),
               )
