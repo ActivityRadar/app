@@ -42,6 +42,15 @@ class _MeetAddScreenState extends State<MeetAddScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final pages = <Widget>[
+      chooseActivity(),
+      chooseTime(),
+      chooseParticipantNumber(),
+      choosePlace(),
+      addDescription(),
+      chooseVisibility(),
+    ];
+
     return Scaffold(
       appBar: CustomAppBar(
         context,
@@ -52,19 +61,12 @@ class _MeetAddScreenState extends State<MeetAddScreen> {
       body: PageView(
         physics: const NeverScrollableScrollPhysics(),
         controller: pageController,
-        children: <Widget>[
-          activity(),
-          whan(),
-          howMany(),
-          where(),
-          titleanddescription(),
-          privat(),
-        ],
+        children: pages,
       ),
     );
   }
 
-  Center activity() {
+  Center chooseActivity() {
     var size = MediaQuery.of(context).size;
 
     double width = size.width;
@@ -134,7 +136,7 @@ class _MeetAddScreenState extends State<MeetAddScreen> {
     );
   }
 
-  Center whan() {
+  Center chooseTime() {
     var size = MediaQuery.of(context).size;
 
     double width = size.width;
@@ -179,7 +181,7 @@ class _MeetAddScreenState extends State<MeetAddScreen> {
     );
   }
 
-  Center where() {
+  Center choosePlace() {
     var size = MediaQuery.of(context).size;
 
     double width = size.width;
@@ -220,7 +222,7 @@ class _MeetAddScreenState extends State<MeetAddScreen> {
     );
   }
 
-  Center howMany() {
+  Center chooseParticipantNumber() {
     var size = MediaQuery.of(context).size;
 
     double width = size.width;
@@ -272,7 +274,7 @@ class _MeetAddScreenState extends State<MeetAddScreen> {
     );
   }
 
-  Center titleanddescription() {
+  Center addDescription() {
     var size = MediaQuery.of(context).size;
 
     double width = size.width;
@@ -348,10 +350,10 @@ class _MeetAddScreenState extends State<MeetAddScreen> {
     );
   }
 
-  Center privat() {
+  Center chooseVisibility() {
     var size = MediaQuery.of(context).size;
-
     double width = size.width;
+
     return Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
