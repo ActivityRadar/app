@@ -302,24 +302,41 @@ class _MeetAddScreenState extends State<MeetAddScreen> {
     double width = size.width;
 
     Widget summaryRow(String key, String value, {bool spacer = true}) {
-      return Column(
-        children: [
-          Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-            MediumText(text: "$key: ", width: width),
-            SmallText(text: value)
-          ]),
-          const SizedBox(height: 10)
-        ],
+      return Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 12.0),
+        child: Column(
+          children: [
+            Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+              MediumText(text: "$key: ", width: width),
+              SizedBox(width: 8),
+              Expanded(
+                child: Text(value, softWrap: true),
+              )
+            ]),
+            const SizedBox(height: 10)
+          ],
+        ),
       );
     }
 
+    final range = participantNumberRange.value;
+
     final rows = [
-      summaryRow("Activity Type(s)", "soccer"),
-      summaryRow("Time", "flexible"),
-      summaryRow("Participants", "1-10"),
+      summaryRow(
+          "Activity Type(s)",
+          chosenActivities.fold("", (t, sport) {
+            return t.isEmpty ? sport.toString() : "$t, ${sport.toString()}";
+          })),
+      summaryRow("Time",
+          timeFlexible.value ? "flexible" : dateTime.value.toIso8601String()),
+      summaryRow(
+          "Participants",
+          range.start == range.end
+              ? "${range.start.toInt()}"
+              : "${range.start.toInt()} - ${range.end.toInt()}"),
       summaryRow("Location", "53.909123; 13.1290839"),
-      summaryRow("Visibility", "public"),
-      summaryRow("Description", "Moin Moin"),
+      summaryRow("Visibility", visibilityFriends.value ? "friends" : "public"),
+      summaryRow("Description", descriptionController.text, spacer: true),
     ];
 
     return Center(
