@@ -4,15 +4,17 @@ import 'package:intl/intl.dart';
 import 'package:app/constants/design.dart';
 
 class DateTimePicker extends StatefulWidget {
-  const DateTimePicker({super.key});
+  const DateTimePicker({super.key, this.notifier});
+
+  final ValueNotifier<DateTime>? notifier;
 
   @override
   _DateTimePickerState createState() => _DateTimePickerState();
 }
 
 class _DateTimePickerState extends State<DateTimePicker> {
-  DateTime selectedDate = DateTime.now();
-  TimeOfDay selectedTime = TimeOfDay.now();
+  late DateTime selectedDate;
+  late TimeOfDay selectedTime;
   final DateTime today = DateTime.now();
 
   Future<void> _selectDate() async {
@@ -25,6 +27,12 @@ class _DateTimePickerState extends State<DateTimePicker> {
         selectedDate;
     _selectTime();
     if (picked != selectedDate) {
+      if (widget.notifier != null) {
+        final d = widget.notifier!.value;
+        widget.notifier!.value =
+            DateTime(picked.year, picked.month, picked.day, d.hour, d.minute);
+      }
+
       setState(() {
         selectedDate = picked;
       });
@@ -38,9 +46,28 @@ class _DateTimePickerState extends State<DateTimePicker> {
         ) ??
         selectedTime;
     if (picked != selectedTime) {
+      if (widget.notifier != null) {
+        final d = widget.notifier!.value;
+        widget.notifier!.value =
+            DateTime(d.year, d.month, d.day, picked.hour, picked.minute);
+      }
+
       setState(() {
         selectedTime = picked;
       });
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+
+    if (widget.notifier != null) {
+      selectedDate = widget.notifier!.value;
+      selectedTime = TimeOfDay.fromDateTime(widget.notifier!.value);
+    } else {
+      selectedDate = DateTime.now();
+      selectedTime = TimeOfDay.now();
     }
   }
 

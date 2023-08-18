@@ -4,7 +4,6 @@ import 'package:app/widgets/custom/appbar.dart';
 import 'package:app/widgets/custom/card.dart';
 import 'package:app/widgets/custom/list_tile.dart';
 import 'package:app/widgets/custom_text.dart';
-import 'package:app/widgets/custom/snackbar.dart';
 import 'package:app/widgets/custom/button.dart';
 import 'package:app/widgets/custom/textfield.dart';
 import 'package:app/widgets/timepicker.dart';
@@ -19,6 +18,7 @@ class MeetAddScreen extends StatefulWidget {
 
 class _MeetAddScreenState extends State<MeetAddScreen> {
   PageController pageController = PageController();
+  int _currentPage = 0;
 
   final _formTitleKey = GlobalKey<FormState>();
   TextEditingController nameController = TextEditingController();
@@ -27,9 +27,12 @@ class _MeetAddScreenState extends State<MeetAddScreen> {
   TextEditingController descriptionController = TextEditingController();
   bool isLoading = false;
 
-  String? newUserId;
-  Set<Sport> filters = <Sport>{};
-  int _currentPage = 0;
+  ValueNotifier<bool> visibilityFriends = ValueNotifier<bool>(false);
+  ValueNotifier<bool> timeFlexible = ValueNotifier<bool>(false);
+  ValueNotifier<DateTime> dateTime = ValueNotifier<DateTime>(DateTime.now());
+  ValueNotifier<RangeValues> participantNumberRange =
+      ValueNotifier<RangeValues>(const RangeValues(1, 2));
+  Set<Sport> chosenActivities = <Sport>{};
 
   void previousPage() {
     pageController.previousPage(
@@ -114,15 +117,15 @@ class _MeetAddScreenState extends State<MeetAddScreen> {
               children: Sport.values.map((Sport exercise) {
                 return FilterChip(
                   label: CustomText(text: exercise.name),
-                  selected: filters.contains(exercise),
+                  selected: chosenActivities.contains(exercise),
                   selectedColor: DesignColors.naviColor,
                   showCheckmark: false,
                   onSelected: (bool selected) {
                     setState(() {
                       if (selected) {
-                        filters.add(exercise);
+                        chosenActivities.add(exercise);
                       } else {
-                        filters.remove(exercise);
+                        chosenActivities.remove(exercise);
                       }
                     });
                   },
@@ -152,11 +155,23 @@ class _MeetAddScreenState extends State<MeetAddScreen> {
       const SizedBox(
         height: 20,
       ),
-      const CustomCard(
+      CustomCard(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            DateTimePicker(),
+            CustomSwitch(
+                switchNotifier: timeFlexible,
+                textLeft: "Spezifische Zeit",
+                textRight: "Flexibel"),
+            ValueListenableBuilder(
+                valueListenable: timeFlexible,
+                builder: (context, flexible, child) {
+                  if (flexible) {
+                    return Container();
+                  } else {
+                    return DateTimePicker(notifier: dateTime);
+                  }
+                })
           ],
         ),
       ),
@@ -196,18 +211,18 @@ class _MeetAddScreenState extends State<MeetAddScreen> {
       const SizedBox(
         height: 20,
       ),
-      const CustomCard(
+      CustomCard(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            Row(
+            const Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 CustomText(text: "mindestes"),
                 CustomText(text: "maximal")
               ],
             ),
-            RangeSliderExample(),
+            RangeSliderExample(notifier: participantNumberRange),
           ],
         ),
       ),
@@ -268,7 +283,10 @@ class _MeetAddScreenState extends State<MeetAddScreen> {
             Container(
               alignment: Alignment.center,
               width: width,
-              child: const PrivatSwitch(),
+              child: CustomSwitch(
+                  switchNotifier: visibilityFriends,
+                  textLeft: "Öffentlich",
+                  textRight: "Nur Freunde"),
             )
           ],
         ),
@@ -311,21 +329,29 @@ class _MeetAddScreenState extends State<MeetAddScreen> {
         height: 20,
       ),
       ...rows,
-      SizedBox(height: 20),
+      const SizedBox(height: 20),
       CustomElevatedButton(onPressed: () {}, text: "Submit")
     ]));
   }
 }
 
 class RangeSliderExample extends StatefulWidget {
-  const RangeSliderExample({super.key});
+  const RangeSliderExample({super.key, this.notifier});
+
+  final ValueNotifier<RangeValues>? notifier;
 
   @override
   State<RangeSliderExample> createState() => _RangeSliderExampleState();
 }
 
 class _RangeSliderExampleState extends State<RangeSliderExample> {
-  RangeValues _currentRangeValues = const RangeValues(1, 2);
+  late RangeValues _currentRangeValues;
+
+  @override
+  void initState() {
+    super.initState();
+    _currentRangeValues = widget.notifier?.value ?? const RangeValues(1, 2);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -344,36 +370,53 @@ class _RangeSliderExampleState extends State<RangeSliderExample> {
         setState(() {
           _currentRangeValues = values;
         });
+
+        widget.notifier?.value = values;
       },
     );
   }
 }
 
-class PrivatSwitch extends StatefulWidget {
-  const PrivatSwitch({super.key});
+class CustomSwitch extends StatefulWidget {
+  const CustomSwitch(
+      {super.key,
+      this.switchNotifier,
+      required this.textLeft,
+      required this.textRight});
+
+  final ValueNotifier<bool>? switchNotifier;
+  final String textLeft;
+  final String textRight;
 
   @override
-  _PrivatSwitchState createState() => _PrivatSwitchState();
+  State<CustomSwitch> createState() => _CustomSwitchState();
 }
 
-class _PrivatSwitchState extends State<PrivatSwitch> {
-  bool _isSwitched = false;
+class _CustomSwitchState extends State<CustomSwitch> {
+  late bool _isSwitched;
+
+  @override
+  void initState() {
+    super.initState();
+    _isSwitched = widget.switchNotifier?.value ?? false;
+  }
 
   @override
   Widget build(BuildContext context) {
     return Row(
       mainAxisSize: MainAxisSize.min,
       children: [
-        const SystemText(text: 'Öffentlich'),
+        SystemText(text: widget.textLeft),
         Switch(
           value: _isSwitched,
           onChanged: (value) {
+            widget.switchNotifier?.value = value;
             setState(() {
               _isSwitched = value;
             });
           },
         ),
-        const SystemText(text: 'nur Freude'),
+        SystemText(text: widget.textRight),
       ],
     );
   }
