@@ -107,45 +107,36 @@ class InfoContainer extends StatelessWidget {
     }
 
     return Column(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: <Widget>[
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Padding(
-                padding: const EdgeInsets.only(left: 8.0),
-                child: MediumText(text: title, width: width)
-                /*
-            Text(
-            ,
-            textAlign: TextAlign.center,
-            style: const TextStyle(
-                color: DesignColors.naviColor,
-                // fontSize: 24.0,
-                fontWeight: FontWeight.bold),
-          ),*/
-                ),
+            Spacer(),
+            Flexible(
+              child: RatingSummary(count: count, average: avg),
+            ),
             IconButton(
                 onPressed: () {},
                 icon: Icon(
-                  Icons.star,
+                  Icons.favorite,
                   color: DesignColors.naviColor,
-                ))
+                )),
           ],
         ),
-        const Spacer(),
-        RatingSummary(count: count, average: avg),
-        const Spacer(),
-        LittleText(text: "KM entfernt", width: width),
-        /*
-        Text(
-          "KM entfernt",
-          style: TextStyle(
-              color: Colors.black54,
-              // fontSize: 18.0,
-              fontWeight: FontWeight.bold),
+        Flexible(
+          child: Text(
+            title,
+            overflow: TextOverflow.ellipsis,
+            maxLines: 1,
+            style: TextStyle(
+                color: Colors.black54,
+                fontWeight: FontWeight.bold,
+                fontSize: width * 0.05),
+          ),
         ),
-        */
-        const Spacer(),
+        Spacer(),
+        LittleText(text: "Bar - 2 km entfernt", width: width),
       ],
     );
   }
