@@ -72,14 +72,12 @@ class ButtonBack extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return FloatingActionButton.small(
-      backgroundColor: DesignColors.naviColor,
-      onPressed: () {},
-      child: Icon(
-        Icons.arrow_back,
-        size: 20,
-        color: Colors.white70,
+    return IconButton(
+      icon: CircleAvatar(
+        child: Icon(Icons.arrow_back),
+        backgroundColor: DesignColors.naviColor,
       ),
+      onPressed: onPressed,
     );
   }
 }
@@ -94,14 +92,12 @@ class ButtonMenu extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return FloatingActionButton.small(
-      backgroundColor: DesignColors.naviColor,
-      onPressed: () {},
-      child: Icon(
-        Icons.menu,
-        size: 20,
-        color: Colors.white70,
+    return IconButton(
+      icon: CircleAvatar(
+        child: Icon(Icons.menu),
+        backgroundColor: DesignColors.naviColor,
       ),
+      onPressed: onPressed,
     );
   }
 }
@@ -116,14 +112,12 @@ class ButtonCancel extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return FloatingActionButton.small(
-      backgroundColor: DesignColors.naviColor,
-      onPressed: () {},
-      child: Icon(
-        Icons.close,
-        size: 20,
-        color: Colors.white70,
+    return IconButton(
+      icon: CircleAvatar(
+        child: Icon(Icons.close),
+        backgroundColor: DesignColors.naviColor,
       ),
+      onPressed: onPressed,
     );
   }
 }
