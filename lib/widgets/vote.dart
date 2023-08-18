@@ -75,7 +75,6 @@ class RatingSummary extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
         RatingScore(score: average),
         SmallText(text: "(${count ?? '?'})"),

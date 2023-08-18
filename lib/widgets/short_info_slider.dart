@@ -111,41 +111,40 @@ class InfoContainer extends StatelessWidget {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Padding(
+            Flexible(
+              child: Padding(
                 padding: const EdgeInsets.only(left: 8.0),
-                child: MediumText(text: title, width: width)
-                /*
-            Text(
-            ,
-            textAlign: TextAlign.center,
-            style: const TextStyle(
-                color: DesignColors.naviColor,
-                // fontSize: 24.0,
-                fontWeight: FontWeight.bold),
-          ),*/
+                child: Text(
+                  title,
+                  overflow: TextOverflow.ellipsis,
+                  maxLines: 1,
+                  style: TextStyle(
+                      color: Colors.black54,
+                      fontWeight: FontWeight.bold,
+                      fontSize: width * 0.04),
                 ),
+              ),
+            ),
             IconButton(
                 onPressed: () {},
                 icon: Icon(
                   Icons.star,
                   color: DesignColors.naviColor,
-                ))
+                )),
           ],
         ),
-        const Spacer(),
-        RatingSummary(count: count, average: avg),
-        const Spacer(),
-        LittleText(text: "KM entfernt", width: width),
-        /*
-        Text(
-          "KM entfernt",
-          style: TextStyle(
-              color: Colors.black54,
-              // fontSize: 18.0,
-              fontWeight: FontWeight.bold),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Flexible(
+              child: Padding(
+                padding: const EdgeInsets.only(left: 8.0),
+                child: RatingSummary(count: count, average: avg),
+              ),
+            ),
+            LittleText(text: "KM entfernt", width: width),
+          ],
         ),
-        */
-        const Spacer(),
       ],
     );
   }
