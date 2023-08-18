@@ -415,8 +415,9 @@ class _RangeSliderExampleState extends State<RangeSliderExample> {
       activeColor: DesignColors.rangeactive,
       inactiveColor: DesignColors.inactive,
       values: _currentRangeValues,
+      min: 1,
       max: 30,
-      divisions: 30,
+      divisions: 29,
       labels: RangeLabels(
         _currentRangeValues.start.round().toString(),
         _currentRangeValues.end.round().toString(),
