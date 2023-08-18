@@ -6,17 +6,17 @@ import 'package:app/widgets/custom_text.dart';
 import 'package:app/widgets/custom/snackbar.dart';
 import 'package:app/widgets/custom/button.dart';
 import 'package:app/widgets/custom/textfield.dart';
-import 'package:app/widgets/timepicker.dart';
+import 'package:app/widgets/photo_picker.dart';
 import 'package:flutter/material.dart';
 
-class MeetAddScreen extends StatefulWidget {
-  const MeetAddScreen({Key? key}) : super(key: key);
+class LocationAddScreen extends StatefulWidget {
+  const LocationAddScreen({Key? key}) : super(key: key);
 
   @override
-  State<MeetAddScreen> createState() => _MeetAddScreenState();
+  State<LocationAddScreen> createState() => _LocationAddScreenState();
 }
 
-class _MeetAddScreenState extends State<MeetAddScreen> {
+class _LocationAddScreenState extends State<LocationAddScreen> {
   PageController pageController = PageController();
 
   final _formTitleKey = GlobalKey<FormState>();
@@ -27,7 +27,9 @@ class _MeetAddScreenState extends State<MeetAddScreen> {
   bool isLoading = false;
 
   String? newUserId;
-  Set<Sport> filters = <Sport>{};
+
+  Set<Place> filtersPlace = <Place>{};
+  Set<Sport> filtersSport = <Sport>{};
   @override
   void previousPage() {
     pageController.previousPage(
@@ -43,23 +45,23 @@ class _MeetAddScreenState extends State<MeetAddScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-          elevation: 0.0,
-          backgroundColor: DesignColors.kBackgroundColor,
-          leading: ButtonCancel(
-            onPressed: () {
-              Navigator.pop(context);
-            },
-          )),
+        elevation: 0.0,
+        backgroundColor: DesignColors.kBackgroundColor,
+        leading: ButtonCancel(
+          onPressed: () {
+            Navigator.pop(context);
+          },
+        ),
+      ),
       body: PageView(
         physics: const NeverScrollableScrollPhysics(),
         controller: pageController,
         children: <Widget>[
           activity(),
-          whan(),
-          howMany(),
+          privatorpublic(),
           where(),
           titleanddescription(),
-          privat(),
+          pickPhoto(),
         ],
       ),
     );
@@ -73,7 +75,7 @@ class _MeetAddScreenState extends State<MeetAddScreen> {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          TitleText(text: "Was willst du spielen?", width: width),
+          TitleText(text: "Welche Sportmöglichkeiten gibt es ?", width: width),
           const SizedBox(
             height: 20,
           ),
@@ -88,15 +90,15 @@ class _MeetAddScreenState extends State<MeetAddScreen> {
                   children: Sport.values.map((Sport exercise) {
                     return FilterChip(
                       label: CustomText(text: exercise.name),
-                      selected: filters.contains(exercise),
+                      selected: filtersSport.contains(exercise),
                       selectedColor: DesignColors.naviColor,
                       showCheckmark: false,
                       onSelected: (bool selected) {
                         setState(() {
                           if (selected) {
-                            filters.add(exercise);
+                            filtersSport.add(exercise);
                           } else {
-                            filters.remove(exercise);
+                            filtersSport.remove(exercise);
                           }
                         });
                       },
@@ -135,7 +137,7 @@ class _MeetAddScreenState extends State<MeetAddScreen> {
     );
   }
 
-  Center whan() {
+  Center privatorpublic() {
     var size = MediaQuery.of(context).size;
 
     double width = size.width;
@@ -143,20 +145,46 @@ class _MeetAddScreenState extends State<MeetAddScreen> {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          TitleText(text: "Wann willst du spielen?", width: width),
+          TitleText(text: "Wo befindet der Platz ?", width: width),
           const SizedBox(
             height: 20,
           ),
-          const CustomCard(
+          CustomCard(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
-                DateTimePicker(),
+                Wrap(
+                  crossAxisAlignment: WrapCrossAlignment.center,
+                  alignment: WrapAlignment.center,
+                  spacing: 5.0,
+                  children: Place.values.map((Place exercise) {
+                    return FilterChip(
+                      label: CustomText(text: exercise.name),
+                      selected: filtersPlace.contains(exercise),
+                      selectedColor: DesignColors.naviColor,
+                      showCheckmark: false,
+                      onSelected: (bool selected) {
+                        setState(() {
+                          if (selected) {
+                            filtersPlace.add(exercise);
+                          } else {
+                            filtersPlace.remove(exercise);
+                          }
+                        });
+                      },
+                    );
+                  }).toList(),
+                ),
+                Container(
+                  alignment: Alignment.center,
+                  width: width,
+                  child: const PrivatSwitch(
+                    secondText: 'Öffentlich',
+                    firstText: 'Privat Gelände',
+                  ),
+                )
               ],
             ),
-          ),
-          const SizedBox(
-            height: 20,
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -188,65 +216,13 @@ class _MeetAddScreenState extends State<MeetAddScreen> {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          TitleText(text: "Wo willst du spielen?", width: width),
+          TitleText(text: "Wo sind die Sport anlagen?", width: width),
           const SizedBox(
             height: 20,
           ),
           CustomListTile(
             onPressed: () {},
             titleText: "Pick Location",
-          ),
-          const SizedBox(
-            height: 20,
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              CustomElevatedButton(
-                onPressed: () {
-                  previousPage();
-                },
-                text: "Previous",
-              ),
-              CustomElevatedButton(
-                onPressed: () {
-                  nextPage();
-                },
-                text: "Next",
-              ),
-            ],
-          )
-        ],
-      ),
-    );
-  }
-
-  Center howMany() {
-    var size = MediaQuery.of(context).size;
-
-    double width = size.width;
-    return Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          TitleText(text: "Wie viele Mitspielende brauchst du?", width: width),
-          const SizedBox(
-            height: 20,
-          ),
-          const CustomCard(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    CustomText(text: "mindestes"),
-                    CustomText(text: "maximal")
-                  ],
-                ),
-                RangeSliderExample(),
-              ],
-            ),
           ),
           const SizedBox(
             height: 20,
@@ -294,21 +270,7 @@ class _MeetAddScreenState extends State<MeetAddScreen> {
                   Padding(
                       padding: const EdgeInsets.only(left: 9.0, top: 15.0),
                       child: CustomTextField(
-                          streetController: nameController, label: 'Titel')
-                      /*TextFormField(
-                              controller: nameController,
-                              onChanged: (v) => nameController.text = v,
-                              decoration: const InputDecoration(
-                                hintText: 'Titel',
-                                border: AppInputBorders.border,
-                                focusedErrorBorder:
-                                    AppInputBorders.focusedError,
-                                errorBorder: AppInputBorders.error,
-                                enabledBorder: AppInputBorders.enabled,
-                                focusedBorder: AppInputBorders.focused,
-                              ),
-                            ),*/
-                      ),
+                          streetController: nameController, label: 'Titel')),
                   Padding(
                     padding: const EdgeInsets.only(left: 9.0, top: 15.0),
                     child: DescriptionTextFieldwithoutBorder(
@@ -349,7 +311,7 @@ class _MeetAddScreenState extends State<MeetAddScreen> {
     );
   }
 
-  Center privat() {
+  Center pickPhoto() {
     var size = MediaQuery.of(context).size;
 
     double width = size.width;
@@ -357,21 +319,19 @@ class _MeetAddScreenState extends State<MeetAddScreen> {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          TitleText(
-              text: "Für wen soll das Angebot sichtbar sein?", width: width),
+          TitleText(text: "Füge noch ein paar Bilder hinzu", width: width),
           const SizedBox(
             height: 20,
           ),
-          CustomCard(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                Container(
-                  alignment: Alignment.center,
-                  width: width,
-                  child: const PrivatSwitch(),
-                )
-              ],
+          Padding(
+            padding: const EdgeInsets.all(9.0),
+            child: TextButton(
+              onPressed: () => bottomSheetPhotoSourcePicker(
+                  context: context, mode: "location", locationId: 'asdas'),
+              //TODO
+              child: const SmallText(
+                text: "Bilder hochladen",
+              ),
             ),
           ),
           const SizedBox(
@@ -430,8 +390,14 @@ class _RangeSliderExampleState extends State<RangeSliderExample> {
 }
 
 class PrivatSwitch extends StatefulWidget {
-  const PrivatSwitch({super.key});
+  const PrivatSwitch({
+    super.key,
+    required this.firstText,
+    required this.secondText,
+  });
 
+  final String firstText;
+  final String secondText;
   @override
   _PrivatSwitchState createState() => _PrivatSwitchState();
 }
@@ -444,7 +410,7 @@ class _PrivatSwitchState extends State<PrivatSwitch> {
     return Row(
       mainAxisSize: MainAxisSize.min,
       children: [
-        const SystemText(text: 'Öffentlich'),
+        SystemText(text: widget.firstText),
         Switch(
           value: _isSwitched,
           onChanged: (value) {
@@ -453,7 +419,7 @@ class _PrivatSwitchState extends State<PrivatSwitch> {
             });
           },
         ),
-        const SystemText(text: 'nur Freude'),
+        SystemText(text: widget.secondText),
       ],
     );
   }
