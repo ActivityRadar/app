@@ -13,6 +13,16 @@ enum Sport {
   Rodelsport
 }
 
+enum Place {
+  bar,
+  spielplatz,
+  hinterhof,
+  schulgeleande,
+  im_gebeaude,
+  club,
+  park
+}
+
 Map<String, String> shortSports = {
   "9pin": "Kegeln",
   "10pin": "Bowling",

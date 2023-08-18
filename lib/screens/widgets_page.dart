@@ -1,3 +1,4 @@
+import 'package:app/screens/location_add.dart';
 import 'package:app/screens/meet_add.dart';
 import 'package:app/widgets/custom/button.dart';
 import 'package:app/widgets/meet_card.dart';
@@ -54,6 +55,17 @@ class ProfileBar extends StatelessWidget {
                   context,
                   MaterialPageRoute(
                     builder: (context) => const MeetAddScreen(),
+                  ),
+                );
+              },
+              text: "Add Meet2",
+            ),
+            CustomElevatedButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const LocationAddScreen(),
                   ),
                 );
               },
