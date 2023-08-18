@@ -45,11 +45,8 @@ class _MeetAddScreenState extends State<MeetAddScreen> {
       appBar: AppBar(
           elevation: 0.0,
           backgroundColor: DesignColors.kBackgroundColor,
-          leading: CustomTextButton(
-            onPressed: () {
-              Navigator.pop(context);
-            },
-            text: "Cancel",
+          leading: ButtonBack(
+            onPressed: () {},
           )),
       body: PageView(
         physics: const NeverScrollableScrollPhysics(),

@@ -61,3 +61,63 @@ class CustomElevatedButton extends StatelessWidget {
     );
   }
 }
+
+class ButtonBack extends StatelessWidget {
+  const ButtonBack({
+    super.key,
+    required this.onPressed,
+  });
+
+  final VoidCallback onPressed;
+
+  @override
+  Widget build(BuildContext context) {
+    return IconButton(
+      icon: CircleAvatar(
+        child: Icon(Icons.arrow_back),
+        backgroundColor: DesignColors.naviColor,
+      ),
+      onPressed: onPressed,
+    );
+  }
+}
+
+class ButtonMenu extends StatelessWidget {
+  const ButtonMenu({
+    super.key,
+    required this.onPressed,
+  });
+
+  final VoidCallback onPressed;
+
+  @override
+  Widget build(BuildContext context) {
+    return IconButton(
+      icon: CircleAvatar(
+        child: Icon(Icons.menu),
+        backgroundColor: DesignColors.naviColor,
+      ),
+      onPressed: onPressed,
+    );
+  }
+}
+
+class ButtonCancel extends StatelessWidget {
+  const ButtonCancel({
+    super.key,
+    required this.onPressed,
+  });
+
+  final VoidCallback onPressed;
+
+  @override
+  Widget build(BuildContext context) {
+    return IconButton(
+      icon: CircleAvatar(
+        child: Icon(Icons.close),
+        backgroundColor: DesignColors.naviColor,
+      ),
+      onPressed: onPressed,
+    );
+  }
+}

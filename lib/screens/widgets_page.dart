@@ -39,6 +39,15 @@ class ProfileBar extends StatelessWidget {
               height: 200, // Höhe der Karte
               child: MeetCard(),
             ),
+            ButtonCancel(
+              onPressed: () {},
+            ),
+            ButtonMenu(
+              onPressed: () {},
+            ),
+            ButtonBack(
+              onPressed: () {},
+            ),
             CustomElevatedButton(
               onPressed: () {
                 Navigator.push(
