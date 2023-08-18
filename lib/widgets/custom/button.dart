@@ -61,3 +61,69 @@ class CustomElevatedButton extends StatelessWidget {
     );
   }
 }
+
+class ButtonBack extends StatelessWidget {
+  const ButtonBack({
+    super.key,
+    required this.onPressed,
+  });
+
+  final VoidCallback onPressed;
+
+  @override
+  Widget build(BuildContext context) {
+    return FloatingActionButton.small(
+      backgroundColor: DesignColors.naviColor,
+      onPressed: () {},
+      child: Icon(
+        Icons.arrow_back,
+        size: 20,
+        color: Colors.white70,
+      ),
+    );
+  }
+}
+
+class ButtonMenu extends StatelessWidget {
+  const ButtonMenu({
+    super.key,
+    required this.onPressed,
+  });
+
+  final VoidCallback onPressed;
+
+  @override
+  Widget build(BuildContext context) {
+    return FloatingActionButton.small(
+      backgroundColor: DesignColors.naviColor,
+      onPressed: () {},
+      child: Icon(
+        Icons.menu,
+        size: 20,
+        color: Colors.white70,
+      ),
+    );
+  }
+}
+
+class ButtonCancel extends StatelessWidget {
+  const ButtonCancel({
+    super.key,
+    required this.onPressed,
+  });
+
+  final VoidCallback onPressed;
+
+  @override
+  Widget build(BuildContext context) {
+    return FloatingActionButton.small(
+      backgroundColor: DesignColors.naviColor,
+      onPressed: () {},
+      child: Icon(
+        Icons.close,
+        size: 20,
+        color: Colors.white70,
+      ),
+    );
+  }
+}
