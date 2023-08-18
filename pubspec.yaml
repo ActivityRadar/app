@@ -58,6 +58,7 @@ dependencies:
   flutter_image_compress: ^2.0.4
   location: ^5.0.0
   shared_preferences: ^2.2.0
+  flutter_svg: ^2.0.7
 
 dependency_overrides:
   http: ^1.1.0 # needed to update aws_s3_api dependency
