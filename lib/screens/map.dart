@@ -169,13 +169,16 @@ class ActivityMarkerMap extends StatefulWidget {
 }
 
 class _ActivityMarkerMapState extends State<ActivityMarkerMap>
-    with TickerProviderStateMixin {
+    with TickerProviderStateMixin, AutomaticKeepAliveClientMixin {
   late LatLngBounds bounds;
   List<LocationMarker> markers = [];
   late final AnimatedMapController mapController =
       AnimatedMapController(vsync: this);
   String? focusedLocationId;
   CircleLayer? currentPositionLayer;
+
+  @override
+  get wantKeepAlive => true;
 
   void onMapEvent(MapEvent event, BuildContext context) {
     final s = Provider.of<AppState>(context, listen: false);
@@ -313,6 +316,8 @@ class _ActivityMarkerMapState extends State<ActivityMarkerMap>
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
+
     const maxBubbleSize = 40;
     const minBubbleSize = 15;
     const exponent = 1.3;
