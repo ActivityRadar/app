@@ -121,3 +121,38 @@ class ButtonCancel extends StatelessWidget {
     );
   }
 }
+
+class ButtonBookMark extends StatefulWidget {
+  @override
+  _ButtonBookMarkState createState() => _ButtonBookMarkState();
+}
+
+class _ButtonBookMarkState extends State<ButtonBookMark> {
+  bool isIconSwitched = false;
+
+  void toggleIcon() {
+    setState(() {
+      isIconSwitched = !isIconSwitched;
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return ElevatedButton(
+      onPressed: () {
+        toggleIcon();
+      },
+      style: ButtonStyle(
+        backgroundColor: MaterialStateProperty.all(DesignColors.naviColor),
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          isIconSwitched ? Icon(Icons.bookmark_added) : Icon(Icons.bookmark),
+          SizedBox(width: 8.0),
+          Text('Merken'),
+        ],
+      ),
+    );
+  }
+}
