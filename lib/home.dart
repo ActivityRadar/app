@@ -1,5 +1,4 @@
 import 'package:app/app_state.dart';
-import 'package:app/screens/community.dart';
 import 'package:app/screens/start.dart';
 import 'package:app/screens/map.dart';
 import 'package:app/screens/settings.dart';
@@ -16,19 +15,31 @@ class Home extends StatefulWidget {
   const Home({super.key});
 
   @override
-  _HomeState createState() => _HomeState();
+  State<Home> createState() => _HomeState();
 }
 
 class _HomeState extends State<Home> with WidgetsBindingObserver {
-  int currentTab = 0;
   final List<Widget> screens = [
     const HomeScreen(),
-    const SettingScreen(),
     const MapScreen(),
-    const CommunityScreen()
+    const TestWidget(),
+    const SettingScreen(),
   ];
-  final PageStorageBucket bucket = PageStorageBucket();
+
+  PageController pageController = PageController();
+
+  int currentTab = 0;
   Widget currentScreen = const HomeScreen();
+
+  void onTap(int index) {
+    if (currentTab != index) {
+      pageController.jumpToPage(index);
+      currentScreen = screens[index];
+      setState(() {
+        currentTab = index;
+      });
+    }
+  }
 
   @override
   void initState() {
@@ -63,9 +74,10 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
     var x = width / 4.5;
     return Scaffold(
       extendBody: true,
-      body: PageStorage(
-        bucket: bucket,
-        child: currentScreen,
+      body: PageView(
+        controller: pageController,
+        onPageChanged: onTap,
+        children: screens,
       ),
       floatingActionButton: showFAB
           ? FloatingActionButton(
@@ -92,8 +104,7 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
                     minWidth: x,
                     onPressed: () {
                       setState(() {
-                        currentScreen = const HomeScreen();
-                        currentTab = 0;
+                        onTap(0);
                       });
                     },
                     child: Column(
@@ -110,8 +121,7 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
                     minWidth: x,
                     onPressed: () {
                       setState(() {
-                        currentScreen = const MapScreen();
-                        currentTab = 1;
+                        onTap(1);
                       });
                     },
                     child: Column(
@@ -134,33 +144,31 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
                     minWidth: x,
                     onPressed: () {
                       setState(() {
-                        currentScreen = const TestWidget();
-                        currentTab = 3;
+                        onTap(2);
                       });
                     },
                     child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           NaviIcon(
-                              icon: Icons.group, currentTab: currentTab == 3),
+                              icon: Icons.group, currentTab: currentTab == 2),
                           NaviText(
-                              text: 'Community', currentTab: currentTab == 3),
+                              text: 'Community', currentTab: currentTab == 2),
                         ]),
                   ),
                   MaterialButton(
                     minWidth: x,
                     onPressed: () {
                       setState(() {
-                        currentScreen = const SettingScreen();
-                        currentTab = 4;
+                        onTap(3);
                       });
                     },
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         NaviIcon(
-                            icon: Icons.settings, currentTab: currentTab == 4),
-                        NaviText(text: "Setting", currentTab: currentTab == 4),
+                            icon: Icons.settings, currentTab: currentTab == 3),
+                        NaviText(text: "Setting", currentTab: currentTab == 3),
                       ],
                     ),
                   ),
