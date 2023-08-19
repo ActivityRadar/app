@@ -112,13 +112,11 @@ class InfoContainer extends StatelessWidget {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Spacer(),
-            Flexible(
-              child: RatingSummary(count: count, average: avg),
-            ),
+            const Spacer(),
+            RatingSummary(count: count, average: avg),
             IconButton(
                 onPressed: () {},
-                icon: Icon(
+                icon: const Icon(
                   Icons.favorite,
                   color: DesignColors.naviColor,
                 )),
@@ -135,7 +133,7 @@ class InfoContainer extends StatelessWidget {
                 fontSize: width * 0.05),
           ),
         ),
-        Spacer(),
+        const Spacer(),
         LittleText(text: "Bar - 2 km entfernt", width: width),
       ],
     );
