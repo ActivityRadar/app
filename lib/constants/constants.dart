@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:app/constants/design.dart';
 import 'dart:core';
+import 'package:flutter_svg/flutter_svg.dart';
 
 enum ReviewPopupMenuItem { report }
 
@@ -63,4 +65,8 @@ class AssetImages {
       AssetImage("assets/images/locationPhotoPlaceholder.jpg");
   static const avatarError =
       AssetImage("assets/images/locationPhotoPlaceholder.jpg");
+  static Widget backgroundAR = SvgPicture.asset("assets/images/background.svg",
+      colorFilter:
+          ColorFilter.mode(Color.fromARGB(22, 248, 248, 248), BlendMode.srcIn),
+      semanticsLabel: 'BackgroundDetails Screen');
 }
