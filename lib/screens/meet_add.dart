@@ -68,6 +68,7 @@ class _MeetAddScreenState extends State<MeetAddScreen> {
     setState(() {
       _currentPage++;
     });
+    FocusScope.of(context).unfocus();
   }
 
   @override
