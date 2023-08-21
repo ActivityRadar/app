@@ -1,37 +1,51 @@
+import 'dart:convert';
+
+import 'package:flutter/services.dart';
 import 'package:fuzzywuzzy/fuzzywuzzy.dart' as fuzzy;
 import 'package:fuzzywuzzy/ratios/partial_ratio.dart';
 
 class ActivityManager {
   late final Map<String, String> _displayToBackend;
-  late final Map<String, String> _backendtoDisplay;
+  late final Map<String, String> _backendToDisplay;
 
   late List<String> _allDisplayTypes;
   late List<String> _allBackendTypes;
 
-  ActivityManager() {
-    // TODO: load these from shared json files
-    _displayToBackend = {
-      "Fussball": "soccer",
-      "Basketball": "basketball",
-      "Schwimmen": "swimming",
-      "Tischtennis": "table_tennis",
-      "Aikido": "aikido",
-      "Bowling": "10pin",
-      "Kegeln": "9pin",
-    };
+  ActivityManager._create(Map<String, List<String>> backendToDisplay) {
+    _backendToDisplay = {};
+    _displayToBackend = {};
 
-    _backendtoDisplay = {
-      "soccer": "Fussball",
-      "basketball": "Basketball",
-      "swimming": "Schwimmen",
-      "table_tennis": "Tischtennis",
-      "aikido": "Aikido",
-      "10pin": "Bowling",
-      "9pin": "Kegeln",
-    };
+    for (var entry in backendToDisplay.entries) {
+      _backendToDisplay[entry.key] =
+          entry.value.isEmpty ? entry.key : entry.value[0];
+
+      for (var name in entry.value) {
+        _displayToBackend[name] = entry.key;
+      }
+
+      if (entry.value.isEmpty) {
+        _displayToBackend[entry.key] = entry.key;
+      }
+    }
 
     _allDisplayTypes = _displayToBackend.keys.toList();
-    _allBackendTypes = _backendtoDisplay.keys.toList();
+    _allBackendTypes = _backendToDisplay.keys.toList();
+  }
+
+  static Future<ActivityManager> create() async {
+    // TODO: load these depending on the language
+    final String response =
+        await rootBundle.loadString('shared/lang/de-DE.json');
+    final data = await jsonDecode(response);
+
+    final Map<String, List<String>> names = {};
+
+    for (var entry in data.entries) {
+      names[entry.key] =
+          data[entry.key]["names"].map<String>((s) => s as String).toList();
+    }
+
+    return ActivityManager._create(names);
   }
 
   String getBackendType(String displayType) {
@@ -39,7 +53,7 @@ class ActivityManager {
   }
 
   String getDisplayType(String backendType) {
-    return _backendtoDisplay[backendType] ?? "";
+    return _backendToDisplay[backendType] ?? "";
   }
 
   List<String> getAllDisplayTypes() {
