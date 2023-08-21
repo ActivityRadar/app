@@ -49,7 +49,7 @@ class PasswordSwitch extends StatelessWidget {
                       const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
                   child: PasswordTextFormField(
                     controller: oldPasswordController,
-                    labelText: "old Password",
+                    label: "old Password",
                     validator: (value) {
                       if (value == null || value.isEmpty) {
                         return 'Please enter your old Password';
@@ -71,7 +71,7 @@ class PasswordSwitch extends StatelessWidget {
                       const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
                   child: PasswordTextFormField(
                     controller: newPasswordController,
-                    labelText: 'new Password',
+                    label: 'new Password',
                     validator: (value) {
                       if (value == null || value.isEmpty) {
                         return 'Please enter your new Password';
@@ -96,7 +96,7 @@ class PasswordSwitch extends StatelessWidget {
 
                       return null;
                     },
-                    labelText: "new Password",
+                    label: "new Password",
                     controller: newPasswordRepeatController),
               ),
               const Padding(

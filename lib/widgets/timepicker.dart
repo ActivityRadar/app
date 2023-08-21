@@ -55,11 +55,11 @@ class _DateTimePickerState extends State<DateTimePicker> {
       children: <Widget>[
         CustomListTile(
             icon: Icon(AppIcons.calendarToday),
-            titleText: "Datum: $formattedDate",
+            text: "Datum: $formattedDate",
             onPressed: _selectDate),
         CustomListTile(
             icon: Icon(AppIcons.accessTime),
-            titleText: "Uhrzeit: $formattedTime",
+            text: "Uhrzeit: $formattedTime",
             onPressed: _selectTime),
       ],
     );

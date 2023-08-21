@@ -99,7 +99,7 @@ class DisplayNameSwitch extends StatelessWidget {
                             horizontal: 8, vertical: 16),
                         child: UsernameTextFormField(
                           controller: usernameController,
-                          labelText: "Nutzername",
+                          label: "Nutzername",
                           validator: (value) {
                             if (value == null || value.isEmpty) {
                               return 'Please enter your Username';
@@ -134,7 +134,7 @@ class DisplayNameSwitch extends StatelessWidget {
                             horizontal: 8, vertical: 16),
                         child: CustomTextFormField(
                           controller: displaynameController,
-                          labelText: "Anzeigename",
+                          label: "Anzeigename",
                           validator: (value) {
                             if (!RegExps.displayname.hasMatch(value!)) {
                               return "Displayname is wrong";
@@ -213,14 +213,14 @@ Future<void> bottomSheetAvatarAction(BuildContext context) async {
                   // TODO: do something to show the user that the photo is gone
                 },
                 icon: Icon(Icons.delete),
-                titleText: "Delete current photo",
+                text: "Delete current photo",
               ),
               CustomListTile(
                 onPressed: () {
                   avatarPicker(context, userId).then((_) => updateAndReturn());
                 },
                 icon: Icon(AppIcons.upload),
-                titleText: "Set new photo",
+                text: "Set new photo",
               )
             ],
           );

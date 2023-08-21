@@ -47,7 +47,7 @@ class EmailSwitch extends StatelessWidget {
                     const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
                 child: EmailTextFormField(
                   controller: emailController,
-                  labelText: "email",
+                  label: "email",
                   validator: (value) {
                     if (value != null || value!.isEmpty) {
                       if (!RegExps.email.hasMatch(value)) {

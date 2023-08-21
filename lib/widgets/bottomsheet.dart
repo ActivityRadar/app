@@ -32,7 +32,7 @@ Future<dynamic> bottomSheetAdd(BuildContext context) {
             children: <Widget>[
               CustomListTile(
                 icon: const Icon(AppIcons.pushPin),
-                titleText: "Add Location",
+                text: "Add Location",
                 onPressed: () {
                   Navigator.push(
                     context,
@@ -43,8 +43,8 @@ Future<dynamic> bottomSheetAdd(BuildContext context) {
                 },
               ),
               CustomListTile(
-                icon: const Icon(AppIcons.event),
-                titleText: "Add Event",
+                icon: const Icon(Icons.event),
+                text: "Add Event",
                 onPressed: () {},
               ),
             ],
@@ -172,11 +172,11 @@ Future<void> reviewBottomSheet(
                   padding: const EdgeInsets.only(left: 9.0, top: 15.0),
                   child: Column(children: [
                     DescriptionTextFormField(
-                        textController: titleController,
+                        controller: titleController,
                         hint: "Title",
                         maxLines: 1),
                     DescriptionTextFormField(
-                        textController: textController,
+                        controller: textController,
                         hint: 'Description',
                         maxLines: 5),
                   ]),

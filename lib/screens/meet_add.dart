@@ -194,7 +194,7 @@ class _MeetAddScreenState extends State<MeetAddScreen> {
           ),
           CustomListTile(
             onPressed: () {},
-            titleText: "Pick Location",
+            text: "Pick Location",
           ),
           const SizedBox(
             height: 20,
@@ -294,7 +294,7 @@ class _MeetAddScreenState extends State<MeetAddScreen> {
                   Padding(
                       padding: const EdgeInsets.only(left: 9.0, top: 15.0),
                       child: CustomTextField(
-                          streetController: nameController, label: 'Titel')
+                          controller: nameController, label: 'Titel')
                       /*TextFormField(
                               controller: nameController,
                               onChanged: (v) => nameController.text = v,

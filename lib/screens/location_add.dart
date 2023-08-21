@@ -222,7 +222,7 @@ class _LocationAddScreenState extends State<LocationAddScreen> {
           ),
           CustomListTile(
             onPressed: () {},
-            titleText: "Pick Location",
+            text: "Pick Location",
           ),
           const SizedBox(
             height: 20,
@@ -270,7 +270,7 @@ class _LocationAddScreenState extends State<LocationAddScreen> {
                   Padding(
                       padding: const EdgeInsets.only(left: 9.0, top: 15.0),
                       child: CustomTextField(
-                          streetController: nameController, label: 'Titel')),
+                          controller: nameController, label: 'Titel')),
                   Padding(
                     padding: const EdgeInsets.only(left: 9.0, top: 15.0),
                     child: DescriptionTextFieldwithoutBorder(

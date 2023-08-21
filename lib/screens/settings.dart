@@ -173,7 +173,7 @@ class SettingScreen extends StatelessWidget {
                     ),
                   );
                 },
-                titleText: "Username and Displayname"),
+                text: "Username and Displayname"),
             const Divider(height: 0),
             TwoListTile(
               onPressed: () {
@@ -210,7 +210,7 @@ class SettingScreen extends StatelessWidget {
                     ),
                   );
                 },
-                titleText: "Password"),
+                text: "Password"),
             const Divider(height: 0),
             CustomListTile(
                 onPressed: () {
@@ -221,7 +221,7 @@ class SettingScreen extends StatelessWidget {
                     ),
                   );
                 },
-                titleText: "Privacy"),
+                text: "Privacy"),
           ],
         ),
       ),
@@ -248,9 +248,9 @@ class SettingScreen extends StatelessWidget {
             valueText: 'English',
           ),
           const Divider(height: 0),
-          CustomListTile(onPressed: () {}, titleText: "Map"),
+          CustomListTile(onPressed: () {}, text: "Map"),
           const Divider(height: 0),
-          CustomListTile(onPressed: () {}, titleText: "Farbe"),
+          CustomListTile(onPressed: () {}, text: "Farbe"),
         ]),
       )
     ];
@@ -271,11 +271,11 @@ class SettingScreen extends StatelessWidget {
       CustomCard(
         child: Column(
           children: [
-            CustomListTile(onPressed: () {}, titleText: "data protection"),
+            CustomListTile(onPressed: () {}, text: "data protection"),
             const Divider(height: 0),
-            CustomListTile(onPressed: () {}, titleText: "AGB"),
+            CustomListTile(onPressed: () {}, text: "AGB"),
             const Divider(height: 0),
-            CustomListTile(onPressed: () {}, titleText: "Impressum"),
+            CustomListTile(onPressed: () {}, text: "Impressum"),
           ],
         ),
       )

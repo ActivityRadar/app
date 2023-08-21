@@ -35,7 +35,7 @@ class _ForgetPasswordScreen extends State<ForgetPasswordScreen> {
                             horizontal: 8, vertical: 16),
                         child: EmailTextFormField(
                           controller: emailController,
-                          labelText: "Username/Email",
+                          label: "Username/Email",
                           validator: (value) {
                             if (value == null || value.isEmpty) {
                               return 'Please enter your username/Email';
@@ -50,7 +50,7 @@ class _ForgetPasswordScreen extends State<ForgetPasswordScreen> {
                             horizontal: 8, vertical: 16),
                         child: EmailTextFormField(
                           controller: emailRepeatController,
-                          labelText: "Username/Email",
+                          label: "Username/Email",
                           validator: (value) {
                             if (value == null || value.isEmpty) {
                               return 'Please enter your username/Email';

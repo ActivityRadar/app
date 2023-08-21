@@ -4,18 +4,18 @@ import 'package:flutter/material.dart';
 class CustomTextField extends StatelessWidget {
   const CustomTextField({
     super.key,
-    required this.streetController,
+    required this.controller,
     required this.label,
   });
 
-  final TextEditingController streetController;
+  final TextEditingController controller;
   final String label;
 
   @override
   Widget build(BuildContext context) {
     return TextField(
-        controller: streetController,
-        onChanged: (v) => streetController.text = v,
+        controller: controller,
+        onChanged: (v) => controller.text = v,
         decoration: InputDecoration(
           labelText: label,
         ));
@@ -25,18 +25,18 @@ class CustomTextField extends StatelessWidget {
 class DescriptionTextField extends StatelessWidget {
   const DescriptionTextField({
     super.key,
-    required this.streetController,
+    required this.controller,
     required this.label,
   });
 
-  final TextEditingController streetController;
+  final TextEditingController controller;
   final String label;
 
   @override
   Widget build(BuildContext context) {
     return TextField(
-      controller: streetController,
-      onChanged: (v) => streetController.text = v,
+      controller: controller,
+      onChanged: (v) => controller.text = v,
       decoration: InputDecoration(
         labelText: label,
       ),
@@ -78,12 +78,12 @@ class PasswordTextFormField extends StatelessWidget {
   const PasswordTextFormField({
     super.key,
     required this.controller,
-    required this.labelText,
+    required this.label,
     required this.validator,
   });
 
   final TextEditingController controller;
-  final String labelText;
+  final String label;
   final FormFieldValidator validator;
 
   @override
@@ -108,7 +108,7 @@ class PasswordTextFormField extends StatelessWidget {
           focusedBorder: UnderlineInputBorder(
             borderSide: BorderSide(color: Colors.blue),
           ),
-          labelText: labelText),
+          labelText: label),
       validator: validator,
     );
   }
@@ -118,12 +118,12 @@ class CustomTextFormField extends StatelessWidget {
   const CustomTextFormField({
     super.key,
     required this.controller,
-    required this.labelText,
+    required this.label,
     required this.validator,
   });
 
   final TextEditingController controller;
-  final String labelText;
+  final String label;
   final FormFieldValidator validator;
 
   @override
@@ -147,7 +147,7 @@ class CustomTextFormField extends StatelessWidget {
           focusedBorder: UnderlineInputBorder(
             borderSide: BorderSide(color: Colors.blue),
           ),
-          labelText: labelText),
+          labelText: label),
       validator: validator,
     );
   }
@@ -155,12 +155,9 @@ class CustomTextFormField extends StatelessWidget {
 
 class DescriptionTextFormField extends StatelessWidget {
   const DescriptionTextFormField(
-      {super.key,
-      required this.textController,
-      required this.hint,
-      this.maxLines});
+      {super.key, required this.controller, required this.hint, this.maxLines});
 
-  final TextEditingController textController;
+  final TextEditingController controller;
   final String hint;
   final int?
       maxLines; // limits the number of shown lines, not the actual number of lines
@@ -169,7 +166,7 @@ class DescriptionTextFormField extends StatelessWidget {
   Widget build(BuildContext context) {
     return TextFormField(
       maxLines: maxLines,
-      controller: textController,
+      controller: controller,
       textAlign: TextAlign.start,
       decoration: InputDecoration(
         hintText: hint,
@@ -238,12 +235,12 @@ class EmailTextFormField extends StatelessWidget {
   const EmailTextFormField({
     super.key,
     required this.controller,
-    required this.labelText,
+    required this.label,
     required this.validator,
   });
 
   final TextEditingController controller;
-  final String labelText;
+  final String label;
   final FormFieldValidator validator;
 
   @override
@@ -267,7 +264,7 @@ class EmailTextFormField extends StatelessWidget {
           focusedBorder: UnderlineInputBorder(
             borderSide: BorderSide(color: Colors.blue),
           ),
-          labelText: labelText),
+          labelText: label),
       validator: validator,
     );
   }
@@ -277,12 +274,12 @@ class UsernameTextFormField extends StatelessWidget {
   const UsernameTextFormField({
     super.key,
     required this.controller,
-    required this.labelText,
+    required this.label,
     required this.validator,
   });
 
   final TextEditingController controller;
-  final String labelText;
+  final String label;
   final FormFieldValidator validator;
 
   @override
@@ -307,7 +304,7 @@ class UsernameTextFormField extends StatelessWidget {
           focusedBorder: UnderlineInputBorder(
             borderSide: BorderSide(color: Colors.blue),
           ),
-          labelText: labelText),
+          labelText: label),
       validator: validator,
     );
   }

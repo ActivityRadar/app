@@ -45,7 +45,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             horizontal: 8, vertical: 16),
                         child: UsernameTextFormField(
                           controller: usernameController,
-                          labelText: "Username",
+                          label: "Username",
                           validator: (value) {
                             if (value == null || value.isEmpty) {
                               return 'Please enter your username';
@@ -58,7 +58,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             horizontal: 8, vertical: 4),
                         child: PasswordTextFormField(
                           controller: passwordController,
-                          labelText: "Password",
+                          label: "Password",
                           validator: (value) {
                             if (value == null || value.isEmpty) {
                               return 'Please enter your password';
