@@ -68,5 +68,5 @@ class AssetImages {
   static Widget backgroundAR = SvgPicture.asset("assets/images/background.svg",
       colorFilter:
           ColorFilter.mode(Color.fromARGB(22, 248, 248, 248), BlendMode.srcIn),
-      semanticsLabel: 'A red up arrow');
+      semanticsLabel: 'BackgroundDetails Screen');
 }
