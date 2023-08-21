@@ -1,4 +1,5 @@
 import 'package:app/constants/design.dart';
+import 'package:app/model/functions.dart';
 import 'package:app/provider/generated/locations_provider.dart';
 import 'package:app/widgets/bottomsheet.dart';
 
@@ -158,7 +159,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
       expandedHeight: 260.0,
       flexibleSpace: FlexibleSpaceBar(
           title: PageTitleText(
-            text: info.name ?? info.activityType,
+            text: getTitle(info),
             width: width,
           ),
           background: Stack(children: [
@@ -169,7 +170,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
   }
 
   Widget generateChipsFromText(LocationDetailedApi info) {
-    List<String> textList = info.activityType.split(",");
+    List<String> textList = info.activityTypes;
 
     return SingleChildScrollView(
       scrollDirection: Axis.horizontal,
@@ -231,7 +232,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
         Padding(
             padding: const EdgeInsets.only(left: 9.0, top: 15.0),
             child: TitleText(
-              text: "activityType",
+              text: "activityTypes",
               width: width,
             )),
         generateChipsFromText(info),

@@ -8,7 +8,9 @@ part of 'location_detailed_api.dart';
 
 LocationDetailedApi _$LocationDetailedApiFromJson(Map<String, dynamic> json) =>
     LocationDetailedApi(
-      activityType: json['activity_type'] as String,
+      activityTypes: (json['activity_types'] as List<dynamic>)
+          .map((e) => e as String)
+          .toList(),
       location:
           GeoJsonLocation.fromJson(json['location'] as Map<String, dynamic>),
       name: json['name'] as String?,
@@ -24,7 +26,7 @@ LocationDetailedApi _$LocationDetailedApiFromJson(Map<String, dynamic> json) =>
 
 Map<String, dynamic> _$LocationDetailedApiToJson(LocationDetailedApi instance) {
   final val = <String, dynamic>{
-    'activity_type': instance.activityType,
+    'activity_types': instance.activityTypes,
     'location': instance.location.toJson(),
   };
 

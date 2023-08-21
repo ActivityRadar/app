@@ -17,7 +17,7 @@ String getTitle(LocationDetailedApi info) {
     return info.name!;
   } else {
     // TODO: translate
-    return info.activityType;
+    return info.activityTypes.join(", ");
   }
 }
 

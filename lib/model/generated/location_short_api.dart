@@ -9,8 +9,8 @@ part 'location_short_api.g.dart';
 
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
 class LocationShortApi {
-  @JsonKey(name: "activity_type")
-  final String activityType;
+  @JsonKey(name: "activity_types")
+  final List<String> activityTypes;
   final GeoJsonLocation location;
   final String? name;
   @JsonKey(name: "trust_score")
@@ -18,7 +18,7 @@ class LocationShortApi {
   final String id;
 
   LocationShortApi(
-      {required this.activityType,
+      {required this.activityTypes,
       required this.location,
       this.name,
       required this.trustScore,
