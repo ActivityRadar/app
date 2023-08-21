@@ -156,7 +156,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
       ],
       pinned: true,
       stretch: true,
-      expandedHeight: 260.0,
+      expandedHeight: 220.0,
       flexibleSpace: FlexibleSpaceBar(
           title: PageTitleText(
             text: getTitle(info),
@@ -389,29 +389,10 @@ class _PhotoSliderState extends State<PhotoSlider> {
               _current = position;
             });
           },
-          enableInfiniteScroll: true,
+          enableInfiniteScroll: false,
         ),
         items: imageBoxes,
       ),
-      Container(
-          margin: const EdgeInsets.symmetric(vertical: 2),
-          child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-            for (int i = 0; i < imageBoxes.length; i++)
-              GestureDetector(
-                  onTap: () => _controller.animateToPage(i),
-                  child: Container(
-                    width: 12.0,
-                    height: 12.0,
-                    margin: const EdgeInsets.symmetric(
-                        vertical: 8.0, horizontal: 4.0),
-                    decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        color: (Theme.of(context).brightness == Brightness.light
-                                ? Colors.white
-                                : Colors.black)
-                            .withOpacity(_current == i ? 0.9 : 0.4)),
-                  ))
-          ]))
     ]);
   }
 }
