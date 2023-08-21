@@ -1,6 +1,7 @@
 import 'package:app/constants/design.dart';
 import 'package:app/model/functions.dart';
 import 'package:app/provider/generated/locations_provider.dart';
+import 'package:app/widgets/activityType_short.dart';
 import 'package:app/widgets/bottomsheet.dart';
 
 import 'package:app/widgets/custom/alertdialog.dart';
@@ -169,25 +170,6 @@ class _DetailsScreenState extends State<DetailsScreen> {
     );
   }
 
-  Widget generateChipsFromText(LocationDetailedApi info) {
-    List<String> textList = info.activityTypes;
-
-    return SingleChildScrollView(
-      scrollDirection: Axis.horizontal,
-      child: Row(
-        children: textList.map((text) {
-          return Padding(
-            padding: const EdgeInsets.only(left: 12.0),
-            child: CustomChip(
-              text: text
-                  .trim(), // Entferne Leerzeichen am Anfang und Ende des Texts
-            ),
-          );
-        }).toList(),
-      ),
-    );
-  }
-
   SliverList _contentList(
       double width, double height, LocationDetailedApi info) {
     return SliverList(
@@ -235,7 +217,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
               text: "activityTypes",
               width: width,
             )),
-        generateChipsFromText(info),
+        ActivityChipSlider(activities: info.activityTypes),
         Padding(
             padding: const EdgeInsets.only(left: 9.0, top: 15.0),
             child: Row(
