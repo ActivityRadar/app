@@ -98,40 +98,34 @@ class _MeetAddScreenState extends State<MeetAddScreen> {
 
   @override
   Widget build(BuildContext context) {
-    Align previous = Align(
-        alignment: Alignment.bottomLeft,
-        child: Padding(
-          padding: const EdgeInsets.only(bottom: 60.0),
-          child:
-              CustomElevatedButton(onPressed: previousPage, text: "Previous"),
-        ));
+    Padding previous = Padding(
+      padding: const EdgeInsets.only(left: 10.0),
+      child: CustomElevatedButton(onPressed: previousPage, text: "Previous"),
+    );
 
-    Align next = Align(
-        alignment: Alignment.bottomRight,
-        child: Padding(
-            padding: const EdgeInsets.only(bottom: 60.0),
-            child: ValueListenableBuilder(
-                valueListenable: validatorNotifiers[_currentPage],
-                builder: (context, canContinue, child) {
-                  var onPressed = nextPage;
-                  var style = null;
-                  if (!canContinue) {
-                    style =
-                        ElevatedButton.styleFrom(backgroundColor: Colors.grey);
-                    onPressed = () {
-                      showDialog(
-                          context: context,
-                          builder: (context) {
-                            return const AlertDialog(
-                                title: Text("Can't continue"),
-                                content: Text(
-                                    "You cant continue as you need to enter input on this page!"));
-                          });
-                    };
-                  }
-                  return CustomElevatedButton(
-                      style: style, onPressed: onPressed, text: "Next");
-                })));
+    Padding next = Padding(
+        padding: const EdgeInsets.only(right: 10.0),
+        child: ValueListenableBuilder(
+            valueListenable: validatorNotifiers[_currentPage],
+            builder: (context, canContinue, child) {
+              var onPressed = nextPage;
+              var style = null;
+              if (!canContinue) {
+                style = ElevatedButton.styleFrom(backgroundColor: Colors.grey);
+                onPressed = () {
+                  showDialog(
+                      context: context,
+                      builder: (context) {
+                        return const AlertDialog(
+                            title: Text("Can't continue"),
+                            content: Text(
+                                "You cant continue as you need to enter input on this page!"));
+                      });
+                };
+              }
+              return CustomElevatedButton(
+                  style: style, onPressed: onPressed, text: "Next");
+            }));
 
     return Scaffold(
         appBar: CustomAppBar(
@@ -150,11 +144,16 @@ class _MeetAddScreenState extends State<MeetAddScreen> {
               .toList(),
         ),
         floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-        floatingActionButton: _currentPage == 0
-            ? next
-            : (_currentPage < pagesFunctions.length - 1
-                ? Stack(children: [previous, next])
-                : previous));
+        floatingActionButton: Align(
+            alignment: Alignment.bottomCenter,
+            child: Padding(
+              padding: const EdgeInsets.only(bottom: 60.0),
+              child: Row(mainAxisSize: MainAxisSize.min, children: [
+                if (_currentPage != 0) previous,
+                const Spacer(),
+                if (_currentPage < pagesFunctions.length - 1) next
+              ]),
+            )));
   }
 
   Center chooseActivity(ValueNotifier<bool> canContinue) {
