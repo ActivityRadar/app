@@ -7,7 +7,9 @@ part of 'location_new.dart';
 // **************************************************************************
 
 LocationNew _$LocationNewFromJson(Map<String, dynamic> json) => LocationNew(
-      activityType: json['activity_type'] as String,
+      activityTypes: (json['activity_types'] as List<dynamic>)
+          .map((e) => e as String)
+          .toList(),
       location:
           GeoJsonLocation.fromJson(json['location'] as Map<String, dynamic>),
       name: json['name'] as String?,
@@ -18,7 +20,7 @@ LocationNew _$LocationNewFromJson(Map<String, dynamic> json) => LocationNew(
 
 Map<String, dynamic> _$LocationNewToJson(LocationNew instance) {
   final val = <String, dynamic>{
-    'activity_type': instance.activityType,
+    'activity_types': instance.activityTypes,
     'location': instance.location.toJson(),
   };
 
