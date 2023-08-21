@@ -5,6 +5,7 @@ import 'package:app/widgets/bottomsheet.dart';
 import 'package:app/widgets/custom/alertdialog.dart';
 import 'package:app/widgets/custom/button.dart';
 import 'package:app/widgets/custom/card.dart';
+import 'package:app/widgets/custom/chip.dart';
 import 'package:app/widgets/custom_text.dart';
 import 'package:app/widgets/login_reminder.dart';
 import 'package:flutter/material.dart';
@@ -16,7 +17,7 @@ import 'package:app/constants/constants.dart';
 import 'package:app/model/generated.dart';
 import 'package:app/provider/photos.dart';
 import 'package:app/provider/user_manager.dart';
-import 'package:app/widgets/activityType_short.dart';
+
 import 'package:app/widgets/photo_picker.dart';
 import 'package:app/widgets/vote.dart';
 
@@ -140,12 +141,6 @@ class _DetailsScreenState extends State<DetailsScreen> {
   SliverAppBar _appBar(double width, CarouselController controller, int current,
       LocationDetailedApi info) {
     return SliverAppBar(
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(
-          bottom: Radius.circular(25.0),
-        ),
-      ),
-      shadowColor: DesignColors.kBackgroundColor,
       actions: <Widget>[
         IconButton(
           onPressed: () {},
@@ -162,13 +157,32 @@ class _DetailsScreenState extends State<DetailsScreen> {
       stretch: true,
       expandedHeight: 260.0,
       flexibleSpace: FlexibleSpaceBar(
-        centerTitle: true,
-        title: PageTitleText(
-          text: info.name ?? info.activityType,
-          width: width,
-        ),
-        background:
+          title: PageTitleText(
+            text: info.name ?? info.activityType,
+            width: width,
+          ),
+          background: Stack(children: [
+            AssetImages.backgroundAR,
             PhotoSlider(photos: info.photos, onExtraPhotoPress: _addPhoto),
+          ])),
+    );
+  }
+
+  Widget generateChipsFromText(LocationDetailedApi info) {
+    List<String> textList = info.activityType.split(",");
+
+    return SingleChildScrollView(
+      scrollDirection: Axis.horizontal,
+      child: Row(
+        children: textList.map((text) {
+          return Padding(
+            padding: const EdgeInsets.only(left: 12.0),
+            child: CustomChip(
+              text: text
+                  .trim(), // Entferne Leerzeichen am Anfang und Ende des Texts
+            ),
+          );
+        }).toList(),
       ),
     );
   }
@@ -220,26 +234,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
               text: "activityType",
               width: width,
             )),
-        Container(
-          margin: const EdgeInsets.symmetric(vertical: 10),
-          height: height / 7,
-          child: ListView(
-            scrollDirection: Axis.horizontal,
-            children: <Widget>[
-              const SizedBox(width: 10.0),
-              Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: ActivityDetails(
-                    imageurl:
-                        "https://cdn.pixabay.com/photo/2016/09/05/23/28/blue-1648005_960_720.jpg",
-                    lat: 13.4496164,
-                    long: 52.5317128,
-                    titel: "Tischtennis",
-                    press: () {},
-                  )),
-            ],
-          ),
-        ),
+        generateChipsFromText(info),
         Padding(
             padding: const EdgeInsets.only(left: 9.0, top: 15.0),
             child: Row(
@@ -276,7 +271,44 @@ class _DetailsScreenState extends State<DetailsScreen> {
                     ])),
               ],
             )),
-        ReviewList(reviews: info.reviews.recent, width: width, height: height)
+        ReviewList(reviews: info.reviews.recent, width: width, height: height),
+        Padding(
+            //TODO Verlinkung
+            padding: const EdgeInsets.only(left: 9.0, top: 15.0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                TitleText(
+                  text: "Meets",
+                  width: width,
+                ),
+                Padding(
+                    padding: const EdgeInsets.only(
+                      right: 9.0,
+                    ),
+                    child: Row(children: [
+                      CustomTextButton(
+                          onPressed: () => conditionalShowLoginReminder(
+                              context: context,
+                              loggedInCallback: () async {
+                                ReviewWithId? oldReview;
+                                LocationsProvider
+                                        .getCurrentUserReviewForLocation(
+                                            locationId: locationId)
+                                    .then((r) {
+                                  oldReview = r;
+                                }).catchError((error) {
+                                  print(error);
+                                }).whenComplete(() => reviewBottomSheet(
+                                        context: context,
+                                        oldReview: oldReview,
+                                        locationId: locationId));
+                              }),
+                          text: "Meet add"),
+                      const Icon(Icons.edit_note),
+                    ])),
+              ],
+            )),
       ]),
     );
   }
