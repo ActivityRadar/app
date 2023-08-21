@@ -6,6 +6,7 @@ import 'package:app/widgets/custom/chip.dart';
 import 'package:app/widgets/custom/icon.dart';
 import 'package:app/widgets/custom/list_tile.dart';
 import 'package:app/widgets/custom/textfield.dart';
+import 'package:app/widgets/login_reminder.dart';
 import 'package:app/widgets/meet_card.dart';
 import 'package:app/widgets/profilecard.dart';
 import 'package:flutter/material.dart';
@@ -58,12 +59,16 @@ class ProfileBar extends StatelessWidget {
             ),
             CustomElevatedButton(
               onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const MeetAddScreen(),
-                  ),
-                );
+                conditionalShowLoginReminder(
+                    context: context,
+                    loggedInCallback: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const MeetAddScreen(),
+                        ),
+                      );
+                    });
               },
               text: "Add Meet2",
             ),
