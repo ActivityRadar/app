@@ -1,5 +1,6 @@
 /// This file extends functionality for the data classes defined in ./generated/
 
+import 'package:app/provider/activity_type.dart';
 import 'package:latlong2/latlong.dart';
 
 import 'generated.dart';
@@ -17,7 +18,9 @@ String getTitle(LocationDetailedApi info) {
     return info.name!;
   } else {
     // TODO: translate
-    return info.activityTypes.join(", ");
+    return info.activityTypes
+        .map((s) => ActivityManager.instance.getDisplayType(s))
+        .join(", ");
   }
 }
 

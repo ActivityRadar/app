@@ -38,3 +38,45 @@ class ActivityDetails extends StatelessWidget {
 
   myDetailsContainer({required id}) {}
 }
+
+class ActivityChip extends StatelessWidget {
+  const ActivityChip({super.key, required this.type, required this.onPressed});
+
+  final String type;
+  final VoidCallback onPressed;
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: onPressed,
+      child: Padding(
+        padding: const EdgeInsets.only(left: 12.0),
+        child: CustomChip(
+          text:
+              type.trim(), // Entferne Leerzeichen am Anfang und Ende des Texts
+        ),
+      ),
+    );
+  }
+}
+
+class ActivityChipSlider extends StatelessWidget {
+  const ActivityChipSlider(
+      {super.key, required this.activities, this.onPressed});
+
+  final List<String> activities;
+  final void Function(String)? onPressed;
+
+  @override
+  Widget build(BuildContext context) {
+    return SingleChildScrollView(
+      scrollDirection: Axis.horizontal,
+      child: Row(
+        children: activities.map((text) {
+          return ActivityChip(
+              type: text, onPressed: () => onPressed?.call(text));
+        }).toList(),
+      ),
+    );
+  }
+}
