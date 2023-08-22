@@ -23,7 +23,31 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(
-        scaffoldBackgroundColor: DesignColors.kBackgroundColor,
+        primaryColor: const Color.fromARGB(255, 204, 68, 53),
+        switchTheme: SwitchThemeData(
+          thumbColor: MaterialStateProperty.all(DesignColors.redColor),
+          trackColor: MaterialStateProperty.all(Colors.grey),
+          overlayColor:
+              MaterialStateProperty.all(Color.fromARGB(255, 210, 24, 24)),
+        ),
+        inputDecorationTheme: const InputDecorationTheme(),
+        timePickerTheme: const TimePickerThemeData(),
+        sliderTheme: const SliderThemeData(
+            valueIndicatorColor: DesignColors.greenColor,
+            overlayColor: DesignColors.greenColor),
+        iconTheme: const IconThemeData(),
+        colorScheme: const ColorScheme(
+            brightness: Brightness.light,
+            primary: DesignColors.blueColor,
+            onPrimary: DesignColors.kBackgroundColor,
+            secondary: DesignColors.greenColor,
+            onSecondary: DesignColors.kBackgroundColor,
+            error: DesignColors.redColor,
+            onError: DesignColors.redColor,
+            background: DesignColors.kBackgroundColor,
+            onBackground: DesignColors.kBackgroundColor,
+            surface: DesignColors.kBackgroundColor,
+            onSurface: DesignColors.kBackgroundColor),
       ),
       localizationsDelegates: const [
         AppLocalizations.delegate, // Add this line
