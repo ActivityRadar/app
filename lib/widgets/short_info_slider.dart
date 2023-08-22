@@ -1,3 +1,4 @@
+import 'package:app/app_state.dart';
 import 'package:app/constants/constants.dart';
 import 'package:app/constants/design.dart';
 import 'package:app/model/functions.dart';
@@ -9,6 +10,8 @@ import 'package:app/screens/map.dart';
 import 'package:app/widgets/vote.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
+import 'package:latlong2/latlong.dart';
+import 'package:provider/provider.dart';
 
 class ShortInfoBox extends StatelessWidget {
   const ShortInfoBox({
@@ -106,6 +109,19 @@ class InfoContainer extends StatelessWidget {
       title = "action";
     }
 
+    final state = Provider.of<AppState>(context);
+    var distanceDesccriptionText = "Bar";
+    if (state.userPosition != null && info != null) {
+      final distance = Distance()
+          .as(LengthUnit.Meter, state.userPosition!, toLatLng(info!.location));
+      if (distance > 1000) {
+        distanceDesccriptionText +=
+            " - ${(distance / 1000).toStringAsFixed(2)} km";
+      } else {
+        distanceDesccriptionText += " - ${distance.toInt()} m";
+      }
+    }
+
     return Column(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: <Widget>[
@@ -134,7 +150,7 @@ class InfoContainer extends StatelessWidget {
           ),
         ),
         const Spacer(),
-        LittleText(text: "Bar - 2 km entfernt", width: width),
+        LittleText(text: distanceDesccriptionText, width: width),
       ],
     );
   }
