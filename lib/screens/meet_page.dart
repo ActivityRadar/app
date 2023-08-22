@@ -263,7 +263,7 @@ class CardPeople extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.only(left: 9.0),
       child: Column(
-        children: [Icon(IconConstants.person), SmallText(text: people)],
+        children: [Icon(AppIcons.person), SmallText(text: people)],
       ),
     );
   }
@@ -277,7 +277,7 @@ class CardPublic extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(
-      children: [Icon(IconConstants.public), SmallText(text: "Öffenlicht")],
+      children: [Icon(AppIcons.public), SmallText(text: "Öffenlicht")],
     );
   }
 }
@@ -290,7 +290,7 @@ class CardPrivat extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(
-      children: [Icon(IconConstants.lock), SmallText(text: "nur Freunde")],
+      children: [Icon(AppIcons.lock), SmallText(text: "nur Freunde")],
     );
   }
 }
@@ -305,7 +305,7 @@ class CardSchedule extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(
-      children: [Icon(IconConstants.schedule), SmallText(text: time)],
+      children: [Icon(AppIcons.schedule), SmallText(text: time)],
     );
   }
 }
@@ -321,7 +321,7 @@ class CardEvent extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        Icon(IconConstants.event),
+        Icon(AppIcons.event),
         SmallText(
           text: date,
         )

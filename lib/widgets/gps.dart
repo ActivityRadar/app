@@ -122,7 +122,7 @@ class _GpsButtonState extends State<GpsButton> {
             active = true;
           });
         },
-        icon: Icon(active ? IconConstants.gpsFixed : IconConstants.gpsOff),
+        icon: Icon(active ? AppIcons.gpsFixed : AppIcons.gpsOff),
         color: active ? Colors.blue : Colors.black);
   }
 }

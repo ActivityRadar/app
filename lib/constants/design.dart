@@ -39,7 +39,7 @@ class AppInputBorders {
   );
 }
 
-class IconConstants {
+class AppIcons {
   static const IconData add = Icons.add;
   static const IconData home = Icons.home;
   static const IconData mapSharp = Icons.map_sharp;

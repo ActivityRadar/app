@@ -198,8 +198,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 controller: dateInput,
                 //editing controller of this TextField
                 decoration: const InputDecoration(
-                    icon:
-                        Icon(IconConstants.calendarToday), //icon of text field
+                    icon: Icon(AppIcons.calendarToday), //icon of text field
                     labelText: "Enter Date" //label text of field
                     ),
                 readOnly: true,

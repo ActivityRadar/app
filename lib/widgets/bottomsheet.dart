@@ -31,7 +31,7 @@ Future<dynamic> bottomSheetAdd(BuildContext context) {
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
               CustomListTile(
-                icon: const Icon(IconConstants.pushPin),
+                icon: const Icon(AppIcons.pushPin),
                 titleText: "Add Location",
                 onPressed: () {
                   Navigator.push(
@@ -43,7 +43,7 @@ Future<dynamic> bottomSheetAdd(BuildContext context) {
                 },
               ),
               CustomListTile(
-                icon: const Icon(IconConstants.event),
+                icon: const Icon(AppIcons.event),
                 titleText: "Add Event",
                 onPressed: () {},
               ),
@@ -159,7 +159,7 @@ Future<void> reviewBottomSheet(
                           itemPadding:
                               const EdgeInsets.symmetric(horizontal: 4.0),
                           itemBuilder: (context, _) => const Icon(
-                            IconConstants.star,
+                            AppIcons.star,
                             color: DesignColors.naviColor,
                           ),
                           onRatingUpdate: (r) {

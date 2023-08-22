@@ -14,27 +14,27 @@ class vote_rate extends StatelessWidget {
       children: <Widget>[
         SmallText(text: "4.1"),
         Icon(
-          IconConstants.star,
+          AppIcons.star,
           color: Colors.amber,
           size: 15.0,
         ),
         Icon(
-          IconConstants.star,
+          AppIcons.star,
           color: Colors.amber,
           size: 15.0,
         ),
         Icon(
-          IconConstants.star,
+          AppIcons.star,
           color: Colors.amber,
           size: 15.0,
         ),
         Icon(
-          IconConstants.star,
+          AppIcons.star,
           color: Colors.amber,
           size: 15.0,
         ),
         Icon(
-          IconConstants.starHalfSharp,
+          AppIcons.starHalfSharp,
           color: Colors.amber,
           size: 15.0,
         ),
@@ -55,7 +55,7 @@ class RatingScore extends StatelessWidget {
     return Row(children: [
       SmallText(text: scoreString),
       const Icon(
-        IconConstants.star,
+        AppIcons.star,
         color: Colors.amber,
         size: 15.0,
       )

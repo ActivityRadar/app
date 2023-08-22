@@ -404,6 +404,6 @@ class LocationMarker extends Marker {
         builder: (context) => GestureDetector(
             onTap: () => onPressed == null ? {} : onPressed(location),
             onDoubleTap: onDoubleTap,
-            child: Icon(IconConstants.locationOn, color: color, size: size)));
+            child: Icon(AppIcons.locationOn, color: color, size: size)));
   }
 }

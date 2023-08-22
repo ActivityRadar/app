@@ -219,7 +219,7 @@ Future<void> bottomSheetAvatarAction(BuildContext context) async {
                 onPressed: () {
                   avatarPicker(context, userId).then((_) => updateAndReturn());
                 },
-                icon: Icon(IconConstants.upload),
+                icon: Icon(AppIcons.upload),
                 titleText: "Set new photo",
               )
             ],

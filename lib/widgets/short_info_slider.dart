@@ -117,7 +117,7 @@ class InfoContainer extends StatelessWidget {
             IconButton(
                 onPressed: () {},
                 icon: const Icon(
-                  IconConstants.favorite,
+                  AppIcons.favorite,
                   color: DesignColors.naviColor,
                 )),
           ],

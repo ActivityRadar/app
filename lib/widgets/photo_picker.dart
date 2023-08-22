@@ -121,13 +121,13 @@ Future<dynamic> bottomSheetPhotoSourcePicker(
             children: [
               ImageSourceButton(
                   title: "Gallery",
-                  icon: const Icon(IconConstants.photo),
+                  icon: const Icon(AppIcons.photo),
                   onPressed: () async {
                     await _pickAndUpload(ImageSource.gallery);
                   }),
               ImageSourceButton(
                   title: "Camera",
-                  icon: const Icon(IconConstants.cameraAlt),
+                  icon: const Icon(AppIcons.cameraAlt),
                   onPressed: () async {
                     await _pickAndUpload(ImageSource.camera);
                   })

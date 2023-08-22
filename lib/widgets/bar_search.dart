@@ -56,13 +56,13 @@ class _MapSearchBarState extends State<MapSearchBar> {
             controller: textController,
             decoration: InputDecoration(
               prefixIcon: IconButton(
-                icon: const Icon(IconConstants.filterAlt),
+                icon: const Icon(AppIcons.filterAlt),
                 onPressed: () {
                   bottomSheetFilter(context);
                 },
               ),
               suffixIcon: IconButton(
-                icon: const Icon(IconConstants.search),
+                icon: const Icon(AppIcons.search),
                 onPressed: () {
                   setActivity(textController.text);
                 },

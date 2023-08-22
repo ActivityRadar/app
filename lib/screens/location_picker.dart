@@ -47,7 +47,7 @@ class PinIcon extends StatelessWidget {
       child: Center(
         heightFactor: 110,
         child: Icon(
-          IconConstants.pushPin,
+          AppIcons.pushPin,
           color: Colors.redAccent,
         ),
       ),

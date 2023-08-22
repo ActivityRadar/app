@@ -32,7 +32,7 @@ class _NumberPickerState extends State<NumberPicker> {
               }
             });
           },
-          icon: Icon(IconConstants.remove),
+          icon: Icon(AppIcons.remove),
         ),
         Container(
           width: 50,
@@ -61,7 +61,7 @@ class _NumberPickerState extends State<NumberPicker> {
               }
             });
           },
-          icon: Icon(IconConstants.add),
+          icon: Icon(AppIcons.add),
         ),
       ],
     );
