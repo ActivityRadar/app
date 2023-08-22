@@ -66,10 +66,14 @@ class ActivityManager {
   }
 
   List<String> searchInDisplayTypes(String search) {
+    return searchInSelection(search, _allDisplayTypes);
+  }
+
+  List<String> searchInSelection(String search, List<String> selection) {
     return fuzzy
         .extractTop(
             query: search,
-            choices: _allDisplayTypes,
+            choices: selection,
             limit: 10,
             cutoff: 50,
             ratio: PartialRatio())
