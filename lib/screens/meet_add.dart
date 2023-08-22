@@ -109,12 +109,20 @@ class _MeetAddScreenState extends State<MeetAddScreen> {
       chooseParticipantNumber,
       choosePlace,
       addDescription,
-      chooseVisibility,
+      // chooseVisibility,
       submitPage
     ];
 
     // has to be in the correct order according to the pagesFunctions list
-    final defaultSkippable = [false, true, true, false, false, true, false];
+    final defaultSkippable = [
+      false,
+      true,
+      true,
+      false,
+      false,
+      // true,
+      false
+    ];
 
     validatorNotifiers =
         defaultSkippable.map((b) => ValueNotifier<bool>(b)).toList();
