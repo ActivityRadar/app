@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
+import 'package:app/constants/design.dart';
 
 class MeetMap extends StatefulWidget {
   const MeetMap({
@@ -25,7 +26,7 @@ class _MeetMapState extends State<MeetMap> {
     final circleMarkers = <CircleMarker>[
       CircleMarker(
         point: center,
-        color: Colors.blue.withOpacity(0.5),
+        color: DesignColors.blueColor.withOpacity(0.5),
         borderStrokeWidth: 1,
         borderColor: Colors.black12,
         useRadiusInMeter: true,

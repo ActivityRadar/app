@@ -1,8 +1,13 @@
 import 'package:flutter/material.dart';
 
 class DesignColors {
-  static const Color naviColor = Color.fromARGB(255, 33, 126, 202);
+  static const Color redColor = Color(0xFFFF7942);
+  static const Color greenColor = Color(0xFF70BF44);
+  static const Color blueColor = Color(0xFF3542CC);
+  static const Color naviColor = blueColor;
   static const Color kBackgroundColor = Color.fromARGB(255, 248, 248, 248);
+  static const Color rangeactiveColor = Color.fromARGB(237, 53, 66, 204);
+  static const Color inactiveColorColor = Color.fromARGB(180, 53, 66, 204);
 }
 
 class AppStyle {

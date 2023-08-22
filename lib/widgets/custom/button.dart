@@ -1,4 +1,5 @@
 import 'package:app/constants/design.dart';
+import 'package:app/widgets/custom/icon.dart';
 import 'package:flutter/material.dart';
 
 class CustomTextButton extends StatelessWidget {
@@ -56,6 +57,9 @@ class CustomElevatedButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ElevatedButton(
+      style: ButtonStyle(
+        backgroundColor: MaterialStateProperty.all(DesignColors.naviColor),
+      ),
       onPressed: onPressed,
       child: Text(text),
     );

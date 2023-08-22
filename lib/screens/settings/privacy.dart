@@ -1,8 +1,10 @@
+import 'package:app/widgets/custom/icon.dart';
 import 'package:app/widgets/custom_text.dart';
 import 'package:app/widgets/custom/card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
+import 'package:app/constants/design.dart';
 
 class PrivacySettingPage extends StatefulWidget {
   const PrivacySettingPage({super.key});
@@ -50,7 +52,7 @@ class _PrivacySettingPageState extends State<PrivacySettingPage> {
                           title: const CustomText(text: 'öffentliches Profil'),
                           trailing: Switch(
                             value: isExpanded,
-                            activeColor: Colors.red,
+                            activeColor: DesignColors.redColor,
                             onChanged: (bool value) {
                               setState(() {
                                 isExpanded = value;
@@ -102,7 +104,7 @@ class _ExpandableTileState extends State<ExpandableTile> {
         title: const CustomText(text: 'Sichtbarkeit auf dem Map'),
         trailing: Switch(
           value: isExpanded,
-          activeColor: Colors.red,
+          activeColor: DesignColors.redColor,
           onChanged: (bool value) {
             setState(() {
               isExpanded = value;
@@ -116,7 +118,7 @@ class _ExpandableTileState extends State<ExpandableTile> {
           title: const CustomText(text: 'Nur Freunde'),
           trailing: Switch(
             value: isfriends,
-            activeColor: Colors.red,
+            activeColor: DesignColors.redColor,
             onChanged: (bool value) {
               setState(() {
                 isfriends = value;
@@ -129,7 +131,7 @@ class _ExpandableTileState extends State<ExpandableTile> {
           title: const CustomText(text: 'Radius'),
           trailing: Switch(
             value: isRadius,
-            activeColor: Colors.red,
+            activeColor: DesignColors.redColor,
             onChanged: (bool value) {
               setState(() {
                 isRadius = value;
@@ -197,7 +199,7 @@ class _RadiusSelectionMapState extends State<RadiusSelectionMap> {
     final circleMarkers = <CircleMarker>[
       CircleMarker(
         point: center,
-        color: Colors.blue.withOpacity(0.5),
+        color: DesignColors.blueColor.withOpacity(0.5),
         borderStrokeWidth: 1,
         borderColor: Colors.black12,
         useRadiusInMeter: true,

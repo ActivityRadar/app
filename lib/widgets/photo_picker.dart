@@ -43,7 +43,8 @@ class ImageSourceButton extends StatelessWidget {
         width: 100,
         margin: const EdgeInsets.all(8.0),
         decoration: BoxDecoration(
-            color: Colors.blue, borderRadius: BorderRadius.circular(5)),
+            color: DesignColors.blueColor,
+            borderRadius: BorderRadius.circular(5)),
         padding: const EdgeInsets.all(20),
         child: GestureDetector(
           onTap: () => onPressed(),
