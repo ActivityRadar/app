@@ -1,12 +1,12 @@
-import 'package:app/constants/constants.dart';
 import 'package:app/constants/design.dart';
 import 'package:app/widgets/custom/appbar.dart';
 import 'package:app/model/functions.dart';
 import 'package:app/model/generated.dart';
+import 'package:app/provider/activity_type.dart';
 import 'package:app/provider/generated/offers_provider.dart';
 import 'package:app/screens/map.dart';
+import 'package:app/widgets/activityType_short.dart';
 import 'package:app/widgets/custom/card.dart';
-import 'package:app/widgets/custom/list_tile.dart';
 import 'package:app/widgets/custom/snackbar.dart';
 import 'package:app/widgets/custom_text.dart';
 import 'package:app/widgets/custom/button.dart';
@@ -28,9 +28,9 @@ class _MeetAddScreenState extends State<MeetAddScreen> {
   int _currentPage = 0;
 
   final _formTitleKey = GlobalKey<FormState>();
+  TextEditingController typeSearchController = TextEditingController();
   TextEditingController titleController = TextEditingController();
   TextEditingController streetController = TextEditingController();
-  TextEditingController locationController = TextEditingController();
   TextEditingController descriptionController = TextEditingController();
   bool isLoading = false;
 
@@ -47,7 +47,9 @@ class _MeetAddScreenState extends State<MeetAddScreen> {
   final GpsLocationNotifier currentPosition = GpsLocationNotifier();
   late final ActivityMarkerMap map;
 
-  Set<Sport> chosenActivities = <Sport>{};
+  List<String> chosenActivities = [];
+  List<String> availableActivities =
+      ActivityManager.instance.getAllDisplayTypes();
 
   late final List<Widget Function(ValueNotifier<bool>)> pagesFunctions;
 
@@ -165,41 +167,73 @@ class _MeetAddScreenState extends State<MeetAddScreen> {
     var size = MediaQuery.of(context).size;
 
     double width = size.width;
+
+    CustomCard scrollableSelectionCard(Widget child) {
+      return CustomCard(
+          child: ConstrainedBox(
+              constraints: BoxConstraints(
+                  minHeight: 50, maxHeight: 120, minWidth: width),
+              child: SingleChildScrollView(
+                  child: Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [child]))));
+    }
+
     return Center(
         child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
       TitleText(text: "Was willst du spielen?", width: width),
       const SizedBox(
         height: 20,
       ),
-      CustomCard(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            Wrap(
-              crossAxisAlignment: WrapCrossAlignment.center,
-              alignment: WrapAlignment.center,
-              spacing: 5.0,
-              children: Sport.values.map((Sport exercise) {
-                return FilterChip(
-                  label: CustomText(text: exercise.name),
-                  selected: chosenActivities.contains(exercise),
-                  selectedColor: DesignColors.naviColor,
-                  showCheckmark: false,
-                  onSelected: (bool selected) {
-                    setState(() {
-                      if (selected) {
+      scrollableSelectionCard(
+        Wrap(
+          crossAxisAlignment: WrapCrossAlignment.center,
+          alignment: WrapAlignment.center,
+          spacing: 5.0,
+          children: chosenActivities.map((exercise) {
+            return ActivityChip(
+              type: exercise,
+              onPressed: () {
+                setState(() {
+                  chosenActivities.remove(exercise);
+                  availableActivities.add(exercise);
+                  canContinue.value = chosenActivities.isNotEmpty;
+                });
+              },
+            );
+          }).toList(),
+        ),
+      ),
+      CustomTextField(
+          streetController: typeSearchController, label: "Suche Aktivität"),
+      scrollableSelectionCard(
+        ValueListenableBuilder(
+          valueListenable: typeSearchController,
+          builder: (context, search, child) {
+            var available = availableActivities.toList();
+            if (search.text.isNotEmpty) {
+              available = ActivityManager.instance
+                  .searchInSelection(search.text, available);
+            }
+
+            return Wrap(
+                crossAxisAlignment: WrapCrossAlignment.center,
+                alignment: WrapAlignment.center,
+                spacing: 5.0,
+                children: available.map((exercise) {
+                  return ActivityChip(
+                    type: exercise,
+                    backgroundColor: Colors.grey,
+                    onPressed: () {
+                      setState(() {
                         chosenActivities.add(exercise);
-                        // activity.value = exercise.toString();
-                      } else {
-                        chosenActivities.remove(exercise);
-                      }
-                      canContinue.value = chosenActivities.isNotEmpty;
-                    });
-                  },
-                );
-              }).toList(),
-            ),
-          ],
+                        availableActivities.remove(exercise);
+                        canContinue.value = chosenActivities.isNotEmpty;
+                      });
+                    },
+                  );
+                }).toList());
+          },
         ),
       ),
       const SizedBox(
@@ -475,7 +509,7 @@ class _MeetAddScreenState extends State<MeetAddScreen> {
 
     final offer = OfferIn(
         location: location,
-        activity: [chosenActivities.toString()],
+        activity: chosenActivities,
         time: time,
         description: descriptionController.text,
         visibility: OfferVisibility.public);
