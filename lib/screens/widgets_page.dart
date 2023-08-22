@@ -9,6 +9,7 @@ import 'package:app/widgets/custom/textfield.dart';
 import 'package:app/widgets/meet_card.dart';
 import 'package:app/widgets/profilecard.dart';
 import 'package:flutter/material.dart';
+import 'package:app/constants/design.dart';
 
 class TestWidget extends StatelessWidget {
   const TestWidget({super.key});
@@ -97,9 +98,16 @@ class ProfileBar extends StatelessWidget {
               text: 'CustomTextButtonWhite',
             ),
             CustomTextButton(onPressed: () {}, text: 'CustomTextButton'),
-            const CustomCard(
-              child: Text("lolo"),
-            ),
+            CustomCard(
+                child: Column(
+              children: [
+                CustomListTile(
+                  onPressed: () {},
+                  text: "CustomListTile",
+                ),
+                Text("CustomCard"),
+              ],
+            )),
             CustomChip(text: "CustomChip"),
             const NaviIcon(
               icon: Icons.icecream,
@@ -133,10 +141,10 @@ class ProfileBar extends StatelessWidget {
             ),
             DescriptionTextFormField(
                 controller: usernameController,
-                hint: "DescriptionTextFormField"),
+                label: "DescriptionTextFormField"),
             UnderLineTextFormField(
               controller: usernameController,
-              hinText: "UnderLineTextFormField",
+              label: "UnderLineTextFormField",
             ),
             EmailTextFormField(
               controller: usernameController,
