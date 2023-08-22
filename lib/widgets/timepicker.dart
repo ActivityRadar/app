@@ -1,6 +1,7 @@
 import 'package:app/widgets/custom/list_tile.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:app/constants/design.dart';
 
 class DateTimePicker extends StatefulWidget {
   const DateTimePicker({super.key});
@@ -53,11 +54,11 @@ class _DateTimePickerState extends State<DateTimePicker> {
       mainAxisSize: MainAxisSize.min,
       children: <Widget>[
         CustomListTile(
-            icon: Icon(Icons.calendar_today),
+            icon: Icon(AppIcons.calendarToday),
             titleText: "Datum: $formattedDate",
             onPressed: _selectDate),
         CustomListTile(
-            icon: Icon(Icons.access_time),
+            icon: Icon(AppIcons.accessTime),
             titleText: "Uhrzeit: $formattedTime",
             onPressed: _selectTime),
       ],

@@ -297,7 +297,7 @@ class PhotoShower extends StatelessWidget {
           backgroundColor: DesignColors.naviColor,
           elevation: 0,
           leading: IconButton(
-              icon: const Icon(Icons.keyboard_backspace),
+              icon: const Icon(AppIcons.keyboardBackspace),
               color: DesignColors.kBackgroundColor,
               onPressed: () {
                 Navigator.pop(context);

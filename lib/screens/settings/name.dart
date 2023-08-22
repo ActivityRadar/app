@@ -11,6 +11,7 @@ import 'package:app/widgets/photo_picker.dart';
 import 'package:app/widgets/custom/snackbar.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:app/constants/design.dart';
 
 class DisplayNameSwitch extends StatelessWidget {
   const DisplayNameSwitch({super.key});
@@ -218,7 +219,7 @@ Future<void> bottomSheetAvatarAction(BuildContext context) async {
                 onPressed: () {
                   avatarPicker(context, userId).then((_) => updateAndReturn());
                 },
-                icon: Icon(Icons.upload),
+                icon: Icon(AppIcons.upload),
                 titleText: "Set new photo",
               )
             ],

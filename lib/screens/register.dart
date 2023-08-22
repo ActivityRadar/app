@@ -10,6 +10,7 @@ import 'package:app/provider/generated/users_provider.dart';
 import 'package:app/widgets/photo_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:app/constants/design.dart';
 import 'package:provider/provider.dart';
 
 class RegisterScreen extends StatefulWidget {
@@ -197,7 +198,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 controller: dateInput,
                 //editing controller of this TextField
                 decoration: const InputDecoration(
-                    icon: Icon(Icons.calendar_today), //icon of text field
+                    icon: Icon(AppIcons.calendarToday), //icon of text field
                     labelText: "Enter Date" //label text of field
                     ),
                 readOnly: true,

@@ -27,7 +27,7 @@ class EditIcon extends StatelessWidget {
         radius: 8,
         child: Center(
           child: Icon(
-            Icons.edit,
+            AppIcons.edit,
             size: 8,
           ),
         ));

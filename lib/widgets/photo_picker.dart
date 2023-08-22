@@ -6,6 +6,7 @@ import 'package:app/widgets/bottomsheet.dart';
 import 'package:app/widgets/custom_text.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:app/constants/design.dart';
 
 final picker = ImagePicker();
 
@@ -120,13 +121,13 @@ Future<dynamic> bottomSheetPhotoSourcePicker(
             children: [
               ImageSourceButton(
                   title: "Gallery",
-                  icon: const Icon(Icons.photo),
+                  icon: const Icon(AppIcons.photo),
                   onPressed: () async {
                     await _pickAndUpload(ImageSource.gallery);
                   }),
               ImageSourceButton(
                   title: "Camera",
-                  icon: const Icon(Icons.camera_alt),
+                  icon: const Icon(AppIcons.cameraAlt),
                   onPressed: () async {
                     await _pickAndUpload(ImageSource.camera);
                   })

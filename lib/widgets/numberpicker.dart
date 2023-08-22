@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:app/constants/design.dart';
 
 class NumberPicker extends StatefulWidget {
   @override
@@ -31,7 +32,7 @@ class _NumberPickerState extends State<NumberPicker> {
               }
             });
           },
-          icon: Icon(Icons.remove),
+          icon: Icon(AppIcons.remove),
         ),
         Container(
           width: 50,
@@ -60,7 +61,7 @@ class _NumberPickerState extends State<NumberPicker> {
               }
             });
           },
-          icon: Icon(Icons.add),
+          icon: Icon(AppIcons.add),
         ),
       ],
     );

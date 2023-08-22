@@ -1,5 +1,5 @@
 import 'dart:async';
-
+import 'package:app/constants/design.dart';
 import 'package:flutter/material.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:location/location.dart';
@@ -122,7 +122,7 @@ class _GpsButtonState extends State<GpsButton> {
             active = true;
           });
         },
-        icon: Icon(active ? Icons.gps_fixed : Icons.gps_off),
+        icon: Icon(active ? AppIcons.gpsFixed : AppIcons.gpsOff),
         color: active ? Colors.blue : Colors.black);
   }
 }
