@@ -4,6 +4,7 @@ import 'package:app/app_state.dart';
 import 'package:app/model/functions.dart';
 import 'package:app/model/generated.dart';
 import 'package:app/provider/generated/locations_provider.dart';
+import 'package:app/widgets/loaction_icon.dart';
 import 'package:app/widgets/short_info_slider.dart';
 import 'package:app/widgets/bar_search.dart';
 import 'package:app/widgets/gps.dart';
@@ -13,6 +14,7 @@ import 'package:flutter_map/flutter_map.dart';
 import 'package:flutter_map/plugin_api.dart';
 import 'package:flutter_map_animations/flutter_map_animations.dart';
 import 'package:flutter_map_marker_cluster/flutter_map_marker_cluster.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
 
 // ignore_for_file: avoid_print
@@ -415,8 +417,9 @@ class LocationMarker extends Marker {
         anchorPos:
             AnchorPos.align(AnchorAlign.top), // top for "above the position"
         builder: (context) => GestureDetector(
-            onTap: () => onPressed == null ? {} : onPressed(location),
-            onDoubleTap: onDoubleTap,
-            child: Icon(AppIcons.locationOn, color: color, size: size)));
+              onTap: () => onPressed == null ? {} : onPressed(location),
+              onDoubleTap: onDoubleTap,
+              child: LocationIcon(color: color, size: size),
+            ));
   }
 }
