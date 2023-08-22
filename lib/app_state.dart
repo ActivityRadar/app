@@ -12,6 +12,8 @@ class StorageKeys {
   static const String userInfo = "userInfo";
   static const String boundsSouthWest = "mapBoundsSW";
   static const String boundsNorthEast = "mapBoundsNE";
+  static const String userPosition = "userPosition";
+  static const String userPositionTime = "userPositionTime";
 }
 
 class AppState extends ChangeNotifier {
@@ -32,6 +34,22 @@ class AppState extends ChangeNotifier {
 
   double zoom = 13;
   LatLng center = const LatLng(52.9, 12.5);
+
+  LatLng? _userPosition;
+
+  LatLng? get userPosition => _userPosition;
+  set userPosition(LatLng? position) {
+    if (position != null) _userPosition = position;
+    notifyListeners();
+  }
+
+  DateTime? _userPositionTime;
+
+  DateTime? get userPositionTime => _userPositionTime;
+  set userPositionTime(DateTime? time) {
+    if (time != null) _userPositionTime = time;
+    notifyListeners();
+  }
 
   Future<void> updateUserInfo() async {
     _currentUser = await UsersProvider.getThisUser();
@@ -55,10 +73,10 @@ class AppState extends ChangeNotifier {
     final prefs = await SharedPreferences.getInstance();
 
     if (prefs.containsKey(StorageKeys.boundsSouthWest)) {
-      LatLng southWest = toLatLng(GeoJsonLocation.fromJson(
-          jsonDecode(prefs.getString(StorageKeys.boundsSouthWest)!)));
-      LatLng northEast = toLatLng(GeoJsonLocation.fromJson(
-          jsonDecode(prefs.getString(StorageKeys.boundsNorthEast)!)));
+      LatLng southWest =
+          _decodeLatLng(prefs.getString(StorageKeys.boundsSouthWest)!);
+      LatLng northEast =
+          _decodeLatLng(prefs.getString(StorageKeys.boundsNorthEast)!);
 
       _mapPosition = LatLngBounds(southWest, northEast);
     }
@@ -66,6 +84,12 @@ class AppState extends ChangeNotifier {
     if (prefs.containsKey(StorageKeys.userInfo)) {
       _currentUser = UserDetailed.fromJson(
           jsonDecode(prefs.getString(StorageKeys.userInfo)!));
+    }
+
+    if (prefs.containsKey(StorageKeys.userPosition)) {
+      _userPosition = _decodeLatLng(prefs.getString(StorageKeys.userPosition)!);
+      _userPositionTime =
+          DateTime.parse(prefs.getString(StorageKeys.userPositionTime)!);
     }
   }
 
@@ -78,9 +102,23 @@ class AppState extends ChangeNotifier {
       await prefs.remove(StorageKeys.userInfo);
     }
 
-    await prefs.setString(StorageKeys.boundsSouthWest,
-        jsonEncode(toLongLat(_mapPosition.southWest).toJson()));
-    await prefs.setString(StorageKeys.boundsNorthEast,
-        jsonEncode(toLongLat(_mapPosition.northEast).toJson()));
+    if (_userPosition != null) {
+      prefs.setString(StorageKeys.userPosition, _encodeLatLng(_userPosition!));
+      prefs.setString(
+          StorageKeys.userPositionTime, _userPositionTime!.toIso8601String());
+    }
+
+    await prefs.setString(
+        StorageKeys.boundsSouthWest, _encodeLatLng(_mapPosition.southWest));
+    await prefs.setString(
+        StorageKeys.boundsNorthEast, _encodeLatLng(_mapPosition.northEast));
+  }
+
+  String _encodeLatLng(LatLng position) {
+    return jsonEncode(toLongLat(position).toJson());
+  }
+
+  LatLng _decodeLatLng(String json) {
+    return toLatLng(GeoJsonLocation.fromJson(jsonDecode(json)));
   }
 }
