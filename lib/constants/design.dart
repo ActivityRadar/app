@@ -15,6 +15,8 @@ class AppStyle {
 class CustomTextStyle {
   static const TextStyle hint =
       TextStyle(fontSize: 15.0, color: Colors.black12);
+
+  static const TextStyle label = TextStyle(color: Colors.black38);
 }
 
 class AppInputBorders {

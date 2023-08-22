@@ -30,7 +30,9 @@ class MyApp extends StatelessWidget {
           overlayColor:
               MaterialStateProperty.all(Color.fromARGB(255, 210, 24, 24)),
         ),
-        inputDecorationTheme: const InputDecorationTheme(),
+        inputDecorationTheme: const InputDecorationTheme(
+          labelStyle: CustomTextStyle.label,
+        ),
         timePickerTheme: const TimePickerThemeData(),
         sliderTheme: const SliderThemeData(
             valueIndicatorColor: DesignColors.greenColor,
