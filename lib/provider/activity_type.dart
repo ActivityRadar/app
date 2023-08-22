@@ -5,17 +5,34 @@ import 'package:fuzzywuzzy/fuzzywuzzy.dart' as fuzzy;
 import 'package:fuzzywuzzy/ratios/partial_ratio.dart';
 
 class ActivityManager {
-  late final Map<String, String> _displayToBackend;
-  late final Map<String, String> _backendToDisplay;
+  final Map<String, String> _displayToBackend = {};
+  final Map<String, String> _backendToDisplay = {};
 
   late List<String> _allDisplayTypes;
   late List<String> _allBackendTypes;
 
-  ActivityManager._create(Map<String, List<String>> backendToDisplay) {
-    _backendToDisplay = {};
-    _displayToBackend = {};
+  static ActivityManager? _instance;
+  static ActivityManager get instance {
+    _instance ??= ActivityManager._();
+    return _instance!;
+  }
 
-    for (var entry in backendToDisplay.entries) {
+  ActivityManager._();
+
+  // must be called before the app is started
+  init() async {
+    final String response =
+        await rootBundle.loadString('shared/lang/de-DE.json');
+    final data = await jsonDecode(response);
+
+    final Map<String, List<String>> names = {};
+
+    for (var entry in data.entries) {
+      names[entry.key] =
+          data[entry.key]["names"].map<String>((s) => s as String).toList();
+    }
+
+    for (var entry in names.entries) {
       _backendToDisplay[entry.key] =
           entry.value.isEmpty ? entry.key : entry.value[0];
 
@@ -30,22 +47,6 @@ class ActivityManager {
 
     _allDisplayTypes = _displayToBackend.keys.toList();
     _allBackendTypes = _backendToDisplay.keys.toList();
-  }
-
-  static Future<ActivityManager> create() async {
-    // TODO: load these depending on the language
-    final String response =
-        await rootBundle.loadString('shared/lang/de-DE.json');
-    final data = await jsonDecode(response);
-
-    final Map<String, List<String>> names = {};
-
-    for (var entry in data.entries) {
-      names[entry.key] =
-          data[entry.key]["names"].map<String>((s) => s as String).toList();
-    }
-
-    return ActivityManager._create(names);
   }
 
   String getBackendType(String displayType) {

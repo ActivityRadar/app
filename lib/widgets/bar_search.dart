@@ -20,12 +20,11 @@ class MapSearchBar extends StatefulWidget {
 class _MapSearchBarState extends State<MapSearchBar> {
   TextEditingController textController = TextEditingController();
 
-  late final ActivityManager activityManager;
-
   List<String> choices = [];
 
   void setActivity(String activity) {
-    widget.mapState.activity.value = activityManager.getBackendType(activity);
+    widget.mapState.activity.value =
+        ActivityManager.instance.getBackendType(activity);
     print('set activity to: $activity');
   }
 
@@ -35,11 +34,10 @@ class _MapSearchBarState extends State<MapSearchBar> {
 
     textController.addListener(() {
       setState(() {
-        choices = activityManager.searchInDisplayTypes(textController.text);
+        choices =
+            ActivityManager.instance.searchInDisplayTypes(textController.text);
       });
     });
-
-    ActivityManager.create().then((mgr) => activityManager = mgr);
   }
 
   @override
