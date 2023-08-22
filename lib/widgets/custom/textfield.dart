@@ -61,11 +61,11 @@ class DescriptionTextFieldwithoutBorder extends StatelessWidget {
       controller: nameController,
       onChanged: (v) => nameController.text = v,
       decoration: InputDecoration(
-        border: AppInputBorders.border,
-        focusedErrorBorder: AppInputBorders.focusedError,
-        errorBorder: AppInputBorders.error,
-        enabledBorder: AppInputBorders.enabled,
-        focusedBorder: AppInputBorders.focused,
+        border: AppInputBorders.none,
+        focusedErrorBorder: AppInputBorders.none,
+        errorBorder: AppInputBorders.none,
+        enabledBorder: AppInputBorders.none,
+        focusedBorder: AppInputBorders.none,
         labelText: label,
       ),
       maxLines: 3,
@@ -93,22 +93,13 @@ class PasswordTextFormField extends StatelessWidget {
       controller: controller,
       keyboardType: TextInputType.visiblePassword,
       decoration: InputDecoration(
-          border: UnderlineInputBorder(
-            borderSide: BorderSide.none,
-          ),
-          focusedErrorBorder: UnderlineInputBorder(
-            borderSide: BorderSide(color: Colors.red),
-          ),
-          errorBorder: UnderlineInputBorder(
-            borderSide: BorderSide(color: Colors.red),
-          ),
-          enabledBorder: UnderlineInputBorder(
-            borderSide: BorderSide(color: Colors.blue),
-          ),
-          focusedBorder: UnderlineInputBorder(
-            borderSide: BorderSide(color: Colors.blue),
-          ),
-          labelText: label),
+        border: AppInputBorders.none,
+        focusedErrorBorder: AppInputBorders.red,
+        errorBorder: AppInputBorders.red,
+        enabledBorder: AppInputBorders.blue,
+        focusedBorder: AppInputBorders.blue,
+        labelText: label,
+      ),
       validator: validator,
     );
   }
@@ -132,22 +123,13 @@ class CustomTextFormField extends StatelessWidget {
       controller: controller,
       keyboardType: TextInputType.emailAddress,
       decoration: InputDecoration(
-          border: UnderlineInputBorder(
-            borderSide: BorderSide.none,
-          ),
-          focusedErrorBorder: UnderlineInputBorder(
-            borderSide: BorderSide(color: Colors.red),
-          ),
-          errorBorder: UnderlineInputBorder(
-            borderSide: BorderSide(color: Colors.red),
-          ),
-          enabledBorder: UnderlineInputBorder(
-            borderSide: BorderSide(color: Colors.blue),
-          ),
-          focusedBorder: UnderlineInputBorder(
-            borderSide: BorderSide(color: Colors.blue),
-          ),
-          labelText: label),
+        border: AppInputBorders.none,
+        focusedErrorBorder: AppInputBorders.red,
+        errorBorder: AppInputBorders.red,
+        enabledBorder: AppInputBorders.blue,
+        focusedBorder: AppInputBorders.blue,
+        labelText: label,
+      ),
       validator: validator,
     );
   }
@@ -155,10 +137,13 @@ class CustomTextFormField extends StatelessWidget {
 
 class DescriptionTextFormField extends StatelessWidget {
   const DescriptionTextFormField(
-      {super.key, required this.controller, required this.hint, this.maxLines});
+      {super.key,
+      required this.controller,
+      required this.label,
+      this.maxLines});
 
   final TextEditingController controller;
-  final String hint;
+  final String label;
   final int?
       maxLines; // limits the number of shown lines, not the actual number of lines
 
@@ -169,22 +154,14 @@ class DescriptionTextFormField extends StatelessWidget {
       controller: controller,
       textAlign: TextAlign.start,
       decoration: InputDecoration(
-        hintText: hint,
+        labelText: label,
         border: UnderlineInputBorder(
           borderSide: BorderSide.none,
         ),
-        focusedErrorBorder: UnderlineInputBorder(
-          borderSide: BorderSide(color: Colors.red),
-        ),
-        errorBorder: UnderlineInputBorder(
-          borderSide: BorderSide(color: Colors.red),
-        ),
-        enabledBorder: UnderlineInputBorder(
-          borderSide: BorderSide.none,
-        ),
-        focusedBorder: UnderlineInputBorder(
-          borderSide: BorderSide.none,
-        ),
+        focusedErrorBorder: AppInputBorders.red,
+        errorBorder: AppInputBorders.red,
+        enabledBorder: AppInputBorders.none,
+        focusedBorder: AppInputBorders.none,
       ),
     );
   }
@@ -194,38 +171,23 @@ class UnderLineTextFormField extends StatelessWidget {
   const UnderLineTextFormField({
     super.key,
     required this.controller,
-    required this.hinText,
+    required this.label,
   });
 
   final TextEditingController controller;
-  final String hinText;
+  final String label;
   @override
   Widget build(BuildContext context) {
     return TextFormField(
       controller: controller,
       textAlign: TextAlign.start,
       decoration: InputDecoration(
-        hintText: hinText,
-        border: UnderlineInputBorder(
-          borderSide: BorderSide.none,
-        ),
-        focusedErrorBorder: UnderlineInputBorder(
-          borderSide: BorderSide(color: Colors.red),
-        ),
-        errorBorder: UnderlineInputBorder(
-          borderSide: BorderSide(color: Colors.red),
-        ),
-        enabledBorder: UnderlineInputBorder(
-          borderSide: BorderSide(
-            color: Colors.blue,
-          ),
-        ),
-        focusedBorder: UnderlineInputBorder(
-          borderSide: BorderSide(
-            color: Colors.blue,
-            width: 2.0,
-          ),
-        ),
+        labelText: label,
+        border: AppInputBorders.none,
+        focusedErrorBorder: AppInputBorders.red,
+        errorBorder: AppInputBorders.red,
+        enabledBorder: AppInputBorders.blue,
+        focusedBorder: AppInputBorders.blue,
       ),
     );
   }
@@ -249,22 +211,13 @@ class EmailTextFormField extends StatelessWidget {
       controller: controller,
       keyboardType: TextInputType.emailAddress,
       decoration: InputDecoration(
-          border: UnderlineInputBorder(
-            borderSide: BorderSide.none,
-          ),
-          focusedErrorBorder: UnderlineInputBorder(
-            borderSide: BorderSide(color: Colors.red),
-          ),
-          errorBorder: UnderlineInputBorder(
-            borderSide: BorderSide(color: Colors.red),
-          ),
-          enabledBorder: UnderlineInputBorder(
-            borderSide: BorderSide(color: Colors.blue),
-          ),
-          focusedBorder: UnderlineInputBorder(
-            borderSide: BorderSide(color: Colors.blue),
-          ),
-          labelText: label),
+        border: AppInputBorders.none,
+        focusedErrorBorder: AppInputBorders.red,
+        errorBorder: AppInputBorders.red,
+        enabledBorder: AppInputBorders.blue,
+        focusedBorder: AppInputBorders.blue,
+        labelText: label,
+      ),
       validator: validator,
     );
   }
@@ -289,22 +242,15 @@ class UsernameTextFormField extends StatelessWidget {
       controller: controller,
       keyboardType: TextInputType.visiblePassword,
       decoration: InputDecoration(
-          border: UnderlineInputBorder(
-            borderSide: BorderSide.none,
-          ),
-          focusedErrorBorder: UnderlineInputBorder(
-            borderSide: BorderSide(color: Colors.red),
-          ),
-          errorBorder: UnderlineInputBorder(
-            borderSide: BorderSide(color: Colors.red),
-          ),
-          enabledBorder: UnderlineInputBorder(
-            borderSide: BorderSide(color: Colors.blue),
-          ),
-          focusedBorder: UnderlineInputBorder(
-            borderSide: BorderSide(color: Colors.blue),
-          ),
-          labelText: label),
+        border: UnderlineInputBorder(
+          borderSide: BorderSide.none,
+        ),
+        focusedErrorBorder: AppInputBorders.red,
+        errorBorder: AppInputBorders.red,
+        enabledBorder: AppInputBorders.blue,
+        focusedBorder: AppInputBorders.blue,
+        labelText: label,
+      ),
       validator: validator,
     );
   }

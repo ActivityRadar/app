@@ -20,24 +20,16 @@ class CustomTextStyle {
 }
 
 class AppInputBorders {
-  static const OutlineInputBorder border = OutlineInputBorder(
+  static const OutlineInputBorder none = OutlineInputBorder(
     borderSide: BorderSide.none,
   );
 
-  static const OutlineInputBorder focused = OutlineInputBorder(
-    borderSide: BorderSide.none,
+  static const OutlineInputBorder red = OutlineInputBorder(
+    borderSide: BorderSide(color: DesignColors.redColor),
   );
 
-  static const OutlineInputBorder enabled = OutlineInputBorder(
-    borderSide: BorderSide.none,
-  );
-
-  static const OutlineInputBorder focusedError = OutlineInputBorder(
-    borderSide: BorderSide.none,
-  );
-
-  static const OutlineInputBorder error = OutlineInputBorder(
-    borderSide: BorderSide.none,
+  static const OutlineInputBorder blue = OutlineInputBorder(
+    borderSide: BorderSide(color: DesignColors.blueColor),
   );
 }
 
