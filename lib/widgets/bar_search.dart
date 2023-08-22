@@ -23,8 +23,7 @@ class _MapSearchBarState extends State<MapSearchBar> {
   List<String> choices = [];
 
   void setActivity(String activity) {
-    widget.mapState.activity.value =
-        ActivityManager.instance.getBackendType(activity);
+    widget.mapState.activities.value = [activity];
     print('set activity to: $activity');
   }
 

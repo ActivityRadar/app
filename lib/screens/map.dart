@@ -3,6 +3,7 @@ import 'package:app/constants/design.dart';
 import 'package:app/app_state.dart';
 import 'package:app/model/functions.dart';
 import 'package:app/model/generated.dart';
+import 'package:app/provider/activity_type.dart';
 import 'package:app/provider/generated/locations_provider.dart';
 import 'package:app/widgets/loaction_icon.dart';
 import 'package:app/widgets/short_info_slider.dart';
@@ -47,7 +48,7 @@ class FocusedLocationNotifier extends ChangeNotifier {
 }
 
 class MapScreenState extends State<MapScreen> {
-  ValueNotifier<String> activity = ValueNotifier("-");
+  ValueNotifier<List<String>> activities = ValueNotifier([""]);
   late MapSearchBar searchBar;
   late ActivityMarkerMap mapWidget;
   FocusedLocationNotifier focusedLocationInfo = FocusedLocationNotifier();
@@ -62,7 +63,7 @@ class MapScreenState extends State<MapScreen> {
     sliderInfos = await LocationsProvider.getLocationsAround(
         long: coordinates.longitude,
         lat: coordinates.latitude,
-        activities: [activity.value]);
+        activities: ActivityManager.instance.getBackendTypes(activities.value));
 
     setState(() {
       print("buildSlider");
@@ -108,7 +109,7 @@ class MapScreenState extends State<MapScreen> {
     searchBar = MapSearchBar(mapState: this);
     mapWidget = ActivityMarkerMap(
         focusedLocation: focusedLocationInfo,
-        activity: activity,
+        activities: activities,
         currentPosition: currentPosition);
 
     focusedLocationInfo.addListener(onFocusChanged);
@@ -172,14 +173,14 @@ class ActivityMarkerMap extends StatefulWidget {
   const ActivityMarkerMap({
     super.key,
     required this.focusedLocation,
-    required this.activity,
+    required this.activities,
     required this.currentPosition,
     this.onNewMarkerTap,
     this.onNewMarkerCreate,
   });
 
   final FocusedLocationNotifier focusedLocation;
-  final ValueNotifier<String> activity;
+  final ValueNotifier<List<String>> activities;
   final GpsLocationNotifier currentPosition;
   final void Function(LatLng)? onNewMarkerTap;
   final void Function(LatLng)? onNewMarkerCreate;
@@ -296,7 +297,7 @@ class _ActivityMarkerMapState extends State<ActivityMarkerMap>
 
   Future<void> performSearch() async {
     print(
-        '${bounds.south}, ${bounds.west}, ${bounds.east}, ${widget.activity.value}');
+        '${bounds.south}, ${bounds.west}, ${bounds.east}, ${widget.activities.value}');
     print("fetch locations started");
 
     List<LocationShortApi> locations =
@@ -305,7 +306,8 @@ class _ActivityMarkerMapState extends State<ActivityMarkerMap>
             south: bounds.south,
             west: bounds.west,
             east: bounds.east,
-            activities: [widget.activity.value]);
+            activities: ActivityManager.instance
+                .getBackendTypes(widget.activities.value));
     print(locations.length);
 
     List<LocationMarker> markers_ =
@@ -363,14 +365,14 @@ class _ActivityMarkerMapState extends State<ActivityMarkerMap>
   void initState() {
     super.initState();
 
-    widget.activity.addListener(performSearch);
+    widget.activities.addListener(performSearch);
     widget.focusedLocation.addListener(focusChangeCallback);
     widget.currentPosition.addListener(onGpsUpdate);
   }
 
   @override
   void dispose() {
-    widget.activity.removeListener(performSearch);
+    widget.activities.removeListener(performSearch);
     widget.focusedLocation.removeListener(focusChangeCallback);
     widget.currentPosition.removeListener(onGpsUpdate);
 

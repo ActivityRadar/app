@@ -43,11 +43,10 @@ class _MeetAddScreenState extends State<MeetAddScreen> {
 
   // location selection map
   final FocusedLocationNotifier locNotifier = FocusedLocationNotifier();
-  late final ValueNotifier<String> activity = ValueNotifier<String>("soccer");
+  late final ValueNotifier<List<String>> activities = ValueNotifier([]);
   final GpsLocationNotifier currentPosition = GpsLocationNotifier();
   late final ActivityMarkerMap map;
 
-  List<String> chosenActivities = [];
   List<String> availableActivities =
       ActivityManager.instance.getAllDisplayTypes();
 
@@ -80,7 +79,7 @@ class _MeetAddScreenState extends State<MeetAddScreen> {
     map = ActivityMarkerMap(
         key: UniqueKey(),
         focusedLocation: locNotifier,
-        activity: activity,
+        activities: activities,
         currentPosition: currentPosition,
         onNewMarkerCreate: (LatLng position) {
           customLocation.value = position;
@@ -190,14 +189,14 @@ class _MeetAddScreenState extends State<MeetAddScreen> {
           crossAxisAlignment: WrapCrossAlignment.center,
           alignment: WrapAlignment.center,
           spacing: 5.0,
-          children: chosenActivities.map((exercise) {
+          children: activities.value.map((exercise) {
             return ActivityChip(
               type: exercise,
               onPressed: () {
                 setState(() {
-                  chosenActivities.remove(exercise);
+                  activities.value.remove(exercise);
                   availableActivities.add(exercise);
-                  canContinue.value = chosenActivities.isNotEmpty;
+                  canContinue.value = activities.value.isNotEmpty;
                 });
               },
             );
@@ -226,9 +225,9 @@ class _MeetAddScreenState extends State<MeetAddScreen> {
                     backgroundColor: Colors.grey,
                     onPressed: () {
                       setState(() {
-                        chosenActivities.add(exercise);
+                        activities.value.add(exercise);
                         availableActivities.remove(exercise);
-                        canContinue.value = chosenActivities.isNotEmpty;
+                        canContinue.value = activities.value.isNotEmpty;
                       });
                     },
                   );
@@ -449,7 +448,7 @@ class _MeetAddScreenState extends State<MeetAddScreen> {
     final rows = [
       summaryRow(
           "Activity Type(s)",
-          chosenActivities.fold("", (t, sport) {
+          activities.value.fold("", (t, sport) {
             return t.isEmpty ? sport.toString() : "$t, ${sport.toString()}";
           })),
       summaryRow("Time",
@@ -509,7 +508,7 @@ class _MeetAddScreenState extends State<MeetAddScreen> {
 
     final offer = OfferIn(
         location: location,
-        activity: chosenActivities,
+        activity: activities.value,
         time: time,
         description: descriptionController.text,
         visibility: OfferVisibility.public);
