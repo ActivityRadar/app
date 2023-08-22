@@ -74,7 +74,7 @@ class ButtonBack extends StatelessWidget {
   Widget build(BuildContext context) {
     return IconButton(
       icon: CircleAvatar(
-        child: Icon(Icons.arrow_back),
+        child: Icon(IconConstants.arrowBack),
         backgroundColor: DesignColors.naviColor,
       ),
       onPressed: onPressed,
@@ -94,7 +94,7 @@ class ButtonMenu extends StatelessWidget {
   Widget build(BuildContext context) {
     return IconButton(
       icon: CircleAvatar(
-        child: Icon(Icons.menu),
+        child: Icon(IconConstants.menu),
         backgroundColor: DesignColors.naviColor,
       ),
       onPressed: onPressed,
@@ -114,7 +114,7 @@ class ButtonCancel extends StatelessWidget {
   Widget build(BuildContext context) {
     return IconButton(
       icon: CircleAvatar(
-        child: Icon(Icons.close),
+        child: Icon(IconConstants.close),
         backgroundColor: DesignColors.naviColor,
       ),
       onPressed: onPressed,
@@ -148,7 +148,9 @@ class _ButtonBookMarkState extends State<ButtonBookMark> {
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          isIconSwitched ? Icon(Icons.bookmark_added) : Icon(Icons.bookmark),
+          isIconSwitched
+              ? Icon(IconConstants.bookmarkAdded)
+              : Icon(IconConstants.bookmark),
           SizedBox(width: 8.0),
           Text('Merken'),
         ],

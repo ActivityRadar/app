@@ -85,7 +85,7 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
               onPressed: () {
                 bottomSheetAdd(context);
               },
-              child: const Icon(Icons.add),
+              child: const Icon(IconConstants.add),
             )
           : null,
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
@@ -110,7 +110,9 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        NaviIcon(icon: Icons.home, currentTab: currentTab == 0),
+                        NaviIcon(
+                            icon: IconConstants.home,
+                            currentTab: currentTab == 0),
                         NaviText(
                             text: AppLocalizations.of(context)!.home,
                             currentTab: currentTab == 0)
@@ -128,7 +130,8 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         NaviIcon(
-                            icon: Icons.map_sharp, currentTab: currentTab == 1),
+                            icon: IconConstants.mapSharp,
+                            currentTab: currentTab == 1),
                         NaviText(
                             text: AppLocalizations.of(context)!.map,
                             currentTab: currentTab == 1),
@@ -151,7 +154,8 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           NaviIcon(
-                              icon: Icons.group, currentTab: currentTab == 2),
+                              icon: IconConstants.group,
+                              currentTab: currentTab == 2),
                           NaviText(
                               text: 'Community', currentTab: currentTab == 2),
                         ]),
@@ -167,7 +171,8 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         NaviIcon(
-                            icon: Icons.settings, currentTab: currentTab == 3),
+                            icon: IconConstants.settings,
+                            currentTab: currentTab == 3),
                         NaviText(text: "Setting", currentTab: currentTab == 3),
                       ],
                     ),

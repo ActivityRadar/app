@@ -1,5 +1,5 @@
+import 'package:app/constants/design.dart';
 import 'package:app/widgets/custom/button.dart';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
@@ -47,7 +47,7 @@ class PinIcon extends StatelessWidget {
       child: Center(
         heightFactor: 110,
         child: Icon(
-          Icons.push_pin,
+          IconConstants.pushPin,
           color: Colors.redAccent,
         ),
       ),

@@ -1,5 +1,5 @@
 import 'dart:math';
-
+import 'package:app/constants/design.dart';
 import 'package:app/app_state.dart';
 import 'package:app/model/functions.dart';
 import 'package:app/model/generated.dart';
@@ -404,6 +404,6 @@ class LocationMarker extends Marker {
         builder: (context) => GestureDetector(
             onTap: () => onPressed == null ? {} : onPressed(location),
             onDoubleTap: onDoubleTap,
-            child: Icon(Icons.location_on, color: color, size: size)));
+            child: Icon(IconConstants.locationOn, color: color, size: size)));
   }
 }

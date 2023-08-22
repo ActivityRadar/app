@@ -114,12 +114,12 @@ class _DetailsScreenState extends State<DetailsScreen> {
       actions: <Widget>[
         IconButton(
           onPressed: () {},
-          icon: const Icon(Icons.ios_share),
+          icon: const Icon(IconConstants.share),
           color: DesignColors.kBackgroundColor,
         ),
         IconButton(
           onPressed: () {},
-          icon: const Icon(Icons.add_a_photo),
+          icon: const Icon(IconConstants.addAPhoto),
           color: DesignColors.kBackgroundColor,
         ),
       ],
@@ -146,12 +146,12 @@ class _DetailsScreenState extends State<DetailsScreen> {
       actions: <Widget>[
         IconButton(
           onPressed: () {},
-          icon: const Icon(Icons.ios_share),
+          icon: const Icon(IconConstants.share),
           color: DesignColors.kBackgroundColor,
         ),
         IconButton(
           onPressed: () => _addPhoto(),
-          icon: const Icon(Icons.add_a_photo),
+          icon: const Icon(IconConstants.addAPhoto),
           color: DesignColors.kBackgroundColor,
         ),
       ],
@@ -250,7 +250,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
                                         locationId: locationId));
                               }),
                           text: "review"),
-                      const Icon(Icons.edit_note),
+                      const Icon(IconConstants.editNote),
                     ])),
               ],
             )),
@@ -288,7 +288,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
                                         locationId: locationId));
                               }),
                           text: "Meet add"),
-                      const Icon(Icons.edit_note),
+                      const Icon(IconConstants.editNote),
                     ])),
               ],
             )),
@@ -353,7 +353,7 @@ class _PhotoSliderState extends State<PhotoSlider> {
                   height: MediaQuery.of(context).size.height,
                   child: const DecoratedBox(
                       decoration: BoxDecoration(color: Colors.grey),
-                      child: Icon(Icons.image))),
+                      child: Icon(IconConstants.image))),
             )));
   }
 
@@ -510,11 +510,11 @@ class ReviewBox extends StatelessWidget {
                   const Spacer(),
                   IconButton(
                       onPressed: () {}, // TODO: send thumbs up
-                      icon: const Icon(Icons.thumb_up,
+                      icon: const Icon(IconConstants.thumbUp,
                           color: Color.fromARGB(142, 0, 0, 0))),
                   IconButton(
                       onPressed: () {}, // TODO: send thumbs down
-                      icon: const Icon(Icons.thumb_down,
+                      icon: const Icon(IconConstants.thumbDown,
                           color: Color.fromARGB(142, 244, 67, 54))),
                 ],
               ))

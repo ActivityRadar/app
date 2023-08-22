@@ -1,5 +1,6 @@
 import 'package:app/widgets/custom_text.dart';
 import 'package:flutter/material.dart';
+import 'package:app/constants/design.dart';
 
 class vote_rate extends StatelessWidget {
   const vote_rate({
@@ -13,27 +14,27 @@ class vote_rate extends StatelessWidget {
       children: <Widget>[
         SmallText(text: "4.1"),
         Icon(
-          Icons.star,
+          IconConstants.star,
           color: Colors.amber,
           size: 15.0,
         ),
         Icon(
-          Icons.star,
+          IconConstants.star,
           color: Colors.amber,
           size: 15.0,
         ),
         Icon(
-          Icons.star,
+          IconConstants.star,
           color: Colors.amber,
           size: 15.0,
         ),
         Icon(
-          Icons.star,
+          IconConstants.star,
           color: Colors.amber,
           size: 15.0,
         ),
         Icon(
-          Icons.star_half_sharp,
+          IconConstants.starHalfSharp,
           color: Colors.amber,
           size: 15.0,
         ),
@@ -54,7 +55,7 @@ class RatingScore extends StatelessWidget {
     return Row(children: [
       SmallText(text: scoreString),
       const Icon(
-        Icons.star,
+        IconConstants.star,
         color: Colors.amber,
         size: 15.0,
       )
