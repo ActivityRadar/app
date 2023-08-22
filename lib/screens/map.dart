@@ -90,6 +90,14 @@ class MapScreenState extends State<MapScreen> {
     }
   }
 
+  void onCurrentPositionChange() {
+    if (currentPosition.coordinates != null) {
+      final state = Provider.of<AppState>(context, listen: false);
+      state.userPosition = currentPosition.coordinates!;
+      state.userPositionTime = currentPosition.lastUpdate!;
+    }
+  }
+
   @override
   void initState() {
     super.initState();
@@ -101,11 +109,13 @@ class MapScreenState extends State<MapScreen> {
         currentPosition: currentPosition);
 
     focusedLocationInfo.addListener(onFocusChanged);
+    currentPosition.addListener(onCurrentPositionChange);
   }
 
   @override
   void dispose() {
     focusedLocationInfo.removeListener(onFocusChanged);
+    currentPosition.removeListener(onCurrentPositionChange);
 
     super.dispose();
   }
@@ -116,6 +126,9 @@ class MapScreenState extends State<MapScreen> {
     var size = MediaQuery.of(context).size;
     var height = size.height;
     var width = size.width;
+
+    final state = Provider.of<AppState>(context, listen: false);
+    currentPosition.setFromStorage(state.userPosition, state.userPositionTime);
 
     return WillPopScope(
         onWillPop: () async {

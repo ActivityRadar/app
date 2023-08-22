@@ -34,6 +34,18 @@ class GpsLocationNotifier extends ChangeNotifier {
     notifyListeners();
   }
 
+  void setFromStorage(LatLng? position, DateTime? time) {
+    if (position == null) return;
+    _location = LocationData.fromMap(
+        {"latitude": position.latitude, "longitude": position.longitude});
+    _lastUpdate = time!;
+    _moveToLocation = false;
+    enabled = false;
+    notifyListeners();
+  }
+
+  DateTime? get lastUpdate => _lastUpdate;
+
   LatLng? get coordinates {
     if (_location == null || _location!.latitude == null) {
       return null;
