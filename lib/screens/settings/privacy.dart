@@ -28,7 +28,7 @@ class _PrivacySettingPageState extends State<PrivacySettingPage> {
               onPressed: () {
                 Navigator.pop(context);
               },
-              icon: const Icon(Icons.navigate_before),
+              icon: IconBack(),
             ),
           ),
           SliverList(

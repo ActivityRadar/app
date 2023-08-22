@@ -10,6 +10,7 @@ import 'package:app/widgets/custom/textfield.dart';
 import 'package:app/widgets/filter_discipline.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import 'package:app/constants/design.dart';
 
 Future<dynamic> bottomSheetBase(
     {required BuildContext context, required dynamic builder}) {
@@ -173,11 +174,11 @@ Future<void> reviewBottomSheet(
                   child: Column(children: [
                     DescriptionTextFormField(
                         controller: titleController,
-                        hint: "Title",
+                        label: "Title",
                         maxLines: 1),
                     DescriptionTextFormField(
                         controller: textController,
-                        hint: 'Description',
+                        label: 'Description',
                         maxLines: 5),
                   ]),
                 ),
