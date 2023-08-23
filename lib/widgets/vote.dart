@@ -51,7 +51,7 @@ class RatingScore extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    String scoreString = score == null ? "-" : score.toString();
+    String scoreString = score?.toStringAsFixed(1) ?? "-";
     return Row(children: [
       SmallText(text: scoreString),
       const Icon(

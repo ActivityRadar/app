@@ -153,7 +153,7 @@ class _ExpandableTileState extends State<ExpandableTile> {
                   });
                 },
               ),
-              CustomText(text: _currentSliderValue.toString())
+              CustomText(text: "${_currentSliderValue.toStringAsFixed(0)} km")
             ],
           )),
           SizedBox(
