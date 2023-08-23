@@ -45,7 +45,7 @@ class MeetPage extends StatelessWidget {
         SliverPersistentHeader(
           delegate: MyHeaderDelegate(
             child: Container(
-              color: DesignColors.kBackground,
+              color: DesignColors.transparent,
               child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[

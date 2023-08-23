@@ -6,6 +6,7 @@ class DesignColors {
   static const Color blue = Color(0xFF3542CC);
   static const Color grey = Colors.grey;
   static const Color naviColor = blue;
+  static const Color transparent = Color.fromARGB(0, 248, 248, 248);
   static const Color kBackground = Color.fromARGB(255, 248, 248, 248);
   static const Color rangeactive = Color.fromARGB(237, 53, 66, 204);
   static const Color inactive = Color.fromARGB(180, 53, 66, 204);
