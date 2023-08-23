@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 
 class DesignColors {
   static const Color red = Color(0xFFFF7942);
@@ -90,4 +91,14 @@ class AppIcons {
   static const IconData edit = Icons.edit;
   static const IconData arrowBack = Icons.arrow_back;
   static const IconData done = Icons.done;
+  static Widget chat = SvgPicture.asset(
+      "assets/icons/chat.svg", // https://remixicon.com/
+      colorFilter:
+          ColorFilter.mode(Color.fromARGB(255, 0, 0, 0), BlendMode.srcIn),
+      semanticsLabel: 'chaticon');
+  static Widget notification = SvgPicture.asset(
+      "assets/icons/notification.svg", // https://remixicon.com/
+      colorFilter:
+          ColorFilter.mode(Color.fromARGB(255, 0, 0, 0), BlendMode.srcIn),
+      semanticsLabel: 'chaticon');
 }
