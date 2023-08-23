@@ -42,8 +42,16 @@ class MyApp extends StatelessWidget {
           enabledBorder: AppInputBorders.none,
           focusedBorder: AppInputBorders.none,
         ),
+        snackBarTheme: SnackBarThemeData(
+          shape: const RoundedRectangleBorder(
+            borderRadius: BorderRadius.all(
+              Radius.circular(15.0),
+            ),
+          ),
+          backgroundColor: DesignColors.naviColor,
+          behavior: SnackBarBehavior.floating,
+          elevation: 6.0,
         ),
-        timePickerTheme: const TimePickerThemeData(),
         sliderTheme: const SliderThemeData(
             valueIndicatorColor: DesignColors.greenColor,
             overlayColor: DesignColors.greenColor),
