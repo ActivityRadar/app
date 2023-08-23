@@ -56,6 +56,11 @@ class MyApp extends StatelessWidget {
             valueIndicatorColor: DesignColors.greenColor,
             overlayColor: DesignColors.greenColor),
         iconTheme: const IconThemeData(),
+        chipTheme: ChipThemeData(
+          backgroundColor: DesignColors.naviColor,
+          labelStyle:
+              TextStyle(color: DesignColors.kBackgroundColor, fontSize: 10),
+        ),
         colorScheme: const ColorScheme(
             brightness: Brightness.light,
             primary: DesignColors.blueColor,
