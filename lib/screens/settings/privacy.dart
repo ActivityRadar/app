@@ -1,4 +1,5 @@
 import 'package:app/widgets/custom/background.dart';
+import 'package:app/widgets/custom/button.dart';
 import 'package:app/widgets/custom/icon.dart';
 import 'package:app/widgets/custom_text.dart';
 import 'package:app/widgets/custom/card.dart';
@@ -26,13 +27,13 @@ class _PrivacySettingPageState extends State<PrivacySettingPage> {
       children: CustomScrollView(
         slivers: <Widget>[
           SliverAppBar(
+            backgroundColor: DesignColors.transparent,
             title: const CustomText(text: "Privacy"),
             centerTitle: true,
-            leading: IconButton(
+            leading: ButtonBack(
               onPressed: () {
                 Navigator.pop(context);
               },
-              icon: IconBack(),
             ),
           ),
           SliverList(
