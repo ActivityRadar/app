@@ -204,7 +204,7 @@ class _MeetAddScreenState extends State<MeetAddScreen> {
         ),
       ),
       CustomTextField(
-          streetController: typeSearchController, label: "Suche Aktivität"),
+          controller: typeSearchController, label: "Suche Aktivität"),
       scrollableSelectionCard(
         ValueListenableBuilder(
           valueListenable: typeSearchController,
@@ -373,7 +373,9 @@ class _MeetAddScreenState extends State<MeetAddScreen> {
             Padding(
                 padding: const EdgeInsets.only(left: 9.0, top: 15.0),
                 child: CustomTextField(
-                    controller: titleController, label: 'Titel')),
+                    action: TextInputAction.next,
+                    controller: titleController,
+                    label: 'Titel')),
             Padding(
               padding: const EdgeInsets.only(left: 9.0, top: 15.0),
               child: DescriptionTextFieldwithoutBorder(
