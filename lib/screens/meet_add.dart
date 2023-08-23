@@ -1,9 +1,13 @@
 import 'package:app/constants/constants.dart';
 import 'package:app/constants/design.dart';
 import 'package:app/widgets/custom/appbar.dart';
+import 'package:app/model/functions.dart';
+import 'package:app/model/generated.dart';
+import 'package:app/provider/generated/offers_provider.dart';
 import 'package:app/screens/map.dart';
 import 'package:app/widgets/custom/card.dart';
 import 'package:app/widgets/custom/list_tile.dart';
+import 'package:app/widgets/custom/snackbar.dart';
 import 'package:app/widgets/custom_text.dart';
 import 'package:app/widgets/custom/button.dart';
 import 'package:app/widgets/custom/textfield.dart';
@@ -433,8 +437,50 @@ class _MeetAddScreenState extends State<MeetAddScreen> {
       ),
       ...rows,
       const SizedBox(height: 20),
-      CustomElevatedButton(onPressed: () {}, text: "Submit")
+      CustomElevatedButton(
+          onPressed: () {
+            submitMeetingOffer()
+                .then((offerId) => Navigator.pop(context))
+                .onError((error, stackTrace) => showMessageSnackBar(
+                    context, "Something went wrong: $error",
+                    fixed: true));
+          },
+          text: "Submit")
     ]));
+  }
+
+  Future<String> submitMeetingOffer() async {
+    late final Map<String, dynamic> location;
+    late final Map<String, dynamic> time;
+
+    if (locNotifier.changedBy == FocusChangeReason.markerTap) {
+      location = {
+        "coords": locNotifier.info!.location.toJson(),
+        "id": locNotifier.info!.id.toString()
+      };
+    } else {
+      final coords = toLongLat(customLocation.value!).toJson();
+      location = {"coords": coords, "radius": 2000};
+    }
+
+    if (timeFlexible.value) {
+      time = OfferTimeFlexible(type: "flexible").toJson();
+    } else {
+      time = OfferTimeSingle(type: "single", times: [
+        dateTime.value,
+        dateTime.value.add(const Duration(hours: 2)),
+      ]).toJson();
+    }
+
+    final offer = OfferIn(
+        location: location,
+        activity: [chosenActivities.toString()],
+        time: time,
+        description: descriptionController.text,
+        visibility: OfferVisibility.public);
+
+    final response = await OffersProvider.createOffer(data: offer);
+    return response.offerId;
   }
 }
 
