@@ -40,10 +40,15 @@ class ActivityDetails extends StatelessWidget {
 }
 
 class ActivityChip extends StatelessWidget {
-  const ActivityChip({super.key, required this.type, required this.onPressed});
+  const ActivityChip(
+      {super.key,
+      required this.type,
+      required this.onPressed,
+      this.backgroundColor});
 
   final String type;
   final VoidCallback onPressed;
+  final Color? backgroundColor;
 
   @override
   Widget build(BuildContext context) {
@@ -52,6 +57,7 @@ class ActivityChip extends StatelessWidget {
       child: Padding(
         padding: const EdgeInsets.only(left: 12.0),
         child: CustomChip(
+          backgroundColor: backgroundColor,
           text:
               type.trim(), // Entferne Leerzeichen am Anfang und Ende des Texts
         ),
