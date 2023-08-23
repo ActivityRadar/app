@@ -40,7 +40,7 @@ class AppState extends ChangeNotifier {
   LatLng? get userPosition => _userPosition;
   set userPosition(LatLng? position) {
     if (position != null) _userPosition = position;
-    notifyListeners();
+    // notifyListeners();
   }
 
   DateTime? _userPositionTime;
@@ -48,7 +48,7 @@ class AppState extends ChangeNotifier {
   DateTime? get userPositionTime => _userPositionTime;
   set userPositionTime(DateTime? time) {
     if (time != null) _userPositionTime = time;
-    notifyListeners();
+    // notifyListeners();
   }
 
   Future<void> updateUserInfo() async {
@@ -69,7 +69,7 @@ class AppState extends ChangeNotifier {
     return currentUser == null ? false : (currentUser!.trustScore >= 100);
   }
 
-  void loadFromStorage() async {
+  Future<void> loadFromStorage() async {
     final prefs = await SharedPreferences.getInstance();
 
     if (prefs.containsKey(StorageKeys.boundsSouthWest)) {

@@ -1,4 +1,6 @@
 import 'package:app/app_state.dart';
+import 'package:app/provider/backend.dart';
+import 'package:app/screens/login.dart';
 import 'package:app/screens/start.dart';
 import 'package:app/screens/map.dart';
 import 'package:app/screens/settings.dart';
@@ -29,7 +31,7 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
   PageController pageController = PageController();
 
   int currentTab = 0;
-  Widget currentScreen = const HomeScreen();
+  late Widget currentScreen;
 
   void onTap(int index) {
     if (currentTab != index) {
@@ -46,7 +48,13 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
     super.initState();
     WidgetsBinding.instance.addObserver(this);
 
-    Provider.of<AppState>(context, listen: false).loadFromStorage();
+    final state = Provider.of<AppState>(context, listen: false);
+    SessionManager.instance.isLoggedIn().then((loggedIn) async {
+      await SessionManager.instance.startSession();
+      state.loadFromStorage();
+    });
+
+    currentScreen = screens[0];
   }
 
   @override
@@ -72,6 +80,7 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
     var height = size.height;
     var width = size.width;
     var x = width / 4.5;
+
     return Scaffold(
       extendBody: true,
       body: PageView(

@@ -6,7 +6,6 @@ import 'package:json_annotation/json_annotation.dart';
 
 import 'package:app/model/generated/photo_info.dart';
 import 'package:app/model/generated/geo_json_location.dart';
-import 'package:app/model/generated/authentication.dart';
 part 'user_detailed.g.dart';
 
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
@@ -23,11 +22,11 @@ class UserDetailed {
   final DateTime creationDate;
   @JsonKey(name: "last_location")
   final GeoJsonLocation? lastLocation;
-  final Authentication authentication;
   @JsonKey(name: "archived_until")
   final DateTime? archivedUntil;
   final bool? admin;
   final String id;
+  final String email;
 
   UserDetailed(
       {required this.username,
@@ -37,10 +36,10 @@ class UserDetailed {
       this.ipAddress,
       required this.creationDate,
       this.lastLocation,
-      required this.authentication,
       this.archivedUntil,
       this.admin,
-      required this.id});
+      required this.id,
+      required this.email});
 
   factory UserDetailed.fromJson(Map<String, dynamic> json) =>
       _$UserDetailedFromJson(json);

@@ -114,6 +114,8 @@ void handleLogin(BuildContext context, String username, String password,
       if (success) {
         Provider.of<AppState>(context, listen: false).updateUserInfo();
 
+        SessionManager.instance.startSession();
+
         showMessageSnackBar(context, 'Login successful!');
 
         Navigator.of(context).pop();
