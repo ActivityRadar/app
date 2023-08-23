@@ -1,5 +1,6 @@
 import 'package:app/app_state.dart';
 import 'package:app/constants/constants.dart';
+import 'package:app/widgets/custom/appbar.dart';
 import 'package:app/widgets/custom_text.dart';
 import 'package:app/widgets/custom/snackbar.dart';
 import 'package:app/widgets/custom/button.dart';
@@ -60,6 +61,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: CustomAppBar(
+        context,
+        () {
+          Navigator.pop(context);
+        },
+      ),
       body: PageView(
         physics: const NeverScrollableScrollPhysics(),
         controller: pageController,
@@ -137,7 +144,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
               padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
               child: CustomTextFormField(
                   controller: verifyCodeController,
-                  labelText: "Verify Code",
+                  label: "Verify Code",
                   validator: (v) {
                     return v.length == 8
                         ? null
@@ -284,7 +291,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
               padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
               child: PasswordTextFormField(
                 controller: passwordController,
-                labelText: "Password",
+                label: "Password",
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return 'Please enter your Password';
@@ -305,7 +312,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
               padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
               child: PasswordTextFormField(
                 controller: passwordRepeatController,
-                labelText: "Password",
+                label: "Password",
                 validator: (secondvalue) {
                   if (secondvalue == null || secondvalue.isEmpty) {
                     return 'Please enter your Email';
@@ -366,7 +373,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
               padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
               child: EmailTextFormField(
                 controller: emailController,
-                labelText: "Email",
+                label: "Email",
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return 'Please enter your Email';
@@ -424,7 +431,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
               padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
               child: UsernameTextFormField(
                 controller: usernameController,
-                labelText: "Username",
+                label: "Username",
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return 'Please enter your Username';

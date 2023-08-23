@@ -1,3 +1,4 @@
+import 'package:app/widgets/custom/appbar.dart';
 import 'package:app/widgets/custom_text.dart';
 import 'package:app/widgets/custom/button.dart';
 import 'package:app/widgets/custom/snackbar.dart';
@@ -20,6 +21,12 @@ class _ForgetPasswordScreen extends State<ForgetPasswordScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: CustomAppBar(
+        context,
+        () {
+          Navigator.pop(context);
+        },
+      ),
       body: Form(
           key: _formKey,
           child: Padding(
@@ -35,7 +42,7 @@ class _ForgetPasswordScreen extends State<ForgetPasswordScreen> {
                             horizontal: 8, vertical: 16),
                         child: EmailTextFormField(
                           controller: emailController,
-                          labelText: "Username/Email",
+                          label: "Username/Email",
                           validator: (value) {
                             if (value == null || value.isEmpty) {
                               return 'Please enter your username/Email';
@@ -50,7 +57,7 @@ class _ForgetPasswordScreen extends State<ForgetPasswordScreen> {
                             horizontal: 8, vertical: 16),
                         child: EmailTextFormField(
                           controller: emailRepeatController,
-                          labelText: "Username/Email",
+                          label: "Username/Email",
                           validator: (value) {
                             if (value == null || value.isEmpty) {
                               return 'Please enter your username/Email';

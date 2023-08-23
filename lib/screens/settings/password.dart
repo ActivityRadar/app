@@ -1,4 +1,5 @@
 import 'package:app/constants/constants.dart';
+import 'package:app/widgets/custom/appbar.dart';
 import 'package:app/widgets/custom_text.dart';
 import 'package:app/widgets/custom/snackbar.dart';
 import 'package:app/widgets/custom/button.dart';
@@ -17,24 +18,19 @@ class PasswordSwitch extends StatelessWidget {
     TextEditingController newPasswordRepeatController = TextEditingController();
 
     return Scaffold(
-      appBar: AppBar(
-        leading: CustomTextButton(
-            onPressed: () {
-              Navigator.pop(context);
-              showMessageSnackBar(context, 'Cancel');
-            },
-            text: 'Cancel'),
-        actions: [
-          CustomTextButtonWhite(
-              onPressed: () {
-                if (formPasswordKey.currentState!.validate()) {
-                  Navigator.pop(context);
-                } else {
-                  showMessageSnackBar(context, 'Please fill input');
-                }
-              },
-              text: 'Finish'),
-        ],
+      appBar: CustomWithActionAppBar(
+        context,
+        () {
+          Navigator.pop(context);
+          showMessageSnackBar(context, 'Cancel');
+        },
+        () {
+          if (formPasswordKey.currentState!.validate()) {
+            Navigator.pop(context);
+          } else {
+            showMessageSnackBar(context, 'Please fill input');
+          }
+        },
       ),
       body: Form(
         key: formPasswordKey,
@@ -49,7 +45,7 @@ class PasswordSwitch extends StatelessWidget {
                       const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
                   child: PasswordTextFormField(
                     controller: oldPasswordController,
-                    labelText: "old Password",
+                    label: "old Password",
                     validator: (value) {
                       if (value == null || value.isEmpty) {
                         return 'Please enter your old Password';
@@ -71,7 +67,7 @@ class PasswordSwitch extends StatelessWidget {
                       const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
                   child: PasswordTextFormField(
                     controller: newPasswordController,
-                    labelText: 'new Password',
+                    label: 'new Password',
                     validator: (value) {
                       if (value == null || value.isEmpty) {
                         return 'Please enter your new Password';
@@ -96,7 +92,7 @@ class PasswordSwitch extends StatelessWidget {
 
                       return null;
                     },
-                    labelText: "new Password",
+                    label: "new Password",
                     controller: newPasswordRepeatController),
               ),
               const Padding(

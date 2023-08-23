@@ -1,9 +1,15 @@
 import 'package:app/screens/location_add.dart';
 import 'package:app/screens/meet_add.dart';
 import 'package:app/widgets/custom/button.dart';
+import 'package:app/widgets/custom/card.dart';
+import 'package:app/widgets/custom/chip.dart';
+import 'package:app/widgets/custom/icon.dart';
+import 'package:app/widgets/custom/list_tile.dart';
+import 'package:app/widgets/custom/textfield.dart';
 import 'package:app/widgets/meet_card.dart';
 import 'package:app/widgets/profilecard.dart';
 import 'package:flutter/material.dart';
+import 'package:app/constants/design.dart';
 
 class TestWidget extends StatelessWidget {
   const TestWidget({super.key});
@@ -29,10 +35,11 @@ class ProfileBar extends StatelessWidget {
     var size = MediaQuery.of(context).size;
     var height = size.height;
     var width = size.width;
-
-    return MaterialApp(
-      home: Scaffold(
-        body: Column(
+    TextEditingController usernameController = TextEditingController();
+    return CustomScrollView(slivers: <Widget>[
+      SliverList(
+          delegate: SliverChildListDelegate([
+        Column(
           children: [
             ProfileCard(height: height),
             const SizedBox(
@@ -71,9 +78,87 @@ class ProfileBar extends StatelessWidget {
               },
               text: "Add Meet2",
             ),
+            Divider(),
+            ButtonBookMark(),
+            ButtonCancel(
+              onPressed: () {},
+            ),
+            ButtonMenu(
+              onPressed: () {},
+            ),
+            ButtonBack(
+              onPressed: () {},
+            ),
+            CustomElevatedButton(
+              onPressed: () {},
+              text: "CustomElevatedButton",
+            ),
+            CustomTextButtonWhite(
+              onPressed: () {},
+              text: 'CustomTextButtonWhite',
+            ),
+            CustomTextButton(onPressed: () {}, text: 'CustomTextButton'),
+            CustomCard(
+                child: Column(
+              children: [
+                CustomListTile(
+                  onPressed: () {},
+                  text: "CustomListTile",
+                ),
+                Text("CustomCard"),
+              ],
+            )),
+            CustomChip(text: "CustomChip"),
+            const NaviIcon(
+              icon: Icons.icecream,
+              currentTab: false,
+            ),
+            EditIcon(),
+            CustomListTile(
+              onPressed: () {},
+              text: "CustomListTile",
+            ),
+            TwoListTile(
+              onPressed: () {},
+              keyText: "first",
+              valueText: "Secend",
+            ),
+            CustomTextField(
+                controller: usernameController, label: "CustomTextField"),
+            DescriptionTextField(
+                controller: usernameController, label: "DescriptionTextField"),
+            DescriptionTextFieldwithoutBorder(
+                nameController: usernameController,
+                label: "DescriptionTextFieldwithoutBorder"),
+            PasswordTextFormField(
+                controller: usernameController,
+                label: "PasswordTextFormField",
+                validator: (value) {}),
+            CustomTextFormField(
+              controller: usernameController,
+              label: "CustomTextFormField",
+              validator: (value) {},
+            ),
+            DescriptionTextFormField(
+                controller: usernameController,
+                label: "DescriptionTextFormField"),
+            UnderLineTextFormField(
+              controller: usernameController,
+              label: "UnderLineTextFormField",
+            ),
+            EmailTextFormField(
+              controller: usernameController,
+              label: "EmailTextFormField",
+              validator: (value) {},
+            ),
+            UsernameTextFormField(
+              controller: usernameController,
+              label: "UsernameTextFormField",
+              validator: (value) {},
+            ),
           ],
         ),
-      ),
-    );
+      ])),
+    ]);
   }
 }

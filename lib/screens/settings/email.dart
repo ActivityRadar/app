@@ -1,4 +1,5 @@
 import 'package:app/constants/constants.dart';
+import 'package:app/widgets/custom/appbar.dart';
 import 'package:app/widgets/custom_text.dart';
 import 'package:app/widgets/custom/snackbar.dart';
 import 'package:app/widgets/custom/button.dart';
@@ -15,24 +16,19 @@ class EmailSwitch extends StatelessWidget {
     TextEditingController emailController = TextEditingController();
 
     return Scaffold(
-      appBar: AppBar(
-        leading: CustomTextButtonWhite(
-            onPressed: () {
-              Navigator.pop(context);
-              showMessageSnackBar(context, 'Cancel');
-            },
-            text: 'Cancel'),
-        actions: [
-          CustomTextButtonWhite(
-              onPressed: () {
-                if (formEmailKey.currentState!.validate()) {
-                  Navigator.pop(context);
-                } else {
-                  showMessageSnackBar(context, 'Please fill input');
-                }
-              },
-              text: 'Finish'),
-        ],
+      appBar: CustomWithActionAppBar(
+        context,
+        () {
+          Navigator.pop(context);
+          showMessageSnackBar(context, 'Cancel');
+        },
+        () {
+          if (formEmailKey.currentState!.validate()) {
+            Navigator.pop(context);
+          } else {
+            showMessageSnackBar(context, 'Please fill input');
+          }
+        },
       ),
       body: Form(
         key: formEmailKey,
@@ -47,7 +43,7 @@ class EmailSwitch extends StatelessWidget {
                     const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
                 child: EmailTextFormField(
                   controller: emailController,
-                  labelText: "email",
+                  label: "email",
                   validator: (value) {
                     if (value != null || value!.isEmpty) {
                       if (!RegExps.email.hasMatch(value)) {

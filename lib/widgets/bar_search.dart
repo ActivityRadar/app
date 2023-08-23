@@ -55,6 +55,11 @@ class _MapSearchBarState extends State<MapSearchBar> {
           child: TextField(
             controller: textController,
             decoration: InputDecoration(
+              border: AppInputBorders.none,
+              focusedErrorBorder: AppInputBorders.none,
+              errorBorder: AppInputBorders.none,
+              enabledBorder: AppInputBorders.none,
+              focusedBorder: AppInputBorders.none,
               prefixIcon: IconButton(
                 icon: const Icon(AppIcons.filterAlt),
                 onPressed: () {

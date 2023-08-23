@@ -25,11 +25,26 @@ class EditIcon extends StatelessWidget {
   Widget build(BuildContext context) {
     return const CircleAvatar(
         radius: 8,
+        backgroundColor: DesignColors.naviColor,
         child: Center(
           child: Icon(
             AppIcons.edit,
             size: 8,
           ),
         ));
+  }
+}
+
+class IconBack extends StatelessWidget {
+  const IconBack({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Icon(
+      Icons.arrow_back,
+      color: DesignColors.naviColor,
+    );
   }
 }

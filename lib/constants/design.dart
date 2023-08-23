@@ -1,8 +1,15 @@
 import 'package:flutter/material.dart';
 
 class DesignColors {
-  static const Color naviColor = Color.fromARGB(255, 33, 126, 202);
-  static const Color kBackgroundColor = Color.fromARGB(255, 248, 248, 248);
+  static const Color red = Color(0xFFFF7942);
+  static const Color green = Color(0xFF70BF44);
+  static const Color blue = Color(0xFF3542CC);
+  static const Color grey = Colors.grey;
+  static const Color naviColor = blue;
+  static const Color kBackground = Color.fromARGB(255, 248, 248, 248);
+  static const Color rangeactive = Color.fromARGB(237, 53, 66, 204);
+  static const Color inactive = Color.fromARGB(180, 53, 66, 204);
+  static const Color border = Color.fromARGB(51, 241, 241, 241);
 }
 
 class AppStyle {
@@ -15,29 +22,31 @@ class AppStyle {
 class CustomTextStyle {
   static const TextStyle hint =
       TextStyle(fontSize: 15.0, color: Colors.black12);
+
+  static const TextStyle label = TextStyle(color: Colors.black38);
 }
 
 class AppInputBorders {
-  static const OutlineInputBorder border = OutlineInputBorder(
+  static const OutlineInputBorder none = OutlineInputBorder(
     borderSide: BorderSide.none,
   );
 
-  static const OutlineInputBorder focused = OutlineInputBorder(
-    borderSide: BorderSide.none,
+  static const OutlineInputBorder red = OutlineInputBorder(
+    borderSide: BorderSide(color: DesignColors.red),
   );
 
-  static const OutlineInputBorder enabled = OutlineInputBorder(
-    borderSide: BorderSide.none,
-  );
-
-  static const OutlineInputBorder focusedError = OutlineInputBorder(
-    borderSide: BorderSide.none,
-  );
-
-  static const OutlineInputBorder error = OutlineInputBorder(
-    borderSide: BorderSide.none,
+  static const OutlineInputBorder blue = OutlineInputBorder(
+    borderSide: BorderSide(color: DesignColors.blue),
   );
 }
+
+const InputDecoration searchDecoration = InputDecoration(
+  border: AppInputBorders.none,
+  focusedErrorBorder: AppInputBorders.none,
+  errorBorder: AppInputBorders.none,
+  enabledBorder: AppInputBorders.none,
+  focusedBorder: AppInputBorders.none,
+);
 
 class AppIcons {
   static const IconData add = Icons.add;
@@ -79,4 +88,5 @@ class AppIcons {
   static const IconData bookmark = Icons.bookmark;
   static const IconData edit = Icons.edit;
   static const IconData arrowBack = Icons.arrow_back;
+  static const IconData done = Icons.done;
 }

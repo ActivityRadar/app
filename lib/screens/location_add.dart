@@ -1,5 +1,6 @@
 import 'package:app/constants/constants.dart';
 import 'package:app/constants/design.dart';
+import 'package:app/widgets/custom/appbar.dart';
 import 'package:app/widgets/custom/card.dart';
 import 'package:app/widgets/custom/list_tile.dart';
 import 'package:app/widgets/custom_text.dart';
@@ -44,14 +45,11 @@ class _LocationAddScreenState extends State<LocationAddScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        elevation: 0.0,
-        backgroundColor: DesignColors.kBackgroundColor,
-        leading: ButtonCancel(
-          onPressed: () {
-            Navigator.pop(context);
-          },
-        ),
+      appBar: CustomAppBar(
+        context,
+        () {
+          Navigator.pop(context);
+        },
       ),
       body: PageView(
         physics: const NeverScrollableScrollPhysics(),
@@ -222,7 +220,7 @@ class _LocationAddScreenState extends State<LocationAddScreen> {
           ),
           CustomListTile(
             onPressed: () {},
-            titleText: "Pick Location",
+            text: "Pick Location",
           ),
           const SizedBox(
             height: 20,
@@ -270,7 +268,7 @@ class _LocationAddScreenState extends State<LocationAddScreen> {
                   Padding(
                       padding: const EdgeInsets.only(left: 9.0, top: 15.0),
                       child: CustomTextField(
-                          streetController: nameController, label: 'Titel')),
+                          controller: nameController, label: 'Titel')),
                   Padding(
                     padding: const EdgeInsets.only(left: 9.0, top: 15.0),
                     child: DescriptionTextFieldwithoutBorder(

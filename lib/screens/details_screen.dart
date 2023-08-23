@@ -89,7 +89,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
           appBar ??= _appBarPlaceHolder(width);
 
           return Scaffold(
-              backgroundColor: DesignColors.kBackgroundColor,
+              backgroundColor: DesignColors.kBackground,
               body: CustomScrollView(
                 slivers: <Widget>[appBar, body],
               ));
@@ -110,17 +110,17 @@ class _DetailsScreenState extends State<DetailsScreen> {
           bottom: Radius.circular(25.0),
         ),
       ),
-      shadowColor: DesignColors.kBackgroundColor,
+      shadowColor: DesignColors.kBackground,
       actions: <Widget>[
         IconButton(
           onPressed: () {},
           icon: const Icon(AppIcons.share),
-          color: DesignColors.kBackgroundColor,
+          color: DesignColors.kBackground,
         ),
         IconButton(
           onPressed: () {},
           icon: const Icon(AppIcons.addAPhoto),
-          color: DesignColors.kBackgroundColor,
+          color: DesignColors.kBackground,
         ),
       ],
       pinned: true,
@@ -147,16 +147,17 @@ class _DetailsScreenState extends State<DetailsScreen> {
         IconButton(
           onPressed: () {},
           icon: const Icon(AppIcons.share),
-          color: DesignColors.kBackgroundColor,
+          color: DesignColors.kBackground,
         ),
         IconButton(
           onPressed: () => _addPhoto(),
           icon: const Icon(AppIcons.addAPhoto),
-          color: DesignColors.kBackgroundColor,
+          color: DesignColors.kBackground,
         ),
       ],
       pinned: true,
       stretch: true,
+      backgroundColor: DesignColors.blue,
       expandedHeight: 220.0,
       flexibleSpace: FlexibleSpaceBar(
           title: PageTitleText(

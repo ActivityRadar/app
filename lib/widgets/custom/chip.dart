@@ -12,11 +12,9 @@ class CustomChip extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Chip(
-        label: Text(
-          text,
-          style: const TextStyle(
-              color: DesignColors.kBackgroundColor, fontSize: 10),
-        ),
-        backgroundColor: DesignColors.naviColor);
+      label: Text(
+        text,
+      ),
+    );
   }
 }

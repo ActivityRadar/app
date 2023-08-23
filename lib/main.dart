@@ -23,7 +23,68 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(
-        scaffoldBackgroundColor: DesignColors.kBackgroundColor,
+        appBarTheme: AppBarTheme(
+          elevation: 0,
+          backgroundColor: DesignColors.kBackground,
+        ),
+        primaryColor: const Color.fromARGB(255, 204, 68, 53),
+        switchTheme: SwitchThemeData(
+          trackColor: MaterialStateProperty.all(DesignColors.grey),
+          overlayColor: MaterialStateProperty.all(DesignColors.green),
+        ),
+        inputDecorationTheme: const InputDecorationTheme(
+          labelStyle: CustomTextStyle.label,
+          border: AppInputBorders.none,
+          focusedErrorBorder: AppInputBorders.none,
+          errorBorder: AppInputBorders.none,
+          enabledBorder: AppInputBorders.none,
+          focusedBorder: AppInputBorders.none,
+        ),
+        timePickerTheme: TimePickerThemeData(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.vertical(
+              bottom: Radius.circular(30.0),
+            ),
+          ),
+        ),
+        snackBarTheme: SnackBarThemeData(
+          shape: const RoundedRectangleBorder(
+            borderRadius: BorderRadius.all(
+              Radius.circular(15.0),
+            ),
+          ),
+          backgroundColor: DesignColors.naviColor,
+          behavior: SnackBarBehavior.floating,
+          elevation: 6.0,
+        ),
+        sliderTheme: const SliderThemeData(
+          valueIndicatorTextStyle: TextStyle(color: DesignColors.blue),
+        ),
+        iconTheme: const IconThemeData(),
+        cardTheme: CardTheme(
+          shape: RoundedRectangleBorder(
+            side: const BorderSide(
+              color: Color.fromARGB(51, 241, 241, 241),
+            ),
+            borderRadius: BorderRadius.circular(AppStyle.cornerRadius),
+          ),
+        ),
+        chipTheme: ChipThemeData(
+          backgroundColor: DesignColors.naviColor,
+          labelStyle: TextStyle(color: DesignColors.kBackground, fontSize: 10),
+        ),
+        colorScheme: const ColorScheme(
+            brightness: Brightness.light,
+            primary: DesignColors.blue,
+            onPrimary: DesignColors.kBackground,
+            secondary: DesignColors.green,
+            onSecondary: DesignColors.kBackground,
+            error: DesignColors.red,
+            onError: DesignColors.red,
+            background: DesignColors.kBackground,
+            onBackground: DesignColors.kBackground,
+            surface: DesignColors.kBackground,
+            onSurface: DesignColors.kBackground),
       ),
       localizationsDelegates: const [
         AppLocalizations.delegate, // Add this line

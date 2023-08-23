@@ -10,6 +10,7 @@ import 'package:app/widgets/custom/textfield.dart';
 import 'package:app/widgets/filter_discipline.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import 'package:app/constants/design.dart';
 
 Future<dynamic> bottomSheetBase(
     {required BuildContext context, required dynamic builder}) {
@@ -32,7 +33,7 @@ Future<dynamic> bottomSheetAdd(BuildContext context) {
             children: <Widget>[
               CustomListTile(
                 icon: const Icon(AppIcons.pushPin),
-                titleText: "Add Location",
+                text: "Add Location",
                 onPressed: () {
                   Navigator.push(
                     context,
@@ -43,8 +44,8 @@ Future<dynamic> bottomSheetAdd(BuildContext context) {
                 },
               ),
               CustomListTile(
-                icon: const Icon(AppIcons.event),
-                titleText: "Add Event",
+                icon: const Icon(Icons.event),
+                text: "Add Event",
                 onPressed: () {},
               ),
             ],
@@ -172,12 +173,12 @@ Future<void> reviewBottomSheet(
                   padding: const EdgeInsets.only(left: 9.0, top: 15.0),
                   child: Column(children: [
                     DescriptionTextFormField(
-                        textController: titleController,
-                        hint: "Title",
+                        controller: titleController,
+                        label: "Title",
                         maxLines: 1),
                     DescriptionTextFormField(
-                        textController: textController,
-                        hint: 'Description',
+                        controller: textController,
+                        label: 'Description',
                         maxLines: 5),
                   ]),
                 ),
