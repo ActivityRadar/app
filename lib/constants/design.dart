@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 
 class DesignColors {
-  static const Color redColor = Color(0xFFFF7942);
-  static const Color greenColor = Color(0xFF70BF44);
-  static const Color blueColor = Color(0xFF3542CC);
-  static const Color greyColor = Colors.grey;
-  static const Color naviColor = blueColor;
-  static const Color kBackgroundColor = Color.fromARGB(255, 248, 248, 248);
-  static const Color rangeactiveColor = Color.fromARGB(237, 53, 66, 204);
-  static const Color inactiveColorColor = Color.fromARGB(180, 53, 66, 204);
-  static const Color borderColor = Color.fromARGB(51, 241, 241, 241);
+  static const Color red = Color(0xFFFF7942);
+  static const Color green = Color(0xFF70BF44);
+  static const Color blue = Color(0xFF3542CC);
+  static const Color grey = Colors.grey;
+  static const Color naviColor = blue;
+  static const Color kBackground = Color.fromARGB(255, 248, 248, 248);
+  static const Color rangeactive = Color.fromARGB(237, 53, 66, 204);
+  static const Color inactive = Color.fromARGB(180, 53, 66, 204);
+  static const Color border = Color.fromARGB(51, 241, 241, 241);
 }
 
 class AppStyle {
@@ -32,11 +32,11 @@ class AppInputBorders {
   );
 
   static const OutlineInputBorder red = OutlineInputBorder(
-    borderSide: BorderSide(color: DesignColors.redColor),
+    borderSide: BorderSide(color: DesignColors.red),
   );
 
   static const OutlineInputBorder blue = OutlineInputBorder(
-    borderSide: BorderSide(color: DesignColors.blueColor),
+    borderSide: BorderSide(color: DesignColors.blue),
   );
 }
 

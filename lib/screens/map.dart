@@ -282,7 +282,7 @@ class _ActivityMarkerMapState extends State<ActivityMarkerMap>
     final List<CircleMarker> circles = [];
     if (pos != null) {
       final color =
-          widget.currentPosition.recent ? DesignColors.blueColor : Colors.grey;
+          widget.currentPosition.recent ? DesignColors.blue : Colors.grey;
       circles.add(CircleMarker(
           radius: 8,
           point: pos,
@@ -373,7 +373,7 @@ class _ActivityMarkerMapState extends State<ActivityMarkerMap>
           builder: (context, ms) {
             return Container(
               decoration: const BoxDecoration(
-                  shape: BoxShape.circle, color: DesignColors.blueColor),
+                  shape: BoxShape.circle, color: DesignColors.blue),
               child: Center(
                 child: MapText(
                   text: ms.length.toString(),
@@ -405,7 +405,7 @@ class LocationMarker extends Marker {
       Function()? onDoubleTap,
       bool focused = false}) {
     final size = focused ? 45.0 : 40.0;
-    final color = focused ? DesignColors.redColor : Colors.black;
+    final color = focused ? DesignColors.red : Colors.black;
 
     if (focused) print("is focused");
 

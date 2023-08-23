@@ -25,12 +25,12 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         appBarTheme: AppBarTheme(
           elevation: 0,
-          backgroundColor: DesignColors.kBackgroundColor,
+          backgroundColor: DesignColors.kBackground,
         ),
         primaryColor: const Color.fromARGB(255, 204, 68, 53),
         switchTheme: SwitchThemeData(
-          trackColor: MaterialStateProperty.all(DesignColors.greyColor),
-          overlayColor: MaterialStateProperty.all(DesignColors.greenColor),
+          trackColor: MaterialStateProperty.all(DesignColors.grey),
+          overlayColor: MaterialStateProperty.all(DesignColors.green),
         ),
         inputDecorationTheme: const InputDecorationTheme(
           labelStyle: CustomTextStyle.label,
@@ -58,7 +58,7 @@ class MyApp extends StatelessWidget {
           elevation: 6.0,
         ),
         sliderTheme: const SliderThemeData(
-          valueIndicatorTextStyle: TextStyle(color: DesignColors.blueColor),
+          valueIndicatorTextStyle: TextStyle(color: DesignColors.blue),
         ),
         iconTheme: const IconThemeData(),
         cardTheme: CardTheme(
@@ -71,21 +71,20 @@ class MyApp extends StatelessWidget {
         ),
         chipTheme: ChipThemeData(
           backgroundColor: DesignColors.naviColor,
-          labelStyle:
-              TextStyle(color: DesignColors.kBackgroundColor, fontSize: 10),
+          labelStyle: TextStyle(color: DesignColors.kBackground, fontSize: 10),
         ),
         colorScheme: const ColorScheme(
             brightness: Brightness.light,
-            primary: DesignColors.blueColor,
-            onPrimary: DesignColors.kBackgroundColor,
-            secondary: DesignColors.greenColor,
-            onSecondary: DesignColors.kBackgroundColor,
-            error: DesignColors.redColor,
-            onError: DesignColors.redColor,
-            background: DesignColors.kBackgroundColor,
-            onBackground: DesignColors.kBackgroundColor,
-            surface: DesignColors.kBackgroundColor,
-            onSurface: DesignColors.kBackgroundColor),
+            primary: DesignColors.blue,
+            onPrimary: DesignColors.kBackground,
+            secondary: DesignColors.green,
+            onSecondary: DesignColors.kBackground,
+            error: DesignColors.red,
+            onError: DesignColors.red,
+            background: DesignColors.kBackground,
+            onBackground: DesignColors.kBackground,
+            surface: DesignColors.kBackground,
+            onSurface: DesignColors.kBackground),
       ),
       localizationsDelegates: const [
         AppLocalizations.delegate, // Add this line

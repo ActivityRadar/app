@@ -412,8 +412,8 @@ class _RangeSliderExampleState extends State<RangeSliderExample> {
   @override
   Widget build(BuildContext context) {
     return RangeSlider(
-      activeColor: DesignColors.rangeactiveColor,
-      inactiveColor: DesignColors.inactiveColorColor,
+      activeColor: DesignColors.rangeactive,
+      inactiveColor: DesignColors.inactive,
       values: _currentRangeValues,
       max: 30,
       divisions: 30,

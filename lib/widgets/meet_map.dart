@@ -26,7 +26,7 @@ class _MeetMapState extends State<MeetMap> {
     final circleMarkers = <CircleMarker>[
       CircleMarker(
         point: center,
-        color: DesignColors.blueColor.withOpacity(0.5),
+        color: DesignColors.blue.withOpacity(0.5),
         borderStrokeWidth: 1,
         borderColor: Colors.black12,
         useRadiusInMeter: true,

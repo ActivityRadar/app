@@ -37,7 +37,7 @@ class SettingScreen extends StatelessWidget {
           expandedHeight: expandedHeight,
           collapsedHeight: collapsedHeight,
           pinned: true,
-          backgroundColor: DesignColors.kBackgroundColor,
+          backgroundColor: DesignColors.kBackground,
           leading: state.isLoggedIn
               ? null
               : CustomTextButton(
@@ -292,13 +292,13 @@ class PhotoShower extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: DesignColors.kBackgroundColor,
+      backgroundColor: DesignColors.kBackground,
       appBar: AppBar(
           backgroundColor: DesignColors.naviColor,
           elevation: 0,
           leading: IconButton(
               icon: const Icon(AppIcons.keyboardBackspace),
-              color: DesignColors.kBackgroundColor,
+              color: DesignColors.kBackground,
               onPressed: () {
                 Navigator.pop(context);
               }),
