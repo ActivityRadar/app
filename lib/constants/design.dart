@@ -4,10 +4,12 @@ class DesignColors {
   static const Color redColor = Color(0xFFFF7942);
   static const Color greenColor = Color(0xFF70BF44);
   static const Color blueColor = Color(0xFF3542CC);
+  static const Color greyColor = Colors.grey;
   static const Color naviColor = blueColor;
   static const Color kBackgroundColor = Color.fromARGB(255, 248, 248, 248);
   static const Color rangeactiveColor = Color.fromARGB(237, 53, 66, 204);
   static const Color inactiveColorColor = Color.fromARGB(180, 53, 66, 204);
+  static const Color borderColor = Color.fromARGB(51, 241, 241, 241);
 }
 
 class AppStyle {
@@ -37,6 +39,7 @@ class AppInputBorders {
     borderSide: BorderSide(color: DesignColors.blueColor),
   );
 }
+
 const InputDecoration searchDecoration = InputDecoration(
   border: AppInputBorders.none,
   focusedErrorBorder: AppInputBorders.none,
@@ -85,4 +88,5 @@ class AppIcons {
   static const IconData bookmark = Icons.bookmark;
   static const IconData edit = Icons.edit;
   static const IconData arrowBack = Icons.arrow_back;
+  static const IconData done = Icons.done;
 }
