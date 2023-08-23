@@ -6,6 +6,23 @@ import 'package:app/widgets/meet_map.dart';
 import 'package:app/constants/design.dart';
 import 'package:flutter/material.dart';
 
+class MeetList extends StatelessWidget {
+  const MeetList({super.key, required this.width, required this.height});
+
+  final double width;
+  final double height;
+
+  @override
+  Widget build(BuildContext context) {
+    return SingleChildScrollView(
+      scrollDirection: Axis.horizontal,
+      child: Row(
+        children: [MeetCard(), MeetCard(), MeetCard()],
+      ),
+    );
+  }
+}
+
 class MeetCard extends StatelessWidget {
   const MeetCard({
     super.key,
@@ -25,78 +42,83 @@ class MeetCard extends StatelessWidget {
             ),
           );
         },
-        child: Card(
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(AppStyle.cornerRadius),
-            ),
-            child: Column(
-              children: [
-                Stack(children: [
-                  SizedBox(
-                    height: height / 6.5,
-                    child: Container(
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(AppStyle
-                              .cornerRadius), // Radius der abgerundeten Ecken
-                        ),
-                        child: const MeetMap()),
-                  ),
-                  Positioned(
-                      bottom: 0, // Positioniert den Container am unteren Rand
-                      left: 0,
-                      right: 0,
-                      child: Container(
-                          alignment: Alignment.bottomCenter,
-                          child: const Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
+        child: SizedBox(
+            width: width,
+            child: Card(
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(AppStyle.cornerRadius),
+                ),
+                child: Column(
+                  children: [
+                    Stack(children: [
+                      SizedBox(
+                        height: height / 6.5,
+                        child: Container(
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(AppStyle
+                                  .cornerRadius), // Radius der abgerundeten Ecken
+                            ),
+                            child: const MeetMap()),
+                      ),
+                      Positioned(
+                          bottom:
+                              0, // Positioniert den Container am unteren Rand
+                          left: 0,
+                          right: 0,
+                          child: Container(
+                              alignment: Alignment.bottomCenter,
+                              child: const Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Padding(
+                                    padding: EdgeInsets.only(left: 12.0),
+                                    child: CustomChip(
+                                      text: 'Table Tennis',
+                                    ),
+                                  ),
+                                  Padding(
+                                    padding: EdgeInsets.only(right: 12.0),
+                                    child: CustomChip(
+                                      text: 'ab 14 Uhr ',
+                                    ),
+                                  )
+                                ],
+                              ))),
+                    ]),
+                    Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Column(children: [
+                            Row(children: [
                               Padding(
-                                padding: EdgeInsets.only(left: 12.0),
-                                child: CustomChip(
-                                  text: 'Table Tennis',
-                                ),
+                                  padding: EdgeInsets.only(left: 10, top: 60)),
+                              CircleAvatar(
+                                backgroundImage: AssetImages.avatarEmpty,
+                                radius: 20,
                               ),
-                              Padding(
-                                padding: EdgeInsets.only(right: 12.0),
-                                child: CustomChip(
-                                  text: 'ab 14 Uhr ',
-                                ),
-                              )
-                            ],
-                          ))),
-                ]),
-                Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Column(children: [
-                        Row(children: [
-                          Padding(padding: EdgeInsets.only(left: 10, top: 60)),
-                          CircleAvatar(
-                            backgroundImage: AssetImages.avatarEmpty,
-                            radius: 20,
-                          ),
-                          SizedBox(
-                            width: 10,
-                          ),
-                          MediumText(
-                            text: 'Max Mustermann',
-                            width: width,
-                          ),
-                        ]),
-                      ]),
-                      Column(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            Padding(
-                              padding: EdgeInsets.all(12.0),
-                              child: LittleText(
-                                text: "12h ago",
+                              SizedBox(
+                                width: 10,
+                              ),
+                              MediumText(
+                                text: 'Max Mustermann',
                                 width: width,
                               ),
-                            )
+                            ]),
                           ]),
-                    ]),
-              ],
-            )));
+                          Column(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                Padding(
+                                  padding: EdgeInsets.all(12.0),
+                                  child: LittleText(
+                                    text: "12h ago",
+                                    width: width,
+                                  ),
+                                )
+                              ]),
+                        ]),
+                  ],
+                ))));
   }
 }
