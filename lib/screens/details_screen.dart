@@ -157,6 +157,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
       ],
       pinned: true,
       stretch: true,
+      backgroundColor: DesignColors.blueColor,
       expandedHeight: 220.0,
       flexibleSpace: FlexibleSpaceBar(
           title: PageTitleText(

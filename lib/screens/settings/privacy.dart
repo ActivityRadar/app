@@ -52,7 +52,6 @@ class _PrivacySettingPageState extends State<PrivacySettingPage> {
                           title: const CustomText(text: 'öffentliches Profil'),
                           trailing: Switch(
                             value: isExpanded,
-                            activeColor: DesignColors.redColor,
                             onChanged: (bool value) {
                               setState(() {
                                 isExpanded = value;
@@ -104,7 +103,6 @@ class _ExpandableTileState extends State<ExpandableTile> {
         title: const CustomText(text: 'Sichtbarkeit auf dem Map'),
         trailing: Switch(
           value: isExpanded,
-          activeColor: DesignColors.redColor,
           onChanged: (bool value) {
             setState(() {
               isExpanded = value;
@@ -118,7 +116,6 @@ class _ExpandableTileState extends State<ExpandableTile> {
           title: const CustomText(text: 'Nur Freunde'),
           trailing: Switch(
             value: isfriends,
-            activeColor: DesignColors.redColor,
             onChanged: (bool value) {
               setState(() {
                 isfriends = value;
@@ -131,7 +128,6 @@ class _ExpandableTileState extends State<ExpandableTile> {
           title: const CustomText(text: 'Radius'),
           trailing: Switch(
             value: isRadius,
-            activeColor: DesignColors.redColor,
             onChanged: (bool value) {
               setState(() {
                 isRadius = value;

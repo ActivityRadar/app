@@ -29,10 +29,8 @@ class MyApp extends StatelessWidget {
         ),
         primaryColor: const Color.fromARGB(255, 204, 68, 53),
         switchTheme: SwitchThemeData(
-          thumbColor: MaterialStateProperty.all(DesignColors.redColor),
-          trackColor: MaterialStateProperty.all(Colors.grey),
-          overlayColor:
-              MaterialStateProperty.all(Color.fromARGB(255, 210, 24, 24)),
+          trackColor: MaterialStateProperty.all(DesignColors.greyColor),
+          overlayColor: MaterialStateProperty.all(DesignColors.greenColor),
         ),
         inputDecorationTheme: const InputDecorationTheme(
           labelStyle: CustomTextStyle.label,
@@ -41,6 +39,13 @@ class MyApp extends StatelessWidget {
           errorBorder: AppInputBorders.none,
           enabledBorder: AppInputBorders.none,
           focusedBorder: AppInputBorders.none,
+        ),
+        timePickerTheme: TimePickerThemeData(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.vertical(
+              bottom: Radius.circular(30.0),
+            ),
+          ),
         ),
         snackBarTheme: SnackBarThemeData(
           shape: const RoundedRectangleBorder(
@@ -53,8 +58,8 @@ class MyApp extends StatelessWidget {
           elevation: 6.0,
         ),
         sliderTheme: const SliderThemeData(
-            valueIndicatorColor: DesignColors.greenColor,
-            overlayColor: DesignColors.greenColor),
+          valueIndicatorTextStyle: TextStyle(color: DesignColors.blueColor),
+        ),
         iconTheme: const IconThemeData(),
         cardTheme: CardTheme(
           shape: RoundedRectangleBorder(
