@@ -29,15 +29,22 @@ class _MeetAddScreenState extends State<MeetAddScreen> {
 
   String? newUserId;
   Set<Sport> filters = <Sport>{};
-  @override
+  int _currentPage = 0;
+
   void previousPage() {
     pageController.previousPage(
         duration: const Duration(milliseconds: 400), curve: Curves.easeIn);
+    setState(() {
+      _currentPage--;
+    });
   }
 
   void nextPage() {
     pageController.nextPage(
         duration: const Duration(milliseconds: 400), curve: Curves.easeIn);
+    setState(() {
+      _currentPage++;
+    });
   }
 
   @override
@@ -51,19 +58,38 @@ class _MeetAddScreenState extends State<MeetAddScreen> {
       chooseVisibility(),
     ];
 
+    Align previous = Align(
+        alignment: Alignment.bottomLeft,
+        child: Padding(
+          padding: const EdgeInsets.only(bottom: 60.0),
+          child:
+              CustomElevatedButton(onPressed: previousPage, text: "Previous"),
+        ));
+    Align next = Align(
+        alignment: Alignment.bottomRight,
+        child: Padding(
+          padding: const EdgeInsets.only(bottom: 60.0),
+          child: CustomElevatedButton(onPressed: nextPage, text: "Next"),
+        ));
+
     return Scaffold(
-      appBar: CustomAppBar(
-        context,
-        () {
-          Navigator.pop(context);
-        },
-      ),
-      body: PageView(
-        physics: const NeverScrollableScrollPhysics(),
-        controller: pageController,
-        children: pages,
-      ),
-    );
+        appBar: CustomAppBar(
+          context,
+          () {
+            Navigator.pop(context);
+          },
+        ),
+        body: PageView(
+          physics: const NeverScrollableScrollPhysics(),
+          controller: pageController,
+          children: pages,
+        ),
+        floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+        floatingActionButton: _currentPage == 0
+            ? next
+            : (_currentPage < pages.length - 1
+                ? Stack(children: [previous, next])
+                : previous));
   }
 
   Center chooseActivity() {
@@ -71,69 +97,48 @@ class _MeetAddScreenState extends State<MeetAddScreen> {
 
     double width = size.width;
     return Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          TitleText(text: "Was willst du spielen?", width: width),
-          const SizedBox(
-            height: 20,
-          ),
-          CustomCard(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                Wrap(
-                  crossAxisAlignment: WrapCrossAlignment.center,
-                  alignment: WrapAlignment.center,
-                  spacing: 5.0,
-                  children: Sport.values.map((Sport exercise) {
-                    return FilterChip(
-                      label: CustomText(text: exercise.name),
-                      selected: filters.contains(exercise),
-                      selectedColor: DesignColors.naviColor,
-                      showCheckmark: false,
-                      onSelected: (bool selected) {
-                        setState(() {
-                          if (selected) {
-                            filters.add(exercise);
-                          } else {
-                            filters.remove(exercise);
-                          }
-                        });
-                      },
-                    );
-                  }).toList(),
-                ),
-              ],
-            ),
-          ),
-          const SizedBox(
-            height: 10,
-          ),
-          const InfoText(
-            text:
-                "Moin Moin Moin Moin Moin Moin Moin Moin Moin Moin Moin Moin Moin Moin Moin Moin Moin Moin Moin Moin Moin Moin Moin Moin",
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              CustomElevatedButton(
-                onPressed: () {
-                  previousPage();
-                },
-                text: "Previous",
-              ),
-              CustomElevatedButton(
-                onPressed: () {
-                  nextPage();
-                },
-                text: "Next",
-              ),
-            ],
-          )
-        ],
+        child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
+      TitleText(text: "Was willst du spielen?", width: width),
+      const SizedBox(
+        height: 20,
       ),
-    );
+      CustomCard(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            Wrap(
+              crossAxisAlignment: WrapCrossAlignment.center,
+              alignment: WrapAlignment.center,
+              spacing: 5.0,
+              children: Sport.values.map((Sport exercise) {
+                return FilterChip(
+                  label: CustomText(text: exercise.name),
+                  selected: filters.contains(exercise),
+                  selectedColor: DesignColors.naviColor,
+                  showCheckmark: false,
+                  onSelected: (bool selected) {
+                    setState(() {
+                      if (selected) {
+                        filters.add(exercise);
+                      } else {
+                        filters.remove(exercise);
+                      }
+                    });
+                  },
+                );
+              }).toList(),
+            ),
+          ],
+        ),
+      ),
+      const SizedBox(
+        height: 10,
+      ),
+      const InfoText(
+        text:
+            "Moin Moin Moin Moin Moin Moin Moin Moin Moin Moin Moin Moin Moin Moin Moin Moin Moin Moin Moin Moin Moin Moin Moin Moin",
+      ),
+    ]));
   }
 
   Center chooseTime() {
@@ -141,44 +146,23 @@ class _MeetAddScreenState extends State<MeetAddScreen> {
 
     double width = size.width;
     return Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          TitleText(text: "Wann willst du spielen?", width: width),
-          const SizedBox(
-            height: 20,
-          ),
-          const CustomCard(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                DateTimePicker(),
-              ],
-            ),
-          ),
-          const SizedBox(
-            height: 20,
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              CustomElevatedButton(
-                onPressed: () {
-                  previousPage();
-                },
-                text: "Previous",
-              ),
-              CustomElevatedButton(
-                onPressed: () {
-                  nextPage();
-                },
-                text: "Next",
-              ),
-            ],
-          )
-        ],
+        child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
+      TitleText(text: "Wann willst du spielen?", width: width),
+      const SizedBox(
+        height: 20,
       ),
-    );
+      const CustomCard(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            DateTimePicker(),
+          ],
+        ),
+      ),
+      const SizedBox(
+        height: 20,
+      ),
+    ]));
   }
 
   Center choosePlace() {
@@ -186,40 +170,19 @@ class _MeetAddScreenState extends State<MeetAddScreen> {
 
     double width = size.width;
     return Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          TitleText(text: "Wo willst du spielen?", width: width),
-          const SizedBox(
-            height: 20,
-          ),
-          CustomListTile(
-            onPressed: () {},
-            text: "Pick Location",
-          ),
-          const SizedBox(
-            height: 20,
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              CustomElevatedButton(
-                onPressed: () {
-                  previousPage();
-                },
-                text: "Previous",
-              ),
-              CustomElevatedButton(
-                onPressed: () {
-                  nextPage();
-                },
-                text: "Next",
-              ),
-            ],
-          )
-        ],
+        child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
+      TitleText(text: "Wo willst du spielen?", width: width),
+      const SizedBox(
+        height: 20,
       ),
-    );
+      CustomListTile(
+        onPressed: () {},
+        text: "Pick Location",
+      ),
+      const SizedBox(
+        height: 20,
+      ),
+    ]));
   }
 
   Center chooseParticipantNumber() {
@@ -227,51 +190,30 @@ class _MeetAddScreenState extends State<MeetAddScreen> {
 
     double width = size.width;
     return Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          TitleText(text: "Wie viele Mitspielende brauchst du?", width: width),
-          const SizedBox(
-            height: 20,
-          ),
-          const CustomCard(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
+        child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
+      TitleText(text: "Wie viele Mitspielende brauchst du?", width: width),
+      const SizedBox(
+        height: 20,
+      ),
+      const CustomCard(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    CustomText(text: "mindestes"),
-                    CustomText(text: "maximal")
-                  ],
-                ),
-                RangeSliderExample(),
+                CustomText(text: "mindestes"),
+                CustomText(text: "maximal")
               ],
             ),
-          ),
-          const SizedBox(
-            height: 20,
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              CustomElevatedButton(
-                onPressed: () {
-                  previousPage();
-                },
-                text: "Previous",
-              ),
-              CustomElevatedButton(
-                onPressed: () {
-                  nextPage();
-                },
-                text: "Next",
-              ),
-            ],
-          )
-        ],
+            RangeSliderExample(),
+          ],
+        ),
       ),
-    );
+      const SizedBox(
+        height: 20,
+      ),
+    ]));
   }
 
   Center addDescription() {
@@ -279,75 +221,33 @@ class _MeetAddScreenState extends State<MeetAddScreen> {
 
     double width = size.width;
     return Center(
-      child: Form(
-        key: _formTitleKey,
+        child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
+      TitleText(text: "Füge eine kurze Beschreibung hinzu", width: width),
+      const SizedBox(
+        height: 20,
+      ),
+      CustomCard(
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            TitleText(text: "Füge eine kurze Beschreibung hinzu", width: width),
-            const SizedBox(
-              height: 20,
-            ),
-            CustomCard(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  Padding(
-                      padding: const EdgeInsets.only(left: 9.0, top: 15.0),
-                      child: CustomTextField(
-                          controller: nameController, label: 'Titel')
-                      /*TextFormField(
-                              controller: nameController,
-                              onChanged: (v) => nameController.text = v,
-                              decoration: const InputDecoration(
-                                hintText: 'Titel',
-                                border: AppInputBorders.border,
-                                focusedErrorBorder:
-                                    AppInputBorders.focusedError,
-                                errorBorder: AppInputBorders.error,
-                                enabledBorder: AppInputBorders.enabled,
-                                focusedBorder: AppInputBorders.focused,
-                              ),
-                            ),*/
-                      ),
-                  Padding(
-                    padding: const EdgeInsets.only(left: 9.0, top: 15.0),
-                    child: DescriptionTextFieldwithoutBorder(
-                      nameController: descriptionController,
-                      label: 'Description',
-                    ),
-                  ),
-                ],
+            Padding(
+                padding: const EdgeInsets.only(left: 9.0, top: 15.0),
+                child: CustomTextField(
+                    controller: nameController, label: 'Titel')),
+            Padding(
+              padding: const EdgeInsets.only(left: 9.0, top: 15.0),
+              child: DescriptionTextFieldwithoutBorder(
+                nameController: descriptionController,
+                label: 'Description',
               ),
             ),
-            const SizedBox(
-              height: 20,
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                CustomElevatedButton(
-                  onPressed: () {
-                    previousPage();
-                  },
-                  text: "Previous",
-                ),
-                CustomElevatedButton(
-                  onPressed: () {
-                    if (_formTitleKey.currentState!.validate()) {
-                      nextPage();
-                    } else {
-                      showMessageSnackBar(context, 'Please fill input');
-                    }
-                  },
-                  text: "Next",
-                ),
-              ],
-            )
           ],
         ),
       ),
-    );
+      const SizedBox(
+        height: 20,
+      ),
+    ]));
   }
 
   Center chooseVisibility() {
@@ -355,49 +255,27 @@ class _MeetAddScreenState extends State<MeetAddScreen> {
     double width = size.width;
 
     return Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          TitleText(
-              text: "Für wen soll das Angebot sichtbar sein?", width: width),
-          const SizedBox(
-            height: 20,
-          ),
-          CustomCard(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                Container(
-                  alignment: Alignment.center,
-                  width: width,
-                  child: const PrivatSwitch(),
-                )
-              ],
-            ),
-          ),
-          const SizedBox(
-            height: 20,
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              CustomElevatedButton(
-                onPressed: () {
-                  previousPage();
-                },
-                text: "Previous",
-              ),
-              CustomElevatedButton(
-                onPressed: () {
-                  nextPage();
-                },
-                text: "Next",
-              ),
-            ],
-          )
-        ],
+        child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
+      TitleText(text: "Für wen soll das Angebot sichtbar sein?", width: width),
+      const SizedBox(
+        height: 20,
       ),
-    );
+      CustomCard(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            Container(
+              alignment: Alignment.center,
+              width: width,
+              child: const PrivatSwitch(),
+            )
+          ],
+        ),
+      ),
+      const SizedBox(
+        height: 20,
+      ),
+    ]));
   }
 }
 
