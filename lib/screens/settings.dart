@@ -198,7 +198,7 @@ class SettingScreen extends StatelessWidget {
                 );
               },
               keyText: "E-Mail",
-              valueText: userInfo.authentication.email ?? "none@none.com",
+              valueText: userInfo.email ?? "none@none.com",
             ),
             const Divider(height: 0),
             CustomListTile(

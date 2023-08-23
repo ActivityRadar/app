@@ -19,13 +19,12 @@ UserDetailed _$UserDetailedFromJson(Map<String, dynamic> json) => UserDetailed(
           ? null
           : GeoJsonLocation.fromJson(
               json['last_location'] as Map<String, dynamic>),
-      authentication: Authentication.fromJson(
-          json['authentication'] as Map<String, dynamic>),
       archivedUntil: json['archived_until'] == null
           ? null
           : DateTime.parse(json['archived_until'] as String),
       admin: json['admin'] as bool?,
       id: json['id'] as String,
+      email: json['email'] as String,
     );
 
 Map<String, dynamic> _$UserDetailedToJson(UserDetailed instance) {
@@ -45,9 +44,9 @@ Map<String, dynamic> _$UserDetailedToJson(UserDetailed instance) {
   writeNotNull('ip_address', instance.ipAddress);
   val['creation_date'] = instance.creationDate.toIso8601String();
   writeNotNull('last_location', instance.lastLocation?.toJson());
-  val['authentication'] = instance.authentication.toJson();
   writeNotNull('archived_until', instance.archivedUntil?.toIso8601String());
   writeNotNull('admin', instance.admin);
   val['id'] = instance.id;
+  val['email'] = instance.email;
   return val;
 }
