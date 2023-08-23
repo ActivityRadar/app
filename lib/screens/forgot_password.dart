@@ -1,4 +1,5 @@
 import 'package:app/widgets/custom/appbar.dart';
+import 'package:app/widgets/custom/background.dart';
 import 'package:app/widgets/custom_text.dart';
 import 'package:app/widgets/custom/button.dart';
 import 'package:app/widgets/custom/snackbar.dart';
@@ -21,69 +22,72 @@ class _ForgetPasswordScreen extends State<ForgetPasswordScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CustomAppBar(
-        context,
-        () {
-          Navigator.pop(context);
-        },
-      ),
-      body: Form(
-          key: _formKey,
-          child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
-              child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    SystemText(text: "Forget your Password"),
-                    // User/Email Input
-                    Padding(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 8, vertical: 16),
-                        child: EmailTextFormField(
-                          controller: emailController,
-                          label: "Username/Email",
-                          validator: (value) {
-                            if (value == null || value.isEmpty) {
-                              return 'Please enter your username/Email';
-                            }
-                            return null;
-                          },
-                        )),
-                    // Second Email Input
+        appBar: CustomAppBar(
+          context,
+          () {
+            Navigator.pop(context);
+          },
+        ),
+        body: BackgroundSVG(
+          children: Form(
+              key: _formKey,
+              child: Padding(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
+                  child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        SystemText(text: "Forget your Password"),
+                        // User/Email Input
+                        Padding(
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 8, vertical: 16),
+                            child: EmailTextFormField(
+                              controller: emailController,
+                              label: "Username/Email",
+                              validator: (value) {
+                                if (value == null || value.isEmpty) {
+                                  return 'Please enter your username/Email';
+                                }
+                                return null;
+                              },
+                            )),
+                        // Second Email Input
 
-                    Padding(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 8, vertical: 16),
-                        child: EmailTextFormField(
-                          controller: emailRepeatController,
-                          label: "Username/Email",
-                          validator: (value) {
-                            if (value == null || value.isEmpty) {
-                              return 'Please enter your username/Email';
-                            }
-                            return null;
-                          },
-                        )),
-                    // Second Email Button
-                    Padding(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 8, vertical: 16.0),
-                      child: Center(
-                        child: CustomElevatedButton(
-                          onPressed: () async {
-                            if (_formKey.currentState!.validate()) {
-                              // Navigate the user to the Home page
-                              print(emailController.text);
-                            } else {
-                              showMessageSnackBar(context, 'Please fill input');
-                            }
-                          },
-                          text: "Submit",
+                        Padding(
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 8, vertical: 16),
+                            child: EmailTextFormField(
+                              controller: emailRepeatController,
+                              label: "Username/Email",
+                              validator: (value) {
+                                if (value == null || value.isEmpty) {
+                                  return 'Please enter your username/Email';
+                                }
+                                return null;
+                              },
+                            )),
+                        // Second Email Button
+                        Padding(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 8, vertical: 16.0),
+                          child: Center(
+                            child: CustomElevatedButton(
+                              onPressed: () async {
+                                if (_formKey.currentState!.validate()) {
+                                  // Navigate the user to the Home page
+                                  print(emailController.text);
+                                } else {
+                                  showMessageSnackBar(
+                                      context, 'Please fill input');
+                                }
+                              },
+                              text: "Submit",
+                            ),
+                          ),
                         ),
-                      ),
-                    ),
-                  ]))),
-    );
+                      ]))),
+        ));
   }
 }

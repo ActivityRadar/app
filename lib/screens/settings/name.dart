@@ -4,6 +4,7 @@ import 'package:app/provider/generated/users_provider.dart';
 import 'package:app/provider/photos.dart';
 import 'package:app/widgets/bottomsheet.dart';
 import 'package:app/widgets/custom/appbar.dart';
+import 'package:app/widgets/custom/background.dart';
 import 'package:app/widgets/custom_text.dart';
 import 'package:app/widgets/custom/button.dart';
 import 'package:app/widgets/custom/list_tile.dart';
@@ -68,7 +69,8 @@ class DisplayNameSwitch extends StatelessWidget {
             }
           },
         ),
-        body: Column(
+        body: BackgroundSVG(
+            children: Column(
           children: [
             Padding(
               padding: const EdgeInsets.only(top: 8, bottom: 4),
@@ -150,7 +152,7 @@ class DisplayNameSwitch extends StatelessWidget {
               ),
             ),
           ],
-        ));
+        )));
   }
 }
 

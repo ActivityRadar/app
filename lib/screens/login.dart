@@ -2,6 +2,7 @@ import 'package:app/app_state.dart';
 import 'package:app/provider/backend.dart';
 import 'package:app/screens/forgot_password.dart';
 import 'package:app/widgets/custom/appbar.dart';
+import 'package:app/widgets/custom/background.dart';
 import 'package:app/widgets/custom_text.dart';
 import 'package:app/widgets/custom/snackbar.dart';
 import 'package:app/widgets/custom/button.dart';
@@ -29,80 +30,82 @@ class _LoginScreenState extends State<LoginScreen> {
     var height = size.height;
     var width = size.width;
     return Scaffold(
-      appBar: CustomAppBar(
-        context,
-        () {
-          Navigator.pop(context);
-        },
-      ),
-      body: Form(
-          key: _formKey,
-          child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
-              child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    PageTitleText(
-                      text: "Login",
-                      width: width,
-                    ),
-                    Padding(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 8, vertical: 16),
-                        child: UsernameTextFormField(
-                          controller: usernameController,
-                          label: "Username",
-                          validator: (value) {
-                            if (value == null || value.isEmpty) {
-                              return 'Please enter your username';
-                            }
-                            return null;
-                          },
-                        )),
-                    Padding(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 8, vertical: 4),
-                        child: PasswordTextFormField(
-                          controller: passwordController,
-                          label: "Password",
-                          validator: (value) {
-                            if (value == null || value.isEmpty) {
-                              return 'Please enter your password';
-                            }
-                            return null;
-                          },
-                        )),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 4, vertical: 1.0),
-                      child: CustomTextButton(
-                          onPressed: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) =>
-                                    const ForgetPasswordScreen(),
-                              ),
-                            );
-                          },
-                          text: 'Forget password'),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 8, vertical: 16.0),
-                      child: Center(
-                        child: CustomElevatedButton(
-                          onPressed: () {
-                            handleLogin(context, usernameController.text,
-                                passwordController.text, _formKey);
-                          },
-                          text: "Submit",
+        appBar: CustomAppBar(
+          context,
+          () {
+            Navigator.pop(context);
+          },
+        ),
+        body: BackgroundSVG(
+          children: Form(
+              key: _formKey,
+              child: Padding(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
+                  child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        PageTitleText(
+                          text: "Login",
+                          width: width,
                         ),
-                      ),
-                    ),
-                  ]))),
-    );
+                        Padding(
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 8, vertical: 16),
+                            child: UsernameTextFormField(
+                              controller: usernameController,
+                              label: "Username",
+                              validator: (value) {
+                                if (value == null || value.isEmpty) {
+                                  return 'Please enter your username';
+                                }
+                                return null;
+                              },
+                            )),
+                        Padding(
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 8, vertical: 4),
+                            child: PasswordTextFormField(
+                              controller: passwordController,
+                              label: "Password",
+                              validator: (value) {
+                                if (value == null || value.isEmpty) {
+                                  return 'Please enter your password';
+                                }
+                                return null;
+                              },
+                            )),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 4, vertical: 1.0),
+                          child: CustomTextButton(
+                              onPressed: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) =>
+                                        const ForgetPasswordScreen(),
+                                  ),
+                                );
+                              },
+                              text: 'Forget password'),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 8, vertical: 16.0),
+                          child: Center(
+                            child: CustomElevatedButton(
+                              onPressed: () {
+                                handleLogin(context, usernameController.text,
+                                    passwordController.text, _formKey);
+                              },
+                              text: "Submit",
+                            ),
+                          ),
+                        ),
+                      ]))),
+        ));
   }
 }
 

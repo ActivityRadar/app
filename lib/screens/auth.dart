@@ -1,5 +1,6 @@
 import 'package:app/screens/login.dart';
 import 'package:app/screens/register.dart';
+import 'package:app/widgets/custom/background.dart';
 import 'package:app/widgets/custom/button.dart';
 import 'package:flutter/material.dart';
 
@@ -13,7 +14,8 @@ class AuthScreen extends StatefulWidget {
 class _AuthScreenState extends State<AuthScreen> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return BackgroundSVG(
+        children: Scaffold(
       body: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
@@ -43,6 +45,6 @@ class _AuthScreenState extends State<AuthScreen> {
               ),
             ]),
           ]),
-    );
+    ));
   }
 }

@@ -1,3 +1,4 @@
+import 'package:app/widgets/custom/background.dart';
 import 'package:app/widgets/custom/icon.dart';
 import 'package:app/widgets/custom_text.dart';
 import 'package:app/widgets/custom/card.dart';
@@ -21,7 +22,8 @@ class _PrivacySettingPageState extends State<PrivacySettingPage> {
     var height = size.height;
     double width = size.width;
     return Scaffold(
-      body: CustomScrollView(
+        body: BackgroundSVG(
+      children: CustomScrollView(
         slivers: <Widget>[
           SliverAppBar(
             title: const CustomText(text: "Privacy"),
@@ -80,7 +82,7 @@ class _PrivacySettingPageState extends State<PrivacySettingPage> {
           ]))
         ],
       ),
-    );
+    ));
   }
 }
 

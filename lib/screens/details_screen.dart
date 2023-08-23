@@ -5,6 +5,7 @@ import 'package:app/widgets/activityType_short.dart';
 import 'package:app/widgets/bottomsheet.dart';
 
 import 'package:app/widgets/custom/alertdialog.dart';
+import 'package:app/widgets/custom/background.dart';
 import 'package:app/widgets/custom/button.dart';
 import 'package:app/widgets/custom/card.dart';
 import 'package:app/widgets/custom_text.dart';
@@ -88,10 +89,10 @@ class _DetailsScreenState extends State<DetailsScreen> {
           appBar ??= _appBarPlaceHolder(width);
 
           return Scaffold(
-              backgroundColor: DesignColors.kBackground,
-              body: CustomScrollView(
-                slivers: <Widget>[appBar, body],
-              ));
+              body: BackgroundSVG(
+                  children: CustomScrollView(
+            slivers: <Widget>[appBar, body],
+          )));
         });
   }
 
