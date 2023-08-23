@@ -56,6 +56,7 @@ class _MeetAddScreenState extends State<MeetAddScreen> {
       choosePlace(),
       addDescription(),
       chooseVisibility(),
+      submitPage()
     ];
 
     Align previous = Align(
@@ -275,6 +276,43 @@ class _MeetAddScreenState extends State<MeetAddScreen> {
       const SizedBox(
         height: 20,
       ),
+    ]));
+  }
+
+  Center submitPage() {
+    var size = MediaQuery.of(context).size;
+    double width = size.width;
+
+    Widget summaryRow(String key, String value, {bool spacer = true}) {
+      return Column(
+        children: [
+          Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+            MediumText(text: "$key: ", width: width),
+            SmallText(text: value)
+          ]),
+          const SizedBox(height: 10)
+        ],
+      );
+    }
+
+    final rows = [
+      summaryRow("Activity Type(s)", "soccer"),
+      summaryRow("Time", "flexible"),
+      summaryRow("Participants", "1-10"),
+      summaryRow("Location", "53.909123; 13.1290839"),
+      summaryRow("Visibility", "public"),
+      summaryRow("Description", "Moin Moin"),
+    ];
+
+    return Center(
+        child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
+      TitleText(text: "Zusammenfassung", width: width),
+      const SizedBox(
+        height: 20,
+      ),
+      ...rows,
+      SizedBox(height: 20),
+      CustomElevatedButton(onPressed: () {}, text: "Submit")
     ]));
   }
 }
