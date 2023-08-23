@@ -6,6 +6,7 @@ import 'package:app/provider/activity_type.dart';
 import 'package:app/provider/generated/offers_provider.dart';
 import 'package:app/screens/map.dart';
 import 'package:app/widgets/activityType_short.dart';
+import 'package:app/widgets/custom/background.dart';
 import 'package:app/widgets/custom/card.dart';
 import 'package:app/widgets/custom/snackbar.dart';
 import 'package:app/widgets/custom_text.dart';
@@ -167,14 +168,16 @@ class _MeetAddScreenState extends State<MeetAddScreen> {
             Navigator.pop(context);
           },
         ),
-        body: PageView(
-          physics: const NeverScrollableScrollPhysics(),
-          controller: pageController,
-          children: pagesFunctions
-              .asMap()
-              .entries
-              .map((entry) => entry.value.call(validatorNotifiers[entry.key]))
-              .toList(),
+        body: BackgroundSVG(
+          children: PageView(
+            physics: const NeverScrollableScrollPhysics(),
+            controller: pageController,
+            children: pagesFunctions
+                .asMap()
+                .entries
+                .map((entry) => entry.value.call(validatorNotifiers[entry.key]))
+                .toList(),
+          ),
         ),
         floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
         floatingActionButton: Align(

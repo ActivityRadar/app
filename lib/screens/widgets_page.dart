@@ -1,5 +1,6 @@
 import 'package:app/screens/location_add.dart';
 import 'package:app/screens/meet_add.dart';
+import 'package:app/widgets/custom/background.dart';
 import 'package:app/widgets/custom/button.dart';
 import 'package:app/widgets/custom/card.dart';
 import 'package:app/widgets/custom/chip.dart';
@@ -11,6 +12,7 @@ import 'package:app/widgets/meet_card.dart';
 import 'package:app/widgets/profilecard.dart';
 import 'package:flutter/material.dart';
 import 'package:app/constants/design.dart';
+import 'package:flutter_svg/svg.dart';
 
 class TestWidget extends StatelessWidget {
   const TestWidget({super.key});
@@ -21,7 +23,11 @@ class TestWidget extends StatelessWidget {
 
     return const MaterialApp(
       title: title,
-      home: Scaffold(body: ProfileBar()),
+      home: Scaffold(
+        body: BackgroundSVG(
+          children: ProfileBar(),
+        ),
+      ),
     );
   }
 }
@@ -36,6 +42,7 @@ class ProfileBar extends StatelessWidget {
     var size = MediaQuery.of(context).size;
     var height = size.height;
     var width = size.width;
+    double x = 20;
     TextEditingController usernameController = TextEditingController();
     return CustomScrollView(slivers: <Widget>[
       SliverList(
@@ -85,24 +92,30 @@ class ProfileBar extends StatelessWidget {
             ),
             Divider(),
             ButtonBookMark(),
+            SizedBox(height: x),
             ButtonCancel(
               onPressed: () {},
             ),
+            SizedBox(height: x),
             ButtonMenu(
               onPressed: () {},
             ),
+            SizedBox(height: x),
             ButtonBack(
               onPressed: () {},
             ),
+            SizedBox(height: x),
             CustomElevatedButton(
               onPressed: () {},
               text: "CustomElevatedButton",
             ),
+            SizedBox(height: x),
             CustomTextButtonWhite(
               onPressed: () {},
               text: 'CustomTextButtonWhite',
             ),
             CustomTextButton(onPressed: () {}, text: 'CustomTextButton'),
+            SizedBox(height: x),
             CustomCard(
                 child: Column(
               children: [
@@ -113,54 +126,68 @@ class ProfileBar extends StatelessWidget {
                 Text("CustomCard"),
               ],
             )),
+            SizedBox(height: x),
             CustomChip(text: "CustomChip"),
+            SizedBox(height: x),
             const NaviIcon(
               icon: Icons.icecream,
               currentTab: false,
             ),
             EditIcon(),
+            SizedBox(height: x),
             CustomListTile(
               onPressed: () {},
               text: "CustomListTile",
             ),
+            SizedBox(height: x),
             TwoListTile(
               onPressed: () {},
               keyText: "first",
               valueText: "Secend",
             ),
+            SizedBox(height: x),
             CustomTextField(
                 controller: usernameController, label: "CustomTextField"),
+            SizedBox(height: x),
             DescriptionTextField(
                 controller: usernameController, label: "DescriptionTextField"),
+            SizedBox(height: x),
             DescriptionTextFieldwithoutBorder(
                 nameController: usernameController,
                 label: "DescriptionTextFieldwithoutBorder"),
+            SizedBox(height: x),
             PasswordTextFormField(
                 controller: usernameController,
                 label: "PasswordTextFormField",
                 validator: (value) {}),
+            SizedBox(height: x),
             CustomTextFormField(
               controller: usernameController,
               label: "CustomTextFormField",
               validator: (value) {},
             ),
+            SizedBox(height: x),
             DescriptionTextFormField(
                 controller: usernameController,
                 label: "DescriptionTextFormField"),
+            SizedBox(height: x),
             UnderLineTextFormField(
               controller: usernameController,
               label: "UnderLineTextFormField",
             ),
+            SizedBox(height: x),
             EmailTextFormField(
               controller: usernameController,
               label: "EmailTextFormField",
               validator: (value) {},
             ),
+            SizedBox(height: x),
             UsernameTextFormField(
               controller: usernameController,
               label: "UsernameTextFormField",
               validator: (value) {},
             ),
+            SizedBox(height: 120),
           ],
         ),
       ])),

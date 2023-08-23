@@ -1,6 +1,7 @@
 import 'package:app/constants/constants.dart';
 import 'package:app/constants/design.dart';
 import 'package:app/widgets/custom/appbar.dart';
+import 'package:app/widgets/custom/background.dart';
 import 'package:app/widgets/custom/card.dart';
 import 'package:app/widgets/custom/list_tile.dart';
 import 'package:app/widgets/custom_text.dart';
@@ -45,24 +46,25 @@ class _LocationAddScreenState extends State<LocationAddScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CustomAppBar(
-        context,
-        () {
-          Navigator.pop(context);
-        },
-      ),
-      body: PageView(
-        physics: const NeverScrollableScrollPhysics(),
-        controller: pageController,
-        children: <Widget>[
-          activity(),
-          privatorpublic(),
-          where(),
-          titleanddescription(),
-          pickPhoto(),
-        ],
-      ),
-    );
+        appBar: CustomAppBar(
+          context,
+          () {
+            Navigator.pop(context);
+          },
+        ),
+        body: BackgroundSVG(
+          children: PageView(
+            physics: const NeverScrollableScrollPhysics(),
+            controller: pageController,
+            children: <Widget>[
+              activity(),
+              privatorpublic(),
+              where(),
+              titleanddescription(),
+              pickPhoto(),
+            ],
+          ),
+        ));
   }
 
   Center activity() {

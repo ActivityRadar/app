@@ -9,6 +9,7 @@ import 'package:app/screens/settings/password.dart';
 import 'package:app/screens/settings/email.dart';
 import 'package:app/screens/settings/name.dart';
 import 'package:app/screens/settings/privacy.dart';
+import 'package:app/widgets/custom/background.dart';
 import 'package:app/widgets/custom/card.dart';
 import 'package:app/widgets/custom/icon.dart';
 import 'package:app/widgets/custom/list_tile.dart';
@@ -32,12 +33,13 @@ class SettingScreen extends StatelessWidget {
     final state = Provider.of<AppState>(context);
 
     return Scaffold(
-      body: CustomScrollView(slivers: <Widget>[
+        body: BackgroundSVG(
+      children: CustomScrollView(slivers: <Widget>[
         SliverAppBar(
+          backgroundColor: DesignColors.transparent,
           expandedHeight: expandedHeight,
           collapsedHeight: collapsedHeight,
           pinned: true,
-          backgroundColor: DesignColors.kBackground,
           leading: state.isLoggedIn
               ? null
               : CustomTextButton(
@@ -119,7 +121,7 @@ class SettingScreen extends StatelessWidget {
           ]),
         )
       ]),
-    );
+    ));
   }
 
   Widget _appBarAvatar(BuildContext context) {

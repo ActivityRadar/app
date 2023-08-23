@@ -23,6 +23,8 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(
+        //  scaffoldBackgroundColor: Color.fromARGB(255, 162, 189, 253),
+        scaffoldBackgroundColor: DesignColors.kBackground,
         appBarTheme: AppBarTheme(
           elevation: 0,
           backgroundColor: DesignColors.kBackground,
@@ -33,6 +35,8 @@ class MyApp extends StatelessWidget {
           overlayColor: MaterialStateProperty.all(DesignColors.green),
         ),
         inputDecorationTheme: const InputDecorationTheme(
+          filled: true,
+          fillColor: DesignColors.kBackground,
           labelStyle: CustomTextStyle.label,
           border: AppInputBorders.none,
           focusedErrorBorder: AppInputBorders.none,

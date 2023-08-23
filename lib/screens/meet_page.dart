@@ -1,5 +1,6 @@
 import 'package:app/constants/constants.dart';
 import 'package:app/constants/design.dart';
+import 'package:app/widgets/custom/background.dart';
 import 'package:app/widgets/custom/card.dart';
 import 'package:app/widgets/custom/chip.dart';
 
@@ -20,8 +21,9 @@ class MeetPage extends StatelessWidget {
     var size = MediaQuery.of(context).size;
     var height = size.height;
     double width = size.width;
-    return Scaffold(
-      backgroundColor: const Color.fromARGB(255, 245, 245, 245),
+    return BackgroundSVG(
+        children: Scaffold(
+      backgroundColor: Color.fromARGB(0, 255, 255, 255),
       body: CustomScrollView(slivers: <Widget>[
         SliverAppBar(
             expandedHeight: expandedHeight,
@@ -45,7 +47,7 @@ class MeetPage extends StatelessWidget {
         SliverPersistentHeader(
           delegate: MyHeaderDelegate(
             child: Container(
-              color: DesignColors.kBackground,
+              color: DesignColors.transparent,
               child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
@@ -217,7 +219,7 @@ class MeetPage extends StatelessWidget {
           ]),
         )
       ]),
-    );
+    ));
   }
 }
 

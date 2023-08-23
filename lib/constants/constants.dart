@@ -69,4 +69,9 @@ class AssetImages {
       colorFilter:
           ColorFilter.mode(Color.fromARGB(22, 248, 248, 248), BlendMode.srcIn),
       semanticsLabel: 'BackgroundDetails Screen');
+  static Widget backgroundpage = SvgPicture.asset(
+      "assets/images/background.svg",
+      colorFilter:
+          ColorFilter.mode(Color.fromARGB(22, 248, 248, 248), BlendMode.srcIn),
+      semanticsLabel: 'BackgroundDetails Screen');
 }
