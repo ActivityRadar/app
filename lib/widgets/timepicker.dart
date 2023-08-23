@@ -1,12 +1,14 @@
 import 'package:app/widgets/custom/list_tile.dart';
+import 'package:app/widgets/custom_text.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:app/constants/design.dart';
 
 class DateTimePicker extends StatefulWidget {
-  const DateTimePicker({super.key, this.notifier});
+  const DateTimePicker({super.key, this.notifier, this.title});
 
   final ValueNotifier<DateTime>? notifier;
+  final String? title;
 
   @override
   _DateTimePickerState createState() => _DateTimePickerState();
@@ -77,17 +79,15 @@ class _DateTimePickerState extends State<DateTimePicker> {
     String formattedTime =
         '${selectedTime.hour.toString().padLeft(2, '0')}:${selectedTime.minute.toString().padLeft(2, '0')}';
 
-    return Column(
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
       mainAxisSize: MainAxisSize.min,
       children: <Widget>[
-        CustomListTile(
-            icon: Icon(AppIcons.calendarToday),
-            text: "Datum: $formattedDate",
-            onPressed: _selectDate),
-        CustomListTile(
-            icon: Icon(AppIcons.accessTime),
-            text: "Uhrzeit: $formattedTime",
-            onPressed: _selectTime),
+        if (widget.title != null)
+          TitleText(
+              text: widget.title!, width: MediaQuery.of(context).size.width),
+        TextButton(onPressed: _selectDate, child: Text(formattedDate)),
+        TextButton(onPressed: _selectTime, child: Text(formattedTime)),
       ],
     );
   }

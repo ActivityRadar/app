@@ -36,7 +36,11 @@ class _MeetAddScreenState extends State<MeetAddScreen> {
 
   ValueNotifier<bool> visibilityFriends = ValueNotifier<bool>(false);
   ValueNotifier<bool> timeFlexible = ValueNotifier<bool>(false);
-  ValueNotifier<DateTime> dateTime = ValueNotifier<DateTime>(DateTime.now());
+  ValueNotifier<DateTime> dateTimeFrom =
+      ValueNotifier<DateTime>(DateTime.now());
+  ValueNotifier<DateTime> dateTimeUntil =
+      ValueNotifier<DateTime>(DateTime.now().add(const Duration(hours: 2)));
+  late Duration meetupDuration;
   ValueNotifier<RangeValues> participantNumberRange =
       ValueNotifier<RangeValues>(const RangeValues(1, 2));
   ValueNotifier<LatLng?> customLocation = ValueNotifier<LatLng?>(null);
@@ -75,6 +79,20 @@ class _MeetAddScreenState extends State<MeetAddScreen> {
   @override
   void initState() {
     super.initState();
+
+    dateTimeFrom.addListener(() {
+      dateTimeUntil.value = dateTimeFrom.value.add(meetupDuration);
+    });
+
+    dateTimeUntil.addListener(() {
+      if (!dateTimeFrom.value.isBefore(dateTimeUntil.value)) {
+        dateTimeFrom.value = dateTimeUntil.value.subtract(meetupDuration);
+      } else {
+        meetupDuration = dateTimeUntil.value.difference(dateTimeFrom.value);
+      }
+    });
+
+    meetupDuration = dateTimeUntil.value.difference(dateTimeFrom.value);
 
     map = ActivityMarkerMap(
         key: UniqueKey(),
@@ -115,7 +133,7 @@ class _MeetAddScreenState extends State<MeetAddScreen> {
             valueListenable: validatorNotifiers[_currentPage],
             builder: (context, canContinue, child) {
               var onPressed = nextPage;
-              var style = null;
+              ButtonStyle? style;
               if (!canContinue) {
                 style = ElevatedButton.styleFrom(backgroundColor: Colors.grey);
                 onPressed = () {
@@ -269,7 +287,30 @@ class _MeetAddScreenState extends State<MeetAddScreen> {
                   if (flexible) {
                     return Container();
                   } else {
-                    return DateTimePicker(notifier: dateTime);
+                    return SizedBox(
+                      width: width,
+                      child: Column(
+                        children: [
+                          ValueListenableBuilder(
+                              valueListenable: dateTimeFrom,
+                              builder: (context, time, child) {
+                                return DateTimePicker(
+                                    key: UniqueKey(),
+                                    title: "Von: ",
+                                    notifier: dateTimeFrom);
+                              }),
+                          const SizedBox(height: 10),
+                          ValueListenableBuilder(
+                              valueListenable: dateTimeUntil,
+                              builder: (context, time, child) {
+                                return DateTimePicker(
+                                    key: UniqueKey(),
+                                    title: "Bis: ",
+                                    notifier: dateTimeUntil);
+                              }),
+                        ],
+                      ),
+                    );
                   }
                 })
           ],
@@ -453,8 +494,11 @@ class _MeetAddScreenState extends State<MeetAddScreen> {
           activities.value.fold("", (t, sport) {
             return t.isEmpty ? sport.toString() : "$t, ${sport.toString()}";
           })),
-      summaryRow("Time",
-          timeFlexible.value ? "flexible" : dateTime.value.toIso8601String()),
+      summaryRow(
+          "Time",
+          timeFlexible.value
+              ? "flexible"
+              : "${dateTimeFrom.value.toIso8601String()} - ${dateTimeUntil.value.toIso8601String()}"),
       summaryRow(
           "Participants",
           range.start == range.end
@@ -503,8 +547,8 @@ class _MeetAddScreenState extends State<MeetAddScreen> {
       time = OfferTimeFlexible(type: "flexible").toJson();
     } else {
       time = OfferTimeSingle(type: "single", times: [
-        dateTime.value,
-        dateTime.value.add(const Duration(hours: 2)),
+        dateTimeFrom.value,
+        dateTimeUntil.value,
       ]).toJson();
     }
 
