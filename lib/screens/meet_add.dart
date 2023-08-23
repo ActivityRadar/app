@@ -27,13 +27,14 @@ class _MeetAddScreenState extends State<MeetAddScreen> {
   PageController pageController = PageController();
   int _currentPage = 0;
 
-  final _formTitleKey = GlobalKey<FormState>();
+  // text controllers
   TextEditingController typeSearchController = TextEditingController();
   TextEditingController titleController = TextEditingController();
   TextEditingController streetController = TextEditingController();
   TextEditingController descriptionController = TextEditingController();
   bool isLoading = false;
 
+  // simple value notifiers
   ValueNotifier<bool> visibilityFriends = ValueNotifier<bool>(false);
   ValueNotifier<bool> timeFlexible = ValueNotifier<bool>(false);
   ValueNotifier<DateTime> dateTimeFrom =
@@ -229,8 +230,11 @@ class _MeetAddScreenState extends State<MeetAddScreen> {
           }).toList(),
         ),
       ),
-      CustomTextField(
-          controller: typeSearchController, label: "Suche Aktivität"),
+      Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 12.0),
+        child: CustomTextField(
+            controller: typeSearchController, label: "Suche Aktivität"),
+      ),
       scrollableSelectionCard(
         ValueListenableBuilder(
           valueListenable: typeSearchController,
