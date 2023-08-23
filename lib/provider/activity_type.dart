@@ -53,6 +53,10 @@ class ActivityManager {
     return _displayToBackend[displayType] ?? "";
   }
 
+  List<String> getBackendTypes(List<String> displayTypes) {
+    return displayTypes.map((t) => _displayToBackend[t] ?? "").toList();
+  }
+
   String getDisplayType(String backendType) {
     return _backendToDisplay[backendType] ?? "";
   }
@@ -66,10 +70,14 @@ class ActivityManager {
   }
 
   List<String> searchInDisplayTypes(String search) {
+    return searchInSelection(search, _allDisplayTypes);
+  }
+
+  List<String> searchInSelection(String search, List<String> selection) {
     return fuzzy
         .extractTop(
             query: search,
-            choices: _allDisplayTypes,
+            choices: selection,
             limit: 10,
             cutoff: 50,
             ratio: PartialRatio())

@@ -1,8 +1,9 @@
 import 'dart:math';
-import 'package:app/constants/design.dart';
 import 'package:app/app_state.dart';
+import 'package:app/constants/design.dart';
 import 'package:app/model/functions.dart';
 import 'package:app/model/generated.dart';
+import 'package:app/provider/activity_type.dart';
 import 'package:app/provider/generated/locations_provider.dart';
 import 'package:app/widgets/loaction_icon.dart';
 import 'package:app/widgets/short_info_slider.dart';
@@ -14,7 +15,7 @@ import 'package:flutter_map/flutter_map.dart';
 import 'package:flutter_map/plugin_api.dart';
 import 'package:flutter_map_animations/flutter_map_animations.dart';
 import 'package:flutter_map_marker_cluster/flutter_map_marker_cluster.dart';
-import 'package:flutter_svg/flutter_svg.dart';
+import 'package:latlong2/latlong.dart';
 import 'package:provider/provider.dart';
 
 // ignore_for_file: avoid_print
@@ -27,7 +28,7 @@ class MapScreen extends StatefulWidget {
   }
 }
 
-enum FocusChangeReason { markerTap, slider, unfocus }
+enum FocusChangeReason { markerTap, slider, unfocus, back }
 
 class FocusedLocationNotifier extends ChangeNotifier {
   LocationShortApi? _info;
@@ -46,7 +47,7 @@ class FocusedLocationNotifier extends ChangeNotifier {
 }
 
 class MapScreenState extends State<MapScreen> {
-  ValueNotifier<String> activity = ValueNotifier("-");
+  ValueNotifier<List<String>> activities = ValueNotifier([""]);
   late MapSearchBar searchBar;
   late ActivityMarkerMap mapWidget;
   FocusedLocationNotifier focusedLocationInfo = FocusedLocationNotifier();
@@ -61,7 +62,7 @@ class MapScreenState extends State<MapScreen> {
     sliderInfos = await LocationsProvider.getLocationsAround(
         long: coordinates.longitude,
         lat: coordinates.latitude,
-        activities: [activity.value]);
+        activities: ActivityManager.instance.getBackendTypes(activities.value));
 
     setState(() {
       print("buildSlider");
@@ -107,7 +108,7 @@ class MapScreenState extends State<MapScreen> {
     searchBar = MapSearchBar(mapState: this);
     mapWidget = ActivityMarkerMap(
         focusedLocation: focusedLocationInfo,
-        activity: activity,
+        activities: activities,
         currentPosition: currentPosition);
 
     focusedLocationInfo.addListener(onFocusChanged);
@@ -134,13 +135,15 @@ class MapScreenState extends State<MapScreen> {
 
     return WillPopScope(
         onWillPop: () async {
-          if (focusedLocationInfo.info == null) return true;
-          focusedLocationInfo.setFocused(
-              info: null, changedBy: FocusChangeReason.unfocus);
-          setState(() {
-            infoSlider = null;
-          });
-          return false;
+          if (focusedLocationInfo.changedBy != FocusChangeReason.back) {
+            focusedLocationInfo.setFocused(
+                info: null, changedBy: FocusChangeReason.back);
+            setState(() {
+              infoSlider = null;
+            });
+            return false;
+          }
+          return true;
         },
         child: Stack(
           children: [
@@ -169,13 +172,17 @@ class ActivityMarkerMap extends StatefulWidget {
   const ActivityMarkerMap({
     super.key,
     required this.focusedLocation,
-    required this.activity,
+    required this.activities,
     required this.currentPosition,
+    this.onNewMarkerTap,
+    this.onNewMarkerCreate,
   });
 
   final FocusedLocationNotifier focusedLocation;
-  final ValueNotifier<String> activity;
+  final ValueNotifier<List<String>> activities;
   final GpsLocationNotifier currentPosition;
+  final void Function(LatLng)? onNewMarkerTap;
+  final void Function(LatLng)? onNewMarkerCreate;
 
   @override
   State<ActivityMarkerMap> createState() {
@@ -191,6 +198,24 @@ class _ActivityMarkerMapState extends State<ActivityMarkerMap>
       AnimatedMapController(vsync: this);
   String? focusedLocationId;
   CircleLayer? currentPositionLayer;
+  Marker? newMarker;
+
+  Marker buildNewMarker(LatLng position) {
+    return Marker(
+        point: position,
+        width: 50,
+        height: 50 * 0.9,
+        anchorPos:
+            AnchorPos.align(AnchorAlign.top), // top for "above the position"
+        builder: (context) {
+          return GestureDetector(
+              onTap: () {
+                widget.onNewMarkerTap?.call(position);
+              },
+              child:
+                  const Icon(Icons.location_pin, color: Colors.blue, size: 50));
+        });
+  }
 
   @override
   get wantKeepAlive => true;
@@ -202,6 +227,16 @@ class _ActivityMarkerMapState extends State<ActivityMarkerMap>
     s.zoom = event.zoom;
     s.center = event.center;
 
+    if (event is MapEventTap) {
+      widget.focusedLocation
+          .setFocused(info: null, changedBy: FocusChangeReason.unfocus);
+
+      setState(() {
+        newMarker = buildNewMarker(event.tapPosition);
+      });
+      widget.onNewMarkerCreate?.call(newMarker!.point);
+      return;
+    }
     if (event is! MapEventMoveEnd) return;
 
     print("move triggered");
@@ -241,6 +276,11 @@ class _ActivityMarkerMapState extends State<ActivityMarkerMap>
         mapController.centerOnPoint(toLatLng(loc.location));
       }
     }
+
+    if (newMarker != null) {
+      print("newMarker reset");
+      newMarker = null;
+    }
   }
 
   void onMarkerDoubleTap() {
@@ -256,7 +296,7 @@ class _ActivityMarkerMapState extends State<ActivityMarkerMap>
 
   Future<void> performSearch() async {
     print(
-        '${bounds.south}, ${bounds.west}, ${bounds.east}, ${widget.activity.value}');
+        '${bounds.south}, ${bounds.west}, ${bounds.east}, ${widget.activities.value}');
     print("fetch locations started");
 
     List<LocationShortApi> locations =
@@ -265,7 +305,8 @@ class _ActivityMarkerMapState extends State<ActivityMarkerMap>
             south: bounds.south,
             west: bounds.west,
             east: bounds.east,
-            activities: [widget.activity.value]);
+            activities: ActivityManager.instance
+                .getBackendTypes(widget.activities.value));
     print(locations.length);
 
     List<LocationMarker> markers_ =
@@ -304,9 +345,16 @@ class _ActivityMarkerMapState extends State<ActivityMarkerMap>
   }
 
   void focusChangeCallback() {
+    if (widget.focusedLocation.changedBy == FocusChangeReason.back &&
+        newMarker != null) {
+      setState(() {
+        newMarker = null;
+      });
+      return;
+    }
+
     final oldFocused = focusedLocationId;
-    final move =
-        widget.focusedLocation.changedBy != FocusChangeReason.markerTap;
+    final move = widget.focusedLocation.changedBy == FocusChangeReason.slider;
     setState(() {
       onFocusChanged(oldFocused, widget.focusedLocation.info, move: move);
     });
@@ -316,14 +364,14 @@ class _ActivityMarkerMapState extends State<ActivityMarkerMap>
   void initState() {
     super.initState();
 
-    widget.activity.addListener(performSearch);
+    widget.activities.addListener(performSearch);
     widget.focusedLocation.addListener(focusChangeCallback);
     widget.currentPosition.addListener(onGpsUpdate);
   }
 
   @override
   void dispose() {
-    widget.activity.removeListener(performSearch);
+    widget.activities.removeListener(performSearch);
     widget.focusedLocation.removeListener(focusChangeCallback);
     widget.currentPosition.removeListener(onGpsUpdate);
 
@@ -344,6 +392,7 @@ class _ActivityMarkerMapState extends State<ActivityMarkerMap>
     double bubbleScale(s) => pow(s, exponent).toDouble();
 
     bounds = Provider.of<AppState>(context).mapPosition;
+    onGpsUpdate();
 
     return FlutterMap(
       mapController: mapController.mapController,
@@ -357,6 +406,7 @@ class _ActivityMarkerMapState extends State<ActivityMarkerMap>
           subdomains: const ['a', 'b', 'c'],
         ),
         if (currentPositionLayer != null) currentPositionLayer!,
+        if (newMarker != null) MarkerLayer(markers: [newMarker!]),
         MarkerClusterLayerWidget(
             options: MarkerClusterLayerOptions(
           maxClusterRadius: bubbleScale(maxBubbleSize).ceil(),

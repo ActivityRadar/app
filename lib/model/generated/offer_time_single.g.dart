@@ -10,7 +10,7 @@ OfferTimeSingle _$OfferTimeSingleFromJson(Map<String, dynamic> json) =>
     OfferTimeSingle(
       type: json['type'] as String?,
       times: (json['times'] as List<dynamic>)
-          .map((e) => e as Map<String, dynamic>)
+          .map((e) => DateTime.parse(e as String))
           .toList(),
     );
 
@@ -24,6 +24,6 @@ Map<String, dynamic> _$OfferTimeSingleToJson(OfferTimeSingle instance) {
   }
 
   writeNotNull('type', instance.type);
-  val['times'] = instance.times;
+  val['times'] = instance.times.map((e) => e.toIso8601String()).toList();
   return val;
 }

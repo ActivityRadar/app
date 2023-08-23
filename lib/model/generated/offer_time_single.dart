@@ -9,7 +9,7 @@ part 'offer_time_single.g.dart';
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
 class OfferTimeSingle {
   final String? type;
-  final List<Map<String, dynamic>> times;
+  final List<DateTime> times;
 
   OfferTimeSingle({this.type, required this.times});
 

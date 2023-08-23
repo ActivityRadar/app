@@ -6,16 +6,19 @@ class CustomTextField extends StatelessWidget {
     super.key,
     required this.controller,
     required this.label,
+    this.action,
   });
 
   final TextEditingController controller;
   final String label;
+  final TextInputAction? action;
 
   @override
   Widget build(BuildContext context) {
     return TextField(
         controller: controller,
         onChanged: (v) => controller.text = v,
+        textInputAction: action,
         decoration: InputDecoration(
           labelText: label,
         ));

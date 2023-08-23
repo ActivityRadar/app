@@ -1,18 +1,22 @@
 import 'package:app/widgets/custom/list_tile.dart';
+import 'package:app/widgets/custom_text.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:app/constants/design.dart';
 
 class DateTimePicker extends StatefulWidget {
-  const DateTimePicker({super.key});
+  const DateTimePicker({super.key, this.notifier, this.title});
+
+  final ValueNotifier<DateTime>? notifier;
+  final String? title;
 
   @override
   _DateTimePickerState createState() => _DateTimePickerState();
 }
 
 class _DateTimePickerState extends State<DateTimePicker> {
-  DateTime selectedDate = DateTime.now();
-  TimeOfDay selectedTime = TimeOfDay.now();
+  late DateTime selectedDate;
+  late TimeOfDay selectedTime;
   final DateTime today = DateTime.now();
 
   Future<void> _selectDate() async {
@@ -25,6 +29,12 @@ class _DateTimePickerState extends State<DateTimePicker> {
         selectedDate;
     _selectTime();
     if (picked != selectedDate) {
+      if (widget.notifier != null) {
+        final d = widget.notifier!.value;
+        widget.notifier!.value =
+            DateTime(picked.year, picked.month, picked.day, d.hour, d.minute);
+      }
+
       setState(() {
         selectedDate = picked;
       });
@@ -38,9 +48,28 @@ class _DateTimePickerState extends State<DateTimePicker> {
         ) ??
         selectedTime;
     if (picked != selectedTime) {
+      if (widget.notifier != null) {
+        final d = widget.notifier!.value;
+        widget.notifier!.value =
+            DateTime(d.year, d.month, d.day, picked.hour, picked.minute);
+      }
+
       setState(() {
         selectedTime = picked;
       });
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+
+    if (widget.notifier != null) {
+      selectedDate = widget.notifier!.value;
+      selectedTime = TimeOfDay.fromDateTime(widget.notifier!.value);
+    } else {
+      selectedDate = DateTime.now();
+      selectedTime = TimeOfDay.now();
     }
   }
 
@@ -50,17 +79,15 @@ class _DateTimePickerState extends State<DateTimePicker> {
     String formattedTime =
         '${selectedTime.hour.toString().padLeft(2, '0')}:${selectedTime.minute.toString().padLeft(2, '0')}';
 
-    return Column(
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
       mainAxisSize: MainAxisSize.min,
       children: <Widget>[
-        CustomListTile(
-            icon: Icon(AppIcons.calendarToday),
-            text: "Datum: $formattedDate",
-            onPressed: _selectDate),
-        CustomListTile(
-            icon: Icon(AppIcons.accessTime),
-            text: "Uhrzeit: $formattedTime",
-            onPressed: _selectTime),
+        if (widget.title != null)
+          TitleText(
+              text: widget.title!, width: MediaQuery.of(context).size.width),
+        TextButton(onPressed: _selectDate, child: Text(formattedDate)),
+        TextButton(onPressed: _selectTime, child: Text(formattedTime)),
       ],
     );
   }

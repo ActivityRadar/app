@@ -10,7 +10,8 @@ LatLng toLatLng(GeoJsonLocation location) {
 }
 
 GeoJsonLocation toLongLat(LatLng location) {
-  return GeoJsonLocation(coordinates: [location.longitude, location.latitude]);
+  return GeoJsonLocation(
+      type: "Point", coordinates: [location.longitude, location.latitude]);
 }
 
 String getTitle(LocationDetailedApi info) {
