@@ -32,6 +32,12 @@ class MyApp extends StatelessWidget {
         ),
         inputDecorationTheme: const InputDecorationTheme(
           labelStyle: CustomTextStyle.label,
+          border: AppInputBorders.none,
+          focusedErrorBorder: AppInputBorders.none,
+          errorBorder: AppInputBorders.none,
+          enabledBorder: AppInputBorders.none,
+          focusedBorder: AppInputBorders.none,
+        ),
         ),
         timePickerTheme: const TimePickerThemeData(),
         sliderTheme: const SliderThemeData(

@@ -37,6 +37,13 @@ class AppInputBorders {
     borderSide: BorderSide(color: DesignColors.blueColor),
   );
 }
+const InputDecoration searchDecoration = InputDecoration(
+  border: AppInputBorders.none,
+  focusedErrorBorder: AppInputBorders.none,
+  errorBorder: AppInputBorders.none,
+  enabledBorder: AppInputBorders.none,
+  focusedBorder: AppInputBorders.none,
+);
 
 class AppIcons {
   static const IconData add = Icons.add;
