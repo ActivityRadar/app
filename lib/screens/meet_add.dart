@@ -1,13 +1,16 @@
 import 'package:app/constants/constants.dart';
 import 'package:app/constants/design.dart';
 import 'package:app/widgets/custom/appbar.dart';
+import 'package:app/screens/map.dart';
 import 'package:app/widgets/custom/card.dart';
 import 'package:app/widgets/custom/list_tile.dart';
 import 'package:app/widgets/custom_text.dart';
 import 'package:app/widgets/custom/button.dart';
 import 'package:app/widgets/custom/textfield.dart';
+import 'package:app/widgets/gps.dart';
 import 'package:app/widgets/timepicker.dart';
 import 'package:flutter/material.dart';
+import 'package:latlong2/latlong.dart';
 
 class MeetAddScreen extends StatefulWidget {
   const MeetAddScreen({Key? key}) : super(key: key);
@@ -21,7 +24,7 @@ class _MeetAddScreenState extends State<MeetAddScreen> {
   int _currentPage = 0;
 
   final _formTitleKey = GlobalKey<FormState>();
-  TextEditingController nameController = TextEditingController();
+  TextEditingController titleController = TextEditingController();
   TextEditingController streetController = TextEditingController();
   TextEditingController locationController = TextEditingController();
   TextEditingController descriptionController = TextEditingController();
@@ -32,8 +35,20 @@ class _MeetAddScreenState extends State<MeetAddScreen> {
   ValueNotifier<DateTime> dateTime = ValueNotifier<DateTime>(DateTime.now());
   ValueNotifier<RangeValues> participantNumberRange =
       ValueNotifier<RangeValues>(const RangeValues(1, 2));
+  ValueNotifier<LatLng?> customLocation = ValueNotifier<LatLng?>(null);
+
+  // location selection map
+  final FocusedLocationNotifier locNotifier = FocusedLocationNotifier();
+  late final ValueNotifier<String> activity = ValueNotifier<String>("soccer");
+  final GpsLocationNotifier currentPosition = GpsLocationNotifier();
+  late final ActivityMarkerMap map;
+
   Set<Sport> chosenActivities = <Sport>{};
-  bool canContinue = false;
+
+  late final List<Widget Function(ValueNotifier<bool>)> pagesFunctions;
+
+  // validators
+  late final List<ValueNotifier<bool>> validatorNotifiers;
 
   void previousPage() {
     pageController.previousPage(
@@ -52,17 +67,37 @@ class _MeetAddScreenState extends State<MeetAddScreen> {
   }
 
   @override
-  Widget build(BuildContext context) {
-    final pages = <Widget>[
-      chooseActivity(),
-      chooseTime(),
-      chooseParticipantNumber(),
-      choosePlace(),
-      addDescription(),
-      chooseVisibility(),
-      submitPage()
+  void initState() {
+    super.initState();
+
+    map = ActivityMarkerMap(
+        key: UniqueKey(),
+        focusedLocation: locNotifier,
+        activity: activity,
+        currentPosition: currentPosition,
+        onNewMarkerCreate: (LatLng position) {
+          customLocation.value = position;
+        });
+
+    pagesFunctions = [
+      chooseActivity,
+      chooseTime,
+      chooseParticipantNumber,
+      choosePlace,
+      addDescription,
+      chooseVisibility,
+      submitPage
     ];
 
+    // has to be in the correct order according to the pagesFunctions list
+    final defaultSkippable = [false, true, true, false, false, true, false];
+
+    validatorNotifiers =
+        defaultSkippable.map((b) => ValueNotifier<bool>(b)).toList();
+  }
+
+  @override
+  Widget build(BuildContext context) {
     Align previous = Align(
         alignment: Alignment.bottomLeft,
         child: Padding(
@@ -70,28 +105,33 @@ class _MeetAddScreenState extends State<MeetAddScreen> {
           child:
               CustomElevatedButton(onPressed: previousPage, text: "Previous"),
         ));
+
     Align next = Align(
         alignment: Alignment.bottomRight,
         child: Padding(
-          padding: const EdgeInsets.only(bottom: 60.0),
-          child: CustomElevatedButton(
-              onPressed: () {
-                if (!canContinue) {
-                  showDialog(
-                      context: context,
-                      builder: (context) {
-                        return const AlertDialog(
-                            title: Text("Can't continue"),
-                            content: Text(
-                                "You cant continue as you need to enter input on this page!"));
-                      });
-
-                  return;
-                }
-                nextPage();
-              },
-              text: "Next"),
-        ));
+            padding: const EdgeInsets.only(bottom: 60.0),
+            child: ValueListenableBuilder(
+                valueListenable: validatorNotifiers[_currentPage],
+                builder: (context, canContinue, child) {
+                  var onPressed = nextPage;
+                  var style = null;
+                  if (!canContinue) {
+                    style =
+                        ElevatedButton.styleFrom(backgroundColor: Colors.grey);
+                    onPressed = () {
+                      showDialog(
+                          context: context,
+                          builder: (context) {
+                            return const AlertDialog(
+                                title: Text("Can't continue"),
+                                content: Text(
+                                    "You cant continue as you need to enter input on this page!"));
+                          });
+                    };
+                  }
+                  return CustomElevatedButton(
+                      style: style, onPressed: onPressed, text: "Next");
+                })));
 
     return Scaffold(
         appBar: CustomAppBar(
@@ -103,17 +143,21 @@ class _MeetAddScreenState extends State<MeetAddScreen> {
         body: PageView(
           physics: const NeverScrollableScrollPhysics(),
           controller: pageController,
-          children: pages,
+          children: pagesFunctions
+              .asMap()
+              .entries
+              .map((entry) => entry.value.call(validatorNotifiers[entry.key]))
+              .toList(),
         ),
         floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
         floatingActionButton: _currentPage == 0
             ? next
-            : (_currentPage < pages.length - 1
+            : (_currentPage < pagesFunctions.length - 1
                 ? Stack(children: [previous, next])
                 : previous));
   }
 
-  Center chooseActivity() {
+  Center chooseActivity(ValueNotifier<bool> canContinue) {
     var size = MediaQuery.of(context).size;
 
     double width = size.width;
@@ -141,10 +185,11 @@ class _MeetAddScreenState extends State<MeetAddScreen> {
                     setState(() {
                       if (selected) {
                         chosenActivities.add(exercise);
+                        // activity.value = exercise.toString();
                       } else {
                         chosenActivities.remove(exercise);
                       }
-                      canContinue = chosenActivities.isNotEmpty;
+                      canContinue.value = chosenActivities.isNotEmpty;
                     });
                   },
                 );
@@ -163,7 +208,7 @@ class _MeetAddScreenState extends State<MeetAddScreen> {
     ]));
   }
 
-  Center chooseTime() {
+  Center chooseTime(ValueNotifier<bool> canContinue) {
     var size = MediaQuery.of(context).size;
 
     double width = size.width;
@@ -199,27 +244,38 @@ class _MeetAddScreenState extends State<MeetAddScreen> {
     ]));
   }
 
-  Center choosePlace() {
+  WillPopScope choosePlace(ValueNotifier<bool> canContinue) {
     var size = MediaQuery.of(context).size;
 
+    locNotifier.addListener(() {
+      setState(() {
+        canContinue.value = !(locNotifier.changedBy == FocusChangeReason.back);
+      });
+    });
+
     double width = size.width;
-    return Center(
-        child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-      TitleText(text: "Wo willst du spielen?", width: width),
-      const SizedBox(
-        height: 20,
-      ),
-      CustomListTile(
-        onPressed: () {},
-        text: "Pick Location",
-      ),
-      const SizedBox(
-        height: 20,
-      ),
-    ]));
+
+    return WillPopScope(
+        onWillPop: () async {
+          if (locNotifier.changedBy != FocusChangeReason.back) {
+            locNotifier.setFocused(
+                info: null, changedBy: FocusChangeReason.back);
+            return false;
+          }
+          return true;
+        },
+        child: Center(
+            child:
+                Column(mainAxisAlignment: MainAxisAlignment.center, children: [
+          TitleText(text: "Wo willst du spielen?", width: width),
+          const SizedBox(
+            height: 20,
+          ),
+          Flexible(child: map),
+        ])));
   }
 
-  Center chooseParticipantNumber() {
+  Center chooseParticipantNumber(ValueNotifier<bool> canContinue) {
     var size = MediaQuery.of(context).size;
 
     double width = size.width;
@@ -250,8 +306,21 @@ class _MeetAddScreenState extends State<MeetAddScreen> {
     ]));
   }
 
-  Center addDescription() {
+  Center addDescription(ValueNotifier<bool> canContinue) {
     var size = MediaQuery.of(context).size;
+
+    void checkTextEmpty() {
+      canContinue.value = descriptionController.text.isNotEmpty &&
+          titleController.text.isNotEmpty;
+    }
+
+    titleController.addListener(() {
+      checkTextEmpty();
+    });
+
+    descriptionController.addListener(() {
+      checkTextEmpty();
+    });
 
     double width = size.width;
     return Center(
@@ -267,7 +336,7 @@ class _MeetAddScreenState extends State<MeetAddScreen> {
             Padding(
                 padding: const EdgeInsets.only(left: 9.0, top: 15.0),
                 child: CustomTextField(
-                    controller: nameController, label: 'Titel')),
+                    controller: titleController, label: 'Titel')),
             Padding(
               padding: const EdgeInsets.only(left: 9.0, top: 15.0),
               child: DescriptionTextFieldwithoutBorder(
@@ -284,7 +353,7 @@ class _MeetAddScreenState extends State<MeetAddScreen> {
     ]));
   }
 
-  Center chooseVisibility() {
+  Center chooseVisibility(ValueNotifier<bool> canContinue) {
     var size = MediaQuery.of(context).size;
     double width = size.width;
 
@@ -315,7 +384,7 @@ class _MeetAddScreenState extends State<MeetAddScreen> {
     ]));
   }
 
-  Center submitPage() {
+  Center submitPage(ValueNotifier<bool> canContinue) {
     var size = MediaQuery.of(context).size;
     double width = size.width;
 
