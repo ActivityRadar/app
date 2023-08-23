@@ -308,8 +308,11 @@ class PhotoShower extends StatelessWidget {
   }
 }
 
-void handleLogout(BuildContext context) {
+void handleLogout(BuildContext context) async {
   Provider.of<AppState>(context, listen: false).logout();
-  TokenManager.instance.deleteToken();
-  showMessageSnackBar(context, 'Logged out!');
+  AuthService.logout().then((_) {
+    SessionManager.instance
+        .endSession()
+        .then((_) => showMessageSnackBar(context, 'Logged out!'));
+  });
 }

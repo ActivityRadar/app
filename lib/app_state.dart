@@ -69,7 +69,7 @@ class AppState extends ChangeNotifier {
     return currentUser == null ? false : (currentUser!.trustScore >= 100);
   }
 
-  void loadFromStorage() async {
+  Future<void> loadFromStorage() async {
     final prefs = await SharedPreferences.getInstance();
 
     if (prefs.containsKey(StorageKeys.boundsSouthWest)) {

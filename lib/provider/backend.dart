@@ -3,26 +3,99 @@ import 'dart:convert';
 
 import 'package:app/model/generated.dart';
 import 'package:app/provider/generated/auth_provider.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
 
 class TokenManager {
   static const storage = FlutterSecureStorage();
 
+  static const String tokenKey = "token";
+  static const String refreshTokenKey = "refreshToken";
+
   static final TokenManager _instance = TokenManager._internal();
   static TokenManager get instance => _instance;
+
   TokenManager._internal();
 
-  Future<String?> getToken() async {
-    return await storage.read(key: "token");
+  String getKey(bool refresh, {bool time = false}) {
+    return "${refresh ? refreshTokenKey : tokenKey}${time ? "Time" : ""}";
   }
 
-  Future<void> setToken(String? token) async {
-    await storage.write(key: "token", value: token);
+  Future<String?> getToken({bool refresh = false}) async {
+    return await storage.read(key: getKey(refresh));
   }
 
-  Future<void> deleteToken() async {
-    await storage.write(key: "token", value: null);
+  Future<void> setToken(String? token, {bool refresh = false}) async {
+    await storage.write(key: getKey(refresh), value: token);
+    await storage.write(
+        key: getKey(refresh, time: true),
+        value: DateTime.now().toIso8601String());
+  }
+
+  Future<void> deleteToken({bool refresh = false}) async {
+    await storage.write(key: getKey(refresh), value: null);
+    await storage.write(key: getKey(refresh, time: true), value: null);
+  }
+
+  Future<DateTime?> lastSetTime({bool refresh = false}) async {
+    final string = await storage.read(key: getKey(refresh, time: true));
+    if (string != null) {
+      return DateTime.parse(string);
+    }
+    return null;
+  }
+}
+
+class SessionManager {
+  static final SessionManager _instance = SessionManager._internal();
+  static SessionManager get instance => _instance;
+
+  static const Duration accessTokenExpireDuration = Duration(minutes: 20);
+  static const Duration refreshTokenExpiryDuration = Duration(days: 30);
+
+  SessionManager._internal();
+
+  Timer? _timer;
+
+  Future<bool> isLoggedIn() async {
+    final DateTime? lastLoginTime =
+        await TokenManager.instance.lastSetTime(refresh: true);
+
+    if (lastLoginTime == null ||
+        lastLoginTime
+            .add(refreshTokenExpiryDuration)
+            .isBefore(DateTime.now())) {
+      print("not logged in or refresh expired");
+      // force a login?
+      return false;
+    }
+    return true;
+  }
+
+  /// returns true if login required
+  Future<void> startSession() async {
+    final DateTime? lastRefreshTime = await TokenManager.instance.lastSetTime();
+    if (lastRefreshTime == null ||
+        lastRefreshTime
+            .add(accessTokenExpireDuration)
+            .isBefore(DateTime.now())) {
+      AuthService.refreshAccessToken();
+    }
+
+    // timer that regularly refreshes the access token
+    _timer = Timer.periodic(accessTokenExpireDuration, (timer) async {
+      try {
+        await AuthService.refreshAccessToken();
+      } catch (e) {
+        // refresh token is outdated, user logged into different device or got banned
+        // _timer!.cancel();
+      }
+    });
+  }
+
+  Future endSession() async {
+    _timer?.cancel();
   }
 }
 
@@ -115,12 +188,27 @@ class AuthService {
           data: LoginBody(username: username, password: password));
 
       await TokenManager.instance.setToken(authResponse.accessToken);
+      await TokenManager.instance
+          .setToken(authResponse.refreshToken, refresh: true);
       return true;
     } catch (e) {
       print("Login failed!");
       print(e);
       return false;
     }
+  }
+
+  static Future refreshAccessToken() async {
+    final refreshToken = await TokenManager.instance.getToken(refresh: true);
+    final AccessTokenBody response =
+        await AuthProvider.getNewAccessToken(refreshToken: refreshToken!);
+    await TokenManager.instance.setToken(response.accessToken);
+  }
+
+  static Future logout() async {
+    await AuthProvider.logout();
+    await TokenManager.instance.deleteToken();
+    await TokenManager.instance.deleteToken(refresh: true);
   }
 
   static Future<bool> changePassword(ChangePasswordForm passwordBody) async {
