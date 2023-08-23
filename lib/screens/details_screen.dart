@@ -413,8 +413,77 @@ class ReviewBox extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
+    final width = size.width;
 
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 3.0),
+      child: SizedBox(
+          child: CustomCard(
+              child: Column(
+            children: [
+              ReviewMetaInfo(
+                review: review,
+              ),
+              Padding(
+                padding:
+                    const EdgeInsets.only(top: 8.0, left: 10.0, right: 10.0),
+                child: SizedBox(
+                    width: double.infinity,
+                    child: ExpandableText(text: review.text)),
+              ),
+              Padding(
+                  padding: const EdgeInsets.symmetric(
+                      vertical: 4.0, horizontal: 10.0),
+                  child: ReviewFeeback(width: width))
+            ],
+          ))),
+    );
+  }
+}
+
+class ReviewFeeback extends StatelessWidget {
+  const ReviewFeeback({
+    super.key,
+    required this.width,
+  });
+
+  final double width;
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        MediumHintText(
+          text: "X out of Y people found this helpful", // TODO: make dynamic
+          width: width,
+        ),
+        const Spacer(),
+        IconButton(
+            onPressed: () {}, // TODO: send thumbs up
+            icon: const Icon(AppIcons.thumbUp,
+                color: Color.fromARGB(142, 0, 0, 0))),
+        IconButton(
+            onPressed: () {}, // TODO: send thumbs down
+            icon: const Icon(AppIcons.thumbDown,
+                color: Color.fromARGB(142, 244, 67, 54))),
+      ],
+    );
+  }
+}
+
+class ReviewMetaInfo extends StatelessWidget {
+  const ReviewMetaInfo({
+    super.key,
+    required this.review,
+  });
+
+  final ReviewWithId review;
+
+  @override
+  Widget build(BuildContext context) {
+    var size = MediaQuery.of(context).size;
     double width = size.width;
+
     UserApiOut? userInfo;
     Future<MemoryImage?> photo =
         UserInfoManager.instance.getUserInfo(review.userId).then((info) {
@@ -425,102 +494,64 @@ class ReviewBox extends StatelessWidget {
       return null;
     });
 
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 3.0),
-      child: Container(
-          child: CustomCard(
-              child: Column(
-        children: [
-          // Name, Profilimage,
-          FutureBuilder(
-            future: photo,
-            builder: (BuildContext context, AsyncSnapshot snapshot) {
-              ImageProvider? image;
-              String username;
-              String displayName;
+    return FutureBuilder(
+      future: photo,
+      builder: (BuildContext context, AsyncSnapshot snapshot) {
+        ImageProvider? image;
+        String username;
+        String displayName;
 
-              const double diameter = 50.0;
-              if (snapshot.hasData) {
-                image = snapshot.data ?? AssetImages.avatarEmpty;
-              } else if (snapshot.hasError) {
-                print(snapshot.error);
-                image = AssetImages.avatarError;
-              }
+        const double diameter = 50.0;
+        if (snapshot.hasData) {
+          image = snapshot.data ?? AssetImages.avatarEmpty;
+        } else if (snapshot.hasError) {
+          print(snapshot.error);
+          image = AssetImages.avatarError;
+        }
 
-              if (userInfo != null) {
-                username = userInfo!.username;
-              } else {
-                username = review.userId.substring(0, 6).toUpperCase();
-              }
+        if (userInfo != null) {
+          username = userInfo!.username;
+        } else {
+          username = review.userId.substring(0, 6).toUpperCase();
+        }
 
-              if (userInfo != null) {
-                displayName = userInfo!.displayName;
-              } else {
-                displayName = review.userId.substring(0, 6).toUpperCase();
-              }
+        if (userInfo != null) {
+          displayName = userInfo!.displayName;
+        } else {
+          displayName = review.userId.substring(0, 6).toUpperCase();
+        }
 
-              image ??= AssetImages.avatarLoading;
+        image ??= AssetImages.avatarLoading;
 
-              return Column(children: [
-                Row(
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.all(12.0),
-                      child: ClipOval(
-                          child: Image(
-                              image: image,
-                              width: diameter,
-                              height: diameter,
-                              fit: BoxFit.cover)),
-                    ),
-                    UserText(displayName: displayName, width: width),
-                    const Spacer(),
-                    Column(children: [
-                      Padding(
-                        padding: const EdgeInsets.only(left: 12.0),
-                        child: RatingScore(score: review.overallRating),
-                      ),
-                      LittleText(
-                          text:
-                              "${DateTime.now().difference(review.creationDate).inDays} days ago",
-                          width: width)
-                    ]),
-                    const ReviewPopupMenuCard(),
-                  ],
+        return Column(mainAxisSize: MainAxisSize.min, children: [
+          Row(
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(12.0),
+                child: ClipOval(
+                    child: Image(
+                        image: image,
+                        width: diameter,
+                        height: diameter,
+                        fit: BoxFit.cover)),
+              ),
+              UserText(displayName: displayName, width: width),
+              const Spacer(),
+              Column(children: [
+                Padding(
+                  padding: const EdgeInsets.only(left: 12.0),
+                  child: RatingScore(score: review.overallRating),
                 ),
-              ]);
-            },
-          ),
-
-          Padding(
-            padding: const EdgeInsets.only(top: 8.0, left: 10.0, right: 10.0),
-            child: SizedBox(
-                width: double.infinity,
-                child: ExpandableText(text: review.text)),
-          ),
-          Padding(
-              padding:
-                  const EdgeInsets.symmetric(vertical: 4.0, horizontal: 10.0),
-              child: Row(
-                children: [
-                  MediumHintText(
+                LittleText(
                     text:
-                        "X out of Y people found this helpful", // TODO: make dynamic
-                    width: width,
-                  ),
-                  const Spacer(),
-                  IconButton(
-                      onPressed: () {}, // TODO: send thumbs up
-                      icon: const Icon(AppIcons.thumbUp,
-                          color: Color.fromARGB(142, 0, 0, 0))),
-                  IconButton(
-                      onPressed: () {}, // TODO: send thumbs down
-                      icon: const Icon(AppIcons.thumbDown,
-                          color: Color.fromARGB(142, 244, 67, 54))),
-                ],
-              ))
-        ],
-      ))),
+                        "${DateTime.now().difference(review.creationDate).inDays} days ago",
+                    width: width)
+              ]),
+              const ReviewPopupMenuCard(),
+            ],
+          ),
+        ]);
+      },
     );
   }
 }
