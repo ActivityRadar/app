@@ -7,7 +7,6 @@ import 'package:app/widgets/bottomsheet.dart';
 import 'package:app/widgets/custom/alertdialog.dart';
 import 'package:app/widgets/custom/button.dart';
 import 'package:app/widgets/custom/card.dart';
-import 'package:app/widgets/custom/chip.dart';
 import 'package:app/widgets/custom_text.dart';
 import 'package:app/widgets/login_reminder.dart';
 import 'package:flutter/material.dart';
@@ -393,14 +392,17 @@ class ReviewList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        for (var review in reviews) ...[
-          ReviewBox(review: review),
-          ReviewBox(review: review),
-          ReviewBox(review: review)
-        ]
-      ],
+    return SingleChildScrollView(
+      scrollDirection: Axis.horizontal,
+      child: Row(
+        children: [
+          for (var review in reviews) ...[
+            ReviewBox(review: review),
+            ReviewBox(review: review),
+            ReviewBox(review: review)
+          ]
+        ],
+      ),
     );
   }
 }
@@ -418,6 +420,7 @@ class ReviewBox extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 3.0),
       child: SizedBox(
+          width: width,
           child: CustomCard(
               child: Column(
             children: [
