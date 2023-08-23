@@ -56,6 +56,14 @@ class MyApp extends StatelessWidget {
             valueIndicatorColor: DesignColors.greenColor,
             overlayColor: DesignColors.greenColor),
         iconTheme: const IconThemeData(),
+        cardTheme: CardTheme(
+          shape: RoundedRectangleBorder(
+            side: const BorderSide(
+              color: Color.fromARGB(51, 241, 241, 241),
+            ),
+            borderRadius: BorderRadius.circular(AppStyle.cornerRadius),
+          ),
+        ),
         chipTheme: ChipThemeData(
           backgroundColor: DesignColors.naviColor,
           labelStyle:

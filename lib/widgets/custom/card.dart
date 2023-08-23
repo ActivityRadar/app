@@ -11,12 +11,6 @@ class CustomCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
-      shape: RoundedRectangleBorder(
-        side: const BorderSide(
-          color: Color.fromARGB(51, 241, 241, 241),
-        ),
-        borderRadius: BorderRadius.circular(AppStyle.cornerRadius),
-      ),
       child: child,
     );
   }
