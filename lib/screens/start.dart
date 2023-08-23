@@ -1,4 +1,6 @@
+import 'package:app/screens/widgets_page.dart';
 import 'package:app/widgets/custom/background.dart';
+import 'package:app/widgets/custom/button.dart';
 import 'package:app/widgets/custom_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -12,8 +14,23 @@ class HomeScreen extends StatelessWidget {
       children: SingleChildScrollView(
         child: Column(
           children: <Widget>[
+            SizedBox(
+              height: 140,
+            ),
             Row(
-              children: <Widget>[CustomText(text: "Hallo")],
+              children: <Widget>[
+                CustomText(text: "Hallo"),
+                ButtonBack(
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const TestWidget(),
+                      ),
+                    );
+                  },
+                ),
+              ],
             )
           ],
         ),
