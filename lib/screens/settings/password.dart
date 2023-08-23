@@ -1,4 +1,5 @@
 import 'package:app/constants/constants.dart';
+import 'package:app/widgets/custom/appbar.dart';
 import 'package:app/widgets/custom_text.dart';
 import 'package:app/widgets/custom/snackbar.dart';
 import 'package:app/widgets/custom/button.dart';
@@ -17,24 +18,19 @@ class PasswordSwitch extends StatelessWidget {
     TextEditingController newPasswordRepeatController = TextEditingController();
 
     return Scaffold(
-      appBar: AppBar(
-        leading: CustomTextButton(
-            onPressed: () {
-              Navigator.pop(context);
-              showMessageSnackBar(context, 'Cancel');
-            },
-            text: 'Cancel'),
-        actions: [
-          CustomTextButtonWhite(
-              onPressed: () {
-                if (formPasswordKey.currentState!.validate()) {
-                  Navigator.pop(context);
-                } else {
-                  showMessageSnackBar(context, 'Please fill input');
-                }
-              },
-              text: 'Finish'),
-        ],
+      appBar: CustomWithActionAppBar(
+        context,
+        () {
+          Navigator.pop(context);
+          showMessageSnackBar(context, 'Cancel');
+        },
+        () {
+          if (formPasswordKey.currentState!.validate()) {
+            Navigator.pop(context);
+          } else {
+            showMessageSnackBar(context, 'Please fill input');
+          }
+        },
       ),
       body: Form(
         key: formPasswordKey,

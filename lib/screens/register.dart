@@ -1,5 +1,6 @@
 import 'package:app/app_state.dart';
 import 'package:app/constants/constants.dart';
+import 'package:app/widgets/custom/appbar.dart';
 import 'package:app/widgets/custom_text.dart';
 import 'package:app/widgets/custom/snackbar.dart';
 import 'package:app/widgets/custom/button.dart';
@@ -60,6 +61,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: CustomAppBar(
+        context,
+        () {
+          Navigator.pop(context);
+        },
+      ),
       body: PageView(
         physics: const NeverScrollableScrollPhysics(),
         controller: pageController,

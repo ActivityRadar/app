@@ -3,6 +3,7 @@ import 'package:app/constants/constants.dart';
 import 'package:app/provider/generated/users_provider.dart';
 import 'package:app/provider/photos.dart';
 import 'package:app/widgets/bottomsheet.dart';
+import 'package:app/widgets/custom/appbar.dart';
 import 'package:app/widgets/custom_text.dart';
 import 'package:app/widgets/custom/button.dart';
 import 'package:app/widgets/custom/list_tile.dart';
@@ -29,49 +30,43 @@ class DisplayNameSwitch extends StatelessWidget {
         TextEditingController(text: state.currentUser!.displayName);
 
     return Scaffold(
-        appBar: AppBar(
-          leading: CustomTextButtonWhite(
-              onPressed: () {
-                Navigator.pop(context);
-                showMessageSnackBar(context, 'Cancel');
-              },
-              text: 'Cancel'),
-          actions: [
-            CustomTextButtonWhite(
-                onPressed: () async {
-                  final Map<String, dynamic> data = {};
-                  var ok = true;
-                  if (formUsernameKey.currentState!.validate()) {
-                    if (usernameController.text !=
-                        state.currentUser!.username) {
-                      data["username"] = usernameController.text;
-                    }
-                  } else {
-                    showMessageSnackBar(context, 'Enter a valid username!');
-                    ok = false;
-                    print("Invalid new username!");
-                  }
-                  if (formDisplaynameKey.currentState!.validate()) {
-                    if (displaynameController.text !=
-                        state.currentUser!.displayName) {
-                      data["display_name"] = displaynameController.text;
-                    }
-                  } else {
-                    showMessageSnackBar(context, 'Enter a valid displayName!');
-                    ok = false;
-                    print("Invalid new display name!");
-                  }
+        appBar: CustomWithActionAppBar(
+          context,
+          () {
+            Navigator.pop(context);
+            showMessageSnackBar(context, 'Cancel');
+          },
+          () async {
+            final Map<String, dynamic> data = {};
+            var ok = true;
+            if (formUsernameKey.currentState!.validate()) {
+              if (usernameController.text != state.currentUser!.username) {
+                data["username"] = usernameController.text;
+              }
+            } else {
+              showMessageSnackBar(context, 'Enter a valid username!');
+              ok = false;
+              print("Invalid new username!");
+            }
+            if (formDisplaynameKey.currentState!.validate()) {
+              if (displaynameController.text !=
+                  state.currentUser!.displayName) {
+                data["display_name"] = displaynameController.text;
+              }
+            } else {
+              showMessageSnackBar(context, 'Enter a valid displayName!');
+              ok = false;
+              print("Invalid new display name!");
+            }
 
-                  if (ok) {
-                    if (data.isNotEmpty) {
-                      await UsersProvider.updateUser(data: data)
-                          .then((_) => state.updateUserInfo());
-                    }
-                    Navigator.pop(context);
-                  }
-                },
-                text: "Finish"),
-          ],
+            if (ok) {
+              if (data.isNotEmpty) {
+                await UsersProvider.updateUser(data: data)
+                    .then((_) => state.updateUserInfo());
+              }
+              Navigator.pop(context);
+            }
+          },
         ),
         body: Column(
           children: [

@@ -23,6 +23,10 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(
+        appBarTheme: AppBarTheme(
+          elevation: 0,
+          backgroundColor: DesignColors.kBackgroundColor,
+        ),
         primaryColor: const Color.fromARGB(255, 204, 68, 53),
         switchTheme: SwitchThemeData(
           thumbColor: MaterialStateProperty.all(DesignColors.redColor),

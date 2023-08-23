@@ -1,3 +1,4 @@
+import 'package:app/widgets/custom/appbar.dart';
 import 'package:app/widgets/custom_text.dart';
 import 'package:app/widgets/custom/button.dart';
 import 'package:app/widgets/custom/snackbar.dart';
@@ -20,6 +21,12 @@ class _ForgetPasswordScreen extends State<ForgetPasswordScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: CustomAppBar(
+        context,
+        () {
+          Navigator.pop(context);
+        },
+      ),
       body: Form(
           key: _formKey,
           child: Padding(

@@ -1,6 +1,7 @@
 import 'package:app/app_state.dart';
 import 'package:app/provider/backend.dart';
 import 'package:app/screens/forgot_password.dart';
+import 'package:app/widgets/custom/appbar.dart';
 import 'package:app/widgets/custom_text.dart';
 import 'package:app/widgets/custom/snackbar.dart';
 import 'package:app/widgets/custom/button.dart';
@@ -28,6 +29,12 @@ class _LoginScreenState extends State<LoginScreen> {
     var height = size.height;
     var width = size.width;
     return Scaffold(
+      appBar: CustomAppBar(
+        context,
+        () {
+          Navigator.pop(context);
+        },
+      ),
       body: Form(
           key: _formKey,
           child: Padding(

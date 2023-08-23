@@ -126,6 +126,26 @@ class ButtonCancel extends StatelessWidget {
   }
 }
 
+class ButtonDone extends StatelessWidget {
+  const ButtonDone({
+    super.key,
+    required this.onPressed,
+  });
+
+  final VoidCallback onPressed;
+
+  @override
+  Widget build(BuildContext context) {
+    return IconButton(
+      icon: CircleAvatar(
+        child: Icon(AppIcons.done),
+        backgroundColor: DesignColors.naviColor,
+      ),
+      onPressed: onPressed,
+    );
+  }
+}
+
 class ButtonBookMark extends StatefulWidget {
   @override
   _ButtonBookMarkState createState() => _ButtonBookMarkState();
