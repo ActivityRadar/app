@@ -20,6 +20,8 @@ class CustomTextField extends StatelessWidget {
         onChanged: (v) => controller.text = v,
         textInputAction: action,
         decoration: InputDecoration(
+          filled: true,
+          fillColor: DesignColors.kBackground,
           labelText: label,
         ));
   }
@@ -41,6 +43,8 @@ class DescriptionTextField extends StatelessWidget {
       controller: controller,
       onChanged: (v) => controller.text = v,
       decoration: InputDecoration(
+        filled: true,
+        fillColor: DesignColors.kBackground,
         labelText: label,
       ),
       maxLines: 3,
@@ -64,6 +68,8 @@ class DescriptionTextFieldwithoutBorder extends StatelessWidget {
       controller: nameController,
       onChanged: (v) => nameController.text = v,
       decoration: InputDecoration(
+        filled: true,
+        fillColor: DesignColors.kBackground,
         labelText: label,
       ),
       maxLines: 3,
@@ -91,6 +97,8 @@ class PasswordTextFormField extends StatelessWidget {
       controller: controller,
       keyboardType: TextInputType.visiblePassword,
       decoration: InputDecoration(
+        filled: true,
+        fillColor: DesignColors.kBackground,
         focusedErrorBorder: AppInputBorders.red,
         errorBorder: AppInputBorders.red,
         enabledBorder: AppInputBorders.blue,
@@ -120,6 +128,8 @@ class CustomTextFormField extends StatelessWidget {
       controller: controller,
       keyboardType: TextInputType.emailAddress,
       decoration: InputDecoration(
+        filled: true,
+        fillColor: DesignColors.kBackground,
         focusedErrorBorder: AppInputBorders.red,
         errorBorder: AppInputBorders.red,
         enabledBorder: AppInputBorders.blue,
@@ -150,6 +160,8 @@ class DescriptionTextFormField extends StatelessWidget {
       controller: controller,
       textAlign: TextAlign.start,
       decoration: InputDecoration(
+        filled: true,
+        fillColor: DesignColors.kBackground,
         labelText: label,
         focusedErrorBorder: AppInputBorders.red,
         errorBorder: AppInputBorders.red,
@@ -173,6 +185,8 @@ class UnderLineTextFormField extends StatelessWidget {
       controller: controller,
       textAlign: TextAlign.start,
       decoration: InputDecoration(
+        filled: true,
+        fillColor: DesignColors.kBackground,
         labelText: label,
         focusedErrorBorder: AppInputBorders.red,
         errorBorder: AppInputBorders.red,
@@ -201,6 +215,8 @@ class EmailTextFormField extends StatelessWidget {
       controller: controller,
       keyboardType: TextInputType.emailAddress,
       decoration: InputDecoration(
+        filled: true,
+        fillColor: DesignColors.kBackground,
         focusedErrorBorder: AppInputBorders.red,
         errorBorder: AppInputBorders.red,
         enabledBorder: AppInputBorders.blue,
@@ -231,6 +247,8 @@ class UsernameTextFormField extends StatelessWidget {
       controller: controller,
       keyboardType: TextInputType.visiblePassword,
       decoration: InputDecoration(
+        filled: true,
+        fillColor: DesignColors.kBackground,
         focusedErrorBorder: AppInputBorders.red,
         errorBorder: AppInputBorders.red,
         enabledBorder: AppInputBorders.blue,

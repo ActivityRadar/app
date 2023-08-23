@@ -54,6 +54,7 @@ class _MapSearchBarState extends State<MapSearchBar> {
           child: TextField(
             controller: textController,
             decoration: InputDecoration(
+              filled: false,
               border: AppInputBorders.none,
               focusedErrorBorder: AppInputBorders.none,
               errorBorder: AppInputBorders.none,
