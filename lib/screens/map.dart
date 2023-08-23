@@ -1,6 +1,6 @@
 import 'dart:math';
-import 'package:app/constants/design.dart';
 import 'package:app/app_state.dart';
+import 'package:app/constants/design.dart';
 import 'package:app/model/functions.dart';
 import 'package:app/model/generated.dart';
 import 'package:app/provider/activity_type.dart';
@@ -15,7 +15,6 @@ import 'package:flutter_map/flutter_map.dart';
 import 'package:flutter_map/plugin_api.dart';
 import 'package:flutter_map_animations/flutter_map_animations.dart';
 import 'package:flutter_map_marker_cluster/flutter_map_marker_cluster.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:provider/provider.dart';
 
@@ -393,6 +392,7 @@ class _ActivityMarkerMapState extends State<ActivityMarkerMap>
     double bubbleScale(s) => pow(s, exponent).toDouble();
 
     bounds = Provider.of<AppState>(context).mapPosition;
+    onGpsUpdate();
 
     return FlutterMap(
       mapController: mapController.mapController,

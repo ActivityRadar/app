@@ -41,7 +41,9 @@ class GpsLocationNotifier extends ChangeNotifier {
     _lastUpdate = time!;
     _moveToLocation = false;
     enabled = false;
-    notifyListeners();
+
+    // dont notify listeners as this is called during a build function
+    // notifyListeners();
   }
 
   DateTime? get lastUpdate => _lastUpdate;
