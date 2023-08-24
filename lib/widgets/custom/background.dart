@@ -16,7 +16,7 @@ class BackgroundSVG extends StatelessWidget {
 
         child: SvgPicture.asset("assets/images/background.svg",
             colorFilter: ColorFilter.mode(
-                Color.fromARGB(66, 192, 195, 243), BlendMode.srcIn),
+                Color.fromARGB(11, 192, 195, 243), BlendMode.srcIn),
             semanticsLabel: 'BackgroundDetails Screen'),
       ),
       children

@@ -61,6 +61,10 @@ class ActivityManager {
     return _backendToDisplay[backendType] ?? "";
   }
 
+  List<String> getDisplayTypes(List<String> backendTypes) {
+    return backendTypes.map((t) => _backendToDisplay[t] ?? "").toList();
+  }
+
   List<String> getAllDisplayTypes() {
     return _allDisplayTypes;
   }

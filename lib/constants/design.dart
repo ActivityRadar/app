@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 
 class DesignColors {
   static const Color red = Color(0xFFFF7942);
   static const Color green = Color(0xFF70BF44);
   static const Color blue = Color(0xFF3542CC);
   static const Color grey = Colors.grey;
+  static const Color black = Color.fromARGB(227, 0, 0, 0);
   static const Color naviColor = blue;
   static const Color transparent = Color.fromARGB(0, 248, 248, 248);
   static const Color kBackground = Color.fromARGB(255, 248, 248, 248);
@@ -90,4 +92,12 @@ class AppIcons {
   static const IconData edit = Icons.edit;
   static const IconData arrowBack = Icons.arrow_back;
   static const IconData done = Icons.done;
+  static Widget chat = SvgPicture.asset(
+      "assets/icons/chat.svg", // https://remixicon.com/
+      colorFilter: ColorFilter.mode(DesignColors.naviColor, BlendMode.srcIn),
+      semanticsLabel: 'chaticon');
+  static Widget notification = SvgPicture.asset(
+      "assets/icons/notification.svg", // https://remixicon.com/
+      colorFilter: ColorFilter.mode(DesignColors.naviColor, BlendMode.srcIn),
+      semanticsLabel: 'chaticon');
 }

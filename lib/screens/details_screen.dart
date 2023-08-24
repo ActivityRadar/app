@@ -1,5 +1,6 @@
 import 'package:app/constants/design.dart';
 import 'package:app/model/functions.dart';
+import 'package:app/provider/activity_type.dart';
 import 'package:app/provider/generated/locations_provider.dart';
 import 'package:app/widgets/activityType_short.dart';
 import 'package:app/widgets/bottomsheet.dart';
@@ -218,7 +219,9 @@ class _DetailsScreenState extends State<DetailsScreen> {
               text: "activityTypes",
               width: width,
             )),
-        ActivityChipSlider(activities: info.activityTypes),
+        ActivityChipSlider(
+            activities:
+                ActivityManager.instance.getDisplayTypes(info.activityTypes)),
         Padding(
             padding: const EdgeInsets.only(left: 9.0, top: 15.0),
             child: Row(

@@ -1,10 +1,12 @@
 import 'package:app/app_state.dart';
 import 'package:app/provider/backend.dart';
+import 'package:app/screens/community.dart';
+import 'package:app/screens/home_Screen.dart';
 import 'package:app/screens/login.dart';
 import 'package:app/screens/start.dart';
 import 'package:app/screens/map.dart';
 import 'package:app/screens/settings.dart';
-import 'package:app/screens/widgets_page.dart';
+
 import 'package:app/widgets/bottomsheet.dart';
 import 'package:app/widgets/custom/icon.dart';
 import 'package:app/widgets/custom_text.dart';
@@ -22,9 +24,9 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> with WidgetsBindingObserver {
   final List<Widget> screens = [
-    const HomeScreen(),
+    const HomePage(),
     const MapScreen(),
-    const TestWidget(),
+    const CommunityScreen(),
     const SettingScreen(),
   ];
 
