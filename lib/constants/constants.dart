@@ -65,13 +65,16 @@ class AssetImages {
       AssetImage("assets/images/locationPhotoPlaceholder.jpg");
   static const avatarError =
       AssetImage("assets/images/locationPhotoPlaceholder.jpg");
-  static Widget backgroundAR = SvgPicture.asset("assets/images/background.svg",
-      colorFilter:
-          ColorFilter.mode(Color.fromARGB(22, 248, 248, 248), BlendMode.srcIn),
-      semanticsLabel: 'BackgroundDetails Screen');
+  static Widget backgroundAR = Transform.scale(
+      scale: 4.0, // Zoomfaktor
+
+      child: SvgPicture.asset("assets/images/background.svg",
+          colorFilter: ColorFilter.mode(
+              Color.fromARGB(22, 248, 248, 248), BlendMode.srcIn),
+          semanticsLabel: 'BackgroundDetails Screen'));
   static Widget backgroundpage = SvgPicture.asset(
       "assets/images/background.svg",
       colorFilter:
-          ColorFilter.mode(Color.fromARGB(22, 248, 248, 248), BlendMode.srcIn),
+          ColorFilter.mode(Color.fromARGB(225, 205, 17, 17), BlendMode.srcIn),
       semanticsLabel: 'BackgroundDetails Screen');
 }
