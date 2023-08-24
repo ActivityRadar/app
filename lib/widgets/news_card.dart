@@ -52,55 +52,47 @@ class NewsCard extends StatelessWidget {
                 child: Column(
                   children: [
                     SizedBox(
-                      height: height / 6.5,
-                      child: Container(
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(AppStyle
-                              .cornerRadius), // Radius der abgerundeten Ecken
-                        ),
-                        child: Transform.scale(
-                          scale: 3.0,
-                          child: SvgPicture.asset(
-                              "assets/images/background.svg",
-                              colorFilter: ColorFilter.mode(
-                                  Color.fromARGB(66, 0, 17, 255),
-                                  BlendMode.srcIn),
-                              semanticsLabel: 'BackgroundDetails Screen'),
-                        ),
-                      ),
-                    ),
-                    Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Column(children: [
-                            Row(children: [
-                              Padding(
-                                  padding: EdgeInsets.only(left: 10, top: 60)),
-                              CircleAvatar(
-                                backgroundImage: AssetImages.avatarEmpty,
-                                radius: 20,
+                        height: height / 6.5,
+                        child: Stack(
+                          children: [
+                            Container(
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(AppStyle
+                                    .cornerRadius), // Radius der abgerundeten Ecken
                               ),
-                              SizedBox(
-                                width: 10,
+                              child: ClipRRect(
+                                borderRadius: BorderRadius.circular(
+                                    AppStyle.cornerRadius),
+                                child: Transform.scale(
+                                  scale: 8,
+                                  child: SvgPicture.asset(
+                                      "assets/images/background.svg",
+                                      colorFilter: ColorFilter.mode(
+                                          Color.fromARGB(66, 0, 17, 255),
+                                          BlendMode.srcIn),
+                                      semanticsLabel:
+                                          'BackgroundDetails Screen'),
+                                ),
                               ),
-                              MediumText(
-                                text: 'Max Mustermann',
-                                width: width,
-                              ),
-                            ]),
-                          ]),
-                          Column(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: [
-                                Padding(
-                                  padding: EdgeInsets.all(12.0),
-                                  child: LittleText(
-                                    text: "12h ago",
-                                    width: width,
-                                  ),
-                                )
-                              ]),
-                        ]),
+                            ),
+                            Center(
+                                child: Text(
+                              "Tennis",
+                              style: TextStyle(
+                                  color: DesignColors.kBackground,
+                                  fontSize: 50,
+                                  fontWeight: FontWeight.bold),
+                            )),
+                            Center(
+                                child: Text(
+                              "Tennis",
+                              style: TextStyle(
+                                  color: Color.fromARGB(255, 26, 255, 0),
+                                  fontSize: 45,
+                                  fontWeight: FontWeight.bold),
+                            )),
+                          ],
+                        )),
                   ],
                 ))));
   }
