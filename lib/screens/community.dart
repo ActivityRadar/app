@@ -1,9 +1,12 @@
 import 'package:app/constants/design.dart';
 import 'package:app/screens/auth.dart';
+import 'package:app/screens/meet_page.dart';
+import 'package:app/screens/meet_search_page.dart';
 import 'package:app/screens/settings.dart';
 import 'package:app/screens/widgets_page.dart';
 import 'package:app/widgets/custom/background.dart';
 import 'package:app/widgets/custom/button.dart';
+import 'package:app/widgets/custom/card.dart';
 import 'package:app/widgets/custom_text.dart';
 import 'package:app/widgets/meet_card.dart';
 import 'package:app/widgets/news_card.dart';
@@ -44,13 +47,11 @@ class CommunityScreen extends StatelessWidget {
       children: CustomScrollView(slivers: <Widget>[
         SliverAppBar(
           backgroundColor: DesignColors.transparent,
-          leading: IconButton(
-            icon: AppIcons.notification,
-            onPressed: () {},
+          title: Text(
+            "Community",
+            style: TextStyle(
+                color: DesignColors.naviColor, fontWeight: FontWeight.bold),
           ),
-          /* title: SearchBar(
-            hintText: "Search Meet and ",
-          ),*/
           actions: <Widget>[
             IconButton(
               icon: AppIcons.chat,
@@ -60,21 +61,89 @@ class CommunityScreen extends StatelessWidget {
         ),
         SliverList(
           delegate: SliverChildListDelegate([
-            SizedBox(
-              height: 30,
+            GestureDetector(
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const MeetSearchScreen(),
+                  ),
+                );
+              },
+              child: Card(
+                shape: RoundedRectangleBorder(
+                  borderRadius:
+                      BorderRadius.circular(AppStyle.cornerRadiusSearch),
+                ),
+                child: IgnorePointer(
+                  child: TextField(
+                    decoration: InputDecoration(
+                      filled: false,
+                      border: AppInputBorders.none,
+                      focusedErrorBorder: AppInputBorders.none,
+                      errorBorder: AppInputBorders.none,
+                      enabledBorder: AppInputBorders.none,
+                      focusedBorder: AppInputBorders.none,
+                      prefixIcon: IconButton(
+                        icon: const Icon(AppIcons.filterAlt),
+                        onPressed: () {},
+                      ),
+                      suffixIcon: IconButton(
+                        icon: const Icon(AppIcons.search),
+                        onPressed: () {},
+                      ),
+                      hintStyle: CustomTextStyle.hint,
+                      hintText:
+                          "Search basketball, volleyball, table tennis ... ",
+                    ),
+                    textInputAction: TextInputAction.search,
+                  ),
+                ),
+              ),
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                TitleText(text: "Dein Meet Statisch", width: width),
+                TextButton(onPressed: () {}, child: Text('Profil'))
+              ],
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                MeetStatic(
+                  value: "5",
+                  title: "erstellte",
+                  onTap: () {},
+                ),
+                MeetStatic(
+                  value: "10",
+                  title: "mit gemacht",
+                  onTap: () {},
+                ),
+                MeetStatic(
+                  value: "1",
+                  title: "mit Freunden",
+                  onTap: () {},
+                ),
+                MeetStatic(
+                  value: "4",
+                  title: "Sportarten",
+                  onTap: () {},
+                )
+              ],
             ),
             Column(
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                TitleText(text: "Schnell suche nach Meet", width: width),
-                ActivitySearchChipSlider(
-                  activities: fruits,
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    TitleText(text: "Deine Meet Up's", width: width),
+                    TextButton(onPressed: () {}, child: Text('mehr Anzeigen'))
+                  ],
                 ),
-                SizedBox(
-                  height: 30,
-                ),
-                TitleText(text: "Deine nächste Verabredung", width: width),
                 MeetList(
                   width: width,
                   height: 40,
@@ -82,17 +151,19 @@ class CommunityScreen extends StatelessWidget {
                 SizedBox(
                   height: 30,
                 ),
-                TitleText(text: "Freudschaftsvorschläge", width: width),
-                ProfilSlider(
-                  profil: name,
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    TitleText(text: "Meet's in deine Nähe", width: width),
+                    TextButton(onPressed: () {}, child: Text('mehr Anzeigen'))
+                  ],
+                ),
+                MeetList(
+                  width: width,
+                  height: 40,
                 ),
                 SizedBox(
                   height: 30,
-                ),
-                TitleText(text: "News", width: width),
-                NewsList(
-                  width: width,
-                  height: 40,
                 ),
                 MediumHintText(
                   text: "App-Version: Beta",
@@ -108,6 +179,63 @@ class CommunityScreen extends StatelessWidget {
           ]),
         )
       ]),
+    );
+  }
+}
+
+class MeetStatic extends StatelessWidget {
+  const MeetStatic({
+    super.key,
+    required this.value,
+    required this.title,
+    required this.onTap,
+  });
+
+  final String value;
+  final String title;
+  final VoidCallback onTap;
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: onTap,
+      child: SizedBox(
+        width: 100,
+        height: 90,
+        child: CustomCard(
+            child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            SizedBox(
+              height: 15,
+            ),
+            SizedBox(
+              height: 20,
+              child: Align(
+                alignment: Alignment.center,
+                child: Text(
+                  value,
+                  style: TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                      color: DesignColors.naviColor),
+                ),
+              ),
+            ),
+            SizedBox(
+              height: 10,
+            ),
+            Align(
+              alignment: Alignment.bottomCenter,
+              child: Text(
+                title,
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                    fontSize: 15, color: const Color.fromARGB(153, 0, 0, 0)),
+              ),
+            ),
+          ],
+        )),
+      ),
     );
   }
 }
