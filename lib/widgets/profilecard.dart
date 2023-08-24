@@ -16,7 +16,7 @@ class ProfileCard extends StatelessWidget {
     var height = size.height;
     double width = size.width;
     return Padding(
-      padding: EdgeInsets.symmetric(vertical: height / 25, horizontal: 16.0),
+      padding: EdgeInsets.symmetric(horizontal: 16.0),
       child: SizedBox(
         height: 66, // Höhe der Karte
         child: Card(

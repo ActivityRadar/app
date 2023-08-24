@@ -23,7 +23,7 @@ class MeetPage extends StatelessWidget {
     double width = size.width;
     return BackgroundSVG(
         children: Scaffold(
-      backgroundColor: Color.fromARGB(0, 255, 255, 255),
+      backgroundColor: Color.fromARGB(255, 255, 255, 255),
       body: CustomScrollView(slivers: <Widget>[
         SliverAppBar(
             expandedHeight: expandedHeight,
@@ -235,19 +235,27 @@ class ProfilListeCardView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(children: [
-      Row(children: [
-        const Padding(padding: EdgeInsets.only(left: 10, top: 60)),
-        const CircleAvatar(
-          backgroundImage: AssetImages.avatarEmpty,
-          radius: 15,
-        ),
-        const SizedBox(
-          width: 10,
-        ),
-        MediumText(
-          text: name,
-          width: width,
-        ),
+      Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+        Row(children: [
+          const Padding(padding: EdgeInsets.only(left: 10, top: 60)),
+          const CircleAvatar(
+            backgroundImage: AssetImages.avatarEmpty,
+            radius: 15,
+          ),
+          const SizedBox(
+            width: 10,
+          ),
+          MediumText(
+            text: name,
+            width: width,
+          ),
+        ]),
+        Row(
+          children: [
+            AppIcons.chat,
+            Icon(AppIcons.close),
+          ],
+        )
       ]),
     ]);
   }
