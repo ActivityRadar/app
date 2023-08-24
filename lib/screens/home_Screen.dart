@@ -22,15 +22,6 @@ class HomePage extends StatelessWidget {
     var size = MediaQuery.of(context).size;
     double height = size.height;
     double width = size.width;
-    List<String> fruits = [
-      'Apple',
-      'Banana',
-      'Orange',
-      'Grapes',
-      'Mango',
-      'Strawberry',
-      'Pineapple',
-    ];
     List<String> name = [
       'Simon',
       'Anton',

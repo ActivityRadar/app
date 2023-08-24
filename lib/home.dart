@@ -1,7 +1,7 @@
 import 'package:app/app_state.dart';
 import 'package:app/provider/backend.dart';
 import 'package:app/screens/community.dart';
-import 'package:app/screens/homeScreen.dart';
+import 'package:app/screens/home_Screen.dart';
 import 'package:app/screens/login.dart';
 import 'package:app/screens/start.dart';
 import 'package:app/screens/map.dart';

@@ -24,24 +24,6 @@ class CommunityScreen extends StatelessWidget {
     var size = MediaQuery.of(context).size;
 
     double width = size.width;
-    List<String> fruits = [
-      'Apple',
-      'Banana',
-      'Orange',
-      'Grapes',
-      'Mango',
-      'Strawberry',
-      'Pineapple',
-    ];
-    List<String> name = [
-      'Simon',
-      'Anton',
-      'Laura',
-      'Sophia',
-      'Nico',
-      'Jan',
-      'Max',
-    ];
 
     return BackgroundSVG(
       children: CustomScrollView(slivers: <Widget>[
@@ -111,22 +93,22 @@ class CommunityScreen extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                MeetStatic(
+                MeetStatistics(
                   value: "5",
                   title: "erstellte",
                   onTap: () {},
                 ),
-                MeetStatic(
+                MeetStatistics(
                   value: "10",
                   title: "mit gemacht",
                   onTap: () {},
                 ),
-                MeetStatic(
+                MeetStatistics(
                   value: "1",
                   title: "mit Freunden",
                   onTap: () {},
                 ),
-                MeetStatic(
+                MeetStatistics(
                   value: "4",
                   title: "Sportarten",
                   onTap: () {},
@@ -183,8 +165,8 @@ class CommunityScreen extends StatelessWidget {
   }
 }
 
-class MeetStatic extends StatelessWidget {
-  const MeetStatic({
+class MeetStatistics extends StatelessWidget {
+  const MeetStatistics({
     super.key,
     required this.value,
     required this.title,
