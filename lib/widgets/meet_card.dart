@@ -15,9 +15,9 @@ class MeetList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
-      scrollDirection: Axis.horizontal,
-      child: Row(
-        children: [MeetCard(), MeetCard(), MeetCard()],
+      scrollDirection: Axis.vertical,
+      child: Column(
+        children: [MeetCard(), MeetCard()],
       ),
     );
   }
