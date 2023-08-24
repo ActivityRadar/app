@@ -75,83 +75,97 @@ class CommunityScreen extends StatelessWidget {
                         onPressed: () {},
                       ),
                       hintStyle: CustomTextStyle.hint,
-                      hintText:
-                          "Search basketball, volleyball, table tennis ... ",
+                      hintText: "Such nach Meet  ... ",
                     ),
                     textInputAction: TextInputAction.search,
                   ),
                 ),
               ),
             ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                TitleText(text: "Dein Meet Statisch", width: width),
-                TextButton(onPressed: () {}, child: Text('Profil'))
-              ],
+            Padding(
+              padding: const EdgeInsets.symmetric(
+                horizontal: 9.0,
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  TitleText(text: "Dein Meet Statisch", width: width),
+                  TextButton(onPressed: () {}, child: Text('Profil'))
+                ],
+              ),
             ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                MeetStatistics(
-                  value: "5",
-                  title: "erstellte",
-                  onTap: () {},
-                ),
-                MeetStatistics(
-                  value: "10",
-                  title: "mit gemacht",
-                  onTap: () {},
-                ),
-                MeetStatistics(
-                  value: "1",
-                  title: "mit Freunden",
-                  onTap: () {},
-                ),
-                MeetStatistics(
-                  value: "4",
-                  title: "Sportarten",
-                  onTap: () {},
-                )
-              ],
+            Padding(
+              padding: const EdgeInsets.only(
+                left: 9.0,
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  MeetStatistics(
+                    value: "5",
+                    title: "Erstellte",
+                    onTap: () {},
+                  ),
+                  MeetStatistics(
+                    value: "10",
+                    title: "Teilgenommen",
+                    onTap: () {},
+                  ),
+                  MeetStatistics(
+                    value: "1",
+                    title: "Mit Freunden",
+                    onTap: () {},
+                  ),
+                  MeetStatistics(
+                    value: "4",
+                    title: "Sportarten",
+                    onTap: () {},
+                  )
+                ],
+              ),
             ),
-            Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    TitleText(text: "Deine Meet Up's", width: width),
-                    TextButton(onPressed: () {}, child: Text('mehr Anzeigen'))
-                  ],
-                ),
-                MeetList(
-                  width: width,
-                  height: 40,
-                ),
-                SizedBox(
-                  height: 30,
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    TitleText(text: "Meet's in deine Nähe", width: width),
-                    TextButton(onPressed: () {}, child: Text('mehr Anzeigen'))
-                  ],
-                ),
-                MeetList(
-                  width: width,
-                  height: 40,
-                ),
-                SizedBox(
-                  height: 30,
-                ),
-                MediumHintText(
-                  text: "App-Version: Beta",
-                  width: width,
-                ),
-              ],
+            Padding(
+              padding: const EdgeInsets.symmetric(
+                horizontal: 9.0,
+              ),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      TitleText(text: "Deine Meet Up's", width: width),
+                      TextButton(onPressed: () {}, child: Text('mehr Anzeigen'))
+                    ],
+                  ),
+                  MeetList(
+                    width: width,
+                    height: 40,
+                  ),
+                  SizedBox(
+                    height: 30,
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      TitleText(text: "Meet's in deine Nähe", width: width),
+                      TextButton(onPressed: () {}, child: Text('mehr Anzeigen'))
+                    ],
+                  ),
+                  MeetList(
+                    width: width,
+                    height: 40,
+                  ),
+                  SizedBox(
+                    height: 30,
+                  ),
+                  MediumHintText(
+                    text: "App-Version: Beta",
+                    width: width,
+                  ),
+                ],
+              ),
             ),
             Padding(
                 padding: const EdgeInsets.only(top: 8, left: 15, bottom: 4),
@@ -212,7 +226,7 @@ class MeetStatistics extends StatelessWidget {
                 title,
                 textAlign: TextAlign.center,
                 style: TextStyle(
-                    fontSize: 15, color: const Color.fromARGB(153, 0, 0, 0)),
+                    fontSize: 13, color: const Color.fromARGB(153, 0, 0, 0)),
               ),
             ),
           ],
