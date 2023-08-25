@@ -50,10 +50,14 @@ class ProfileBar extends StatelessWidget {
         Column(
           children: [
             ProfileCard(height: height),
-            const SizedBox(
+            SizedBox(
               width: 500, // Breite der Karte
               height: 200, // Höhe der Karte
-              child: MeetCard(),
+              child: MeetCard(
+                  name: "Max",
+                  onTap: () {},
+                  activity: "Fussball",
+                  time: '12 Uhr'),
             ),
             ButtonCancel(
               onPressed: () {},

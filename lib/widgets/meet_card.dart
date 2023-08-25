@@ -17,7 +17,34 @@ class MeetList extends StatelessWidget {
     return SingleChildScrollView(
       scrollDirection: Axis.vertical,
       child: Column(
-        children: [MeetCard(), MeetCard()],
+        children: [
+          MeetCard(
+            name: 'Jan K.',
+            activity: 'Tischtennis',
+            time: 'ab 13 Uhr ',
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const MeetPage(),
+                ),
+              );
+            },
+          ),
+          MeetCard(
+            name: 'Sophie K.',
+            activity: 'Fussbal',
+            time: 'ab 11 Uhr ',
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const MeetPage(),
+                ),
+              );
+            },
+          )
+        ],
       ),
     );
   }
@@ -26,22 +53,23 @@ class MeetList extends StatelessWidget {
 class MeetCard extends StatelessWidget {
   const MeetCard({
     super.key,
+    required this.name,
+    required this.onTap,
+    required this.activity,
+    required this.time,
   });
 
+  final String time;
+  final String activity;
+  final VoidCallback onTap;
+  final String name;
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
     var height = size.height;
     double width = size.width;
     return GestureDetector(
-        onTap: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => const MeetPage(),
-            ),
-          );
-        },
+        onTap: onTap,
         child: SizedBox(
             width: width,
             child: Card(
@@ -67,20 +95,20 @@ class MeetCard extends StatelessWidget {
                           right: 0,
                           child: Container(
                               alignment: Alignment.bottomCenter,
-                              child: const Row(
+                              child: Row(
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
                                 children: [
                                   Padding(
                                     padding: EdgeInsets.only(left: 12.0),
                                     child: CustomChip(
-                                      text: 'Table Tennis',
+                                      text: activity,
                                     ),
                                   ),
                                   Padding(
                                     padding: EdgeInsets.only(right: 12.0),
                                     child: CustomChip(
-                                      text: 'ab 14 Uhr ',
+                                      text: time,
                                     ),
                                   )
                                 ],
@@ -101,7 +129,7 @@ class MeetCard extends StatelessWidget {
                                 width: 10,
                               ),
                               MediumText(
-                                text: 'Max Mustermann',
+                                text: name,
                                 width: width,
                               ),
                             ]),

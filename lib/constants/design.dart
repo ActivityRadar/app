@@ -94,10 +94,10 @@ class AppIcons {
   static const IconData done = Icons.done;
   static Widget chat = SvgPicture.asset(
       "assets/icons/chat.svg", // https://remixicon.com/
-      colorFilter: ColorFilter.mode(DesignColors.naviColor, BlendMode.srcIn),
+      colorFilter: ColorFilter.mode(DesignColors.kBackground, BlendMode.srcIn),
       semanticsLabel: 'chaticon');
   static Widget notification = SvgPicture.asset(
       "assets/icons/notification.svg", // https://remixicon.com/
       colorFilter: ColorFilter.mode(DesignColors.naviColor, BlendMode.srcIn),
-      semanticsLabel: 'chaticon');
+      semanticsLabel: 'notification');
 }

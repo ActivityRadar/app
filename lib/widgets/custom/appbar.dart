@@ -9,6 +9,18 @@ AppBar CustomAppBar(BuildContext context, VoidCallback onPressed) {
       leading: ButtonCancel(onPressed: onPressed));
 }
 
+AppBar NaviAppBar(BuildContext context, VoidCallback onPressed) {
+  return AppBar(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(
+          bottom: Radius.circular(30.0),
+        ),
+      ),
+      elevation: 0.0,
+      backgroundColor: DesignColors.blue,
+      leading: ButtonCancel(onPressed: onPressed));
+}
+
 AppBar CustomWithActionAppBar(BuildContext context,
     VoidCallback onPressedleading, VoidCallback onPressedactions) {
   return AppBar(

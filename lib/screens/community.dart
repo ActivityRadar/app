@@ -28,11 +28,16 @@ class CommunityScreen extends StatelessWidget {
     return BackgroundSVG(
       children: CustomScrollView(slivers: <Widget>[
         SliverAppBar(
-          backgroundColor: DesignColors.transparent,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.vertical(
+              bottom: Radius.circular(30.0),
+            ),
+          ),
+          backgroundColor: DesignColors.blue,
           title: Text(
             "Community",
             style: TextStyle(
-                color: DesignColors.naviColor, fontWeight: FontWeight.bold),
+                color: DesignColors.kBackground, fontWeight: FontWeight.bold),
           ),
           actions: <Widget>[
             IconButton(
@@ -43,6 +48,9 @@ class CommunityScreen extends StatelessWidget {
         ),
         SliverList(
           delegate: SliverChildListDelegate([
+            SizedBox(
+              height: 20,
+            ),
             GestureDetector(
               onTap: () {
                 Navigator.push(
