@@ -15,8 +15,16 @@ import 'package:flutter_map/flutter_map.dart';
 import 'package:flutter_map/plugin_api.dart';
 import 'package:flutter_map_animations/flutter_map_animations.dart';
 import 'package:flutter_map_marker_cluster/flutter_map_marker_cluster.dart';
+import 'package:flutter_map_tile_caching/flutter_map_tile_caching.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:provider/provider.dart';
+
+TileLayer createCachedTileLayer() {
+  return TileLayer(
+      urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
+      subdomains: const ['a', 'b', 'c'],
+      tileProvider: FMTC.instance('mapStore').getTileProvider());
+}
 
 // ignore_for_file: avoid_print
 class MapScreen extends StatefulWidget {
@@ -401,10 +409,7 @@ class _ActivityMarkerMapState extends State<ActivityMarkerMap>
           onMapEvent: (event) => onMapEvent(event, context),
           interactiveFlags: InteractiveFlag.all & ~InteractiveFlag.rotate),
       children: [
-        TileLayer(
-          urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
-          subdomains: const ['a', 'b', 'c'],
-        ),
+        createCachedTileLayer(),
         if (currentPositionLayer != null) currentPositionLayer!,
         if (newMarker != null) MarkerLayer(markers: [newMarker!]),
         MarkerClusterLayerWidget(

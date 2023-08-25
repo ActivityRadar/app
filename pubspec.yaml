@@ -60,6 +60,7 @@ dependencies:
   shared_preferences: ^2.2.0
   flutter_svg: ^2.0.7
   fuzzywuzzy: ^1.1.6
+  flutter_map_tile_caching: ^9.0.0-dev.3
 
 dependency_overrides:
   http: ^1.1.0 # needed to update aws_s3_api dependency

@@ -7,10 +7,13 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:app/l10n/l10n.dart';
 import 'package:provider/provider.dart';
 import 'package:app/constants/design.dart';
+import 'package:flutter_map_tile_caching/flutter_map_tile_caching.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await ActivityManager.instance.init();
+  await FlutterMapTileCaching.initialise();
+  await FMTC.instance('mapStore').manage.createAsync();
 
   runApp(ChangeNotifierProvider(
       create: (context) => AppState(), child: const MyApp()));
