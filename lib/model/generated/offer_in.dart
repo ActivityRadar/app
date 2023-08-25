@@ -4,6 +4,7 @@
 
 import 'package:json_annotation/json_annotation.dart';
 
+import 'package:app/model/generated/description_with_title.dart';
 import 'package:app/model/generated/offer_visibility.dart';
 import 'package:app/model/generated/location_blurr_in.dart';
 part 'offer_in.g.dart';
@@ -12,11 +13,13 @@ part 'offer_in.g.dart';
 class OfferIn {
   final List<String> activity;
   final Map<String, dynamic> time;
-  final String description;
+  final DescriptionWithTitle description;
   final OfferVisibility visibility;
   @JsonKey(name: "visibility_radius")
   final double visibilityRadius;
   final Map<String, dynamic> location;
+  @JsonKey(name: "participant_limits")
+  final List<int> participantLimits;
   final LocationBlurrIn blurr;
 
   OfferIn(
@@ -26,6 +29,7 @@ class OfferIn {
       required this.visibility,
       required this.visibilityRadius,
       required this.location,
+      required this.participantLimits,
       required this.blurr});
 
   factory OfferIn.fromJson(Map<String, dynamic> json) =>

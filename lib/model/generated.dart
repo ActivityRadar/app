@@ -4,6 +4,7 @@ export 'generated/access_token_body.dart' show AccessTokenBody;
 export 'generated/change_password_form.dart' show ChangePasswordForm;
 export 'generated/create_location_response.dart' show CreateLocationResponse;
 export 'generated/create_user_response.dart' show CreateUserResponse;
+export 'generated/description_with_title.dart' show DescriptionWithTitle;
 export 'generated/geo_json_feature_collection.dart' show GeoJsonFeatureCollection;
 export 'generated/geo_json_line.dart' show GeoJsonLine;
 export 'generated/geo_json_location.dart' show GeoJsonLocation;

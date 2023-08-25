@@ -4,22 +4,21 @@
 
 import 'package:json_annotation/json_annotation.dart';
 
+import 'package:app/model/generated/description_with_title.dart';
 part 'review_base.g.dart';
 
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
 class ReviewBase {
   @JsonKey(name: "location_id")
   final String locationId;
-  final String title;
-  final String text;
+  final DescriptionWithTitle description;
   @JsonKey(name: "overall_rating")
   final double overallRating;
   final Map<String, dynamic> details;
 
   ReviewBase(
       {required this.locationId,
-      required this.title,
-      required this.text,
+      required this.description,
       required this.overallRating,
       required this.details});
 

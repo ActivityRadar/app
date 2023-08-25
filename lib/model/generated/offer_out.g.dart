@@ -10,10 +10,14 @@ OfferOut _$OfferOutFromJson(Map<String, dynamic> json) => OfferOut(
       activity:
           (json['activity'] as List<dynamic>).map((e) => e as String).toList(),
       time: json['time'] as Map<String, dynamic>,
-      description: json['description'] as String,
+      description: DescriptionWithTitle.fromJson(
+          json['description'] as Map<String, dynamic>),
       visibility: $enumDecode(_$OfferVisibilityEnumMap, json['visibility']),
       visibilityRadius: (json['visibility_radius'] as num).toDouble(),
       location: json['location'] as Map<String, dynamic>?,
+      participantLimits: (json['participant_limits'] as List<dynamic>)
+          .map((e) => e as int)
+          .toList(),
       participants: (json['participants'] as List<dynamic>)
           .map((e) => Participant.fromJson(e as Map<String, dynamic>))
           .toList(),
@@ -28,7 +32,7 @@ Map<String, dynamic> _$OfferOutToJson(OfferOut instance) {
   final val = <String, dynamic>{
     'activity': instance.activity,
     'time': instance.time,
-    'description': instance.description,
+    'description': instance.description.toJson(),
     'visibility': _$OfferVisibilityEnumMap[instance.visibility]!,
     'visibility_radius': instance.visibilityRadius,
   };
@@ -40,6 +44,7 @@ Map<String, dynamic> _$OfferOutToJson(OfferOut instance) {
   }
 
   writeNotNull('location', instance.location);
+  val['participant_limits'] = instance.participantLimits;
   val['participants'] = instance.participants.map((e) => e.toJson()).toList();
   val['id'] = instance.id;
   val['user_info'] = instance.userInfo.toJson();
