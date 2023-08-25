@@ -5,22 +5,28 @@
 import 'package:json_annotation/json_annotation.dart';
 
 import 'package:app/model/generated/offer_visibility.dart';
+import 'package:app/model/generated/location_blurr_in.dart';
 part 'offer_in.g.dart';
 
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
 class OfferIn {
-  final Map<String, dynamic> location;
   final List<String> activity;
   final Map<String, dynamic> time;
   final String description;
   final OfferVisibility visibility;
+  @JsonKey(name: "visibility_radius")
+  final double visibilityRadius;
+  final Map<String, dynamic> location;
+  final LocationBlurrIn blurr;
 
   OfferIn(
-      {required this.location,
-      required this.activity,
+      {required this.activity,
       required this.time,
       required this.description,
-      required this.visibility});
+      required this.visibility,
+      required this.visibilityRadius,
+      required this.location,
+      required this.blurr});
 
   factory OfferIn.fromJson(Map<String, dynamic> json) =>
       _$OfferInFromJson(json);
