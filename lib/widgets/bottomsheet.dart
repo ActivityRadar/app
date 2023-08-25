@@ -3,6 +3,7 @@ import 'package:app/constants/design.dart';
 import 'package:app/model/generated.dart';
 import 'package:app/provider/generated/locations_provider.dart';
 import 'package:app/screens/location_picker.dart';
+import 'package:app/screens/meet_add.dart';
 import 'package:app/widgets/custom/list_tile.dart';
 import 'package:app/widgets/custom_text.dart';
 import 'package:app/widgets/custom/button.dart';
@@ -45,8 +46,15 @@ Future<dynamic> bottomSheetAdd(BuildContext context) {
               ),
               CustomListTile(
                 icon: const Icon(Icons.event),
-                onPressed: () {},
                 text: "Neues Meetup erstellen",
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const MeetAddScreen(),
+                    ),
+                  );
+                },
               ),
             ],
           ));
