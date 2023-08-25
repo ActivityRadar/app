@@ -1,27 +1,89 @@
+import 'package:app/app_state.dart';
 import 'package:app/constants/constants.dart';
 import 'package:app/constants/design.dart';
-import 'package:app/provider/generated/offers_provider.dart';
+import 'package:app/model/functions.dart';
+import 'package:app/provider/activity_type.dart';
+import 'package:app/model/generated.dart';
+import 'package:app/provider/generated/users_provider.dart';
+import 'package:app/provider/photos.dart';
+import 'package:app/provider/user_manager.dart';
+import 'package:app/widgets/activityType_short.dart';
 import 'package:app/widgets/custom/background.dart';
 import 'package:app/widgets/custom/chip.dart';
 
 import 'package:app/widgets/custom/alertdialog.dart';
-import 'package:app/model/generated.dart';
 
 import 'package:app/widgets/custom_text.dart';
 import 'package:app/widgets/custom/button.dart';
 import 'package:app/widgets/meet_map.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 
 class MeetPage extends StatelessWidget {
-  const MeetPage({super.key});
+  const MeetPage({super.key, this.x});
+
+  final OfferOut? x;
 
   @override
   Widget build(BuildContext context) {
-    const double collapsedHeight = 90;
+    final state = context.read<AppState>();
+    final OfferOut offer = x ??
+        OfferOut(
+            id: "209dhj128e",
+            participants: [
+              Participant(
+                  id: state.currentUser!.id, status: ParticipantStatus.host),
+              Participant(
+                  id: "64d0f9312b6597c92fb2f15f",
+                  status: ParticipantStatus.requested),
+            ],
+            visibilityRadius: 2.0,
+            location: OfferLocationArea(
+                coords: GeoJsonLocation(
+                    type: "Point", coordinates: [13.4, 52.5])).toJson(),
+            activity: ["table_tennis"],
+            // time: OfferTimeFlexible(type: "flexible").toJson(),
+            time: OfferTimeSingle(type: "single", times: [
+              DateTime.parse("2023-08-29T19:30:20Z"),
+              DateTime.parse("2023-08-29T21:30:20Z")
+            ]).toJson(),
+            userInfo: OfferCreatorInfo(
+                username: state.currentUser!.username,
+                displayName: state.currentUser!.displayName,
+                id: state.currentUser!.id),
+            blurrInfo: LocationBlurrOut(
+                radius: 2,
+                center:
+                    GeoJsonLocation(type: "Point", coordinates: [13.4, 52.5])),
+            description: "Wer hat Bock?",
+            visibility: OfferVisibility.public);
+
+    final bool isHost = state.currentUser!.id == offer.userInfo.id;
+    final bool isParticipant =
+        isHost || offer.participants.any((p) => p.id == state.currentUser!.id);
+
+    double collapsedHeight = 90;
     const double expandedHeight = 160;
+
     var size = MediaQuery.of(context).size;
     var height = size.height;
     double width = size.width;
+
+    List<Widget> timeWidgets = [const CardTimeFlexible()];
+    if (offer.time["type"] != "flexible") {
+      final start = DateTime.parse(offer.time["times"][0]);
+      final DateFormat dateFormatter = DateFormat("dd.MM.yyyy");
+      final DateFormat timeFormatter = DateFormat("hh:mm");
+
+      timeWidgets = [
+        CardEvent(date: dateFormatter.format(start)),
+        CardSchedule(
+          time: "${timeFormatter.format(start)} Uhr",
+        ),
+      ];
+    }
+
     return BackgroundSVG(
         children: Scaffold(
       backgroundColor: Color.fromARGB(255, 255, 255, 255),
@@ -66,20 +128,22 @@ class MeetPage extends StatelessWidget {
                                 width: 10,
                               ),
                               MediumText(
-                                text: 'Max Mustermann',
+                                text: offer.userInfo.displayName,
                                 width: width,
                               ),
                             ]),
                           ]),
-                          CustomTextButton(
-                              onPressed: () {
-                                Navigator.of(context).pop(); // Dialog schließen
-                              },
-                              text: 'Anfrage senden'),
+                          if (!isParticipant)
+                            CustomTextButton(
+                                onPressed: () {
+                                  Navigator.of(context)
+                                      .pop(); // Dialog schließen
+                                },
+                                text: 'Anfrage senden'),
                         ]),
                     Center(
                       child: TitleText(
-                        text: "Table Tennis",
+                        text: offer.description,
                         width: width,
                       ),
                     ),
@@ -91,7 +155,7 @@ class MeetPage extends StatelessWidget {
         ),
         SliverList(
           delegate: SliverChildListDelegate([
-            const Padding(
+            Padding(
               padding: EdgeInsets.only(left: 9.0, top: 10.0),
               child: Column(
                 children: [
@@ -101,11 +165,10 @@ class MeetPage extends StatelessWidget {
                       CardPeople(
                         people: '1-4',
                       ),
-                      CardEvent(date: "14.02.13"),
-                      CardSchedule(
-                        time: "14 Uhr",
-                      ),
-                      CardPublic(),
+                      ...timeWidgets,
+                      offer.visibility == OfferVisibility.public
+                          ? CardPublic()
+                          : CardPrivat(),
                     ],
                   )
                 ],
@@ -117,49 +180,9 @@ class MeetPage extends StatelessWidget {
             Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
-                  const SingleChildScrollView(
-                      scrollDirection:
-                          Axis.horizontal, // Horizontales Scrollen aktivieren
-                      child: Row(
-                        children: [
-                          Padding(
-                            padding: EdgeInsets.only(left: 12.0),
-                            child: CustomChip(
-                              text: "Table Tennis",
-                            ),
-                          ),
-                          Padding(
-                            padding: EdgeInsets.only(left: 12.0),
-                            child: CustomChip(
-                              text: "Tennis",
-                            ),
-                          ),
-                          Padding(
-                            padding: EdgeInsets.only(left: 12.0),
-                            child: CustomChip(
-                              text: "Swimming",
-                            ),
-                          ),
-                          Padding(
-                            padding: EdgeInsets.only(left: 12.0),
-                            child: CustomChip(
-                              text: "Football",
-                            ),
-                          ),
-                          Padding(
-                            padding: EdgeInsets.only(left: 12.0),
-                            child: CustomChip(
-                              text: "soccer",
-                            ),
-                          ),
-                          Padding(
-                            padding: EdgeInsets.only(left: 12.0),
-                            child: CustomChip(
-                              text: "Volleyball",
-                            ),
-                          ),
-                        ],
-                      )),
+                  ActivityChipSlider(
+                      activities: ActivityManager.instance
+                          .getDisplayTypes(offer.activity)),
                   const SizedBox(
                     height: 10,
                   ),
@@ -170,9 +193,7 @@ class MeetPage extends StatelessWidget {
                   Padding(
                       padding: const EdgeInsets.all(9.0),
                       child: DescriptionText(
-                          text:
-                              "Moin, Moin, Moin, Moin, Moin, Moin, Moin, Moin, Moin, Moin, Moin, Moin, Moin, Moin, Moin, Moin, Moin, Moin, Moin, Moin, Moin, Moin, Moin, Moin, Moin, Moin, Moin, Moin, ",
-                          width: width)),
+                          text: offer.description, width: width)),
                   Padding(
                     padding: const EdgeInsets.only(left: 9.0, top: 10.0),
                     child: TitleText(text: "Sind auch dabei:", width: width),
@@ -180,33 +201,31 @@ class MeetPage extends StatelessWidget {
                   Padding(
                       padding: const EdgeInsets.all(9.0),
                       child: Column(
-                        children: [
-                          ProfilListeCardView(
-                              width: width, name: 'Max Mustermann'),
-                          const Divider(
-                            // Hier wird die Trennlinie hinzugefügt
-                            color: Color.fromARGB(
-                                63, 0, 0, 0), // Farbe der Trennlinie
-                          ),
-                          ProfilListeCardView(
-                              width: width, name: 'Max Mustermann'),
-                          const Divider(
-                            // Hier wird die Trennlinie hinzugefügt
-                            color: Color.fromARGB(
-                                63, 0, 0, 0), // Farbe der Trennlinie
-                          ),
-                          ProfilListeCardView(
-                              width: width, name: 'Max Mustermann'),
-                        ],
-                      )),
+                          children: offer.participants
+                              .where((p) =>
+                                  p.id != state.currentUser!.id &&
+                                  (p.status == ParticipantStatus.accepted ||
+                                      isHost))
+                              .map(
+                                (p) => Column(children: [
+                                  ProfileListCard(width: width, userId: p.id),
+                                  const Divider(
+                                    // Hier wird die Trennlinie hinzugefügt
+                                    color: Color.fromARGB(
+                                        63, 0, 0, 0), // Farbe der Trennlinie
+                                  )
+                                ]),
+                              )
+                              .toList())),
                   Padding(
                       padding: const EdgeInsets.all(9.0),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           ButtonBookMark(),
-                          CustomElevatedButton(
-                              onPressed: () {}, text: "Anfrage senden")
+                          if (!isParticipant)
+                            CustomElevatedButton(
+                                onPressed: () {}, text: "Anfrage senden")
                         ],
                       )),
                   Padding(
@@ -223,33 +242,61 @@ class MeetPage extends StatelessWidget {
   }
 }
 
-class ProfilListeCardView extends StatelessWidget {
-  const ProfilListeCardView({
+class ProfileListCard extends StatelessWidget {
+  const ProfileListCard({
     super.key,
     required this.width,
-    required this.name,
+    required this.userId,
   });
 
   final double width;
-  final String name;
+  final String userId;
+
   @override
   Widget build(BuildContext context) {
+    UserApiOut? userInfo;
+    Future<MemoryImage?> photo =
+        UserInfoManager.instance.getUserInfo(userId).then((info) {
+      userInfo = info;
+      if (info.avatar != null) {
+        return PhotoManager.instance.getThumbnail(info.avatar!.url);
+      }
+      return null;
+    });
+
     return Column(children: [
       Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-        Row(children: [
-          const Padding(padding: EdgeInsets.only(left: 10, top: 60)),
-          const CircleAvatar(
-            backgroundImage: AssetImages.avatarEmpty,
-            radius: 15,
-          ),
-          const SizedBox(
-            width: 10,
-          ),
-          MediumText(
-            text: name,
-            width: width,
-          ),
-        ]),
+        FutureBuilder(
+          future: photo,
+          builder: (BuildContext context, AsyncSnapshot snapshot) {
+            var name = "<name>";
+            ImageProvider thumbnail = AssetImages.avatarLoading;
+
+            // if photo was fetched, so was the user data
+            if (snapshot.hasData) {
+              final info = userInfo!;
+              name = info.displayName;
+
+              if (snapshot.data != null) {
+                thumbnail = snapshot.data;
+              } else {
+                thumbnail = AssetImages.avatarEmpty;
+              }
+            }
+
+            return Row(children: [
+              const Padding(padding: EdgeInsets.only(left: 10, top: 60)),
+              CircleAvatar(backgroundImage: thumbnail, radius: 15),
+              const SizedBox(
+                width: 10,
+              ),
+              MediumText(
+                text: name,
+                width: width,
+              ),
+            ]);
+          },
+        ),
         Row(
           children: [
             AppIcons.chat,
@@ -268,6 +315,7 @@ class CardPeople extends StatelessWidget {
   });
 
   final String people;
+
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -287,7 +335,7 @@ class CardPublic extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return const Column(
-      children: [Icon(AppIcons.public), SmallText(text: "Öffenlich")],
+      children: [Icon(AppIcons.public), SmallText(text: "Öffentlich")],
     );
   }
 }
@@ -316,6 +364,24 @@ class CardSchedule extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [const Icon(AppIcons.schedule), SmallText(text: time)],
+    );
+  }
+}
+
+class CardTimeFlexible extends StatelessWidget {
+  const CardTimeFlexible({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        Row(children: [
+          const Icon(AppIcons.event),
+          Text("+"),
+          const Icon(AppIcons.schedule)
+        ]),
+        SmallText(text: "Flexibel")
+      ],
     );
   }
 }
