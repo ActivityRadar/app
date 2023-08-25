@@ -502,7 +502,10 @@ class _MeetAddScreenState extends State<MeetAddScreen> {
     }
 
     final range = participantNumberRange.value;
-
+    final loc = locNotifier.info?.location ??
+        (customLocation.value == null
+            ? null
+            : toLongLat(customLocation.value!));
     final rows = [
       summaryRow(
           "Tätigkeit(en)",
@@ -519,10 +522,7 @@ class _MeetAddScreenState extends State<MeetAddScreen> {
           range.start == range.end
               ? "${range.start.toInt()}"
               : "${range.start.toInt()} - ${range.end.toInt()}"),
-      summaryRow(
-          "Standort",
-          formatGeoLocation(
-              locNotifier.info?.location ?? toLongLat(customLocation.value!))),
+      summaryRow("Standort", loc == null ? "" : formatGeoLocation(loc)),
       summaryRow("Sichtbarkeit", visibilityFriends.value ? "Freunde" : "Alle"),
       summaryRow("Beschreibung", descriptionController.text, spacer: true),
     ];
