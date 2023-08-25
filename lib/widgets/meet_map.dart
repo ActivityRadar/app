@@ -39,7 +39,7 @@ class _MeetMapState extends State<MeetMap> {
         child: FlutterMap(
           options: MapOptions(center: center, zoom: 10),
           children: [
-            flutterMapTileLayer,
+            createCachedTileLayer(),
             CircleLayer(circles: circleMarkers),
           ],
         ),
