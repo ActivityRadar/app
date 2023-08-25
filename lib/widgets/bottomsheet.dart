@@ -33,7 +33,7 @@ Future<dynamic> bottomSheetAdd(BuildContext context) {
             children: <Widget>[
               CustomListTile(
                 icon: const Icon(AppIcons.pushPin),
-                text: "Add Location",
+                text: "Neuen Standort erstellen",
                 onPressed: () {
                   Navigator.push(
                     context,
@@ -45,8 +45,8 @@ Future<dynamic> bottomSheetAdd(BuildContext context) {
               ),
               CustomListTile(
                 icon: const Icon(Icons.event),
-                text: "Add Event",
                 onPressed: () {},
+                text: "Neues Meetup erstellen",
               ),
             ],
           ));

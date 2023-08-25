@@ -73,7 +73,7 @@ class _MapSearchBarState extends State<MapSearchBar> {
                 },
               ),
               hintStyle: CustomTextStyle.hint,
-              hintText: "Search basketball, volleyball, table tennis ... ",
+              hintText: "Suche nach Fussball, Tischtennis, Schwimmen, etc.",
             ),
             textInputAction: TextInputAction.search,
             onSubmitted: setActivity,

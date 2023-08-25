@@ -103,7 +103,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       .updateUserInfo();
                 }).then((_) => Navigator.of(context).pop());
               },
-              text: "Profile picture",
+              text: "Profilbild",
             ),
           ),
           const SizedBox(
@@ -117,13 +117,13 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   onPressed: () {
                     Navigator.pop(context);
                   },
-                  text: 'skip',
+                  text: 'Skip',
                 ),
                 CustomElevatedButton(
                   onPressed: () {
                     Navigator.pop(context);
                   },
-                  text: "Next",
+                  text: "Weiter",
                 )
               ]),
             ],
@@ -146,11 +146,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
               padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
               child: CustomTextFormField(
                   controller: verifyCodeController,
-                  label: "Verify Code",
+                  label: "Verifizierungscode",
                   validator: (v) {
                     return v.length == 8
                         ? null
-                        : "The code must be 8 digits long!";
+                        : "Der Code muss 8 Zeichen lang sein!";
                   }),
             ),
             const SizedBox(
@@ -163,7 +163,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   onPressed: () {
                     previousPage();
                   },
-                  text: "Cancel",
+                  text: "Abbrechen",
                 ),
                 CustomElevatedButton(
                   onPressed: () async {
@@ -180,10 +180,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         nextPage();
                       }
                     } else {
-                      print("Verification failed!");
+                      print("Verifizierung fehlgeschlagen!");
                     }
                   },
-                  text: "Next",
+                  text: "Weiter",
                 ),
               ],
             ),
@@ -208,7 +208,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 //editing controller of this TextField
                 decoration: const InputDecoration(
                     icon: Icon(AppIcons.calendarToday), //icon of text field
-                    labelText: "Enter Date" //label text of field
+                    labelText: "Gib ein Datum an" //label text of field
                     ),
                 readOnly: true,
                 //set it true, so that user will not able to edit text
@@ -243,7 +243,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 onPressed: () {
                   previousPage();
                 },
-                text: "Previous",
+                text: "Zurück",
               ),
               ElevatedButton(
                 onPressed: isLoading
@@ -270,7 +270,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 child: isLoading
                     ? const CircularProgressIndicator()
                     : const CustomText(
-                        text: "Next",
+                        text: "Weiter",
                       ),
               ),
             ],
@@ -293,18 +293,14 @@ class _RegisterScreenState extends State<RegisterScreen> {
               padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
               child: PasswordTextFormField(
                 controller: passwordController,
-                label: "Password",
+                label: "Passwort",
                 validator: (value) {
                   if (value == null || value.isEmpty) {
-                    return 'Please enter your Password';
-                  }
-                  if (passwordController.text !=
-                      passwordRepeatController.text) {
-                    return 'Password is not the same ';
+                    return 'Gib dein Passwort ein';
                   }
                   if (validateStructure(passwordController.text)) {
                   } else {
-                    return 'Password rules units';
+                    return 'Passwort entspricht nicht den Regeln';
                   }
                   return null;
                 },
@@ -317,14 +313,14 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 label: "Password",
                 validator: (secondvalue) {
                   if (secondvalue == null || secondvalue.isEmpty) {
-                    return 'Please enter your Email';
+                    return 'Gib dein Passwort ein';
                   }
                   if (passwordController.text != secondvalue) {
-                    return 'Password is not the same';
+                    return 'Keine Übereinstimmtung';
                   }
                   if (validateStructure(passwordRepeatController.text)) {
                   } else {
-                    return 'Password rules units';
+                    return 'Passwort entspricht nicht den Regeln';
                   }
 
                   return null;
@@ -341,17 +337,17 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   onPressed: () {
                     previousPage();
                   },
-                  text: "Previous",
+                  text: "Zurück",
                 ),
                 CustomElevatedButton(
                   onPressed: () {
                     if (_formPasswordKey.currentState!.validate()) {
                       nextPage();
                     } else {
-                      showMessageSnackBar(context, 'Please fill input');
+                      showMessageSnackBar(context, 'Unvollständige Eingabe!');
                     }
                   },
-                  text: "Next",
+                  text: "Weiter",
                 ),
               ],
             ),
@@ -378,13 +374,13 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 label: "Email",
                 validator: (value) {
                   if (value == null || value.isEmpty) {
-                    return 'Please enter your Email';
+                    return 'Gib deine Email an';
                   }
                   if (!RegExps.email.hasMatch(value)) {
-                    return "Email is wrong";
+                    return "Email-Adresse nicht valide";
                   }
                   if (emailTaken!) {
-                    return "Email is already used by another account!";
+                    return "Email wird bereits verwendet!";
                   }
 
                   return null;
@@ -406,10 +402,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     if (_formEmailKey.currentState!.validate()) {
                       nextPage();
                     } else {
-                      showMessageSnackBar(context, 'Please fill input');
+                      showMessageSnackBar(context, 'Bitte eingeben');
                     }
                   },
-                  text: "Submit",
+                  text: "Weiter",
                 ),
               ),
             ),
@@ -433,16 +429,16 @@ class _RegisterScreenState extends State<RegisterScreen> {
               padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
               child: UsernameTextFormField(
                 controller: usernameController,
-                label: "Username",
+                label: "Nutzername",
                 validator: (value) {
                   if (value == null || value.isEmpty) {
-                    return 'Please enter your Username';
+                    return 'Gib einen Nutzernamen an';
                   }
                   if (!RegExps.username.hasMatch(value)) {
-                    return "Username is wrong";
+                    return "Nutzername nicht valide";
                   }
                   if (usernameTaken!) {
-                    return "Username is already taken!";
+                    return "Nutzername bereits vergeben!";
                   }
 
                   return null;
@@ -463,7 +459,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       onPressed: () {
                         previousPage();
                       },
-                      text: "Previous",
+                      text: "Zurück",
                     ),
                     CustomElevatedButton(
                       onPressed: () async {
@@ -477,10 +473,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         if (_formUsernameKey.currentState!.validate()) {
                           nextPage();
                         } else {
-                          showMessageSnackBar(context, 'Please fill input');
+                          showMessageSnackBar(context, 'Fehlende Eingabe');
                         }
                       },
-                      text: "Next",
+                      text: "Weiter",
                     )
                   ],
                 ),

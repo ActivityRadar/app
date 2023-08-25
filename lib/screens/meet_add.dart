@@ -134,7 +134,7 @@ class _MeetAddScreenState extends State<MeetAddScreen> {
   Widget build(BuildContext context) {
     Padding previous = Padding(
       padding: const EdgeInsets.only(left: 10.0),
-      child: CustomElevatedButton(onPressed: previousPage, text: "Previous"),
+      child: CustomElevatedButton(onPressed: previousPage, text: "Zurück"),
     );
 
     Padding next = Padding(
@@ -151,14 +151,14 @@ class _MeetAddScreenState extends State<MeetAddScreen> {
                       context: context,
                       builder: (context) {
                         return const AlertDialog(
-                            title: Text("Can't continue"),
+                            title: Text("Du kannst nicht fortfahren!"),
                             content: Text(
-                                "You cant continue as you need to enter input on this page!"));
+                                "Diese Seite braucht noch deine Eingabe!"));
                       });
                 };
               }
               return CustomElevatedButton(
-                  style: style, onPressed: onPressed, text: "Next");
+                  style: style, onPressed: onPressed, text: "Weiter");
             }));
 
     return Scaffold(
@@ -436,7 +436,7 @@ class _MeetAddScreenState extends State<MeetAddScreen> {
               padding: const EdgeInsets.only(left: 9.0, top: 15.0),
               child: DescriptionTextFieldwithoutBorder(
                 nameController: descriptionController,
-                label: 'Description',
+                label: 'Beschreibung',
               ),
             ),
           ],
@@ -505,23 +505,26 @@ class _MeetAddScreenState extends State<MeetAddScreen> {
 
     final rows = [
       summaryRow(
-          "Activity Type(s)",
+          "Tätigkeit(en)",
           activities.value.fold("", (t, sport) {
             return t.isEmpty ? sport.toString() : "$t, ${sport.toString()}";
           })),
       summaryRow(
-          "Time",
+          "Zeit",
           timeFlexible.value
               ? "flexible"
               : "${dateTimeFrom.value.toIso8601String()} - ${dateTimeUntil.value.toIso8601String()}"),
       summaryRow(
-          "Participants",
+          "Teilnehmer",
           range.start == range.end
               ? "${range.start.toInt()}"
               : "${range.start.toInt()} - ${range.end.toInt()}"),
-      summaryRow("Location", "53.909123; 13.1290839"),
-      summaryRow("Visibility", visibilityFriends.value ? "friends" : "public"),
-      summaryRow("Description", descriptionController.text, spacer: true),
+      summaryRow(
+          "Standort",
+          formatGeoLocation(
+              locNotifier.info?.location ?? toLongLat(customLocation.value!))),
+      summaryRow("Sichtbarkeit", visibilityFriends.value ? "Freunde" : "Alle"),
+      summaryRow("Beschreibung", descriptionController.text, spacer: true),
     ];
 
     return Center(

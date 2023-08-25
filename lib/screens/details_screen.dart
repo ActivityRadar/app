@@ -204,19 +204,19 @@ class _DetailsScreenState extends State<DetailsScreen> {
         Padding(
             padding: const EdgeInsets.only(left: 9.0, top: 30.0),
             child: TitleText(
-              text: "description",
+              text: "Beschreibung",
               width: width,
             )),
         Padding(
             padding: const EdgeInsets.only(left: 9.0, top: 10.0),
             child: MediumText(
-              text: "FILLER", // info.tags["description"]
+              text: info.tags["description"] ?? "Keine Beschreibung vorhanden.",
               width: width,
             )),
         Padding(
             padding: const EdgeInsets.only(left: 9.0, top: 15.0),
             child: TitleText(
-              text: "activityTypes",
+              text: "Assoziierte Aktivitäten",
               width: width,
             )),
         ActivityChipSlider(
@@ -228,7 +228,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 TitleText(
-                  text: "Reviews",
+                  text: "Bewertungen",
                   width: width,
                 ),
                 Padding(
@@ -253,7 +253,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
                                         oldReview: oldReview,
                                         locationId: locationId));
                               }),
-                          text: "review"),
+                          text: "Hinzufügen"),
                       const Icon(AppIcons.editNote),
                     ])),
               ],
@@ -266,7 +266,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 TitleText(
-                  text: "Meets",
+                  text: "Verabredungen",
                   width: width,
                 ),
                 Padding(
@@ -291,7 +291,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
                                         oldReview: oldReview,
                                         locationId: locationId));
                               }),
-                          text: "Meet add"),
+                          text: "Hinzufügen"),
                       const Icon(AppIcons.editNote),
                     ])),
               ],
@@ -461,7 +461,7 @@ class ReviewFeeback extends StatelessWidget {
     return Row(
       children: [
         MediumHintText(
-          text: "X out of Y people found this helpful", // TODO: make dynamic
+          text: "X von Y Nutzern fanden das hilfreich", // TODO: make dynamic
           width: width,
         ),
         const Spacer(),
@@ -551,7 +551,7 @@ class ReviewMetaInfo extends StatelessWidget {
                 ),
                 LittleText(
                     text:
-                        "${DateTime.now().difference(review.creationDate).inDays} days ago",
+                        "Vor ${DateTime.now().difference(review.creationDate).inDays} Tagen",
                     width: width)
               ]),
               const ReviewPopupMenuCard(),
@@ -575,8 +575,8 @@ class ExpandableText extends StatelessWidget {
         style: const TextStyle(color: Colors.black87),
         colorClickableText: Colors.grey,
         trimMode: TrimMode.Line,
-        trimCollapsedText: "More",
-        trimExpandedText: " Less");
+        trimCollapsedText: "Mehr",
+        trimExpandedText: " Weniger");
   }
 }
 
