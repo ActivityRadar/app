@@ -99,9 +99,9 @@ Future<void> reviewBottomSheet(
     ReviewWithId? oldReview,
     required String locationId}) async {
   TextEditingController titleController =
-      TextEditingController(text: oldReview?.title);
+      TextEditingController(text: oldReview?.description.title);
   TextEditingController textController =
-      TextEditingController(text: oldReview?.text);
+      TextEditingController(text: oldReview?.description.text);
   double rating = oldReview?.overallRating ?? 1.0;
   final update = oldReview != null;
 
@@ -131,8 +131,9 @@ Future<void> reviewBottomSheet(
                           try {
                             final newReview = ReviewBase(
                                 locationId: locationId,
-                                title: titleController.text,
-                                text: textController.text,
+                                description: DescriptionWithTitle(
+                                    title: titleController.text,
+                                    text: textController.text),
                                 overallRating: rating,
                                 details: {});
                             if (update) {

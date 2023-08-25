@@ -570,13 +570,17 @@ class _MeetAddScreenState extends State<MeetAddScreen> {
       ]).toJson();
     }
 
+    final pLimits = participantNumberRange.value;
+
     final offer = OfferIn(
         location: location,
         activity: activities.value,
         time: time,
         visibilityRadius: 5,
         blurr: LocationBlurrIn(radius: 2),
-        description: descriptionController.text,
+        description: DescriptionWithTitle(
+            title: titleController.text, text: descriptionController.text),
+        participantLimits: [pLimits.start as int, pLimits.end as int],
         visibility: OfferVisibility.public);
 
     await OffersProvider.createOffer(data: offer);

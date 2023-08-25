@@ -4,12 +4,10 @@ import 'package:app/constants/design.dart';
 import 'package:app/model/functions.dart';
 import 'package:app/provider/activity_type.dart';
 import 'package:app/model/generated.dart';
-import 'package:app/provider/generated/users_provider.dart';
 import 'package:app/provider/photos.dart';
 import 'package:app/provider/user_manager.dart';
 import 'package:app/widgets/activityType_short.dart';
 import 'package:app/widgets/custom/background.dart';
-import 'package:app/widgets/custom/chip.dart';
 
 import 'package:app/widgets/custom/alertdialog.dart';
 
@@ -38,6 +36,7 @@ class MeetPage extends StatelessWidget {
                   id: "64d0f9312b6597c92fb2f15f",
                   status: ParticipantStatus.requested),
             ],
+            participantLimits: [1, 4],
             visibilityRadius: 2.0,
             location: OfferLocationArea(
                 coords: GeoJsonLocation(
@@ -56,7 +55,10 @@ class MeetPage extends StatelessWidget {
                 radius: 2,
                 center:
                     GeoJsonLocation(type: "Point", coordinates: [13.4, 52.5])),
-            description: "Wer hat Bock?",
+            description: DescriptionWithTitle(
+                title: "Wer hat Bock?",
+                text:
+                    "Ich würde gern mit mindestens 3 anderen spielen, wenns geht."),
             visibility: OfferVisibility.public);
 
     final bool isHost = state.currentUser!.id == offer.userInfo.id;
@@ -86,7 +88,7 @@ class MeetPage extends StatelessWidget {
 
     return BackgroundSVG(
         children: Scaffold(
-      backgroundColor: Color.fromARGB(255, 255, 255, 255),
+      backgroundColor: const Color.fromARGB(255, 255, 255, 255),
       body: CustomScrollView(slivers: <Widget>[
         SliverAppBar(
             expandedHeight: expandedHeight,
@@ -147,7 +149,7 @@ class MeetPage extends StatelessWidget {
                         ]),
                     Center(
                       child: TitleText(
-                        text: offer.description,
+                        text: offer.description.title,
                         width: width,
                       ),
                     ),
@@ -160,19 +162,18 @@ class MeetPage extends StatelessWidget {
         SliverList(
           delegate: SliverChildListDelegate([
             Padding(
-              padding: EdgeInsets.only(left: 9.0, top: 10.0),
+              padding: const EdgeInsets.only(left: 9.0, top: 10.0),
               child: Column(
                 children: [
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      CardPeople(
-                        people: '1-4',
+                      CardParticipantLimits(
+                        min: offer.participantLimits[0],
+                        max: offer.participantLimits[1],
                       ),
                       ...timeWidgets,
-                      offer.visibility == OfferVisibility.public
-                          ? CardPublic()
-                          : CardPrivat(),
+                      CardVisibility(visibility: offer.visibility)
                     ],
                   )
                 ],
@@ -197,7 +198,7 @@ class MeetPage extends StatelessWidget {
                   Padding(
                       padding: const EdgeInsets.all(9.0),
                       child: DescriptionText(
-                          text: offer.description, width: width)),
+                          text: offer.description.text, width: width)),
                   Padding(
                     padding: const EdgeInsets.only(left: 9.0, top: 10.0),
                     child: TitleText(text: "Sind auch dabei:", width: width),
@@ -278,8 +279,7 @@ class ProfileListCard extends StatelessWidget {
 
             // if photo was fetched, so was the user data
             if (snapshot.hasData) {
-              final info = userInfo!;
-              name = info.displayName;
+              name = userInfo!.displayName;
 
               if (snapshot.data != null) {
                 thumbnail = snapshot.data;
@@ -304,7 +304,7 @@ class ProfileListCard extends StatelessWidget {
         Row(
           children: [
             AppIcons.chat,
-            Icon(AppIcons.close),
+            const Icon(AppIcons.close),
           ],
         )
       ]),
@@ -312,47 +312,41 @@ class ProfileListCard extends StatelessWidget {
   }
 }
 
-class CardPeople extends StatelessWidget {
-  const CardPeople({
+class CardParticipantLimits extends StatelessWidget {
+  const CardParticipantLimits({
     super.key,
-    required this.people,
+    required this.min,
+    required this.max,
   });
 
-  final String people;
+  final int min;
+  final int max;
 
   @override
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.only(left: 9.0),
       child: Column(
-        children: [const Icon(AppIcons.person), SmallText(text: people)],
+        children: [const Icon(AppIcons.person), SmallText(text: "$min - $max")],
       ),
     );
   }
 }
 
-class CardPublic extends StatelessWidget {
-  const CardPublic({
+class CardVisibility extends StatelessWidget {
+  const CardVisibility({
     super.key,
+    required this.visibility,
   });
+
+  final OfferVisibility visibility;
 
   @override
   Widget build(BuildContext context) {
-    return const Column(
-      children: [Icon(AppIcons.public), SmallText(text: "Öffentlich")],
-    );
-  }
-}
-
-class CardPrivat extends StatelessWidget {
-  const CardPrivat({
-    super.key,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return const Column(
-      children: [Icon(AppIcons.lock), SmallText(text: "Freunde")],
+    return Column(
+      children: visibility == OfferVisibility.public
+          ? [const Icon(AppIcons.public), const SmallText(text: "Öffentlich")]
+          : [const Icon(AppIcons.lock), const SmallText(text: "Freunde")],
     );
   }
 }
@@ -377,12 +371,12 @@ class CardTimeFlexible extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
+    return const Column(
       children: [
         Row(children: [
-          const Icon(AppIcons.event),
+          Icon(AppIcons.event),
           Text("+"),
-          const Icon(AppIcons.schedule)
+          Icon(AppIcons.schedule)
         ]),
         SmallText(text: "Flexibel")
       ],
