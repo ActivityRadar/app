@@ -96,6 +96,12 @@ flutter:
     - assets/icons/
     - shared/lang/
 
+  fonts:
+    - family: Fira Sans
+      fonts:
+      - asset: assets/fonts/FiraSans-BoldItalic.ttf
+
+
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
 
