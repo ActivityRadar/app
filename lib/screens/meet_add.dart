@@ -547,7 +547,7 @@ class _MeetAddScreenState extends State<MeetAddScreen> {
     ]));
   }
 
-  Future<String> submitMeetingOffer() async {
+  Future<void> submitMeetingOffer() async {
     late final Map<String, dynamic> location;
     late final Map<String, dynamic> time;
 
@@ -574,11 +574,12 @@ class _MeetAddScreenState extends State<MeetAddScreen> {
         location: location,
         activity: activities.value,
         time: time,
+        visibilityRadius: 5,
+        blurr: LocationBlurrIn(radius: 2),
         description: descriptionController.text,
         visibility: OfferVisibility.public);
 
-    final response = await OffersProvider.createOffer(data: offer);
-    return response.offerId;
+    await OffersProvider.createOffer(data: offer);
   }
 }
 
