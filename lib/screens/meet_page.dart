@@ -98,7 +98,11 @@ class MeetPage extends StatelessWidget {
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(AppStyle.cornerRadius),
                   ),
-                  child: const MeetMap(),
+                  child: MeetMap(
+                      center: toLatLng(isHost
+                          ? GeoJsonLocation.fromJson(offer.location!["coords"])
+                          : offer.blurrInfo.center),
+                      radius: isHost ? 0.01 : offer.blurrInfo.radius),
                 ),
               ),
             ),

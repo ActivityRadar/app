@@ -5,6 +5,7 @@ import 'package:app/widgets/custom_text.dart';
 import 'package:app/widgets/meet_map.dart';
 import 'package:app/constants/design.dart';
 import 'package:flutter/material.dart';
+import 'package:latlong2/latlong.dart';
 
 class MeetList extends StatelessWidget {
   const MeetList({super.key, required this.width, required this.height});
@@ -58,7 +59,7 @@ class MeetCard extends StatelessWidget {
                               borderRadius: BorderRadius.circular(AppStyle
                                   .cornerRadius), // Radius der abgerundeten Ecken
                             ),
-                            child: const MeetMap()),
+                            child: const MeetMap(center: LatLng(53, 12))),
                       ),
                       Positioned(
                           bottom:
