@@ -166,7 +166,7 @@ class BackendService {
     switch (response.statusCode) {
       case (200):
         if (decodeFromJson) {
-          return jsonDecode(response.body);
+          return jsonDecode(utf8.decode(response.bodyBytes));
         }
         return response;
       case (307):
