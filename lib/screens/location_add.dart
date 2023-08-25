@@ -75,7 +75,9 @@ class _LocationAddScreenState extends State<LocationAddScreen> {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          TitleText(text: "Welche Sportmöglichkeiten gibt es ?", width: width),
+          TitleText(
+              text: "Welche Tätigkeiten kann man hier unternehme?",
+              width: width),
           const SizedBox(
             height: 20,
           ),
@@ -113,7 +115,7 @@ class _LocationAddScreenState extends State<LocationAddScreen> {
           ),
           const InfoText(
             text:
-                "Moin Moin Moin Moin Moin Moin Moin Moin Moin Moin Moin Moin Moin Moin Moin Moin Moin Moin Moin Moin Moin Moin Moin Moin",
+                "Gib alle Sportarten an, die man an diesem Standort machen kann.",
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -145,7 +147,7 @@ class _LocationAddScreenState extends State<LocationAddScreen> {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          TitleText(text: "Wo befindet der Platz ?", width: width),
+          TitleText(text: "Wo liegt der Standort?", width: width),
           const SizedBox(
             height: 20,
           ),
@@ -275,7 +277,7 @@ class _LocationAddScreenState extends State<LocationAddScreen> {
                     padding: const EdgeInsets.only(left: 9.0, top: 15.0),
                     child: DescriptionTextFieldwithoutBorder(
                       nameController: descriptionController,
-                      label: 'Description',
+                      label: 'Beschreibung',
                     ),
                   ),
                 ],

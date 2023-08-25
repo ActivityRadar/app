@@ -55,7 +55,7 @@ class SettingScreen extends StatelessWidget {
           actions: <Widget>[
             if (state.isLoggedIn)
               CustomTextButton(
-                  onPressed: () => handleLogout(context), text: 'logout')
+                  onPressed: () => handleLogout(context), text: 'Ausloggen')
             else
               CustomTextButton(
                 onPressed: () => Navigator.push(
@@ -64,7 +64,7 @@ class SettingScreen extends StatelessWidget {
                     builder: (context) => const RegisterScreen(),
                   ),
                 ),
-                text: 'Register',
+                text: 'Registrieren',
               ),
           ],
           flexibleSpace: LayoutBuilder(
@@ -74,9 +74,8 @@ class SettingScreen extends StatelessWidget {
                 titlePadding: const EdgeInsets.all(16.0),
                 title: state.isLoggedIn
                     ? _appBarAvatar(context)
-                    : const CustomText(
-                        text: "Not signed in!",
-                      ),
+                    : const Text("Nicht angemeldet",
+                        style: TextStyle(color: DesignColors.black)),
                 centerTitle: true,
               );
             },
@@ -103,7 +102,7 @@ class SettingScreen extends StatelessWidget {
                 ),
                 if (state.isLoggedIn) ...[
                   CustomTextButton(
-                    text: 'logout',
+                    text: 'Ausloggen',
                     onPressed: () => handleLogout(context),
                   ),
                   CustomTextButton(
@@ -186,7 +185,7 @@ class SettingScreen extends StatelessWidget {
                   ),
                 );
               },
-              keyText: "Displayname",
+              keyText: "Anzeigename",
               valueText: userInfo.displayName,
             ),
             const Divider(height: 0),
@@ -246,11 +245,11 @@ class SettingScreen extends StatelessWidget {
         child: Column(children: [
           TwoListTile(
             onPressed: () {},
-            keyText: 'Language',
-            valueText: 'English',
+            keyText: 'Sprache',
+            valueText: 'Deutsch',
           ),
           const Divider(height: 0),
-          CustomListTile(onPressed: () {}, text: "Map"),
+          CustomListTile(onPressed: () {}, text: "Karte"),
           const Divider(height: 0),
           CustomListTile(onPressed: () {}, text: "Farbe"),
         ]),
@@ -266,14 +265,14 @@ class SettingScreen extends StatelessWidget {
       Padding(
         padding: const EdgeInsets.only(top: 8, left: 15, bottom: 4),
         child: LittleText(
-          text: "Rechtliche",
+          text: "Rechtliches",
           width: width,
         ),
       ),
       CustomCard(
         child: Column(
           children: [
-            CustomListTile(onPressed: () {}, text: "data protection"),
+            CustomListTile(onPressed: () {}, text: "Datenschutz"),
             const Divider(height: 0),
             CustomListTile(onPressed: () {}, text: "AGB"),
             const Divider(height: 0),
@@ -315,6 +314,6 @@ void handleLogout(BuildContext context) async {
   AuthService.logout().then((_) {
     SessionManager.instance
         .endSession()
-        .then((_) => showMessageSnackBar(context, 'Logged out!'));
+        .then((_) => showMessageSnackBar(context, 'Ausgeloggt!'));
   });
 }

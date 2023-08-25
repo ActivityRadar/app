@@ -55,10 +55,10 @@ class _LoginScreenState extends State<LoginScreen> {
                                 horizontal: 8, vertical: 16),
                             child: UsernameTextFormField(
                               controller: usernameController,
-                              label: "Username",
+                              label: "Nutzername",
                               validator: (value) {
                                 if (value == null || value.isEmpty) {
-                                  return 'Please enter your username';
+                                  return 'Gib einen Nutzernamen an!';
                                 }
                                 return null;
                               },
@@ -68,10 +68,10 @@ class _LoginScreenState extends State<LoginScreen> {
                                 horizontal: 8, vertical: 4),
                             child: PasswordTextFormField(
                               controller: passwordController,
-                              label: "Password",
+                              label: "Passwort",
                               validator: (value) {
                                 if (value == null || value.isEmpty) {
-                                  return 'Please enter your password';
+                                  return 'Gib dein Passwort ein!';
                                 }
                                 return null;
                               },
@@ -89,7 +89,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                   ),
                                 );
                               },
-                              text: 'Forget password'),
+                              text: 'Passwort vergessen'),
                         ),
                         Padding(
                           padding: const EdgeInsets.symmetric(
@@ -100,7 +100,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                 handleLogin(context, usernameController.text,
                                     passwordController.text, _formKey);
                               },
-                              text: "Submit",
+                              text: "Abschicken",
                             ),
                           ),
                         ),
@@ -119,14 +119,14 @@ void handleLogin(BuildContext context, String username, String password,
 
         SessionManager.instance.startSession();
 
-        showMessageSnackBar(context, 'Login successful!');
+        showMessageSnackBar(context, 'Erfolgreich eingeloggt!');
 
         Navigator.of(context).pop();
       } else {
-        showMessageSnackBar(context, 'Login failed!');
+        showMessageSnackBar(context, 'Login fehlgeschlagen!');
       }
     });
   } else {
-    showMessageSnackBar(context, 'Please fill input!');
+    showMessageSnackBar(context, 'Bitte Eingabe füllen!');
   }
 }

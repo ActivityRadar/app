@@ -15,11 +15,11 @@ void conditionalShowLoginReminder(
         context: context,
         builder: (BuildContext context) {
           return CustomAlertDialog(
-              title: 'You are not logged in!',
+              title: 'Du bist momentan nicht angemeldet!',
               content: const SystemText(
                   text:
-                      "You must be logged into a user account to use certain functionalities of the app like: Adding photos, reviews, locations, and many more."),
-              firstbuttonText: "Sign in / Register",
+                      "Du musst angemeldet sein, um bestimmte Funktionalitäten der App nutzen zu können. Beispielsweise Fotos hinzuzufügen, Bewertungen abzugeben, andere Nutzer zu melden und viele mehr."),
+              firstbuttonText: "Anmelden",
               firstonPress: () {
                 Navigator.of(context).pop();
                 Navigator.push(
@@ -27,7 +27,7 @@ void conditionalShowLoginReminder(
                     MaterialPageRoute(
                         builder: (context) => const LoginScreen()));
               },
-              secondbuttonText: 'No, thanks!',
+              secondbuttonText: 'Nein, danke!',
               secondonPress: () {
                 Navigator.of(context).pop();
               });

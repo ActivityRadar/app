@@ -14,6 +14,10 @@ GeoJsonLocation toLongLat(LatLng location) {
       type: "Point", coordinates: [location.longitude, location.latitude]);
 }
 
+String formatGeoLocation(GeoJsonLocation location) {
+  return "${location.coordinates[0]}; ${location.coordinates[1]}";
+}
+
 String getTitle(LocationDetailedApi info) {
   if (info.name != null) {
     return info.name!;

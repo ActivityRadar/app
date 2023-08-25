@@ -1,10 +1,11 @@
 import 'package:app/constants/constants.dart';
 import 'package:app/constants/design.dart';
+import 'package:app/provider/generated/offers_provider.dart';
 import 'package:app/widgets/custom/background.dart';
-import 'package:app/widgets/custom/card.dart';
 import 'package:app/widgets/custom/chip.dart';
 
 import 'package:app/widgets/custom/alertdialog.dart';
+import 'package:app/model/generated.dart';
 
 import 'package:app/widgets/custom_text.dart';
 import 'package:app/widgets/custom/button.dart';
@@ -33,10 +34,9 @@ class MeetPage extends StatelessWidget {
                 height: 100,
                 child: Container(
                   decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(
-                        AppStyle.cornerRadius), // Radius der abgerundeten Ecken
+                    borderRadius: BorderRadius.circular(AppStyle.cornerRadius),
                   ),
-                  child: MeetMap(),
+                  child: const MeetMap(),
                 ),
               ),
             ),
@@ -91,8 +91,8 @@ class MeetPage extends StatelessWidget {
         ),
         SliverList(
           delegate: SliverChildListDelegate([
-            Padding(
-              padding: const EdgeInsets.only(left: 9.0, top: 10.0),
+            const Padding(
+              padding: EdgeInsets.only(left: 9.0, top: 10.0),
               child: Column(
                 children: [
                   Row(
@@ -111,13 +111,13 @@ class MeetPage extends StatelessWidget {
                 ],
               ),
             ),
-            SizedBox(
+            const SizedBox(
               height: 10,
             ),
             Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
-                  SingleChildScrollView(
+                  const SingleChildScrollView(
                       scrollDirection:
                           Axis.horizontal, // Horizontales Scrollen aktivieren
                       child: Row(
@@ -160,12 +160,12 @@ class MeetPage extends StatelessWidget {
                           ),
                         ],
                       )),
-                  SizedBox(
+                  const SizedBox(
                     height: 10,
                   ),
                   Padding(
                     padding: const EdgeInsets.only(left: 9.0, top: 10.0),
-                    child: TitleText(text: "description", width: width),
+                    child: TitleText(text: "Beschreibung", width: width),
                   ),
                   Padding(
                       padding: const EdgeInsets.all(9.0),
@@ -183,16 +183,16 @@ class MeetPage extends StatelessWidget {
                         children: [
                           ProfilListeCardView(
                               width: width, name: 'Max Mustermann'),
-                          Divider(
+                          const Divider(
                             // Hier wird die Trennlinie hinzugefügt
-                            color: const Color.fromARGB(
+                            color: Color.fromARGB(
                                 63, 0, 0, 0), // Farbe der Trennlinie
                           ),
                           ProfilListeCardView(
                               width: width, name: 'Max Mustermann'),
-                          Divider(
+                          const Divider(
                             // Hier wird die Trennlinie hinzugefügt
-                            color: const Color.fromARGB(
+                            color: Color.fromARGB(
                                 63, 0, 0, 0), // Farbe der Trennlinie
                           ),
                           ProfilListeCardView(
@@ -273,7 +273,7 @@ class CardPeople extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.only(left: 9.0),
       child: Column(
-        children: [Icon(AppIcons.person), SmallText(text: people)],
+        children: [const Icon(AppIcons.person), SmallText(text: people)],
       ),
     );
   }
@@ -286,8 +286,8 @@ class CardPublic extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [Icon(AppIcons.public), SmallText(text: "Öffenlicht")],
+    return const Column(
+      children: [Icon(AppIcons.public), SmallText(text: "Öffenlich")],
     );
   }
 }
@@ -299,8 +299,8 @@ class CardPrivat extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [Icon(AppIcons.lock), SmallText(text: "nur Freunde")],
+    return const Column(
+      children: [Icon(AppIcons.lock), SmallText(text: "Freunde")],
     );
   }
 }
@@ -315,7 +315,7 @@ class CardSchedule extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(
-      children: [Icon(AppIcons.schedule), SmallText(text: time)],
+      children: [const Icon(AppIcons.schedule), SmallText(text: time)],
     );
   }
 }
@@ -331,7 +331,7 @@ class CardEvent extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        Icon(AppIcons.event),
+        const Icon(AppIcons.event),
         SmallText(
           text: date,
         )
