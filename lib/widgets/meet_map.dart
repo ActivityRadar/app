@@ -1,3 +1,4 @@
+import 'package:app/screens/map.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
@@ -38,10 +39,7 @@ class _MeetMapState extends State<MeetMap> {
         child: FlutterMap(
           options: MapOptions(center: center, zoom: 10),
           children: [
-            TileLayer(
-              urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
-              subdomains: const ['a', 'b', 'c'],
-            ),
+            flutterMapTileLayer,
             CircleLayer(circles: circleMarkers),
           ],
         ),
