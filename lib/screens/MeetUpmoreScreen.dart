@@ -50,10 +50,7 @@ class MeetUpMoreScreen extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  MeetList(
-                    width: width,
-                    height: 40,
-                  ),
+                  //inhalt
                   SizedBox(
                     height: 30,
                   ),
