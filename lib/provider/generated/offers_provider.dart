@@ -3,8 +3,12 @@ import 'package:app/provider/backend.dart';
 
 class OffersProvider {
   /// Get Offers
-  static Future<List<OfferOut>> getOffers({required List<String> id}) async {
-    final Map<String, dynamic> __q = {"id": id};
+  static Future<List<OfferOut>> getOffers(
+      {List<String>? id, bool? allForUser}) async {
+    final Map<String, dynamic> __q = {
+      if (id != null) "id": id,
+      if (allForUser != null) "all-for-user": allForUser.toString()
+    };
     final List responseBody = await BackendService.instance
         .sendRequest(HttpMethod.get, "/offers/", queryParams: __q);
     return responseBody.map((item) => OfferOut.fromJson(item)).toList();
