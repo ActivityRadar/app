@@ -1,5 +1,7 @@
 import 'package:app/constants/design.dart';
+
 import 'package:app/screens/auth.dart';
+import 'package:app/screens/more_meetups_screen.dart';
 import 'package:app/screens/meet_page.dart';
 import 'package:app/screens/meet_search_page.dart';
 import 'package:app/screens/settings.dart';
@@ -136,7 +138,17 @@ class CommunityScreen extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       TitleText(text: "Deine Meet Up's", width: width),
-                      TextButton(onPressed: () {}, child: Text('mehr Anzeigen'))
+                      TextButton(
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) =>
+                                    MeetUpMoreScreen(title: "Deine Meet Up's"),
+                              ),
+                            );
+                          },
+                          child: Text('mehr Anzeigen'))
                     ],
                   ),
                   MeetList(
@@ -150,7 +162,20 @@ class CommunityScreen extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       TitleText(text: "Meet's in deine Nähe", width: width),
-                      TextButton(onPressed: () {}, child: Text('mehr Anzeigen'))
+                      TextButton(
+                          onPressed: () {},
+                          child: TextButton(
+                              onPressed: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) =>
+                                        const MeetUpMoreScreen(
+                                            title: "Meet's in deine Nähe"),
+                                  ),
+                                );
+                              },
+                              child: Text('mehr Anzeigen')))
                     ],
                   ),
                   MeetList(
