@@ -1,8 +1,6 @@
-import 'package:app/widgets/custom/list_tile.dart';
 import 'package:app/widgets/custom_text.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:app/constants/design.dart';
 
 class DateTimePicker extends StatefulWidget {
   const DateTimePicker({super.key, this.notifier, this.title});
@@ -20,34 +18,36 @@ class _DateTimePickerState extends State<DateTimePicker> {
   final DateTime today = DateTime.now();
 
   Future<void> _selectDate() async {
-    final DateTime picked = await showDatePicker(
-          context: context,
-          initialDate: selectedDate,
-          firstDate: today,
-          lastDate: today.add(const Duration(days: 14)),
-        ) ??
-        selectedDate;
-    _selectTime();
-    if (picked != selectedDate) {
-      if (widget.notifier != null) {
-        final d = widget.notifier!.value;
-        widget.notifier!.value =
-            DateTime(picked.year, picked.month, picked.day, d.hour, d.minute);
+    final DateTime? picked = await showDatePicker(
+      context: context,
+      initialDate: selectedDate,
+      firstDate: today,
+      lastDate: today.add(const Duration(days: 14)),
+    );
+
+    if (picked != null) {
+      if (picked != selectedDate) {
+        if (widget.notifier != null) {
+          final d = widget.notifier!.value;
+          widget.notifier!.value =
+              DateTime(picked.year, picked.month, picked.day, d.hour, d.minute);
+        }
+
+        setState(() {
+          selectedDate = picked;
+        });
       }
 
-      setState(() {
-        selectedDate = picked;
-      });
+      _selectTime();
     }
   }
 
   Future<void> _selectTime() async {
-    final TimeOfDay picked = await showTimePicker(
-          context: context,
-          initialTime: selectedTime,
-        ) ??
-        selectedTime;
-    if (picked != selectedTime) {
+    final TimeOfDay? picked = await showTimePicker(
+      context: context,
+      initialTime: selectedTime,
+    );
+    if (picked != null) {
       if (widget.notifier != null) {
         final d = widget.notifier!.value;
         widget.notifier!.value =
