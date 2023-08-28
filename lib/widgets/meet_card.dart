@@ -1,5 +1,7 @@
 import 'package:app/constants/constants.dart';
+import 'package:app/model/generated.dart';
 import 'package:app/screens/meet_page.dart';
+import 'package:app/widgets/activityType_short.dart';
 import 'package:app/widgets/custom/chip.dart';
 import 'package:app/widgets/custom_text.dart';
 import 'package:app/widgets/meet_map.dart';
@@ -7,33 +9,20 @@ import 'package:app/constants/design.dart';
 import 'package:flutter/material.dart';
 import 'package:latlong2/latlong.dart';
 
-class MeetList extends StatelessWidget {
-  const MeetList({super.key, required this.width, required this.height});
-
-  final double width;
-  final double height;
-
-  @override
-  Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      scrollDirection: Axis.vertical,
-      child: Column(
-        children: [MeetCard(), MeetCard()],
-      ),
-    );
-  }
-}
-
 class MeetCard extends StatelessWidget {
   const MeetCard({
     super.key,
+    required this.offer,
   });
+
+  final OfferOut offer;
 
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
     var height = size.height;
     double width = size.width;
+
     return GestureDetector(
         onTap: () {
           Navigator.push(
@@ -68,14 +57,16 @@ class MeetCard extends StatelessWidget {
                           right: 0,
                           child: Container(
                               alignment: Alignment.bottomCenter,
-                              child: const Row(
+                              child: Row(
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
                                 children: [
                                   Padding(
                                     padding: EdgeInsets.only(left: 12.0),
-                                    child: CustomChip(
-                                      text: 'Table Tennis',
+                                    child: ActivityChip(
+                                      type: offer.activity.length != 1
+                                          ? "Multi"
+                                          : offer.activity[0],
                                     ),
                                   ),
                                   Padding(

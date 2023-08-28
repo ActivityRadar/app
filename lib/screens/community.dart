@@ -151,10 +151,6 @@ class CommunityScreen extends StatelessWidget {
                           child: Text('mehr Anzeigen'))
                     ],
                   ),
-                  MeetList(
-                    width: width,
-                    height: 40,
-                  ),
                   SizedBox(
                     height: 30,
                   ),
@@ -177,10 +173,6 @@ class CommunityScreen extends StatelessWidget {
                               },
                               child: Text('mehr Anzeigen')))
                     ],
-                  ),
-                  MeetList(
-                    width: width,
-                    height: 40,
                   ),
                   SizedBox(
                     height: 30,

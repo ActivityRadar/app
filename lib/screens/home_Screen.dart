@@ -69,42 +69,6 @@ class HomePage extends StatelessWidget {
                   hintText: "Search Meet and ",
                 ),
                 TitleText(text: "Deine nächste Verabredung", width: width),
-                MeetList(
-                  width: width,
-                  height: 40,
-                ),
-                MeetList(
-                  width: width,
-                  height: 40,
-                ),
-                MeetList(
-                  width: width,
-                  height: 40,
-                ),
-                MeetList(
-                  width: width,
-                  height: 40,
-                ),
-                MeetList(
-                  width: width,
-                  height: 40,
-                ),
-                MeetList(
-                  width: width,
-                  height: 40,
-                ),
-                MeetList(
-                  width: width,
-                  height: 40,
-                ),
-                MeetList(
-                  width: width,
-                  height: 40,
-                ),
-                MeetList(
-                  width: width,
-                  height: 40,
-                ),
                 SizedBox(
                   height: 30,
                 ),
