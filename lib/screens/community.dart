@@ -1,4 +1,5 @@
 import 'package:app/constants/design.dart';
+import 'package:app/screens/AllMeetUpmoreScreen.dart';
 import 'package:app/screens/auth.dart';
 import 'package:app/screens/MeetUpmoreScreen.dart';
 import 'package:app/screens/meet_page.dart';
@@ -160,7 +161,19 @@ class CommunityScreen extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       TitleText(text: "Meet's in deine Nähe", width: width),
-                      TextButton(onPressed: () {}, child: Text('mehr Anzeigen'))
+                      TextButton(
+                          onPressed: () {},
+                          child: TextButton(
+                              onPressed: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) =>
+                                        const AllMeetUpMoreScreen(),
+                                  ),
+                                );
+                              },
+                              child: Text('mehr Anzeigen')))
                     ],
                   ),
                   MeetList(
