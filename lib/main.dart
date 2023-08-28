@@ -92,7 +92,7 @@ class MyApp extends StatelessWidget {
             background: DesignColors.kBackground,
             onBackground: DesignColors.kBackground,
             surface: DesignColors.kBackground,
-            onSurface: DesignColors.kBackground),
+            onSurface: DesignColors.grey),
       ),
       localizationsDelegates: const [
         AppLocalizations.delegate, // Add this line
