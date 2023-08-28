@@ -1,7 +1,7 @@
 import 'package:app/constants/design.dart';
-import 'package:app/screens/AllMeetUpmoreScreen.dart';
+
 import 'package:app/screens/auth.dart';
-import 'package:app/screens/MeetUpmoreScreen.dart';
+import 'package:app/screens/more_meetups_screen.dart';
 import 'package:app/screens/meet_page.dart';
 import 'package:app/screens/meet_search_page.dart';
 import 'package:app/screens/settings.dart';
@@ -143,7 +143,8 @@ class CommunityScreen extends StatelessWidget {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (context) => const MeetUpMoreScreen(),
+                                builder: (context) =>
+                                    MeetUpMoreScreen(title: "Deine Meet Up's"),
                               ),
                             );
                           },
@@ -169,7 +170,8 @@ class CommunityScreen extends StatelessWidget {
                                   context,
                                   MaterialPageRoute(
                                     builder: (context) =>
-                                        const AllMeetUpMoreScreen(),
+                                        const MeetUpMoreScreen(
+                                            title: "Meet's in deine Nähe"),
                                   ),
                                 );
                               },
