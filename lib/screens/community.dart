@@ -1,5 +1,6 @@
 import 'package:app/constants/design.dart';
 import 'package:app/screens/auth.dart';
+import 'package:app/screens/MeetUpmoreScreen.dart';
 import 'package:app/screens/meet_page.dart';
 import 'package:app/screens/meet_search_page.dart';
 import 'package:app/screens/settings.dart';
@@ -136,7 +137,16 @@ class CommunityScreen extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       TitleText(text: "Deine Meet Up's", width: width),
-                      TextButton(onPressed: () {}, child: Text('mehr Anzeigen'))
+                      TextButton(
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => const MeetUpMoreScreen(),
+                              ),
+                            );
+                          },
+                          child: Text('mehr Anzeigen'))
                     ],
                   ),
                   MeetList(

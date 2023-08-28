@@ -92,6 +92,7 @@ class AppIcons {
   static const IconData edit = Icons.edit;
   static const IconData arrowBack = Icons.arrow_back;
   static const IconData done = Icons.done;
+  static const IconData morevert = Icons.more_vert;
   static Widget chat = SvgPicture.asset(
       "assets/icons/chat.svg", // https://remixicon.com/
       colorFilter: ColorFilter.mode(DesignColors.naviColor, BlendMode.srcIn),
