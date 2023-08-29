@@ -1,9 +1,9 @@
 import 'package:app/constants/design.dart';
+import 'package:app/provider/meetup_manager.dart';
 import 'package:app/widgets/custom/appbar.dart';
 import 'package:app/model/functions.dart';
 import 'package:app/model/generated.dart';
 import 'package:app/provider/activity_type.dart';
-import 'package:app/provider/generated/offers_provider.dart';
 import 'package:app/screens/map.dart';
 import 'package:app/widgets/activityType_short.dart';
 import 'package:app/widgets/custom/background.dart';
@@ -524,6 +524,7 @@ class _MeetAddScreenState extends State<MeetAddScreen> {
               : "${range.start.toInt()} - ${range.end.toInt()}"),
       summaryRow("Standort", loc == null ? "" : formatGeoLocation(loc)),
       summaryRow("Sichtbarkeit", visibilityFriends.value ? "Freunde" : "Alle"),
+      summaryRow("Titel", titleController.text, spacer: true),
       summaryRow("Beschreibung", descriptionController.text, spacer: true),
     ];
 
@@ -548,42 +549,41 @@ class _MeetAddScreenState extends State<MeetAddScreen> {
   }
 
   Future<void> submitMeetingOffer() async {
-    late final Map<String, dynamic> location;
-    late final Map<String, dynamic> time;
+    var location;
+    var time;
 
     if (locNotifier.changedBy == FocusChangeReason.markerTap) {
-      location = {
-        "coords": locNotifier.info!.location.toJson(),
-        "id": locNotifier.info!.id.toString()
-      };
+      location = OfferLocationConnected(
+          coords: locNotifier.info!.location, id: locNotifier.info!.id);
     } else {
-      final coords = toLongLat(customLocation.value!).toJson();
-      location = {"coords": coords, "radius": 2000};
+      final coords = toLongLat(customLocation.value!);
+      location = OfferLocationArea(coords: coords);
     }
 
     if (timeFlexible.value) {
-      time = OfferTimeFlexible(type: "flexible").toJson();
+      time = OfferTimeFlexible(type: "flexible");
     } else {
       time = OfferTimeSingle(type: "single", times: [
         dateTimeFrom.value,
         dateTimeUntil.value,
-      ]).toJson();
+      ]);
     }
 
     final pLimits = participantNumberRange.value;
 
     final offer = OfferIn(
-        location: location,
-        activity: activities.value,
-        time: time,
+        location: {}, // this is going to be handled by OfferInParsed
+        activity: ActivityManager.instance.getBackendTypes(activities.value),
+        time: {}, // this is going to be handled by OfferInParsed
         visibilityRadius: 5,
         blurr: LocationBlurrIn(radius: 2),
         description: DescriptionWithTitle(
             title: titleController.text, text: descriptionController.text),
-        participantLimits: [pLimits.start as int, pLimits.end as int],
+        participantLimits: [pLimits.start.toInt(), pLimits.end.toInt()],
         visibility: OfferVisibility.public);
 
-    await OffersProvider.createOffer(data: offer);
+    await MeetupManager.instance.createMeetup(
+        OfferInParsed(offer: offer, location_: location, time_: time));
   }
 }
 
