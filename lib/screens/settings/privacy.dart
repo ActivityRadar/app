@@ -1,10 +1,12 @@
+import 'package:app/screens/map.dart';
+import 'package:app/util/map.dart';
 import 'package:app/widgets/custom/background.dart';
 import 'package:app/widgets/custom/button.dart';
-import 'package:app/widgets/custom/icon.dart';
 import 'package:app/widgets/custom_text.dart';
 import 'package:app/widgets/custom/card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
+import 'package:flutter_map_animations/flutter_map_animations.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:app/constants/design.dart';
 
@@ -17,11 +19,13 @@ class PrivacySettingPage extends StatefulWidget {
 
 class _PrivacySettingPageState extends State<PrivacySettingPage> {
   bool isExpanded = false;
+
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
     var height = size.height;
     double width = size.width;
+
     return Scaffold(
         body: BackgroundSVG(
       children: CustomScrollView(
@@ -97,8 +101,9 @@ class ExpandableTile extends StatefulWidget {
 class _ExpandableTileState extends State<ExpandableTile> {
   bool isExpanded = false;
   bool isRadius = false;
-  bool isfriends = false;
-  double _currentSliderValue = 20;
+  bool isFriends = false;
+  ValueNotifier<double> _currentSliderValue = ValueNotifier(20.0);
+
   @override
   Widget build(BuildContext context) {
     return Column(children: [
@@ -118,10 +123,10 @@ class _ExpandableTileState extends State<ExpandableTile> {
         ListTile(
           title: const CustomText(text: 'Nur Freunde'),
           trailing: Switch(
-            value: isfriends,
+            value: isFriends,
             onChanged: (bool value) {
               setState(() {
-                isfriends = value;
+                isFriends = value;
               });
             },
           ),
@@ -139,30 +144,30 @@ class _ExpandableTileState extends State<ExpandableTile> {
           ),
         ),
         if (isRadius) ...[
-          ListTile(
-              title: Row(
-            children: [
-              Slider(
-                value: _currentSliderValue,
-                max: 25,
-                divisions: 25,
-                label: _currentSliderValue.round().toString(),
-                onChanged: (double value) {
-                  setState(() {
-                    _currentSliderValue = value;
-                  });
-                },
-              ),
-              CustomText(text: "${_currentSliderValue.toStringAsFixed(0)} km")
-            ],
-          )),
+          ValueListenableBuilder(
+              valueListenable: _currentSliderValue,
+              builder: (context, value, child) {
+                return ListTile(
+                    title: Row(
+                  children: [
+                    Slider(
+                      value: value,
+                      max: 25,
+                      divisions: 25,
+                      label: value.round().toString(),
+                      onChanged: (double value_) {
+                        _currentSliderValue.value = value_;
+                      },
+                    ),
+                    CustomText(text: "${value.toStringAsFixed(0)} km")
+                  ],
+                ));
+              }),
           SizedBox(
               height: 300,
               child: RadiusSelectionMap(
-                height: 10,
-                width: 10,
-                radius: _currentSliderValue,
-              ))
+                  radius: _currentSliderValue,
+                  center: LatLng(52.520008, 13.404954)))
         ]
       ],
     ]);
@@ -173,13 +178,11 @@ class RadiusSelectionMap extends StatefulWidget {
   const RadiusSelectionMap({
     super.key,
     required this.radius,
-    required this.width,
-    required this.height,
+    required this.center,
   });
 
-  final double width;
-  final double height;
-  final double radius;
+  final ValueNotifier<double> radius;
+  final LatLng center;
 
   @override
   State<RadiusSelectionMap> createState() {
@@ -187,34 +190,62 @@ class RadiusSelectionMap extends StatefulWidget {
   }
 }
 
-class _RadiusSelectionMapState extends State<RadiusSelectionMap> {
-  LatLngBounds bounds =
-      LatLngBounds(const LatLng(52.37, 12.74), const LatLng(50, 13.04));
-  final MapController mapController = MapController();
+class _RadiusSelectionMapState extends State<RadiusSelectionMap>
+    with TickerProviderStateMixin {
+  late final AnimatedMapController animatedMapController =
+      AnimatedMapController(
+          vsync: this,
+          duration: const Duration(milliseconds: 20),
+          curve: Curves.linear);
+
+  @override
+  void initState() {
+    super.initState();
+
+    widget.radius.addListener(updateZoom);
+  }
+
+  @override
+  void dispose() {
+    widget.radius.removeListener(updateZoom);
+
+    super.dispose();
+  }
+
+  void updateZoom() {
+    animatedMapController
+        .animatedZoomTo(getZoomLevel(getCircleRadius(widget.radius.value)));
+  }
+
+  double getCircleRadius(double radius) {
+    return radius * 1000;
+  }
 
   @override
   Widget build(BuildContext context) {
-    const LatLng center = LatLng(52.520008, 13.404954); //Todo center
-    final circleMarkers = <CircleMarker>[
-      CircleMarker(
-        point: center,
-        color: DesignColors.blue.withOpacity(0.5),
-        borderStrokeWidth: 1,
-        borderColor: Colors.black12,
-        useRadiusInMeter: true,
-        radius: widget.radius * 1000, // 2000 meters | 2 km
-      ),
-    ];
     return Stack(children: [
       FlutterMap(
-        mapController: mapController,
-        options: MapOptions(center: center, zoom: 10),
+        mapController: animatedMapController.mapController,
+        options: MapOptions(
+            center: widget.center,
+            zoom: getZoomLevel(getCircleRadius(widget.radius.value))),
         children: [
-          TileLayer(
-            urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
-            subdomains: const ['a', 'b', 'c'],
-          ),
-          CircleLayer(circles: circleMarkers),
+          createCachedTileLayer(),
+          ValueListenableBuilder(
+              valueListenable: widget.radius,
+              builder: (context, value, child) {
+                return CircleLayer(circles: <CircleMarker>[
+                  CircleMarker(
+                    point: widget.center,
+                    color: DesignColors.blue.withOpacity(0.5),
+                    borderStrokeWidth: 1,
+                    borderColor: Colors.black12,
+                    useRadiusInMeter: true,
+                    radius: getCircleRadius(
+                        widget.radius.value), // 2000 meters | 2 km
+                  ),
+                ]);
+              })
         ],
       ),
     ]);
