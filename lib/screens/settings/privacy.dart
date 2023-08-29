@@ -1,14 +1,11 @@
 import 'package:app/app_state.dart';
-import 'package:app/screens/map.dart';
-import 'package:app/util/map.dart';
 import 'package:app/widgets/custom/background.dart';
 import 'package:app/widgets/custom/button.dart';
 import 'package:app/widgets/custom_text.dart';
 import 'package:app/widgets/custom/card.dart';
 import 'package:app/widgets/number_slider.dart';
+import 'package:app/widgets/radius_map.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_map/flutter_map.dart';
-import 'package:flutter_map_animations/flutter_map_animations.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:app/constants/design.dart';
 import 'package:provider/provider.dart';
@@ -162,84 +159,6 @@ class _ExpandableTileState extends State<ExpandableTile> {
                   center: state.userPosition ?? LatLng(52.520008, 13.404954)))
         ]
       ],
-    ]);
-  }
-}
-
-class RadiusSelectionMap extends StatefulWidget {
-  const RadiusSelectionMap({
-    super.key,
-    required this.radius,
-    required this.center,
-  });
-
-  final ValueNotifier<double> radius;
-  final LatLng center;
-
-  @override
-  State<RadiusSelectionMap> createState() {
-    return _RadiusSelectionMapState();
-  }
-}
-
-class _RadiusSelectionMapState extends State<RadiusSelectionMap>
-    with TickerProviderStateMixin {
-  late final AnimatedMapController animatedMapController =
-      AnimatedMapController(
-          vsync: this,
-          duration: const Duration(milliseconds: 20),
-          curve: Curves.linear);
-
-  @override
-  void initState() {
-    super.initState();
-
-    widget.radius.addListener(updateZoom);
-  }
-
-  @override
-  void dispose() {
-    widget.radius.removeListener(updateZoom);
-
-    super.dispose();
-  }
-
-  void updateZoom() {
-    animatedMapController
-        .animatedZoomTo(getZoomLevel(getCircleRadius(widget.radius.value)));
-  }
-
-  double getCircleRadius(double radius) {
-    return radius * 1000;
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Stack(children: [
-      FlutterMap(
-        mapController: animatedMapController.mapController,
-        options: MapOptions(
-            center: widget.center,
-            zoom: getZoomLevel(getCircleRadius(widget.radius.value))),
-        children: [
-          createCachedTileLayer(),
-          ValueListenableBuilder(
-              valueListenable: widget.radius,
-              builder: (context, value, child) {
-                return CircleLayer(circles: <CircleMarker>[
-                  CircleMarker(
-                    point: widget.center,
-                    color: DesignColors.blue.withOpacity(0.5),
-                    borderStrokeWidth: 1,
-                    borderColor: Colors.black12,
-                    useRadiusInMeter: true,
-                    radius: getCircleRadius(
-                        widget.radius.value), // 2000 meters | 2 km
-                  ),
-                ]);
-              })
-        ],
-      ),
     ]);
   }
 }
