@@ -150,6 +150,8 @@ class _ExpandableTileState extends State<ExpandableTile> {
         ),
         if (isRadius) ...[
           ListeningSlider(
+            min: 1,
+            max: 25,
             valueNotifier: _currentSliderValue,
             textFormatter: (v) => "${v.toStringAsFixed(0)} km",
           ),

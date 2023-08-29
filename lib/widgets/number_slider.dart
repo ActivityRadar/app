@@ -6,11 +6,17 @@ class ListeningSlider extends StatelessWidget {
       {super.key,
       required this.valueNotifier,
       required this.textFormatter,
-      this.leading});
+      this.leading,
+      this.discrete = true,
+      required this.min,
+      required this.max});
 
   final ValueNotifier<double> valueNotifier;
   final String Function(double) textFormatter;
   final Widget? leading;
+  final bool discrete;
+  final double min;
+  final double max;
 
   @override
   Widget build(BuildContext context) {
@@ -19,17 +25,18 @@ class ListeningSlider extends StatelessWidget {
         builder: (context, value, child) {
           return ListTile(
               title: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               if (leading != null) leading!,
-              Slider(
+              Expanded(
+                  child: Slider(
                 value: value,
-                max: 25,
-                divisions: 25,
-                label: value.round().toString(),
+                min: discrete ? min.floorToDouble() : min,
+                max: discrete ? max.floorToDouble() : max,
                 onChanged: (double value_) {
                   valueNotifier.value = value_;
                 },
-              ),
+              )),
               CustomText(text: textFormatter(value))
             ],
           ));
