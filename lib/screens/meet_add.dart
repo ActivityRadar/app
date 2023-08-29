@@ -601,8 +601,8 @@ class _MeetAddScreenState extends State<MeetAddScreen> {
         location: {}, // this is going to be handled by OfferInParsed
         activity: ActivityManager.instance.getBackendTypes(activities.value),
         time: {}, // this is going to be handled by OfferInParsed
-        visibilityRadius: 5,
-        blurr: LocationBlurrIn(radius: 2),
+        visibilityRadius: visibilityRadius.value,
+        blurr: LocationBlurrIn(radius: blurrRadius.value),
         description: DescriptionWithTitle(
             title: titleController.text, text: descriptionController.text),
         participantLimits: [pLimits.start.toInt(), pLimits.end.toInt()],
