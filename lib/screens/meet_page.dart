@@ -274,28 +274,16 @@ class ProfileListCard extends StatelessWidget {
         FutureBuilder(
           future: photo,
           builder: (BuildContext context, AsyncSnapshot snapshot) {
-            var name = "<name>";
-            ImageProvider thumbnail = AssetImages.avatarLoading;
-
-            // if photo was fetched, so was the user data
-            if (snapshot.hasData) {
-              name = userInfo!.displayName;
-
-              if (snapshot.data != null) {
-                thumbnail = snapshot.data;
-              } else {
-                thumbnail = AssetImages.avatarEmpty;
-              }
-            }
+            final result = getNameAndAvatar(snapshot, userInfo);
 
             return Row(children: [
               const Padding(padding: EdgeInsets.only(left: 10, top: 60)),
-              CircleAvatar(backgroundImage: thumbnail, radius: 15),
+              CircleAvatar(backgroundImage: result.image, radius: 15),
               const SizedBox(
                 width: 10,
               ),
               MediumText(
-                text: name,
+                text: result.displayName,
                 width: width,
               ),
             ]);

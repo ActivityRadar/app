@@ -504,45 +504,16 @@ class ReviewMetaInfo extends StatelessWidget {
     return FutureBuilder(
       future: photo,
       builder: (BuildContext context, AsyncSnapshot snapshot) {
-        ImageProvider? image;
-        String username;
-        String displayName;
-
-        const double diameter = 50.0;
-        if (snapshot.hasData) {
-          image = snapshot.data ?? AssetImages.avatarEmpty;
-        } else if (snapshot.hasError) {
-          print(snapshot.error);
-          image = AssetImages.avatarError;
-        }
-
-        if (userInfo != null) {
-          username = userInfo!.username;
-        } else {
-          username = review.userId.substring(0, 6).toUpperCase();
-        }
-
-        if (userInfo != null) {
-          displayName = userInfo!.displayName;
-        } else {
-          displayName = review.userId.substring(0, 6).toUpperCase();
-        }
-
-        image ??= AssetImages.avatarLoading;
+        final result = getNameAndAvatar(snapshot, userInfo);
 
         return Column(mainAxisSize: MainAxisSize.min, children: [
           Row(
             children: [
               Padding(
                 padding: const EdgeInsets.all(12.0),
-                child: ClipOval(
-                    child: Image(
-                        image: image,
-                        width: diameter,
-                        height: diameter,
-                        fit: BoxFit.cover)),
+                child: CircleAvatar(backgroundImage: result.image, radius: 25),
               ),
-              UserText(displayName: displayName, width: width),
+              UserText(displayName: result.displayName, width: width),
               const Spacer(),
               Column(children: [
                 Padding(
