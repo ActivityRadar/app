@@ -13,6 +13,8 @@ import 'package:app/widgets/custom_text.dart';
 import 'package:app/widgets/custom/button.dart';
 import 'package:app/widgets/custom/textfield.dart';
 import 'package:app/widgets/gps.dart';
+import 'package:app/widgets/number_slider.dart';
+import 'package:app/widgets/radius_map.dart';
 import 'package:app/widgets/timepicker.dart';
 import 'package:flutter/material.dart';
 import 'package:latlong2/latlong.dart';
@@ -46,6 +48,10 @@ class _MeetAddScreenState extends State<MeetAddScreen> {
   ValueNotifier<RangeValues> participantNumberRange =
       ValueNotifier<RangeValues>(const RangeValues(1, 2));
   ValueNotifier<LatLng?> customLocation = ValueNotifier<LatLng?>(null);
+
+  // radius sliders
+  ValueNotifier<double> blurrRadius = ValueNotifier(2.0);
+  ValueNotifier<double> visibilityRadius = ValueNotifier(2.0);
 
   // location selection map
   final FocusedLocationNotifier locNotifier = FocusedLocationNotifier();
@@ -111,20 +117,12 @@ class _MeetAddScreenState extends State<MeetAddScreen> {
       chooseParticipantNumber,
       choosePlace,
       addDescription,
-      // chooseVisibility,
+      chooseVisibility,
       submitPage
     ];
 
     // has to be in the correct order according to the pagesFunctions list
-    final defaultSkippable = [
-      false,
-      true,
-      true,
-      false,
-      false,
-      // true,
-      false
-    ];
+    final defaultSkippable = [false, true, true, false, false, true, false];
 
     validatorNotifiers =
         defaultSkippable.map((b) => ValueNotifier<bool>(b)).toList();
@@ -454,7 +452,7 @@ class _MeetAddScreenState extends State<MeetAddScreen> {
 
     return Center(
         child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-      TitleText(text: "Für wen soll das Angebot sichtbar sein?", width: width),
+      TitleText(text: "Wem wird das Angebot angezeigt?", width: width),
       const SizedBox(
         height: 20,
       ),
@@ -473,9 +471,36 @@ class _MeetAddScreenState extends State<MeetAddScreen> {
           ],
         ),
       ),
+      TitleText(
+          text: "In welchem Radius wird das Angebot angezeigt?", width: width),
       const SizedBox(
         height: 20,
       ),
+      CustomCard(
+          child: Column(
+        children: [
+          ListeningSlider(
+              min: 0.5,
+              max: 15.0,
+              leading: const Text("Verzerrung"),
+              valueNotifier: blurrRadius,
+              textFormatter: (v) => "${v.toStringAsPrecision(2)} km"),
+          ListeningSlider(
+              min: 1.0,
+              max: 30.0,
+              leading: const Text("Sichtbarkeit"),
+              valueNotifier: visibilityRadius,
+              textFormatter: (v) => "${v.toStringAsPrecision(2)} km")
+        ],
+      )),
+      Flexible(
+          child: SizedBox(
+        width: width,
+        child: MultipleRadiusesSelectionMap(
+            notifiers: [blurrRadius, visibilityRadius],
+            center: getLocation() ?? const LatLng(52.3, 13.3),
+            colors: const [DesignColors.grey, DesignColors.blue]),
+      )),
     ]));
   }
 
@@ -502,10 +527,7 @@ class _MeetAddScreenState extends State<MeetAddScreen> {
     }
 
     final range = participantNumberRange.value;
-    final loc = locNotifier.info?.location ??
-        (customLocation.value == null
-            ? null
-            : toLongLat(customLocation.value!));
+    final loc = getLocation();
     final rows = [
       summaryRow(
           "Tätigkeit(en)",
@@ -522,8 +544,12 @@ class _MeetAddScreenState extends State<MeetAddScreen> {
           range.start == range.end
               ? "${range.start.toInt()}"
               : "${range.start.toInt()} - ${range.end.toInt()}"),
-      summaryRow("Standort", loc == null ? "" : formatGeoLocation(loc)),
+      summaryRow("Standort", loc == null ? "" : loc.toString()),
       summaryRow("Sichtbarkeit", visibilityFriends.value ? "Freunde" : "Alle"),
+      summaryRow("Sichtbarkeitsradius",
+          "${visibilityRadius.value.toStringAsPrecision(2)} km"),
+      summaryRow("Verzerrungsradius",
+          "${blurrRadius.value.toStringAsPrecision(2)} km"),
       summaryRow("Titel", titleController.text, spacer: true),
       summaryRow("Beschreibung", descriptionController.text, spacer: true),
     ];
@@ -584,6 +610,13 @@ class _MeetAddScreenState extends State<MeetAddScreen> {
 
     await MeetupManager.instance.createMeetup(
         OfferInParsed(offer: offer, location_: location, time_: time));
+  }
+
+  LatLng? getLocation() {
+    final loc = locNotifier.changedBy == FocusChangeReason.markerTap
+        ? toLatLng(locNotifier.info!.location)
+        : (customLocation.value == null ? null : customLocation.value!);
+    return loc;
   }
 }
 
