@@ -66,9 +66,10 @@ class MeetPage extends StatelessWidget {
                   ),
                   child: MeetMap(
                       center: toLatLng(isHost
-                          ? GeoJsonLocation.fromJson(offer.location!["coords"])
+                          ? offer.location_.coords
                           : offer.blurrInfo.center),
-                      radius: isHost ? 0.01 : offer.blurrInfo.radius),
+                      radius: isHost ? 0.3 : offer.blurrInfo.radius,
+                      circleScale: isHost ? 50 : 150),
                 ),
               ),
             ),

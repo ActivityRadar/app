@@ -1,4 +1,5 @@
 import 'package:app/screens/map.dart';
+import 'package:app/util/map.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
@@ -8,11 +9,13 @@ class MeetMap extends StatefulWidget {
   const MeetMap({
     super.key,
     required this.center,
-    this.radius = 2.0,
+    this.radius = 0.3,
+    this.circleScale = 150,
   });
 
   final LatLng center;
   final double radius; // in km
+  final double circleScale;
 
   @override
   State<MeetMap> createState() {
@@ -40,7 +43,10 @@ class _MeetMapState extends State<MeetMap> {
       IgnorePointer(
         child: FlutterMap(
           // TODO: dynamic zoom (depending on radius)
-          options: MapOptions(center: widget.center, zoom: 12),
+          options: MapOptions(
+              center: widget.center,
+              zoom: getZoomLevel(widget.radius * 1000,
+                  scale: widget.circleScale)),
           children: [
             createCachedTileLayer(),
             CircleLayer(circles: circleMarkers),

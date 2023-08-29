@@ -62,9 +62,11 @@ class MeetCard extends StatelessWidget {
                             child: offer.location_ == null
                                 ? MeetMap(
                                     center: toLatLng(offer.blurrInfo.center),
-                                    radius: offer.blurrInfo.radius)
+                                    radius: offer.blurrInfo.radius,
+                                    circleScale: 100)
                                 : MeetMap(
-                                    center: toLatLng(offer.location_!.coords))),
+                                    center: toLatLng(offer.location_!.coords),
+                                    circleScale: 30)),
                       ),
                       Positioned(
                           bottom:
