@@ -1,5 +1,6 @@
 import 'package:app/constants/constants.dart';
 import 'package:app/model/generated.dart';
+import 'package:app/provider/meetup_manager.dart';
 import 'package:app/screens/meet_page.dart';
 import 'package:app/widgets/activityType_short.dart';
 import 'package:app/widgets/custom/chip.dart';
@@ -15,7 +16,7 @@ class MeetCard extends StatelessWidget {
     required this.offer,
   });
 
-  final OfferOut offer;
+  final OfferParsed offer;
 
   @override
   Widget build(BuildContext context) {
@@ -28,7 +29,7 @@ class MeetCard extends StatelessWidget {
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => const MeetPage(),
+              builder: (context) => MeetPage(offer: offer),
             ),
           );
         },

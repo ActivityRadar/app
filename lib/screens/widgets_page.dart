@@ -53,7 +53,7 @@ class ProfileBar extends StatelessWidget {
             const SizedBox(
               width: 500, // Breite der Karte
               height: 200, // Höhe der Karte
-              child: MeetCard(),
+              // child: MeetCard(),
             ),
             ButtonCancel(
               onPressed: () {},

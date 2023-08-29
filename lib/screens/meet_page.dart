@@ -4,6 +4,7 @@ import 'package:app/constants/design.dart';
 import 'package:app/model/functions.dart';
 import 'package:app/provider/activity_type.dart';
 import 'package:app/model/generated.dart';
+import 'package:app/provider/meetup_manager.dart';
 import 'package:app/provider/photos.dart';
 import 'package:app/provider/user_manager.dart';
 import 'package:app/widgets/activityType_short.dart';
@@ -15,51 +16,16 @@ import 'package:app/widgets/custom_text.dart';
 import 'package:app/widgets/custom/button.dart';
 import 'package:app/widgets/meet_map.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 class MeetPage extends StatelessWidget {
-  const MeetPage({super.key, this.x});
+  const MeetPage({super.key, required this.offer});
 
-  final OfferOut? x;
+  final OfferParsed offer;
 
   @override
   Widget build(BuildContext context) {
     final state = context.read<AppState>();
-    final OfferOut offer = x ??
-        OfferOut(
-            id: "209dhj128e",
-            participants: [
-              Participant(
-                  id: state.currentUser!.id, status: ParticipantStatus.host),
-              Participant(
-                  id: "64d0f9312b6597c92fb2f15f",
-                  status: ParticipantStatus.requested),
-            ],
-            participantLimits: [1, 4],
-            visibilityRadius: 2.0,
-            location: OfferLocationArea(
-                coords: GeoJsonLocation(
-                    type: "Point", coordinates: [13.4, 52.5])).toJson(),
-            activity: ["table_tennis"],
-            // time: OfferTimeFlexible(type: "flexible").toJson(),
-            time: OfferTimeSingle(type: "single", times: [
-              DateTime.parse("2023-08-29T19:30:20Z"),
-              DateTime.parse("2023-08-29T21:30:20Z")
-            ]).toJson(),
-            userInfo: OfferCreatorInfo(
-                username: state.currentUser!.username,
-                displayName: state.currentUser!.displayName,
-                id: state.currentUser!.id),
-            blurrInfo: LocationBlurrOut(
-                radius: 2,
-                center:
-                    GeoJsonLocation(type: "Point", coordinates: [13.4, 52.5])),
-            description: DescriptionWithTitle(
-                title: "Wer hat Bock?",
-                text:
-                    "Ich würde gern mit mindestens 3 anderen spielen, wenns geht."),
-            visibility: OfferVisibility.public);
 
     final bool isHost = state.currentUser!.id == offer.userInfo.id;
     final bool isParticipant =
