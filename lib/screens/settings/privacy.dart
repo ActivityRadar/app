@@ -1,3 +1,4 @@
+import 'package:app/app_state.dart';
 import 'package:app/screens/map.dart';
 import 'package:app/util/map.dart';
 import 'package:app/widgets/custom/background.dart';
@@ -10,6 +11,7 @@ import 'package:flutter_map/flutter_map.dart';
 import 'package:flutter_map_animations/flutter_map_animations.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:app/constants/design.dart';
+import 'package:provider/provider.dart';
 
 class PrivacySettingPage extends StatefulWidget {
   const PrivacySettingPage({super.key});
@@ -107,6 +109,8 @@ class _ExpandableTileState extends State<ExpandableTile> {
 
   @override
   Widget build(BuildContext context) {
+    final state = context.read<AppState>();
+
     return Column(children: [
       ListTile(
         title: const CustomText(text: 'Sichtbarkeit auf dem Map'),
@@ -153,7 +157,7 @@ class _ExpandableTileState extends State<ExpandableTile> {
               height: 300,
               child: RadiusSelectionMap(
                   radius: _currentSliderValue,
-                  center: LatLng(52.520008, 13.404954)))
+                  center: state.userPosition ?? LatLng(52.520008, 13.404954)))
         ]
       ],
     ]);
