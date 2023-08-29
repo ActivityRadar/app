@@ -41,13 +41,11 @@ class MeetPage extends StatelessWidget {
     List<Widget> timeWidgets = [const CardTimeFlexible()];
     if (offer.time["type"] != "flexible") {
       final start = DateTime.parse(offer.time["times"][0]);
-      final DateFormat dateFormatter = DateFormat("dd.MM.yyyy");
-      final DateFormat timeFormatter = DateFormat("hh:mm");
 
       timeWidgets = [
-        CardEvent(date: dateFormatter.format(start)),
-        CardSchedule(
-          time: "${timeFormatter.format(start)} Uhr",
+        CardDate(date: start),
+        CardTime(
+          time: formatMeetupTime(start),
         ),
       ];
     }
@@ -305,21 +303,6 @@ class CardVisibility extends StatelessWidget {
   }
 }
 
-class CardSchedule extends StatelessWidget {
-  const CardSchedule({
-    super.key,
-    required this.time,
-  });
-
-  final String time;
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      children: [const Icon(AppIcons.schedule), SmallText(text: time)],
-    );
-  }
-}
-
 class CardTimeFlexible extends StatelessWidget {
   const CardTimeFlexible({super.key});
 
@@ -338,22 +321,39 @@ class CardTimeFlexible extends StatelessWidget {
   }
 }
 
-class CardEvent extends StatelessWidget {
-  const CardEvent({
+class CardDate extends StatelessWidget {
+  const CardDate({
     super.key,
     required this.date,
   });
 
-  final String date;
+  final DateTime date;
+
   @override
   Widget build(BuildContext context) {
     return Column(
       children: [
         const Icon(AppIcons.event),
         SmallText(
-          text: date,
+          text: getDateDescription(date),
         )
       ],
+    );
+  }
+}
+
+class CardTime extends StatelessWidget {
+  const CardTime({
+    super.key,
+    required this.time,
+  });
+
+  final String time;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [const Icon(AppIcons.schedule), SmallText(text: time)],
     );
   }
 }
