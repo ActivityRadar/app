@@ -1,5 +1,8 @@
+import 'package:app/app_state.dart';
 import 'package:app/constants/constants.dart';
+import 'package:app/model/functions.dart';
 import 'package:app/model/generated.dart';
+import 'package:app/provider/activity_type.dart';
 import 'package:app/provider/meetup_manager.dart';
 import 'package:app/screens/meet_page.dart';
 import 'package:app/widgets/activityType_short.dart';
@@ -9,6 +12,7 @@ import 'package:app/widgets/meet_map.dart';
 import 'package:app/constants/design.dart';
 import 'package:flutter/material.dart';
 import 'package:latlong2/latlong.dart';
+import 'package:provider/provider.dart';
 
 class MeetCard extends StatelessWidget {
   const MeetCard({
@@ -23,6 +27,12 @@ class MeetCard extends StatelessWidget {
     var size = MediaQuery.of(context).size;
     var height = size.height;
     double width = size.width;
+    final startDateTime =
+        offer.time_ is OfferTimeSingle ? offer.time_.times[0] : DateTime.now();
+
+    final state = context.read<AppState>();
+
+    print("${state.currentUser!.id}, ${offer.userInfo.id}");
 
     return GestureDetector(
         onTap: () {
@@ -49,7 +59,12 @@ class MeetCard extends StatelessWidget {
                               borderRadius: BorderRadius.circular(AppStyle
                                   .cornerRadius), // Radius der abgerundeten Ecken
                             ),
-                            child: const MeetMap(center: LatLng(53, 12))),
+                            child: offer.location_ == null
+                                ? MeetMap(
+                                    center: toLatLng(offer.blurrInfo.center),
+                                    radius: offer.blurrInfo.radius)
+                                : MeetMap(
+                                    center: toLatLng(offer.location_!.coords))),
                       ),
                       Positioned(
                           bottom:
@@ -67,13 +82,17 @@ class MeetCard extends StatelessWidget {
                                     child: ActivityChip(
                                       type: offer.activity.length != 1
                                           ? "Multi"
-                                          : offer.activity[0],
+                                          : ActivityManager.instance
+                                              .getDisplayType(
+                                                  offer.activity[0]),
                                     ),
                                   ),
                                   Padding(
                                     padding: EdgeInsets.only(right: 12.0),
                                     child: CustomChip(
-                                      text: 'ab 14 Uhr ',
+                                      text: offer.time["type"] == "flexible"
+                                          ? "Flexible"
+                                          : "${getDateDescription(startDateTime)}, ${formatMeetupTime(startDateTime)}",
                                     ),
                                   )
                                 ],
@@ -94,7 +113,9 @@ class MeetCard extends StatelessWidget {
                                 width: 10,
                               ),
                               MediumText(
-                                text: 'Max Mustermann',
+                                text: state.currentUser!.id == offer.userInfo.id
+                                    ? "Von Dir"
+                                    : "Von ${offer.userInfo.displayName}",
                                 width: width,
                               ),
                             ]),
@@ -105,7 +126,7 @@ class MeetCard extends StatelessWidget {
                                 Padding(
                                   padding: EdgeInsets.all(12.0),
                                   child: LittleText(
-                                    text: "12h ago",
+                                    text: "Vor 12 Stunden",
                                     width: width,
                                   ),
                                 )
