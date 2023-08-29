@@ -6,34 +6,44 @@ import 'package:json_annotation/json_annotation.dart';
 
 import 'package:app/model/generated/description_with_title.dart';
 import 'package:app/model/generated/offer_visibility.dart';
-import 'package:app/model/generated/location_blurr_in.dart';
-part 'offer_in.g.dart';
+import 'package:app/model/generated/participant.dart';
+import 'package:app/model/generated/offer_creator_info.dart';
+import 'package:app/model/generated/location_blurr_out.dart';
+part 'offer_out.g.dart';
 
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
-class OfferIn {
+class OfferOut {
   final List<String> activity;
   final Map<String, dynamic> time;
   final DescriptionWithTitle description;
   final OfferVisibility visibility;
   @JsonKey(name: "visibility_radius")
   final double visibilityRadius;
-  final Map<String, dynamic> location;
+  final Map<String, dynamic>? location;
   @JsonKey(name: "participant_limits")
   final List<int> participantLimits;
-  final LocationBlurrIn blurr;
+  final List<Participant> participants;
+  final String id;
+  @JsonKey(name: "user_info")
+  final OfferCreatorInfo userInfo;
+  @JsonKey(name: "blurr_info")
+  final LocationBlurrOut blurrInfo;
 
-  OfferIn(
+  OfferOut(
       {required this.activity,
       required this.time,
       required this.description,
       required this.visibility,
       required this.visibilityRadius,
-      required this.location,
+      this.location,
       required this.participantLimits,
-      required this.blurr});
+      required this.participants,
+      required this.id,
+      required this.userInfo,
+      required this.blurrInfo});
 
-  factory OfferIn.fromJson(Map<String, dynamic> json) =>
-      _$OfferInFromJson(json);
+  factory OfferOut.fromJson(Map<String, dynamic> json) =>
+      _$OfferOutFromJson(json);
 
-  Map<String, dynamic> toJson() => _$OfferInToJson(this);
+  Map<String, dynamic> toJson() => _$OfferOutToJson(this);
 }

@@ -10,9 +10,8 @@ part 'offer_location_area.g.dart';
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
 class OfferLocationArea {
   final GeoJsonLocation coords;
-  final double radius;
 
-  OfferLocationArea({required this.coords, required this.radius});
+  OfferLocationArea({required this.coords});
 
   factory OfferLocationArea.fromJson(Map<String, dynamic> json) =>
       _$OfferLocationAreaFromJson(json);

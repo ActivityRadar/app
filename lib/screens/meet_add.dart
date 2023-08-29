@@ -1,9 +1,9 @@
 import 'package:app/constants/design.dart';
+import 'package:app/provider/meetup_manager.dart';
 import 'package:app/widgets/custom/appbar.dart';
 import 'package:app/model/functions.dart';
 import 'package:app/model/generated.dart';
 import 'package:app/provider/activity_type.dart';
-import 'package:app/provider/generated/offers_provider.dart';
 import 'package:app/screens/map.dart';
 import 'package:app/widgets/activityType_short.dart';
 import 'package:app/widgets/custom/background.dart';
@@ -13,6 +13,8 @@ import 'package:app/widgets/custom_text.dart';
 import 'package:app/widgets/custom/button.dart';
 import 'package:app/widgets/custom/textfield.dart';
 import 'package:app/widgets/gps.dart';
+import 'package:app/widgets/number_slider.dart';
+import 'package:app/widgets/radius_map.dart';
 import 'package:app/widgets/timepicker.dart';
 import 'package:flutter/material.dart';
 import 'package:latlong2/latlong.dart';
@@ -46,6 +48,10 @@ class _MeetAddScreenState extends State<MeetAddScreen> {
   ValueNotifier<RangeValues> participantNumberRange =
       ValueNotifier<RangeValues>(const RangeValues(1, 2));
   ValueNotifier<LatLng?> customLocation = ValueNotifier<LatLng?>(null);
+
+  // radius sliders
+  ValueNotifier<double> blurrRadius = ValueNotifier(2.0);
+  ValueNotifier<double> visibilityRadius = ValueNotifier(2.0);
 
   // location selection map
   final FocusedLocationNotifier locNotifier = FocusedLocationNotifier();
@@ -111,20 +117,12 @@ class _MeetAddScreenState extends State<MeetAddScreen> {
       chooseParticipantNumber,
       choosePlace,
       addDescription,
-      // chooseVisibility,
+      chooseVisibility,
       submitPage
     ];
 
     // has to be in the correct order according to the pagesFunctions list
-    final defaultSkippable = [
-      false,
-      true,
-      true,
-      false,
-      false,
-      // true,
-      false
-    ];
+    final defaultSkippable = [false, true, true, false, false, true, false];
 
     validatorNotifiers =
         defaultSkippable.map((b) => ValueNotifier<bool>(b)).toList();
@@ -454,7 +452,7 @@ class _MeetAddScreenState extends State<MeetAddScreen> {
 
     return Center(
         child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-      TitleText(text: "Für wen soll das Angebot sichtbar sein?", width: width),
+      TitleText(text: "Wem wird das Angebot angezeigt?", width: width),
       const SizedBox(
         height: 20,
       ),
@@ -473,9 +471,36 @@ class _MeetAddScreenState extends State<MeetAddScreen> {
           ],
         ),
       ),
+      TitleText(
+          text: "In welchem Radius wird das Angebot angezeigt?", width: width),
       const SizedBox(
         height: 20,
       ),
+      CustomCard(
+          child: Column(
+        children: [
+          ListeningSlider(
+              min: 0.5,
+              max: 15.0,
+              leading: const Text("Verzerrung"),
+              valueNotifier: blurrRadius,
+              textFormatter: (v) => "${v.toStringAsPrecision(2)} km"),
+          ListeningSlider(
+              min: 1.0,
+              max: 30.0,
+              leading: const Text("Sichtbarkeit"),
+              valueNotifier: visibilityRadius,
+              textFormatter: (v) => "${v.toStringAsPrecision(2)} km")
+        ],
+      )),
+      Flexible(
+          child: SizedBox(
+        width: width,
+        child: MultipleRadiusesSelectionMap(
+            notifiers: [blurrRadius, visibilityRadius],
+            center: getLocation() ?? const LatLng(52.3, 13.3),
+            colors: const [DesignColors.grey, DesignColors.blue]),
+      )),
     ]));
   }
 
@@ -502,10 +527,7 @@ class _MeetAddScreenState extends State<MeetAddScreen> {
     }
 
     final range = participantNumberRange.value;
-    final loc = locNotifier.info?.location ??
-        (customLocation.value == null
-            ? null
-            : toLongLat(customLocation.value!));
+    final loc = getLocation();
     final rows = [
       summaryRow(
           "Tätigkeit(en)",
@@ -522,8 +544,13 @@ class _MeetAddScreenState extends State<MeetAddScreen> {
           range.start == range.end
               ? "${range.start.toInt()}"
               : "${range.start.toInt()} - ${range.end.toInt()}"),
-      summaryRow("Standort", loc == null ? "" : formatGeoLocation(loc)),
+      summaryRow("Standort", loc == null ? "" : loc.toString()),
       summaryRow("Sichtbarkeit", visibilityFriends.value ? "Freunde" : "Alle"),
+      summaryRow("Sichtbarkeitsradius",
+          "${visibilityRadius.value.toStringAsPrecision(2)} km"),
+      summaryRow("Verzerrungsradius",
+          "${blurrRadius.value.toStringAsPrecision(2)} km"),
+      summaryRow("Titel", titleController.text, spacer: true),
       summaryRow("Beschreibung", descriptionController.text, spacer: true),
     ];
 
@@ -547,38 +574,49 @@ class _MeetAddScreenState extends State<MeetAddScreen> {
     ]));
   }
 
-  Future<String> submitMeetingOffer() async {
-    late final Map<String, dynamic> location;
-    late final Map<String, dynamic> time;
+  Future<void> submitMeetingOffer() async {
+    var location;
+    var time;
 
     if (locNotifier.changedBy == FocusChangeReason.markerTap) {
-      location = {
-        "coords": locNotifier.info!.location.toJson(),
-        "id": locNotifier.info!.id.toString()
-      };
+      location = OfferLocationConnected(
+          coords: locNotifier.info!.location, id: locNotifier.info!.id);
     } else {
-      final coords = toLongLat(customLocation.value!).toJson();
-      location = {"coords": coords, "radius": 2000};
+      final coords = toLongLat(customLocation.value!);
+      location = OfferLocationArea(coords: coords);
     }
 
     if (timeFlexible.value) {
-      time = OfferTimeFlexible(type: "flexible").toJson();
+      time = OfferTimeFlexible(type: "flexible");
     } else {
       time = OfferTimeSingle(type: "single", times: [
         dateTimeFrom.value,
         dateTimeUntil.value,
-      ]).toJson();
+      ]);
     }
 
+    final pLimits = participantNumberRange.value;
+
     final offer = OfferIn(
-        location: location,
-        activity: activities.value,
-        time: time,
-        description: descriptionController.text,
+        location: {}, // this is going to be handled by OfferInParsed
+        activity: ActivityManager.instance.getBackendTypes(activities.value),
+        time: {}, // this is going to be handled by OfferInParsed
+        visibilityRadius: visibilityRadius.value,
+        blurr: LocationBlurrIn(radius: blurrRadius.value),
+        description: DescriptionWithTitle(
+            title: titleController.text, text: descriptionController.text),
+        participantLimits: [pLimits.start.toInt(), pLimits.end.toInt()],
         visibility: OfferVisibility.public);
 
-    final response = await OffersProvider.createOffer(data: offer);
-    return response.offerId;
+    await MeetupManager.instance.createMeetup(
+        OfferInParsed(offer: offer, location_: location, time_: time));
+  }
+
+  LatLng? getLocation() {
+    final loc = locNotifier.changedBy == FocusChangeReason.markerTap
+        ? toLatLng(locNotifier.info!.location)
+        : (customLocation.value == null ? null : customLocation.value!);
+    return loc;
   }
 }
 

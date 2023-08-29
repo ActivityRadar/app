@@ -1,20 +1,15 @@
+import 'package:app/app_state.dart';
 import 'package:app/constants/design.dart';
-
-import 'package:app/screens/auth.dart';
 import 'package:app/screens/more_meetups_screen.dart';
-import 'package:app/screens/meet_page.dart';
+import 'package:app/provider/meetup_manager.dart';
+import 'package:app/screens/meet_add.dart';
 import 'package:app/screens/meet_search_page.dart';
-import 'package:app/screens/settings.dart';
-import 'package:app/screens/widgets_page.dart';
 import 'package:app/widgets/custom/background.dart';
-import 'package:app/widgets/custom/button.dart';
 import 'package:app/widgets/custom/card.dart';
 import 'package:app/widgets/custom_text.dart';
 import 'package:app/widgets/meet_card.dart';
-import 'package:app/widgets/news_card.dart';
-import 'package:app/widgets/profilslieder.dart';
-import 'package:app/widgets/search_activity_slieder.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class CommunityScreen extends StatelessWidget {
   const CommunityScreen({Key? key}) : super(key: key);
@@ -26,6 +21,16 @@ class CommunityScreen extends StatelessWidget {
     var size = MediaQuery.of(context).size;
 
     double width = size.width;
+    Future<List<OfferParsed>> userMeetups =
+        MeetupManager.instance.getUserMeetups(forceFetch: true);
+
+    final state = context.read<AppState>();
+    if (state.userPosition != null) {
+      MeetupManager.instance.currentPosition = state.userPosition!;
+    }
+
+    Future<List<OfferParsed>> availableMeetups =
+        MeetupManager.instance.getAvailableMeetups(forceFetch: true);
 
     return BackgroundSVG(
       children: CustomScrollView(slivers: <Widget>[
@@ -91,7 +96,7 @@ class CommunityScreen extends StatelessWidget {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  TitleText(text: "Dein Meet Statisch", width: width),
+                  TitleText(text: "Dein Meet Statistik", width: width),
                   TextButton(onPressed: () {}, child: Text('Profil'))
                 ],
               ),
@@ -151,17 +156,15 @@ class CommunityScreen extends StatelessWidget {
                           child: Text('mehr Anzeigen'))
                     ],
                   ),
-                  MeetList(
-                    width: width,
-                    height: 40,
-                  ),
+                  meetCardLoader(userMeetups,
+                      emptyMessage: "Du hast derzeit keine offenen Meetups!"),
                   SizedBox(
                     height: 30,
                   ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      TitleText(text: "Meet's in deine Nähe", width: width),
+                      TitleText(text: "Meet's in deiner Nähe", width: width),
                       TextButton(
                           onPressed: () {},
                           child: TextButton(
@@ -178,10 +181,11 @@ class CommunityScreen extends StatelessWidget {
                               child: Text('mehr Anzeigen')))
                     ],
                   ),
-                  MeetList(
-                    width: width,
-                    height: 40,
-                  ),
+                  meetCardLoader(availableMeetups,
+                      emptyMessage:
+                          "In deiner Nähe wurden keine offenen Meetups gefunden!",
+                      errorMessage:
+                          "Aktiviere deinen Standort, um nach Angeboten zu suchen!"),
                   SizedBox(
                     height: 30,
                   ),
@@ -200,6 +204,49 @@ class CommunityScreen extends StatelessWidget {
           ]),
         )
       ]),
+    );
+  }
+
+  Widget emptyMeetupsContainer(BuildContext context, String message) {
+    return GestureDetector(
+      onTap: () {
+        Navigator.push(context,
+            MaterialPageRoute(builder: (context) => const MeetAddScreen()));
+      },
+      child: ListTile(
+          title: Text(message),
+          subtitle: Text("Erstelle ein neues Angebot...")),
+    );
+  }
+
+  Widget meetCardLoader(Future<List<OfferParsed>> future,
+      {required String emptyMessage, String? errorMessage}) {
+    return FutureBuilder(
+      future: future,
+      builder:
+          (BuildContext context, AsyncSnapshot<List<OfferParsed>> snapshot) {
+        if (snapshot.hasData) {
+          if (snapshot.data!.isEmpty) {
+            return emptyMeetupsContainer(context, emptyMessage);
+          }
+          return Column(
+              children: snapshot.data!
+                  .take(2) // only show the first two items
+                  .map((offer) => MeetCard(offer: offer))
+                  .toList());
+        }
+
+        if (snapshot.hasError) {
+          print(snapshot.error);
+          return Text(errorMessage ?? "Fehler beim Laden der Meetups!");
+        }
+
+        if (!snapshot.hasData) {
+          return CircularProgressIndicator();
+        }
+
+        return emptyMeetupsContainer(context, emptyMessage);
+      },
     );
   }
 }

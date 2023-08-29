@@ -1,4 +1,5 @@
 import 'package:app/screens/map.dart';
+import 'package:app/util/map.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
@@ -7,7 +8,14 @@ import 'package:app/constants/design.dart';
 class MeetMap extends StatefulWidget {
   const MeetMap({
     super.key,
+    required this.center,
+    this.radius = 0.3,
+    this.circleScale = 150,
   });
+
+  final LatLng center;
+  final double radius; // in km
+  final double circleScale;
 
   @override
   State<MeetMap> createState() {
@@ -16,28 +24,29 @@ class MeetMap extends StatefulWidget {
 }
 
 class _MeetMapState extends State<MeetMap> {
-  LatLngBounds bounds =
-      LatLngBounds(const LatLng(52.37, 12.74), const LatLng(50, 13.04));
   final MapController mapController = MapController();
 
   @override
   Widget build(BuildContext context) {
-    const LatLng center = LatLng(52.520008, 13.404954);
     //TODO Circlemarker or Circle
     final circleMarkers = <CircleMarker>[
       CircleMarker(
-        point: center,
+        point: widget.center,
         color: DesignColors.blue.withOpacity(0.5),
         borderStrokeWidth: 1,
         borderColor: Colors.black12,
         useRadiusInMeter: true,
-        radius: 200, // 2000 meters | 2 km
+        radius: widget.radius * 1000, // radius in meters
       ),
     ];
     return Stack(children: [
       IgnorePointer(
         child: FlutterMap(
-          options: MapOptions(center: center, zoom: 10),
+          // TODO: dynamic zoom (depending on radius)
+          options: MapOptions(
+              center: widget.center,
+              zoom: getZoomLevel(widget.radius * 1000,
+                  scale: widget.circleScale)),
           children: [
             createCachedTileLayer(),
             CircleLayer(circles: circleMarkers),

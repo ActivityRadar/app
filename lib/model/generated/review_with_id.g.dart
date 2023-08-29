@@ -8,8 +8,8 @@ part of 'review_with_id.dart';
 
 ReviewWithId _$ReviewWithIdFromJson(Map<String, dynamic> json) => ReviewWithId(
       locationId: json['location_id'] as String,
-      title: json['title'] as String,
-      text: json['text'] as String,
+      description: DescriptionWithTitle.fromJson(
+          json['description'] as Map<String, dynamic>),
       overallRating: (json['overall_rating'] as num).toDouble(),
       details: json['details'] as Map<String, dynamic>,
       creationDate: DateTime.parse(json['creation_date'] as String),
@@ -20,8 +20,7 @@ ReviewWithId _$ReviewWithIdFromJson(Map<String, dynamic> json) => ReviewWithId(
 Map<String, dynamic> _$ReviewWithIdToJson(ReviewWithId instance) =>
     <String, dynamic>{
       'location_id': instance.locationId,
-      'title': instance.title,
-      'text': instance.text,
+      'description': instance.description.toJson(),
       'overall_rating': instance.overallRating,
       'details': instance.details,
       'creation_date': instance.creationDate.toIso8601String(),

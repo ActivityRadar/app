@@ -36,12 +36,12 @@ class NewsCard extends StatelessWidget {
     double width = size.width;
     return GestureDetector(
         onTap: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => const MeetPage(),
-            ),
-          );
+          // Navigator.push(
+          //   context,
+          //   MaterialPageRoute(
+          //     builder: (context) => const MeetPage(),
+          //   ),
+          // );
         },
         child: SizedBox(
             width: width,

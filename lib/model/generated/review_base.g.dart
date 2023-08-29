@@ -8,8 +8,8 @@ part of 'review_base.dart';
 
 ReviewBase _$ReviewBaseFromJson(Map<String, dynamic> json) => ReviewBase(
       locationId: json['location_id'] as String,
-      title: json['title'] as String,
-      text: json['text'] as String,
+      description: DescriptionWithTitle.fromJson(
+          json['description'] as Map<String, dynamic>),
       overallRating: (json['overall_rating'] as num).toDouble(),
       details: json['details'] as Map<String, dynamic>,
     );
@@ -17,8 +17,7 @@ ReviewBase _$ReviewBaseFromJson(Map<String, dynamic> json) => ReviewBase(
 Map<String, dynamic> _$ReviewBaseToJson(ReviewBase instance) =>
     <String, dynamic>{
       'location_id': instance.locationId,
-      'title': instance.title,
-      'text': instance.text,
+      'description': instance.description.toJson(),
       'overall_rating': instance.overallRating,
       'details': instance.details,
     };

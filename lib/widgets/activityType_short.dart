@@ -41,13 +41,10 @@ class ActivityDetails extends StatelessWidget {
 
 class ActivityChip extends StatelessWidget {
   const ActivityChip(
-      {super.key,
-      required this.type,
-      required this.onPressed,
-      this.backgroundColor});
+      {super.key, required this.type, this.onPressed, this.backgroundColor});
 
   final String type;
-  final VoidCallback onPressed;
+  final VoidCallback? onPressed;
   final Color? backgroundColor;
 
   @override
