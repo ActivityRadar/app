@@ -4,6 +4,7 @@ import 'package:app/widgets/custom/background.dart';
 import 'package:app/widgets/custom/button.dart';
 import 'package:app/widgets/custom_text.dart';
 import 'package:app/widgets/custom/card.dart';
+import 'package:app/widgets/number_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:flutter_map_animations/flutter_map_animations.dart';
@@ -144,25 +145,10 @@ class _ExpandableTileState extends State<ExpandableTile> {
           ),
         ),
         if (isRadius) ...[
-          ValueListenableBuilder(
-              valueListenable: _currentSliderValue,
-              builder: (context, value, child) {
-                return ListTile(
-                    title: Row(
-                  children: [
-                    Slider(
-                      value: value,
-                      max: 25,
-                      divisions: 25,
-                      label: value.round().toString(),
-                      onChanged: (double value_) {
-                        _currentSliderValue.value = value_;
-                      },
-                    ),
-                    CustomText(text: "${value.toStringAsFixed(0)} km")
-                  ],
-                ));
-              }),
+          ListeningSlider(
+            valueNotifier: _currentSliderValue,
+            textFormatter: (v) => "${v.toStringAsFixed(0)} km",
+          ),
           SizedBox(
               height: 300,
               child: RadiusSelectionMap(
