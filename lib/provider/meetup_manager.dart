@@ -16,7 +16,9 @@ class OfferParsed extends OfferOut {
             participants: offer.participants,
             id: offer.id,
             userInfo: offer.userInfo,
-            blurrInfo: offer.blurrInfo);
+            blurrInfo: offer.blurrInfo,
+            status: offer.status,
+            creationDate: offer.creationDate);
 
   factory OfferParsed.fromGenerated(OfferOut offer) {
     final time = offer.time["type"] == "flexible"
