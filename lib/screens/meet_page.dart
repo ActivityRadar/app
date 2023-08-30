@@ -73,7 +73,7 @@ class MeetPage extends StatelessWidget {
                 ),
               ),
             ),
-            actions: const [MeetPopupMenuCard()],
+            actions: [MeetPopupMenuCard(isHost: isHost)],
             iconTheme: const IconThemeData(
               color: DesignColors.naviColor,
             )),
@@ -359,33 +359,34 @@ class CardTime extends StatelessWidget {
   }
 }
 
-class MeetPopupMenuCard extends StatefulWidget {
-  const MeetPopupMenuCard({super.key});
+class MeetPopupMenuCard extends StatelessWidget {
+  const MeetPopupMenuCard({super.key, required this.isHost});
 
-  @override
-  State<MeetPopupMenuCard> createState() => _MeetPopupMenuCardState();
-}
-
-class _MeetPopupMenuCardState extends State<MeetPopupMenuCard> {
-  ReviewPopupMenuItem? selectedMenu;
+  final bool isHost;
 
   @override
   Widget build(BuildContext context) {
-    return PopupMenuButton<ReviewPopupMenuItem>(
-      initialValue: selectedMenu,
-      // Callback that sets the selected popup menu item.
-      onSelected: (ReviewPopupMenuItem item) {
-        setState(() {
-          selectedMenu = item;
-        });
-      },
-      itemBuilder: (BuildContext context) =>
-          <PopupMenuEntry<ReviewPopupMenuItem>>[
-        PopupMenuItem<ReviewPopupMenuItem>(
-          value: ReviewPopupMenuItem.report,
-          child: const SystemText(text: 'Report as inappropriate'),
-          onTap: () => _showDialog(context),
-        ),
+    return PopupMenuButton(
+      itemBuilder: (BuildContext context) => <PopupMenuEntry>[
+        if (!isHost)
+          PopupMenuItem(
+            child: const SystemText(text: 'Report as inappropriate'),
+            onTap: () => _showDialog(context),
+          ),
+        if (isHost) ...[
+          PopupMenuItem(
+            child: const SystemText(text: 'Angebot löschen'),
+            onTap: () => {},
+          ),
+          PopupMenuItem(
+            child: const SystemText(text: 'Angebot schliessen'),
+            onTap: () => {},
+          ),
+          PopupMenuItem(
+            child: const SystemText(text: 'Angebot öffnen'),
+            onTap: () => {},
+          )
+        ],
       ],
     );
   }
