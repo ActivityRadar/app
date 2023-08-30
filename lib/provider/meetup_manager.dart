@@ -110,8 +110,6 @@ class MeetupManager {
       _userMeetups.add(m.id);
     }
 
-    print(_userMeetups.length);
-
     return _userMeetups.map((id) => _storage[id]!).toList();
   }
 
