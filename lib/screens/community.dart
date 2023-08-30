@@ -105,8 +105,10 @@ class CommunityScreen extends StatelessWidget {
               padding: const EdgeInsets.only(
                 left: 9.0,
               ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
+              child: Wrap(
+                alignment:
+                    WrapAlignment.center, // Ausrichtung am Anfang der Zeile
+                spacing: 8.0,
                 children: [
                   MeetStatistics(
                     value: "5",
@@ -123,11 +125,6 @@ class CommunityScreen extends StatelessWidget {
                     title: "Mit Freunden",
                     onTap: () {},
                   ),
-                  MeetStatistics(
-                    value: "4",
-                    title: "Sportarten",
-                    onTap: () {},
-                  )
                 ],
               ),
             ),
@@ -264,20 +261,23 @@ class MeetStatistics extends StatelessWidget {
   final VoidCallback onTap;
   @override
   Widget build(BuildContext context) {
+    var size = MediaQuery.of(context).size;
+    double height = size.height;
+    double width = size.width;
     return GestureDetector(
       onTap: onTap,
       child: SizedBox(
-        width: 100,
-        height: 90,
+        width: width / 3.5,
+        height: height / 10,
         child: CustomCard(
             child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
             SizedBox(
-              height: 15,
+              height: ((height / 10) / 5),
             ),
             SizedBox(
-              height: 20,
+              height: ((height / 10) / 4),
               child: Align(
                 alignment: Alignment.center,
                 child: Text(
@@ -290,7 +290,7 @@ class MeetStatistics extends StatelessWidget {
               ),
             ),
             SizedBox(
-              height: 10,
+              height: ((height / 10) / 10),
             ),
             Align(
               alignment: Alignment.bottomCenter,
