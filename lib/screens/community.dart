@@ -214,7 +214,8 @@ class CommunityScreen extends StatelessWidget {
         subtitle: Text(
           "Erstelle ein neues Angebot...",
         ),
-        trailing: ButtonArrow(
+        trailing: ButtonCircle(
+          icon: AppIcons.arrowForward,
           onPressed: () {
             Navigator.push(context,
                 MaterialPageRoute(builder: (context) => const MeetAddScreen()));

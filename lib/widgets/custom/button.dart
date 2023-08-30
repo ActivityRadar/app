@@ -65,99 +65,20 @@ class CustomElevatedButton extends StatelessWidget {
   }
 }
 
-class ButtonBack extends StatelessWidget {
-  const ButtonBack({
+class ButtonCircle extends StatelessWidget {
+  const ButtonCircle({
     super.key,
     required this.onPressed,
+    required this.icon,
   });
-
+  final IconData icon;
   final VoidCallback onPressed;
 
   @override
   Widget build(BuildContext context) {
     return IconButton(
       icon: CircleAvatar(
-        child: Icon(AppIcons.arrowBack),
-        backgroundColor: DesignColors.naviColor,
-      ),
-      onPressed: onPressed,
-    );
-  }
-}
-
-class ButtonMenu extends StatelessWidget {
-  const ButtonMenu({
-    super.key,
-    required this.onPressed,
-  });
-
-  final VoidCallback onPressed;
-
-  @override
-  Widget build(BuildContext context) {
-    return IconButton(
-      icon: CircleAvatar(
-        child: Icon(AppIcons.menu),
-        backgroundColor: DesignColors.naviColor,
-      ),
-      onPressed: onPressed,
-    );
-  }
-}
-
-class ButtonCancel extends StatelessWidget {
-  const ButtonCancel({
-    super.key,
-    required this.onPressed,
-  });
-
-  final VoidCallback onPressed;
-
-  @override
-  Widget build(BuildContext context) {
-    return IconButton(
-      icon: CircleAvatar(
-        child: Icon(AppIcons.close),
-        backgroundColor: DesignColors.naviColor,
-      ),
-      onPressed: onPressed,
-    );
-  }
-}
-
-class ButtonDone extends StatelessWidget {
-  const ButtonDone({
-    super.key,
-    required this.onPressed,
-  });
-
-  final VoidCallback onPressed;
-
-  @override
-  Widget build(BuildContext context) {
-    return IconButton(
-      icon: CircleAvatar(
-        child: Icon(AppIcons.done),
-        backgroundColor: DesignColors.naviColor,
-      ),
-      onPressed: onPressed,
-    );
-  }
-}
-
-class ButtonArrow extends StatelessWidget {
-  const ButtonArrow({
-    super.key,
-    required this.onPressed,
-  });
-
-  final VoidCallback onPressed;
-
-  @override
-  Widget build(BuildContext context) {
-    return IconButton(
-      icon: CircleAvatar(
-        child: Icon(AppIcons.arrowForward),
+        child: Icon(icon),
         backgroundColor: DesignColors.naviColor,
       ),
       onPressed: onPressed,
