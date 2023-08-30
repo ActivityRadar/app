@@ -128,7 +128,8 @@ class MeetCard extends StatelessWidget {
                                 Padding(
                                   padding: EdgeInsets.all(12.0),
                                   child: LittleText(
-                                    text: "Vor 12 Stunden",
+                                    text:
+                                        formatCreationDate(offer.creationDate),
                                     width: width,
                                   ),
                                 )
