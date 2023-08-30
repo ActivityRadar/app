@@ -6,7 +6,7 @@ AppBar CustomAppBar(BuildContext context, VoidCallback onPressed) {
   return AppBar(
       elevation: 0.0,
       backgroundColor: DesignColors.transparent,
-      leading: ButtonCancel(onPressed: onPressed));
+      leading: ButtonCircle(icon: AppIcons.close, onPressed: onPressed));
 }
 
 AppBar CustomWithActionAppBar(BuildContext context,
@@ -14,7 +14,7 @@ AppBar CustomWithActionAppBar(BuildContext context,
   return AppBar(
     elevation: 0.0,
     backgroundColor: DesignColors.transparent,
-    leading: ButtonCancel(onPressed: onPressedleading),
-    actions: [ButtonDone(onPressed: onPressedactions)],
+    leading: ButtonCircle(icon: AppIcons.close, onPressed: onPressedleading),
+    actions: [ButtonCircle(icon: AppIcons.done, onPressed: onPressedactions)],
   );
 }

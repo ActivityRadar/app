@@ -1,3 +1,4 @@
+import 'package:app/constants/design.dart';
 import 'package:app/screens/widgets_page.dart';
 import 'package:app/widgets/custom/background.dart';
 import 'package:app/widgets/custom/button.dart';
@@ -20,7 +21,8 @@ class HomeScreen extends StatelessWidget {
             Row(
               children: <Widget>[
                 CustomText(text: "Hallo"),
-                ButtonBack(
+                ButtonCircle(
+                  icon: AppIcons.arrowBack,
                   onPressed: () {
                     Navigator.push(
                       context,

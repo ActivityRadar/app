@@ -55,13 +55,16 @@ class ProfileBar extends StatelessWidget {
               height: 200, // Höhe der Karte
               // child: MeetCard(),
             ),
-            ButtonCancel(
+            ButtonCircle(
+              icon: AppIcons.close,
               onPressed: () {},
             ),
-            ButtonMenu(
+            ButtonCircle(
+              icon: AppIcons.menu,
               onPressed: () {},
             ),
-            ButtonBack(
+            ButtonCircle(
+              icon: AppIcons.arrowBack,
               onPressed: () {},
             ),
             CustomElevatedButton(
@@ -93,15 +96,18 @@ class ProfileBar extends StatelessWidget {
             Divider(),
             ButtonBookMark(),
             SizedBox(height: x),
-            ButtonCancel(
+            ButtonCircle(
+              icon: AppIcons.close,
               onPressed: () {},
             ),
             SizedBox(height: x),
-            ButtonMenu(
+            ButtonCircle(
+              icon: AppIcons.menu,
               onPressed: () {},
             ),
             SizedBox(height: x),
-            ButtonBack(
+            ButtonCircle(
+              icon: AppIcons.arrowBack,
               onPressed: () {},
             ),
             SizedBox(height: x),

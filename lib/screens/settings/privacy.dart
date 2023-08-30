@@ -34,7 +34,8 @@ class _PrivacySettingPageState extends State<PrivacySettingPage> {
             backgroundColor: DesignColors.transparent,
             title: const CustomText(text: "Privacy"),
             centerTitle: true,
-            leading: ButtonBack(
+            leading: ButtonCircle(
+              icon: AppIcons.arrowBack,
               onPressed: () {
                 Navigator.pop(context);
               },
