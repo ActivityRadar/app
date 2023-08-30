@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:app/constants/design.dart';
 import 'package:app/provider/meetup_manager.dart';
 import 'package:app/widgets/custom/appbar.dart';
@@ -479,12 +481,20 @@ class _MeetAddScreenState extends State<MeetAddScreen> {
       CustomCard(
           child: Column(
         children: [
-          ListeningSlider(
-              min: 0.5,
-              max: 15.0,
-              leading: const Text("Verzerrung"),
-              valueNotifier: blurrRadius,
-              textFormatter: (v) => "${v.toStringAsPrecision(2)} km"),
+          ValueListenableBuilder(
+              valueListenable: visibilityRadius,
+              builder: (context, value, child) {
+                // we have to set the blurr radius to at most the visibility radius here
+                // to avoid an out of range error in the slider widget
+                blurrRadius.value =
+                    min(value, blurrRadius.value).floorToDouble();
+                return ListeningSlider(
+                    min: 0.5,
+                    max: value,
+                    leading: const Text("Verzerrung"),
+                    valueNotifier: blurrRadius,
+                    textFormatter: (v) => "${v.toStringAsPrecision(2)} km");
+              }),
           ListeningSlider(
               min: 1.0,
               max: 30.0,
