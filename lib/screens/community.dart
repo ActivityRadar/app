@@ -145,8 +145,9 @@ class CommunityScreen extends StatelessWidget {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (context) =>
-                                    MeetUpMoreScreen(title: "Deine Meet Up's"),
+                                builder: (context) => MeetUpMoreScreen(
+                                    title: "Deine Meet Up's",
+                                    participating: true),
                               ),
                             );
                           },
@@ -171,7 +172,8 @@ class CommunityScreen extends StatelessWidget {
                                   MaterialPageRoute(
                                     builder: (context) =>
                                         const MeetUpMoreScreen(
-                                            title: "Meet's in deine Nähe"),
+                                            title: "Meet's in deine Nähe",
+                                            participating: false),
                                   ),
                                 );
                               },

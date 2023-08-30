@@ -1,17 +1,28 @@
 import 'package:app/constants/design.dart';
+import 'package:app/provider/meetup_manager.dart';
 import 'package:app/widgets/custom/background.dart';
+import 'package:app/widgets/custom/card.dart';
+import 'package:app/widgets/custom_text.dart';
+import 'package:app/widgets/meet_card.dart';
 import 'package:flutter/material.dart';
 
 class MeetUpMoreScreen extends StatelessWidget {
   const MeetUpMoreScreen({
     Key? key,
     required this.title,
+    required this.participating,
   }) : super(key: key);
 
   final String title;
+  final bool participating;
+
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
+
+    final Future<List<OfferParsed>> meetups = participating
+        ? MeetupManager.instance.getUserMeetups()
+        : MeetupManager.instance.getAvailableMeetups();
 
     double width = size.width;
 
@@ -42,19 +53,33 @@ class MeetUpMoreScreen extends StatelessWidget {
             const SizedBox(
               height: 20,
             ),
-            const Padding(
+            Padding(
               padding: EdgeInsets.symmetric(
                 horizontal: 9.0,
               ),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  //inhalt
-                  SizedBox(
-                    height: 30,
-                  ),
-                ],
+              child: FutureBuilder(
+                future: meetups,
+                builder: (BuildContext context, AsyncSnapshot snapshot) {
+                  var children;
+                  if (snapshot.hasData) {
+                    children = snapshot.data!
+                        .map<Widget>((m) => MeetCard(offer: m))
+                        .toList();
+                  } else if (snapshot.hasError) {
+                    children = [
+                      CustomCard(
+                          child: TitleText(
+                              text: "Error loading items!", width: width))
+                    ];
+                  } else {
+                    children = [const CircularProgressIndicator()];
+                  }
+
+                  return Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: children);
+                },
               ),
             ),
           ]),
