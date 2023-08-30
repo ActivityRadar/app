@@ -91,6 +91,7 @@ class AppIcons {
   static const IconData bookmark = Icons.bookmark;
   static const IconData edit = Icons.edit;
   static const IconData arrowBack = Icons.arrow_back;
+  static const IconData arrowForward = Icons.arrow_forward;
   static const IconData done = Icons.done;
   static const IconData morevert = Icons.more_vert;
   static Widget chat = SvgPicture.asset(

@@ -5,6 +5,7 @@ import 'package:app/provider/meetup_manager.dart';
 import 'package:app/screens/meet_add.dart';
 import 'package:app/screens/meet_search_page.dart';
 import 'package:app/widgets/custom/background.dart';
+import 'package:app/widgets/custom/button.dart';
 import 'package:app/widgets/custom/card.dart';
 import 'package:app/widgets/custom_text.dart';
 import 'package:app/widgets/meet_card.dart';
@@ -207,14 +208,19 @@ class CommunityScreen extends StatelessWidget {
   }
 
   Widget emptyMeetupsContainer(BuildContext context, String message) {
-    return GestureDetector(
-      onTap: () {
-        Navigator.push(context,
-            MaterialPageRoute(builder: (context) => const MeetAddScreen()));
-      },
+    return Card(
       child: ListTile(
-          title: Text(message),
-          subtitle: Text("Erstelle ein neues Angebot...")),
+        title: Text(message),
+        subtitle: Text(
+          "Erstelle ein neues Angebot...",
+        ),
+        trailing: ButtonArrow(
+          onPressed: () {
+            Navigator.push(context,
+                MaterialPageRoute(builder: (context) => const MeetAddScreen()));
+          },
+        ),
+      ),
     );
   }
 
