@@ -21,11 +21,13 @@ OfferOut _$OfferOutFromJson(Map<String, dynamic> json) => OfferOut(
       participants: (json['participants'] as List<dynamic>)
           .map((e) => Participant.fromJson(e as Map<String, dynamic>))
           .toList(),
-      id: json['id'] as String,
+      creationDate: DateTime.parse(json['creation_date'] as String),
       userInfo:
           OfferCreatorInfo.fromJson(json['user_info'] as Map<String, dynamic>),
       blurrInfo:
           LocationBlurrOut.fromJson(json['blurr_info'] as Map<String, dynamic>),
+      status: $enumDecode(_$OfferStatusEnumMap, json['status']),
+      id: json['id'] as String,
     );
 
 Map<String, dynamic> _$OfferOutToJson(OfferOut instance) {
@@ -46,12 +48,20 @@ Map<String, dynamic> _$OfferOutToJson(OfferOut instance) {
   writeNotNull('location', instance.location);
   val['participant_limits'] = instance.participantLimits;
   val['participants'] = instance.participants.map((e) => e.toJson()).toList();
-  val['id'] = instance.id;
+  val['creation_date'] = instance.creationDate.toIso8601String();
   val['user_info'] = instance.userInfo.toJson();
   val['blurr_info'] = instance.blurrInfo.toJson();
+  val['status'] = _$OfferStatusEnumMap[instance.status]!;
+  val['id'] = instance.id;
   return val;
 }
 
 const _$OfferVisibilityEnumMap = {
   OfferVisibility.public: 'public',
+};
+
+const _$OfferStatusEnumMap = {
+  OfferStatus.open: 'open',
+  OfferStatus.closed: 'closed',
+  OfferStatus.timeout: 'timeout',
 };

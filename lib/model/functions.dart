@@ -30,32 +30,65 @@ String getTitle(LocationDetailedApi info) {
   }
 }
 
-String getDateDescription(DateTime date) {
-  final today = DateTime.now();
-  if (date.isAfter(today.add(const Duration(days: 7)))) {
+String getDateDescription(DateTime startDate) {
+  final now = DateTime.now();
+  if (startDate.isAfter(now.add(const Duration(days: 7)))) {
     final formatter = DateFormat("dd.MM.yyyy");
-    return formatter.format(date);
+    return formatter.format(startDate);
   }
 
-  final todayDate = DateTime(today.year, today.month, today.day);
-  final dateDate = DateTime(date.year, date.month, date.day);
+  final today = DateTime(now.year, now.month, now.day);
+  final dateDate = DateTime(startDate.year, startDate.month, startDate.day);
 
-  var days = todayDate.difference(dateDate).inDays;
-  switch (days) {
-    case 0:
-      return "Heute";
-    case 1:
-      return "Morgen";
-    default:
-      return [
-        "Montag",
-        "Dienstag",
-        "Mittwoch",
-        "Donnerstag",
-        "Freitag",
-        "Samstag",
-        "Sonntag"
-      ][date.weekday - 1];
+  var days = today.difference(dateDate).inDays;
+  if (!today.isAfter(dateDate)) {
+    switch (days) {
+      case 0:
+        return "Heute";
+      case 1:
+        return "Morgen";
+      default:
+        return [
+          "Montag",
+          "Dienstag",
+          "Mittwoch",
+          "Donnerstag",
+          "Freitag",
+          "Samstag",
+          "Sonntag"
+        ][startDate.weekday - 1];
+    }
+  } else {
+    switch (days) {
+      case 1:
+        return "Gestern";
+      default:
+        return "Vor $days Tagen";
+    }
+  }
+}
+
+String formatCreationDate(DateTime date) {
+  final now = DateTime.now();
+  if (now.isBefore(date)) {
+    throw Exception("Creation seems to lie in the future! ($date)");
+  }
+
+  Duration difference = now.difference(date);
+  final formatter = DateFormat('yyyy-MM-dd');
+  Duration dayDifference = DateTime.parse(formatter.format(now))
+      .difference(DateTime.parse(formatter.format(date)));
+
+  if (dayDifference.inDays == 1) {
+    return "Gestern erstellt";
+  } else if (dayDifference.inDays > 1) {
+    return "Vor ${dayDifference.inDays} Tagen erstellt";
+  } else if (difference.inHours > 0) {
+    return "Vor ${difference.inHours} Stunden erstellt";
+  } else if (difference.inMinutes > 10) {
+    return "Vor ${difference.inMinutes} Minuten erstellt";
+  } else {
+    return "Vor kurzem erstellt";
   }
 }
 

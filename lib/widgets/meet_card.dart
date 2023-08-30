@@ -11,7 +11,6 @@ import 'package:app/widgets/custom_text.dart';
 import 'package:app/widgets/meet_map.dart';
 import 'package:app/constants/design.dart';
 import 'package:flutter/material.dart';
-import 'package:latlong2/latlong.dart';
 import 'package:provider/provider.dart';
 
 class MeetCard extends StatelessWidget {
@@ -31,8 +30,6 @@ class MeetCard extends StatelessWidget {
         offer.time_ is OfferTimeSingle ? offer.time_.times[0] : DateTime.now();
 
     final state = context.read<AppState>();
-
-    print("${state.currentUser!.id}, ${offer.userInfo.id}");
 
     return GestureDetector(
         onTap: () {
@@ -128,7 +125,8 @@ class MeetCard extends StatelessWidget {
                                 Padding(
                                   padding: EdgeInsets.all(12.0),
                                   child: LittleText(
-                                    text: "Vor 12 Stunden",
+                                    text:
+                                        formatCreationDate(offer.creationDate),
                                     width: width,
                                   ),
                                 )

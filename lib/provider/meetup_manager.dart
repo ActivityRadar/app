@@ -16,7 +16,9 @@ class OfferParsed extends OfferOut {
             participants: offer.participants,
             id: offer.id,
             userInfo: offer.userInfo,
-            blurrInfo: offer.blurrInfo);
+            blurrInfo: offer.blurrInfo,
+            status: offer.status,
+            creationDate: offer.creationDate);
 
   factory OfferParsed.fromGenerated(OfferOut offer) {
     final time = offer.time["type"] == "flexible"
@@ -107,8 +109,6 @@ class MeetupManager {
       _storage[m.id] = OfferParsed.fromGenerated(m);
       _userMeetups.add(m.id);
     }
-
-    print(_userMeetups.length);
 
     return _userMeetups.map((id) => _storage[id]!).toList();
   }

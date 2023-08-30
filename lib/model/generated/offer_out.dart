@@ -9,6 +9,7 @@ import 'package:app/model/generated/offer_visibility.dart';
 import 'package:app/model/generated/participant.dart';
 import 'package:app/model/generated/offer_creator_info.dart';
 import 'package:app/model/generated/location_blurr_out.dart';
+import 'package:app/model/generated/offer_status.dart';
 part 'offer_out.g.dart';
 
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
@@ -23,11 +24,14 @@ class OfferOut {
   @JsonKey(name: "participant_limits")
   final List<int> participantLimits;
   final List<Participant> participants;
-  final String id;
+  @JsonKey(name: "creation_date")
+  final DateTime creationDate;
   @JsonKey(name: "user_info")
   final OfferCreatorInfo userInfo;
   @JsonKey(name: "blurr_info")
   final LocationBlurrOut blurrInfo;
+  final OfferStatus status;
+  final String id;
 
   OfferOut(
       {required this.activity,
@@ -38,9 +42,11 @@ class OfferOut {
       this.location,
       required this.participantLimits,
       required this.participants,
-      required this.id,
+      required this.creationDate,
       required this.userInfo,
-      required this.blurrInfo});
+      required this.blurrInfo,
+      required this.status,
+      required this.id});
 
   factory OfferOut.fromJson(Map<String, dynamic> json) =>
       _$OfferOutFromJson(json);
