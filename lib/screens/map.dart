@@ -406,6 +406,7 @@ class _ActivityMarkerMapState extends State<ActivityMarkerMap>
       mapController: mapController.mapController,
       options: MapOptions(
           bounds: bounds,
+          maxZoom: 18,
           onMapEvent: (event) => onMapEvent(event, context),
           interactiveFlags: InteractiveFlag.all & ~InteractiveFlag.rotate),
       children: [
