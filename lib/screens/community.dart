@@ -22,13 +22,14 @@ class CommunityScreen extends StatelessWidget {
     var size = MediaQuery.of(context).size;
 
     double width = size.width;
-    Future<List<OfferParsed>> userMeetups =
-        MeetupManager.instance.getUserMeetups(forceFetch: true);
 
     final state = context.read<AppState>();
     if (state.userPosition != null) {
       MeetupManager.instance.currentPosition = state.userPosition!;
     }
+
+    Future<List<OfferParsed>> userMeetups =
+        MeetupManager.instance.getUserMeetups(forceFetch: true);
 
     Future<List<OfferParsed>> availableMeetups =
         MeetupManager.instance.getAvailableMeetups(forceFetch: true);

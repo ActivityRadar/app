@@ -442,6 +442,7 @@ class MeetPopupMenuCard extends StatelessWidget {
                                 OffersProvider.deleteOffer(offerId: offer.id)
                                     .then((_) async {
                                   Navigator.pop(context);
+                                  Navigator.pop(context);
                                 });
                               },
                               text: "Ja"),
