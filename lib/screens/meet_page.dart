@@ -9,6 +9,7 @@ import 'package:app/provider/meetup_manager.dart';
 import 'package:app/provider/photos.dart';
 import 'package:app/provider/user_manager.dart';
 import 'package:app/widgets/activityType_short.dart';
+import 'package:app/widgets/bottomsheet.dart';
 import 'package:app/widgets/custom/background.dart';
 
 import 'package:app/widgets/custom/alertdialog.dart';
@@ -235,7 +236,11 @@ class _MeetPageState extends State<MeetPage> {
                           ButtonBookMark(),
                           if (!isParticipant)
                             CustomElevatedButton(
-                                onPressed: () {}, text: "Anfrage senden")
+                                onPressed: () {
+                                  bottomSheetRequestToJoin(
+                                      context, offer, onChangeCallback);
+                                },
+                                text: "Anfrage senden")
                         ],
                       )),
                   Padding(
@@ -525,4 +530,37 @@ class MyHeaderDelegate extends SliverPersistentHeaderDelegate {
   bool shouldRebuild(SliverPersistentHeaderDelegate oldDelegate) {
     return false;
   }
+}
+
+void bottomSheetRequestToJoin(
+    BuildContext context, OfferParsed offer, VoidCallback onSubmit) {
+  final width = MediaQuery.of(context).size.width;
+  final textController = TextEditingController();
+
+  bottomSheetBase(
+      context: context,
+      builder: (context) {
+        return Padding(
+          padding:
+              EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+          child: Column(mainAxisSize: MainAxisSize.min, children: [
+            TitleText(text: "Frage die Teilnahme an", width: width),
+            MediumText(
+                text:
+                    "Benachrichtige ${offer.userInfo.displayName}, dass du dabei sein willst!",
+                width: width),
+            TextField(controller: textController),
+            CustomTextButton(
+                onPressed: () {
+                  OffersProvider.requestToJoin(
+                          offerId: offer.id, data: textController.text)
+                      .whenComplete(() {
+                    Navigator.pop(context);
+                    onSubmit();
+                  });
+                },
+                text: "Abschicken")
+          ]),
+        );
+      });
 }
