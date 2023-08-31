@@ -67,7 +67,6 @@ class AssetImages {
       AssetImage("assets/images/locationPhotoPlaceholder.jpg");
   static Widget backgroundAR = Transform.scale(
       scale: 4.0, // Zoomfaktor
-
       child: SvgPicture.asset("assets/images/background.svg",
           colorFilter: ColorFilter.mode(
               Color.fromARGB(22, 248, 248, 248), BlendMode.srcIn),

@@ -97,9 +97,38 @@ class AppIcons {
   static Widget chat = SvgPicture.asset(
       "assets/icons/chat.svg", // https://remixicon.com/
       colorFilter: ColorFilter.mode(DesignColors.naviColor, BlendMode.srcIn),
-      semanticsLabel: 'chaticon');
+      semanticsLabel: 'chat');
   static Widget notification = SvgPicture.asset(
       "assets/icons/notification.svg", // https://remixicon.com/
       colorFilter: ColorFilter.mode(DesignColors.naviColor, BlendMode.srcIn),
-      semanticsLabel: 'chaticon');
+      semanticsLabel: 'notification');
+
+  static Widget dumbbell = SvgPicture.asset(
+      "assets/icons/dumbbell.svg", // https://pictogrammers.com/
+      colorFilter: ColorFilter.mode(DesignColors.naviColor, BlendMode.srcIn),
+      semanticsLabel: 'dumbbell');
+  static Widget golf = SvgPicture.asset(
+      "assets/icons/golf.svg", // https://pictogrammers.com/
+      colorFilter: ColorFilter.mode(DesignColors.naviColor, BlendMode.srcIn),
+      semanticsLabel: 'golf');
+  static Widget soccer = SvgPicture.asset(
+      "assets/icons/soccer.svg", // https://pictogrammers.com/
+      colorFilter: ColorFilter.mode(DesignColors.naviColor, BlendMode.srcIn),
+      semanticsLabel: 'soccer');
+  static Widget swim = SvgPicture.asset(
+      "assets/icons/swim.svg", // https://pictogrammers.com/
+      colorFilter: ColorFilter.mode(DesignColors.naviColor, BlendMode.srcIn),
+      semanticsLabel: 'swim');
+  static Widget tabletennis = SvgPicture.asset(
+      "assets/icons/table-tennis.svg", // https://pictogrammers.com/
+      colorFilter: ColorFilter.mode(DesignColors.naviColor, BlendMode.srcIn),
+      semanticsLabel: 'tabletennis');
+  static Widget volleyball = SvgPicture.asset(
+      "assets/icons/volleyball.svg", // https://pictogrammers.com/
+      colorFilter: ColorFilter.mode(DesignColors.naviColor, BlendMode.srcIn),
+      semanticsLabel: 'volleyball');
+  static Widget basketball = SvgPicture.asset(
+      "assets/icons/basketball.svg", // https://pictogrammers.com/
+      colorFilter: ColorFilter.mode(DesignColors.naviColor, BlendMode.srcIn),
+      semanticsLabel: 'volleyball');
 }
