@@ -30,7 +30,7 @@ class MeetPage extends StatefulWidget {
 }
 
 class _MeetPageState extends State<MeetPage> {
-  late final Future<OfferParsed> offerFuture;
+  late Future<OfferParsed> offerFuture;
 
   @override
   void initState() {
@@ -59,6 +59,9 @@ class _MeetPageState extends State<MeetPage> {
     final bool isHost = state.currentUser!.id == offer.userInfo.id;
     final bool isParticipant =
         isHost || offer.participants.any((p) => p.id == state.currentUser!.id);
+    final bool isWaiting = offer.participants.any((p) =>
+        p.id == state.currentUser!.id &&
+        p.status == ParticipantStatus.requested);
 
     double collapsedHeight = 90;
     const double expandedHeight = 160;
@@ -78,6 +81,16 @@ class _MeetPageState extends State<MeetPage> {
         ),
       ];
     }
+
+    UserApiOut? hostInfo;
+    Future<MemoryImage?> photo =
+        UserInfoManager.instance.getUserInfo(offer.userInfo.id).then((info) {
+      hostInfo = info;
+      if (info.avatar != null) {
+        return PhotoManager.instance.getThumbnail(info.avatar!.url);
+      }
+      return null;
+    });
 
     return BackgroundSVG(
         children: Scaffold(
@@ -129,29 +142,32 @@ class _MeetPageState extends State<MeetPage> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Column(children: [
-                            Row(children: [
-                              const Padding(
-                                  padding: EdgeInsets.only(left: 10, top: 60)),
-                              const CircleAvatar(
-                                backgroundImage: AssetImages.avatarEmpty,
-                                radius: 20,
-                              ),
-                              const SizedBox(
-                                width: 10,
-                              ),
-                              MediumText(
-                                text: offer.userInfo.displayName,
-                                width: width,
-                              ),
-                            ]),
+                            FutureBuilder(
+                              future: photo,
+                              builder: (BuildContext context,
+                                  AsyncSnapshot snapshot) {
+                                final result =
+                                    getNameAndAvatar(snapshot, hostInfo);
+
+                                return Row(children: [
+                                  const Padding(
+                                      padding:
+                                          EdgeInsets.only(left: 10, top: 60)),
+                                  CircleAvatar(
+                                    backgroundImage: result.image,
+                                    radius: 20,
+                                  ),
+                                  const SizedBox(
+                                    width: 10,
+                                  ),
+                                  MediumText(
+                                    text: offer.userInfo.displayName,
+                                    width: width,
+                                  ),
+                                ]);
+                              },
+                            ),
                           ]),
-                          if (!isParticipant)
-                            CustomTextButton(
-                                onPressed: () {
-                                  Navigator.of(context)
-                                      .pop(); // Dialog schließen
-                                },
-                                text: 'Anfrage senden'),
                         ]),
                     Center(
                       child: TitleText(
@@ -214,12 +230,45 @@ class _MeetPageState extends State<MeetPage> {
                       child: Column(
                           children: offer.participants
                               .where((p) =>
-                                  p.id != state.currentUser!.id &&
+                                  //     p.id != state.currentUser!.id &&
                                   (p.status == ParticipantStatus.accepted ||
                                       isHost))
                               .map(
                                 (p) => Column(children: [
-                                  ProfileListCard(width: width, userId: p.id),
+                                  ProfileListCard(
+                                      width: width,
+                                      participant: p,
+                                      actions: [
+                                        if (!(p.id == state.currentUser!.id))
+                                          IconButton(
+                                              onPressed: () {},
+                                              icon: AppIcons.chat),
+                                        if (isHost &&
+                                            !(p.id ==
+                                                state.currentUser!.id)) ...[
+                                          if (p.status ==
+                                              ParticipantStatus.requested)
+                                            IconButton(
+                                                onPressed: () {
+                                                  OffersProvider.acceptRequest(
+                                                          offerId: offer.id,
+                                                          userId: p.id)
+                                                      .whenComplete(
+                                                          onChangeCallback);
+                                                },
+                                                icon:
+                                                    const Icon(AppIcons.done)),
+                                          IconButton(
+                                              onPressed: () {
+                                                OffersProvider.declineRequest(
+                                                        offerId: offer.id,
+                                                        userId: p.id)
+                                                    .whenComplete(
+                                                        onChangeCallback);
+                                              },
+                                              icon: const Icon(AppIcons.close))
+                                        ],
+                                      ]),
                                   const Divider(
                                     // Hier wird die Trennlinie hinzugefügt
                                     color: Color.fromARGB(
@@ -228,6 +277,11 @@ class _MeetPageState extends State<MeetPage> {
                                 ]),
                               )
                               .toList())),
+                  if (isWaiting)
+                    MediumText(
+                        width: width,
+                        text:
+                            "Du wirst die anderen Teilnehmer sehen, sobald deine Teilnahme vom Gastgeber bestätigt wird."),
                   Padding(
                       padding: const EdgeInsets.all(9.0),
                       child: Row(
@@ -267,17 +321,19 @@ class ProfileListCard extends StatelessWidget {
   const ProfileListCard({
     super.key,
     required this.width,
-    required this.userId,
+    required this.participant,
+    required this.actions,
   });
 
   final double width;
-  final String userId;
+  final Participant participant;
+  final List<IconButton> actions;
 
   @override
   Widget build(BuildContext context) {
     UserApiOut? userInfo;
     Future<MemoryImage?> photo =
-        UserInfoManager.instance.getUserInfo(userId).then((info) {
+        UserInfoManager.instance.getUserInfo(participant.id).then((info) {
       userInfo = info;
       if (info.avatar != null) {
         return PhotoManager.instance.getThumbnail(info.avatar!.url);
@@ -306,10 +362,7 @@ class ProfileListCard extends StatelessWidget {
           },
         ),
         Row(
-          children: [
-            AppIcons.chat,
-            const Icon(AppIcons.close),
-          ],
+          children: actions,
         )
       ]),
     ]);
