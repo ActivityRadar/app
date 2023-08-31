@@ -108,7 +108,12 @@ class _MeetPageState extends State<MeetPage> {
                 ),
               ),
             ),
-            actions: [MeetPopupMenuCard(isHost: isHost)],
+            actions: [
+              MeetPopupMenuCard(
+                  isHost: isHost,
+                  offer: offer,
+                  onChangeCallback: onChangeCallback)
+            ],
             iconTheme: const IconThemeData(
               color: DesignColors.naviColor,
             )),
@@ -244,6 +249,12 @@ class _MeetPageState extends State<MeetPage> {
         )
       ]),
     ));
+  }
+
+  void onChangeCallback() {
+    setState(() {
+      offerFuture = MeetupManager.instance.updateMeetupInfo(widget.id);
+    });
   }
 }
 
@@ -395,9 +406,16 @@ class CardTime extends StatelessWidget {
 }
 
 class MeetPopupMenuCard extends StatelessWidget {
-  const MeetPopupMenuCard({super.key, required this.isHost});
+  const MeetPopupMenuCard({
+    super.key,
+    required this.isHost,
+    required this.offer,
+    required this.onChangeCallback,
+  });
 
   final bool isHost;
+  final OfferParsed offer;
+  final VoidCallback onChangeCallback;
 
   @override
   Widget build(BuildContext context) {
@@ -411,16 +429,53 @@ class MeetPopupMenuCard extends StatelessWidget {
         if (isHost) ...[
           PopupMenuItem(
             child: const SystemText(text: 'Angebot löschen'),
-            onTap: () => {},
+            onTap: () {
+              showDialog(
+                  context: context,
+                  builder: (context) {
+                    return AlertDialog(
+                        content: const Text(
+                            "Willst du das Angebot wirklich löschen?"),
+                        actions: [
+                          CustomTextButton(
+                              onPressed: () {
+                                OffersProvider.deleteOffer(offerId: offer.id)
+                                    .then((_) async {
+                                  Navigator.pop(context);
+                                });
+                              },
+                              text: "Ja"),
+                          CustomTextButton(
+                              onPressed: () => Navigator.pop(context),
+                              text: "Nein")
+                        ]);
+                  });
+            },
           ),
-          PopupMenuItem(
-            child: const SystemText(text: 'Angebot schliessen'),
-            onTap: () => {},
-          ),
-          PopupMenuItem(
-            child: const SystemText(text: 'Angebot öffnen'),
-            onTap: () => {},
-          )
+          if (offer.status == OfferStatus.open)
+            PopupMenuItem(
+              child: const SystemText(text: 'Angebot schliessen'),
+              onTap: () {
+                OffersProvider.setOfferStatus(
+                        offerId: offer.id, status: OfferStatus.closed)
+                    .then((_) async {
+                  await MeetupManager.instance.updateMeetupInfo(offer.id);
+                  onChangeCallback();
+                });
+              },
+            ),
+          if (offer.status == OfferStatus.closed)
+            PopupMenuItem(
+              child: const SystemText(text: 'Angebot öffnen'),
+              onTap: () {
+                OffersProvider.setOfferStatus(
+                        offerId: offer.id, status: OfferStatus.open)
+                    .then((_) async {
+                  await MeetupManager.instance.updateMeetupInfo(offer.id);
+                  onChangeCallback();
+                });
+              },
+            )
         ],
       ],
     );
