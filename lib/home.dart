@@ -86,6 +86,7 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
     return Scaffold(
       extendBody: true,
       body: PageView(
+        physics: NeverScrollableScrollPhysics(),
         controller: pageController,
         onPageChanged: onTap,
         children: screens,
