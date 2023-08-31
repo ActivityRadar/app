@@ -307,18 +307,22 @@ class _ActivityMarkerMapState extends State<ActivityMarkerMap>
         '${bounds.south}, ${bounds.west}, ${bounds.east}, ${widget.activities.value}');
     print("fetch locations started");
 
-    List<LocationShortApi> locations =
-        await LocationsProvider.getLocationsByBbox(
-            north: bounds.north,
-            south: bounds.south,
-            west: bounds.west,
-            east: bounds.east,
-            activities: ActivityManager.instance
-                .getBackendTypes(widget.activities.value));
-    print(locations.length);
+    List<LocationMarker> markers_ = [];
+    if (mapController.mapController.zoom < 10) {
+      print("Zoom in to get data");
+    } else {
+      List<LocationShortApi> locations =
+          await LocationsProvider.getLocationsByBbox(
+              north: bounds.north,
+              south: bounds.south,
+              west: bounds.west,
+              east: bounds.east,
+              activities: ActivityManager.instance
+                  .getBackendTypes(widget.activities.value));
+      print(locations.length);
 
-    List<LocationMarker> markers_ =
-        locations.map((loc) => createMarker(loc)).toList();
+      markers_ = locations.map((loc) => createMarker(loc)).toList();
+    }
 
     setState(() {
       markers = markers_;
