@@ -36,7 +36,7 @@ class MeetCard extends StatelessWidget {
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => MeetPage(offer: offer),
+              builder: (context) => MeetPage(id: offer.id),
             ),
           );
         },

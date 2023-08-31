@@ -4,6 +4,7 @@ import 'package:app/constants/design.dart';
 import 'package:app/model/functions.dart';
 import 'package:app/provider/activity_type.dart';
 import 'package:app/model/generated.dart';
+import 'package:app/provider/generated/offers_provider.dart';
 import 'package:app/provider/meetup_manager.dart';
 import 'package:app/provider/photos.dart';
 import 'package:app/provider/user_manager.dart';
@@ -18,13 +19,40 @@ import 'package:app/widgets/meet_map.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-class MeetPage extends StatelessWidget {
-  const MeetPage({super.key, required this.offer});
+class MeetPage extends StatefulWidget {
+  const MeetPage({super.key, required this.id});
 
-  final OfferParsed offer;
+  final String id;
+
+  @override
+  State<MeetPage> createState() => _MeetPageState();
+}
+
+class _MeetPageState extends State<MeetPage> {
+  late final Future<OfferParsed> offerFuture;
+
+  @override
+  void initState() {
+    super.initState();
+
+    offerFuture = MeetupManager.instance.updateMeetupInfo(widget.id);
+  }
 
   @override
   Widget build(BuildContext context) {
+    return FutureBuilder(
+      future: offerFuture,
+      builder: (BuildContext context, AsyncSnapshot snapshot) {
+        if (!snapshot.hasData) {
+          return const CircularProgressIndicator();
+        }
+
+        return buildWhenLoaded(snapshot.data);
+      },
+    );
+  }
+
+  Widget buildWhenLoaded(OfferParsed offer) {
     final state = context.read<AppState>();
 
     final bool isHost = state.currentUser!.id == offer.userInfo.id;
@@ -64,12 +92,19 @@ class MeetPage extends StatelessWidget {
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(AppStyle.cornerRadius),
                   ),
-                  child: MeetMap(
-                      center: toLatLng(isHost
-                          ? offer.location_.coords
-                          : offer.blurrInfo.center),
-                      radius: isHost ? 0.3 : offer.blurrInfo.radius,
-                      circleScale: isHost ? 50 : 150),
+                  child: Stack(
+                    children: [
+                      MeetMap(
+                          center: toLatLng(isHost
+                              ? offer.location_.coords
+                              : offer.blurrInfo.center),
+                          radius: isHost ? 0.3 : offer.blurrInfo.radius,
+                          circleScale: isHost ? 50 : 150),
+                      Align(
+                          alignment: Alignment.bottomCenter,
+                          child: Chip(label: Text(offer.status.toString())))
+                    ],
+                  ),
                 ),
               ),
             ),
