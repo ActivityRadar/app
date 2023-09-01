@@ -183,12 +183,6 @@ class _DetailsScreenState extends State<DetailsScreen> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
                 Padding(
-                    padding: const EdgeInsets.only(left: 9.0, top: 5.0),
-                    child: MediumHintText(
-                      text: "10963 Berlin",
-                      width: width,
-                    )),
-                Padding(
                   padding: const EdgeInsets.only(left: 9.0),
                   child: MediumHintText(
                     text: "Park",
