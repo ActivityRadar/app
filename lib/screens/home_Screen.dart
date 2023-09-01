@@ -34,8 +34,6 @@ class HomePage extends StatelessWidget {
       MeetupManager.instance.currentPosition = state.userPosition!;
     }
 
-    Future<List<OfferParsed>> availableMeetups =
-        MeetupManager.instance.getAvailableMeetups(forceFetch: true);
     List<String> name = [
       'Anton',
       'Sophie',
