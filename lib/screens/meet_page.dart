@@ -4,10 +4,12 @@ import 'package:app/constants/design.dart';
 import 'package:app/model/functions.dart';
 import 'package:app/provider/activity_type.dart';
 import 'package:app/model/generated.dart';
+import 'package:app/provider/generated/offers_provider.dart';
 import 'package:app/provider/meetup_manager.dart';
 import 'package:app/provider/photos.dart';
 import 'package:app/provider/user_manager.dart';
 import 'package:app/widgets/activityType_short.dart';
+import 'package:app/widgets/bottomsheet.dart';
 import 'package:app/widgets/custom/background.dart';
 
 import 'package:app/widgets/custom/alertdialog.dart';
@@ -18,18 +20,48 @@ import 'package:app/widgets/meet_map.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-class MeetPage extends StatelessWidget {
-  const MeetPage({super.key, required this.offer});
+class MeetPage extends StatefulWidget {
+  const MeetPage({super.key, required this.id});
 
-  final OfferParsed offer;
+  final String id;
+
+  @override
+  State<MeetPage> createState() => _MeetPageState();
+}
+
+class _MeetPageState extends State<MeetPage> {
+  late Future<OfferParsed> offerFuture;
+
+  @override
+  void initState() {
+    super.initState();
+
+    offerFuture = MeetupManager.instance.updateMeetupInfo(widget.id);
+  }
 
   @override
   Widget build(BuildContext context) {
+    return FutureBuilder(
+      future: offerFuture,
+      builder: (BuildContext context, AsyncSnapshot snapshot) {
+        if (!snapshot.hasData) {
+          return const CircularProgressIndicator();
+        }
+
+        return buildWhenLoaded(snapshot.data);
+      },
+    );
+  }
+
+  Widget buildWhenLoaded(OfferParsed offer) {
     final state = context.read<AppState>();
 
     final bool isHost = state.currentUser!.id == offer.userInfo.id;
     final bool isParticipant =
         isHost || offer.participants.any((p) => p.id == state.currentUser!.id);
+    final bool isWaiting = offer.participants.any((p) =>
+        p.id == state.currentUser!.id &&
+        p.status == ParticipantStatus.requested);
 
     double collapsedHeight = 90;
     const double expandedHeight = 160;
@@ -50,6 +82,16 @@ class MeetPage extends StatelessWidget {
       ];
     }
 
+    UserApiOut? hostInfo;
+    Future<MemoryImage?> photo =
+        UserInfoManager.instance.getUserInfo(offer.userInfo.id).then((info) {
+      hostInfo = info;
+      if (info.avatar != null) {
+        return PhotoManager.instance.getThumbnail(info.avatar!.url);
+      }
+      return null;
+    });
+
     return BackgroundSVG(
         children: Scaffold(
       backgroundColor: const Color.fromARGB(255, 255, 255, 255),
@@ -64,16 +106,28 @@ class MeetPage extends StatelessWidget {
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(AppStyle.cornerRadius),
                   ),
-                  child: MeetMap(
-                      center: toLatLng(isHost
-                          ? offer.location_.coords
-                          : offer.blurrInfo.center),
-                      radius: isHost ? 0.3 : offer.blurrInfo.radius,
-                      circleScale: isHost ? 50 : 150),
+                  child: Stack(
+                    children: [
+                      MeetMap(
+                          center: toLatLng(isHost
+                              ? offer.location_.coords
+                              : offer.blurrInfo.center),
+                          radius: isHost ? 0.3 : offer.blurrInfo.radius,
+                          circleScale: isHost ? 50 : 150),
+                      Align(
+                          alignment: Alignment.bottomCenter,
+                          child: Chip(label: Text(offer.status.toString())))
+                    ],
+                  ),
                 ),
               ),
             ),
-            actions: const [MeetPopupMenuCard()],
+            actions: [
+              MeetPopupMenuCard(
+                  isHost: isHost,
+                  offer: offer,
+                  onChangeCallback: onChangeCallback)
+            ],
             iconTheme: const IconThemeData(
               color: DesignColors.naviColor,
             )),
@@ -88,29 +142,32 @@ class MeetPage extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Column(children: [
-                            Row(children: [
-                              const Padding(
-                                  padding: EdgeInsets.only(left: 10, top: 60)),
-                              const CircleAvatar(
-                                backgroundImage: AssetImages.avatarEmpty,
-                                radius: 20,
-                              ),
-                              const SizedBox(
-                                width: 10,
-                              ),
-                              MediumText(
-                                text: offer.userInfo.displayName,
-                                width: width,
-                              ),
-                            ]),
+                            FutureBuilder(
+                              future: photo,
+                              builder: (BuildContext context,
+                                  AsyncSnapshot snapshot) {
+                                final result =
+                                    getNameAndAvatar(snapshot, hostInfo);
+
+                                return Row(children: [
+                                  const Padding(
+                                      padding:
+                                          EdgeInsets.only(left: 10, top: 60)),
+                                  CircleAvatar(
+                                    backgroundImage: result.image,
+                                    radius: 20,
+                                  ),
+                                  const SizedBox(
+                                    width: 10,
+                                  ),
+                                  MediumText(
+                                    text: offer.userInfo.displayName,
+                                    width: width,
+                                  ),
+                                ]);
+                              },
+                            ),
                           ]),
-                          if (!isParticipant)
-                            CustomTextButton(
-                                onPressed: () {
-                                  Navigator.of(context)
-                                      .pop(); // Dialog schließen
-                                },
-                                text: 'Anfrage senden'),
                         ]),
                     Center(
                       child: TitleText(
@@ -173,12 +230,45 @@ class MeetPage extends StatelessWidget {
                       child: Column(
                           children: offer.participants
                               .where((p) =>
-                                  p.id != state.currentUser!.id &&
+                                  //     p.id != state.currentUser!.id &&
                                   (p.status == ParticipantStatus.accepted ||
                                       isHost))
                               .map(
                                 (p) => Column(children: [
-                                  ProfileListCard(width: width, userId: p.id),
+                                  ProfileListCard(
+                                      width: width,
+                                      participant: p,
+                                      actions: [
+                                        if (!(p.id == state.currentUser!.id))
+                                          IconButton(
+                                              onPressed: () {},
+                                              icon: AppIcons.chat),
+                                        if (isHost &&
+                                            !(p.id ==
+                                                state.currentUser!.id)) ...[
+                                          if (p.status ==
+                                              ParticipantStatus.requested)
+                                            IconButton(
+                                                onPressed: () {
+                                                  OffersProvider.acceptRequest(
+                                                          offerId: offer.id,
+                                                          userId: p.id)
+                                                      .whenComplete(
+                                                          onChangeCallback);
+                                                },
+                                                icon:
+                                                    const Icon(AppIcons.done)),
+                                          IconButton(
+                                              onPressed: () {
+                                                OffersProvider.declineRequest(
+                                                        offerId: offer.id,
+                                                        userId: p.id)
+                                                    .whenComplete(
+                                                        onChangeCallback);
+                                              },
+                                              icon: const Icon(AppIcons.close))
+                                        ],
+                                      ]),
                                   const Divider(
                                     // Hier wird die Trennlinie hinzugefügt
                                     color: Color.fromARGB(
@@ -187,6 +277,11 @@ class MeetPage extends StatelessWidget {
                                 ]),
                               )
                               .toList())),
+                  if (isWaiting)
+                    MediumText(
+                        width: width,
+                        text:
+                            "Du wirst die anderen Teilnehmer sehen, sobald deine Teilnahme vom Gastgeber bestätigt wird."),
                   Padding(
                       padding: const EdgeInsets.all(9.0),
                       child: Row(
@@ -195,7 +290,11 @@ class MeetPage extends StatelessWidget {
                           ButtonBookMark(),
                           if (!isParticipant)
                             CustomElevatedButton(
-                                onPressed: () {}, text: "Anfrage senden")
+                                onPressed: () {
+                                  bottomSheetRequestToJoin(
+                                      context, offer, onChangeCallback);
+                                },
+                                text: "Anfrage senden")
                         ],
                       )),
                   Padding(
@@ -210,23 +309,31 @@ class MeetPage extends StatelessWidget {
       ]),
     ));
   }
+
+  void onChangeCallback() {
+    setState(() {
+      offerFuture = MeetupManager.instance.updateMeetupInfo(widget.id);
+    });
+  }
 }
 
 class ProfileListCard extends StatelessWidget {
   const ProfileListCard({
     super.key,
     required this.width,
-    required this.userId,
+    required this.participant,
+    required this.actions,
   });
 
   final double width;
-  final String userId;
+  final Participant participant;
+  final List<IconButton> actions;
 
   @override
   Widget build(BuildContext context) {
     UserApiOut? userInfo;
     Future<MemoryImage?> photo =
-        UserInfoManager.instance.getUserInfo(userId).then((info) {
+        UserInfoManager.instance.getUserInfo(participant.id).then((info) {
       userInfo = info;
       if (info.avatar != null) {
         return PhotoManager.instance.getThumbnail(info.avatar!.url);
@@ -255,10 +362,7 @@ class ProfileListCard extends StatelessWidget {
           },
         ),
         Row(
-          children: [
-            AppIcons.chat,
-            const Icon(AppIcons.close),
-          ],
+          children: actions,
         )
       ]),
     ]);
@@ -359,33 +463,79 @@ class CardTime extends StatelessWidget {
   }
 }
 
-class MeetPopupMenuCard extends StatefulWidget {
-  const MeetPopupMenuCard({super.key});
+class MeetPopupMenuCard extends StatelessWidget {
+  const MeetPopupMenuCard({
+    super.key,
+    required this.isHost,
+    required this.offer,
+    required this.onChangeCallback,
+  });
 
-  @override
-  State<MeetPopupMenuCard> createState() => _MeetPopupMenuCardState();
-}
-
-class _MeetPopupMenuCardState extends State<MeetPopupMenuCard> {
-  ReviewPopupMenuItem? selectedMenu;
+  final bool isHost;
+  final OfferParsed offer;
+  final VoidCallback onChangeCallback;
 
   @override
   Widget build(BuildContext context) {
-    return PopupMenuButton<ReviewPopupMenuItem>(
-      initialValue: selectedMenu,
-      // Callback that sets the selected popup menu item.
-      onSelected: (ReviewPopupMenuItem item) {
-        setState(() {
-          selectedMenu = item;
-        });
-      },
-      itemBuilder: (BuildContext context) =>
-          <PopupMenuEntry<ReviewPopupMenuItem>>[
-        PopupMenuItem<ReviewPopupMenuItem>(
-          value: ReviewPopupMenuItem.report,
-          child: const SystemText(text: 'Report as inappropriate'),
-          onTap: () => _showDialog(context),
-        ),
+    return PopupMenuButton(
+      itemBuilder: (BuildContext context) => <PopupMenuEntry>[
+        if (!isHost)
+          PopupMenuItem(
+            child: const SystemText(text: 'Report as inappropriate'),
+            onTap: () => _showDialog(context),
+          ),
+        if (isHost) ...[
+          PopupMenuItem(
+            child: const SystemText(text: 'Angebot löschen'),
+            onTap: () {
+              showDialog(
+                  context: context,
+                  builder: (context) {
+                    return AlertDialog(
+                        content: const Text(
+                            "Willst du das Angebot wirklich löschen?"),
+                        actions: [
+                          CustomTextButton(
+                              onPressed: () {
+                                OffersProvider.deleteOffer(offerId: offer.id)
+                                    .then((_) async {
+                                  Navigator.pop(context);
+                                  Navigator.pop(context);
+                                });
+                              },
+                              text: "Ja"),
+                          CustomTextButton(
+                              onPressed: () => Navigator.pop(context),
+                              text: "Nein")
+                        ]);
+                  });
+            },
+          ),
+          if (offer.status == OfferStatus.open)
+            PopupMenuItem(
+              child: const SystemText(text: 'Angebot schliessen'),
+              onTap: () {
+                OffersProvider.setOfferStatus(
+                        offerId: offer.id, status: OfferStatus.closed)
+                    .then((_) async {
+                  await MeetupManager.instance.updateMeetupInfo(offer.id);
+                  onChangeCallback();
+                });
+              },
+            ),
+          if (offer.status == OfferStatus.closed)
+            PopupMenuItem(
+              child: const SystemText(text: 'Angebot öffnen'),
+              onTap: () {
+                OffersProvider.setOfferStatus(
+                        offerId: offer.id, status: OfferStatus.open)
+                    .then((_) async {
+                  await MeetupManager.instance.updateMeetupInfo(offer.id);
+                  onChangeCallback();
+                });
+              },
+            )
+        ],
       ],
     );
   }
@@ -433,4 +583,37 @@ class MyHeaderDelegate extends SliverPersistentHeaderDelegate {
   bool shouldRebuild(SliverPersistentHeaderDelegate oldDelegate) {
     return false;
   }
+}
+
+void bottomSheetRequestToJoin(
+    BuildContext context, OfferParsed offer, VoidCallback onSubmit) {
+  final width = MediaQuery.of(context).size.width;
+  final textController = TextEditingController();
+
+  bottomSheetBase(
+      context: context,
+      builder: (context) {
+        return Padding(
+          padding:
+              EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+          child: Column(mainAxisSize: MainAxisSize.min, children: [
+            TitleText(text: "Frage die Teilnahme an", width: width),
+            MediumText(
+                text:
+                    "Benachrichtige ${offer.userInfo.displayName}, dass du dabei sein willst!",
+                width: width),
+            TextField(controller: textController),
+            CustomTextButton(
+                onPressed: () {
+                  OffersProvider.requestToJoin(
+                          offerId: offer.id, data: textController.text)
+                      .whenComplete(() {
+                    Navigator.pop(context);
+                    onSubmit();
+                  });
+                },
+                text: "Abschicken")
+          ]),
+        );
+      });
 }

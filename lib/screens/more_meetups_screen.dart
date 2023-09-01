@@ -1,4 +1,5 @@
 import 'package:app/constants/design.dart';
+import 'package:app/model/generated.dart';
 import 'package:app/provider/meetup_manager.dart';
 import 'package:app/widgets/custom/background.dart';
 import 'package:app/widgets/custom/card.dart';
@@ -25,6 +26,8 @@ class MeetUpMoreScreen extends StatelessWidget {
         : MeetupManager.instance.getAvailableMeetups();
 
     double width = size.width;
+
+    DateTime now = DateTime.now();
 
     return Scaffold(
         body: BackgroundSVG(
@@ -63,7 +66,10 @@ class MeetUpMoreScreen extends StatelessWidget {
                   var children;
                   if (snapshot.hasData) {
                     children = snapshot.data!
-                        .map<Widget>((m) => MeetCard(offer: m))
+                        .map<Widget>((m) => Opacity(
+                            opacity:
+                                m.status == OfferStatus.timeout ? 0.6 : 1.0,
+                            child: MeetCard(offer: m)))
                         .toList();
                   } else if (snapshot.hasError) {
                     children = [
